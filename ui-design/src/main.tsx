@@ -28,6 +28,8 @@ import {
   X,
 } from "lucide-react";
 import "./styles.css";
+import { Attempts } from "./Attempts";
+const assignmentTabs = ["Overview", "Attempts", "Evidence", "Activity"];
 
 type View = "My Work" | "Organization" | "Evidence";
 type Kind = "Assessment" | "Authority" | "Work" | "Reconciliation";
@@ -582,7 +584,7 @@ function App() {
                     role="tablist"
                     aria-label="Assignment details"
                   >
-                    {["Overview", "Evidence", "Activity"].map((t) => (
+                    {assignmentTabs.map((t) => (
                       <button
                         key={t}
                         role="tab"
@@ -590,17 +592,19 @@ function App() {
                         aria-controls="assignment-tabpanel"
                         tabIndex={tab === t ? 0 : -1}
                         onKeyDown={(e) => {
-                          const names = ["Overview", "Evidence", "Activity"];
+                          const names = assignmentTabs;
                           const index = names.indexOf(t);
                           const next =
                             e.key === "ArrowRight"
-                              ? names[(index + 1) % 3]
+                              ? names[(index + 1) % names.length]
                               : e.key === "ArrowLeft"
-                                ? names[(index + 2) % 3]
+                                ? names[
+                                    (index + names.length - 1) % names.length
+                                  ]
                                 : e.key === "Home"
                                   ? names[0]
                                   : e.key === "End"
-                                    ? names[2]
+                                    ? names[names.length - 1]
                                     : null;
                           if (next) {
                             e.preventDefault();
@@ -704,6 +708,8 @@ function App() {
                           </button>
                         ))}
                       </>
+                    ) : tab === "Attempts" ? (
+                      <Attempts assignmentId={selected.id} />
                     ) : (
                       <>
                         <div className="section-label">ASSIGNMENT HISTORY</div>

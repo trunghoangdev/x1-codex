@@ -1903,3 +1903,80 @@ textarea::placeholder {
 .mini-avatar {
   color: #526343;
 }
+
+.attempt-card {
+  margin-top: 20px;
+  padding: 20px;
+  border: 1px solid var(--line);
+  border-radius: 7px;
+  background: #fbfcf8;
+}
+.attempt-heading {
+  display: flex;
+  justify-content: space-between;
+  align-items: flex-start;
+  gap: 12px;
+  flex-wrap: wrap;
+  font-size: 12px;
+}
+.attempt-status {
+  display: flex;
+  gap: 6px;
+  align-items: center;
+  font-size: 11px;
+  color: #596958;
+}
+.attempt-produced .attempt-status {
+  color: #426a48;
+}
+.attempt-failed .attempt-status {
+  color: #96572d;
+}
+.attempt-fields {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 17px;
+  margin: 20px 0 0;
+}
+.attempt-fields dt,
+.attempt-artifact > span {
+  font-size: 10px;
+  color: #707b64;
+  margin-bottom: 6px;
+  display: block;
+}
+.attempt-fields dd {
+  margin: 0;
+  font-size: 11px;
+  line-height: 1.7;
+  overflow-wrap: anywhere;
+}
+.attempt-artifact {
+  border-top: 1px solid var(--line);
+  margin-top: 18px;
+  padding-top: 15px;
+}
+.attempt-artifact code {
+  font-size: 10px;
+  overflow-wrap: anywhere;
+}
+.attempt-explanation {
+  font-size: 11px;
+  line-height: 1.8;
+  color: #667259;
+  margin-top: 16px;
+}
+@media (max-width: 620px) {
+  .tabs {
+    gap: 20px;
+  }
+  .tabs button {
+    font-size: 11px;
+  }
+  .attempt-card {
+    padding: 15px;
+  }
+  .attempt-fields {
+    grid-template-columns: 1fr;
+  }
+}

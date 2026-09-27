@@ -72,3 +72,7 @@ TMPDIR=../.cache/tmp npm test
 ```
 
 On a workstation that already has Chromium's system libraries, the `LD_LIBRARY_PATH` override is unnecessary. Cache folders are intentionally not committed.
+
+## Incremental updates
+
+See [ITERATIONS.md](ITERATIONS.md). The first update adds **Attempts** to assignment detail. Open **A-1042 → Attempts** for sample execution history; the other assignments explicitly state that no sample history is connected. Existing screenshots represent the initial design.

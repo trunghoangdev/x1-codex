@@ -119,3 +119,44 @@ test("filters, responsive navigation and modal fit a phone screen", async ({
     ),
   ).toBe(true);
 });
+
+test("attempts preserve unknown outcomes and keyboard navigation", async ({
+  page,
+}) => {
+  await page.goto("/");
+  await page.getByRole("button", { name: /A-1042.*Review retry/ }).click();
+  await page.getByRole("tab", { name: "Overview", exact: true }).focus();
+  await page.keyboard.press("ArrowRight");
+  await expect(
+    page.getByRole("tab", { name: "Attempts", exact: true }),
+  ).toBeFocused();
+  const produced = page.getByRole("article", { name: "demo-attempt-03" });
+  await expect(produced).toContainText("Produced");
+  const failed = page.getByRole("article", { name: "demo-attempt-02" });
+  await expect(failed).toContainText("Not observed");
+  const open = page.getByRole("article", { name: "demo-attempt-01" });
+  await expect(open).toContainText("Open — completion not recorded");
+  await expect(open).toContainText("live execution is not established");
+  await page.keyboard.press("End");
+  await expect(
+    page.getByRole("tab", { name: "Activity", exact: true }),
+  ).toBeFocused();
+  await page.keyboard.press("ArrowRight");
+  await expect(
+    page.getByRole("tab", { name: "Overview", exact: true }),
+  ).toBeFocused();
+  await page.setViewportSize({ width: 390, height: 844 });
+  await page.getByRole("tab", { name: "Attempts", exact: true }).click();
+  expect(
+    await page.evaluate(
+      () => document.documentElement.scrollWidth <= innerWidth,
+    ),
+  ).toBe(true);
+  await page.getByRole("button", { name: "Back to My Work" }).click();
+  await page
+    .getByRole("button", { name: /A-1041.*Authorize Payments/ })
+    .click();
+  await page.getByRole("tab", { name: "Attempts", exact: true }).click();
+  await expect(page.getByRole("tabpanel")).toContainText("No sample attempts");
+  await expect(page.getByRole("article")).toHaveCount(0);
+});
