@@ -2116,3 +2116,97 @@ textarea::placeholder {
     font-size: 10px;
   }
 }
+.check-scenario {
+  display: flex;
+  flex-direction: column;
+  gap: 9px;
+  font-size: 12px;
+  margin-top: 23px;
+  color: #53674b;
+}
+.check-scenario select {
+  width: 100%;
+  padding: 11px;
+  border: 1px solid #dce3d5;
+  border-radius: 5px;
+  background: #fff;
+  color: #354c30;
+  font: inherit;
+}
+.check-scenario select:focus-visible {
+  outline: 2px solid #799e8b;
+  outline-offset: 2px;
+}
+.check-observation {
+  margin-top: 22px;
+  padding: 20px;
+  border: 1px solid var(--line);
+  border-radius: 7px;
+  background: #fbfcf8;
+}
+.check-passed .attempt-status {
+  color: #426a48;
+}
+.check-refused .attempt-status {
+  color: #96572d;
+}
+.check-diagnostics {
+  margin-top: 20px;
+  border-top: 1px solid var(--line);
+  padding-top: 15px;
+}
+.check-diagnostics summary {
+  cursor: pointer;
+  font-size: 12px;
+  color: #53674b;
+}
+.check-diagnostics p {
+  font-size: 12px;
+  line-height: 1.8;
+  margin-top: 12px;
+}
+.check-diagnostics small {
+  display: block;
+  font-size: 10px;
+  line-height: 1.7;
+  margin-top: 10px;
+  color: #707b64;
+}
+.check-gates-heading {
+  margin-top: 26px;
+}
+.check-gates {
+  border: 1px solid var(--line);
+  border-radius: 6px;
+}
+.check-gate {
+  display: flex;
+  justify-content: space-between;
+  gap: 15px;
+  padding: 15px;
+  border-bottom: 1px solid var(--line);
+  font-size: 11px;
+  line-height: 1.7;
+}
+.check-gate:last-child {
+  border-bottom: 0;
+}
+.check-gate strong {
+  font-weight: 500;
+}
+.check-gate span {
+  color: #707b64;
+  text-align: right;
+}
+@media (max-width: 620px) {
+  .check-observation {
+    padding: 15px;
+  }
+  .check-gate {
+    flex-direction: column;
+    gap: 5px;
+  }
+  .check-gate span {
+    text-align: left;
+  }
+}

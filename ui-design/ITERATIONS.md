@@ -29,3 +29,17 @@ The diff scrolls within its panel on narrow screens. No production data, backend
 Validation: production build, formatting checks, and all six browser tests passed. The new test covers file switching, added/removed lines and counts, sample identity labels, assignment isolation and mobile overflow. Earlier screenshot previews remain snapshots of iteration 00.
 
 Next proposed slice: **Checks**, separating validator passed, refused and could-not-run observations from human assessment and approval.
+
+## 03 — Validator observations and decision boundaries
+
+Open **A-1042 → Checks**. A labeled scenario selector previews three independent synthetic observations: validator passed, validator refused, and could not run. These alternatives are not a historical sequence and changing the preview does not mutate an assignment or record a decision.
+
+The observation displays its assignment, attempt, sample candidate-bytes digest, validator, timestamp, execution flag, termination, and optional exit code. Missing status remains “Not observed.” Expand diagnostics to read an explanation, explicitly separated from an authoritative decision.
+
+A second section distinguishes human assessment, publication admissibility, applicability, approval and external effect. An assessment submitted through the existing demo updates only its assessment indicator. Missing gates remain unavailable; a validator pass never becomes an approval. Other assignments have an explicit no-sample state.
+
+No validator was executed and no production observation was copied. The digest is explicitly synthetic and unverified. This UI does not implement production readiness enforcement; the existing release decision demo remains separate.
+
+Validation: production build and all seven browser tests passed, covering the three observation states, absent exit status, diagnostics, assessment separation, assignment isolation, mobile overflow and prior flows.
+
+Next proposed slice: connect the existing release decision demo to an explicit prerequisite summary and exact decision subject, keeping unavailable evidence visibly unavailable.

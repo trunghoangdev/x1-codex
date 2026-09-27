@@ -198,3 +198,60 @@ test("candidate shows a scoped diff, file changes and unverified identities", as
   await expect(panel).toContainText("No sample candidate");
   await expect(panel.locator(".diff-table")).toHaveCount(0);
 });
+
+test("checks distinguish observations from decisions without changing work", async ({
+  page,
+}) => {
+  await page.goto("/");
+  await page.getByRole("button", { name: /A-1042.*Review retry/ }).click();
+  await page.getByRole("tab", { name: "Checks", exact: true }).click();
+  const observation = page.getByRole("article", {
+    name: "Validator observation",
+  });
+  const selector = page.getByLabel("Preview an alternative observation");
+  await expect(observation).toContainText("Validator passed");
+  await expect(page.locator(".check-gates")).toContainText("Approval");
+  await expect(page.locator(".check-gates")).toContainText(
+    "Not established by this validator",
+  );
+  await selector.selectOption("refused");
+  await expect(observation).toContainText("Validator refused");
+  await expect(
+    observation
+      .locator("div")
+      .filter({ has: page.locator("dt", { hasText: "Exit code" }) })
+      .last(),
+  ).toContainText("1");
+  await selector.selectOption("unavailable");
+  await expect(observation).toContainText("Could not run");
+  await expect(
+    observation.locator("dd").filter({ hasText: "Not observed" }),
+  ).toHaveCount(2);
+  await page.getByText("Diagnostic explanation", { exact: true }).click();
+  await expect(observation).toContainText("No candidate verdict was observed");
+  await page.setViewportSize({ width: 390, height: 844 });
+  expect(
+    await page.evaluate(
+      () => document.documentElement.scrollWidth <= innerWidth,
+    ),
+  ).toBe(true);
+  await page.getByRole("button", { name: "Submit assessment" }).click();
+  await page
+    .getByLabel("Decision rationale")
+    .fill("The validator could not run. Further evidence is needed.");
+  await page.getByRole("button", { name: "Record assessment" }).click();
+  await expect(page.locator(".check-gates")).toContainText(
+    "Recorded in this demo session",
+  );
+  await expect(observation).toContainText("Could not run");
+  await expect(page.locator(".check-gates")).toContainText(
+    "Not established by this validator",
+  );
+  await page.getByRole("button", { name: "Back to My Work" }).click();
+  await page
+    .getByRole("button", { name: /A-1041.*Authorize Payments/ })
+    .click();
+  await page.getByRole("tab", { name: "Checks", exact: true }).click();
+  await expect(page.getByRole("tabpanel")).toContainText("No sample checks");
+  await expect(page.getByRole("combobox")).toHaveCount(0);
+});

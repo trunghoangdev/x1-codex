@@ -2,6 +2,7 @@
 export const sampleCandidate = {
   assignmentId: "A-1042",
   attemptId: "demo-attempt-03",
+  candidateDigest: `sha256:${"b".repeat(64)}`,
   artifactDigest: `sha256:${"a".repeat(64)}`,
   baseRevision: "184c72a81f995c8fa31f997269a4c5c91c0e403d2",
   label: "Retry handling · changeset c8e4a21",

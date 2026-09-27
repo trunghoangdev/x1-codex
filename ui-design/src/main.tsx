@@ -30,10 +30,12 @@ import {
 import "./styles.css";
 import { Attempts } from "./Attempts";
 import { Candidate } from "./Candidate";
+import { Checks } from "./Checks";
 const assignmentTabs = [
   "Overview",
   "Attempts",
   "Candidate",
+  "Checks",
   "Evidence",
   "Activity",
 ];
@@ -715,6 +717,12 @@ function App() {
                           </button>
                         ))}
                       </>
+                    ) : tab === "Checks" ? (
+                      <Checks
+                        key={selected.id}
+                        assignmentId={selected.id}
+                        response={completed[selected.id]}
+                      />
                     ) : tab === "Candidate" ? (
                       <Candidate key={selected.id} assignmentId={selected.id} />
                     ) : tab === "Attempts" ? (
