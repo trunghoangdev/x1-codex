@@ -31,6 +31,8 @@ import "./styles.css";
 import { Attempts } from "./Attempts";
 import { Candidate } from "./Candidate";
 import { Checks } from "./Checks";
+import { EvidenceArtifacts, ArtifactContents } from "./EvidenceArtifacts";
+import { evidenceFor, inputFor, type EvidenceArtifact } from "./evidenceData";
 import { DecisionReceipt, type ResponseRecord } from "./DecisionReceipt";
 import { sampleCandidate } from "./candidateData";
 import {
@@ -147,28 +149,6 @@ const iconFor = {
   Authority: ShieldCheck,
   Reconciliation: GitBranch,
 };
-const digest =
-  "sha256:7d8f042cb36255e78de621025a315f7f862013b0c9ec6c47dbf4a928fe62a903";
-const artifacts = [
-  {
-    title: "Source change",
-    id: "AR-771",
-    detail: "Changeset c8e4a21 · 3 files changed",
-    icon: FileCode2,
-  },
-  {
-    title: "Test results",
-    id: "AR-775",
-    detail: "42 passed · 0 failed · Node staging-01",
-    icon: CircleCheck,
-  },
-  {
-    title: "Worker contribution",
-    id: "AR-776",
-    detail: "Implementation notes · Codex worker",
-    icon: FileText,
-  },
-];
 function App() {
   const [view, setView] = useState<View>("My Work");
   const [selected, setSelected] = useState<Assignment | null>(null);
@@ -180,7 +160,7 @@ function App() {
   const [decision, setDecision] = useState<string | null>(null);
   const [reason, setReason] = useState("");
   const [notice, setNotice] = useState("");
-  const [artifact, setArtifact] = useState<string | null>(null);
+  const [artifact, setArtifact] = useState<EvidenceArtifact | null>(null);
   const [mobile, setMobile] = useState(false);
   const [showCompleted, setShowCompleted] = useState(false);
   const [receipts, setReceipts] = useState<ResponseRecord[]>([]);
@@ -654,7 +634,9 @@ function App() {
                         onClick={() => setTab(t)}
                       >
                         {t}
-                        {t === "Evidence" && <span>3</span>}
+                        {t === "Evidence" && (
+                          <span>{evidenceFor(selected.id).length}</span>
+                        )}
                       </button>
                     ))}
                   </div>
@@ -673,14 +655,20 @@ function App() {
                         <h3>Exact input</h3>
                         <button
                           className="artifact-link"
-                          onClick={() => setArtifact(selected.artifact)}
+                          onClick={() =>
+                            setArtifact(
+                              inputFor(selected.id, selected.artifact),
+                            )
+                          }
                         >
                           <span className="file-icon">
                             <FileCode2 size={21} />
                           </span>
                           <span>
                             <strong>{selected.artifact}</strong>
-                            <small>Immutable reference · sample artifact</small>
+                            <small>
+                              Sample input · inspect reference availability
+                            </small>
                           </span>
                           <ArrowUpRight size={17} />
                         </button>
@@ -726,24 +714,10 @@ function App() {
                           Illustrative records for this prototype. Inspect an
                           artifact before recording your decision.
                         </p>
-                        {artifacts.map(({ title, id, detail, icon: Icon }) => (
-                          <button
-                            className="artifact-link evidence-row"
-                            key={id}
-                            onClick={() => setArtifact(`${id} · ${title}`)}
-                          >
-                            <span className="file-icon">
-                              <Icon size={22} />
-                            </span>
-                            <span>
-                              <strong>{title}</strong>
-                              <small>
-                                {id} · {detail}
-                              </small>
-                            </span>
-                            <ArrowUpRight size={17} />
-                          </button>
-                        ))}
+                        <EvidenceArtifacts
+                          assignmentId={selected.id}
+                          onInspect={setArtifact}
+                        />
                       </>
                     ) : tab === "Checks" ? (
                       <Checks
@@ -1029,8 +1003,8 @@ function App() {
                       Payments API <span className="count-badge">v1.8.2</span>
                     </h2>
                     <p>
-                      From contribution to authority. Each record has its own
-                      meaning.
+                      Release A-1041: only its sample subject is connected.
+                      A-1042 review evidence is listed separately below.
                     </p>
                   </div>
                   <GitBranch size={23} />
@@ -1044,14 +1018,16 @@ function App() {
                     "Effect",
                   ].map((label, i) => (
                     <React.Fragment key={label}>
-                      <div className={`chain-node ${i < 3 ? "done" : ""}`}>
+                      <div className="chain-node">
                         <span>
-                          {i < 3 ? <Check size={20} /> : <Circle size={18} />}
+                          <Circle size={18} />
                         </span>
                         <strong>{label}</strong>
                         <small>
                           {i < 3
-                            ? "Attached"
+                            ? i === 0
+                              ? "Sample release subject"
+                              : "Not connected"
                             : i === 3
                               ? completed["A-1041"] || "Awaiting decision"
                               : "Not established"}
@@ -1063,25 +1039,45 @@ function App() {
                     </React.Fragment>
                   ))}
                 </div>
-                {artifacts.map(({ title, id, detail, icon: Icon }) => (
-                  <button
-                    key={id}
-                    className="artifact-link evidence-row"
-                    onClick={() => setArtifact(`${id} · ${title}`)}
-                  >
-                    <span className="file-icon">
-                      <Icon size={22} />
-                    </span>
-                    <span>
-                      <strong>{title}</strong>
-                      <small>
-                        {id} · {detail}
-                      </small>
-                    </span>
-                    <span className="badge work">Inspectable</span>
-                    <ArrowUpRight size={17} />
-                  </button>
-                ))}
+                {assignments
+                  .filter((a) => evidenceFor(a.id).length > 0)
+                  .map((a) => (
+                    <section
+                      className="evidence-group"
+                      key={a.id}
+                      aria-label={`Evidence for ${a.id}`}
+                    >
+                      <h3>
+                        {a.id} · {a.title}
+                      </h3>
+                      <EvidenceArtifacts
+                        assignmentId={a.id}
+                        onInspect={setArtifact}
+                      />
+                      {receipts
+                        .filter((record) => record.assignmentId === a.id)
+                        .map((record) => (
+                          <button
+                            key={record.id}
+                            className="artifact-link evidence-row"
+                            onClick={() => {
+                              setView("My Work");
+                              open(a);
+                              setTab("Activity");
+                            }}
+                          >
+                            <FileCheck2 size={20} />
+                            <span>
+                              <strong>{record.decision} receipt</strong>
+                              <small>
+                                {a.id} · Local demo record · Not server-admitted
+                              </small>
+                            </span>
+                            <ArrowUpRight size={17} />
+                          </button>
+                        ))}
+                    </section>
+                  ))}
                 <button
                   className="artifact-link evidence-row"
                   onClick={() => {
@@ -1204,32 +1200,7 @@ function App() {
             <FileCode2 size={18} />
             SAMPLE ARTIFACT
           </div>
-          <h3>{artifact}</h3>
-          <dl className="artifact-properties">
-            <dt>Origin</dt>
-            <dd>Software Factory · staging-01</dd>
-            <dt>Produced by</dt>
-            <dd>Codex worker / test runner (sample)</dd>
-            <dt>Reference</dt>
-            <dd>
-              <code>{digest}</code>
-            </dd>
-          </dl>
-          <div className="code-preview">
-            <div>
-              <span className="live-dot" />
-              Illustrative evidence excerpt
-            </div>
-            <pre>
-              {artifact.toLowerCase().includes("test")
-                ? "PASS  duplicate event is processed once\nPASS  retry respects backoff interval\nPASS  expired delivery is not replayed\n\n42 passed · 0 failed\nSample data; no tests executed by this UI."
-                : "Contribution: payment webhook retries\n\n+ Check event id before processing\n+ Retry transient failures with backoff\n+ Preserve delivery attempt history\n\nScope: source contribution only\nDeployment authority: not granted"}
-            </pre>
-          </div>
-          <p className="demo-note">
-            This inspector uses fictional data. Digests and provenance have not
-            been verified.
-          </p>
+          <ArtifactContents artifact={artifact} />
           <button
             className="button secondary"
             onClick={() => setArtifact(null)}

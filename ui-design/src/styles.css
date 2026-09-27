@@ -2294,3 +2294,15 @@ textarea::placeholder {
     padding: 15px;
   }
 }
+.evidence-group {
+  padding: 24px 0;
+  border-top: 1px solid var(--line);
+}
+.evidence-group > h3 {
+  font-size: 13px;
+  line-height: 1.7;
+}
+.artifact-properties dd p {
+  font-size: 10px;
+  margin-top: 8px;
+}

@@ -84,3 +84,5 @@ The third update adds **A-1042 → Checks**: preview passed, refused, or could-n
 The fourth update strengthens **A-1041 → release review**. Approval starts disabled because sample prerequisites are missing. Use **Preview release prerequisites → All prerequisites satisfied — demo** to exercise approval, or record a refusal. The confirmation and local Activity include the exact sample release subject and target. See iteration 04 for limitations and validation.
 
 The fifth update adds a **structured decision receipt** under **Activity** after submitting a response. Use **View record** to see the local receipt ID, demo actor, time, subject, permission, rationale and prerequisite snapshot. It is session-only and explicitly not a server-admitted decision. See iteration 05 for details.
+
+The sixth update scopes **Evidence** to each assignment and gives **Artifact Inspector** explicit per-record content and reference availability. The workspace Evidence page groups records by assignment and links session receipts. Release test/assessment records that are not connected are now shown as unavailable. See iteration 06 for details.

@@ -67,3 +67,15 @@ The receipt says **LOCAL DEMO RECORD** and explicitly states that no server admi
 Validation: production build and all nine browser tests passed. New coverage checks actor, permission, subject context, multiline rationale, timestamp stability, assignment isolation, mobile layout and refresh reset.
 
 Next proposed slice: unify the Evidence view and artifact inspector with the assignment-scoped candidate and decision records, replacing the remaining generic sample links.
+
+## 06 — Assignment-scoped evidence and artifact inspection
+
+Assignment Evidence now lists only explicitly associated sample records; its badge counts those records. A-1042 owns its source change, historical test fixture and worker notes. A-1041 owns a separate release subject. Other assignments show an unavailable-evidence state, and their Overview input inspector states that its body and immutable reference are not connected.
+
+The inspector consumes a typed artifact record instead of guessing content from its title. Source content is derived from the candidate fixture; the release identity is shared with the decision subject. Records without a digest say so. The historical “42 passed” fixture is explicitly not an executed check, not verified against the candidate, and not proof of duplicate-event coverage.
+
+The workspace Evidence page groups records by assignment and links available session receipts to that assignment's Activity. Its release chain no longer marks tests and assessment as attached without connected records; the release subject, decision and unestablished effect remain separate.
+
+Validation: production build and all ten browser tests passed. New coverage checks assignment isolation, unavailable evidence, per-artifact content and reference behavior, and inspector layout at phone width. No remote records were copied or backend connected. Initial screenshots remain historical previews.
+
+Next proposed slice: inspect a bounded set of sanitized SF metadata from the authorized development host to refine fixtures against observed data, without exposing logs or credentials or running assignments.

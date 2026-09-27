@@ -358,3 +358,51 @@ test("decision receipt snapshots identity, time and rationale without leaking ac
   await page.getByRole("tab", { name: "Activity", exact: true }).click();
   await expect(receipt).toHaveCount(0);
 });
+
+test("evidence and inspector stay scoped and expose only connected references", async ({
+  page,
+}) => {
+  await page.goto("/");
+  await page.getByRole("button", { name: "View release assignment" }).click();
+  await page.getByRole("tab", { name: "Evidence", exact: false }).click();
+  const panel = page.getByRole("tabpanel");
+  await expect(panel).not.toContainText("AR-775");
+  await panel.getByRole("button", { name: /Release candidate AR-801/ }).click();
+  await expect(page.getByRole("dialog")).toContainText(
+    "sha256:" + "c".repeat(64),
+  );
+  await expect(page.getByRole("dialog")).toContainText("A-1041");
+  await expect(page.getByRole("dialog")).not.toContainText("42 passed");
+  await page.keyboard.press("Escape");
+  await page.getByRole("button", { name: "Back to My Work" }).click();
+  await page.getByRole("button", { name: /A-1038.*Clarify/ }).click();
+  await page.getByRole("tab", { name: "Evidence" }).click();
+  await expect(panel).toContainText("No sample evidence");
+  await page
+    .getByRole("navigation")
+    .getByRole("button", { name: "Evidence", exact: true })
+    .click();
+  const group = page.getByRole("region", {
+    name: "Evidence for A-1042",
+    exact: true,
+  });
+  await group
+    .getByRole("button", { name: /Worker contribution AR-776/ })
+    .click();
+  await expect(page.getByRole("dialog")).toContainText("No digest connected");
+  await expect(page.getByRole("dialog")).toContainText(
+    "Duplicate-event handling still requires separate review",
+  );
+  await page.keyboard.press("Escape");
+  await group.getByRole("button", { name: /Source change AR-771/ }).click();
+  await expect(page.getByRole("dialog")).toContainText("Math.min");
+  await expect(page.getByRole("dialog")).toContainText(
+    "sha256:" + "a".repeat(64),
+  );
+  await page.setViewportSize({ width: 390, height: 844 });
+  expect(
+    await page.evaluate(
+      () => document.documentElement.scrollWidth <= innerWidth,
+    ),
+  ).toBe(true);
+});
