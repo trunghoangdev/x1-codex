@@ -3,6 +3,8 @@
 - Read and write only within `/home/trungh/ws_x1/x1-codex`.
 - All other repositories in `/home/trungh/ws_x1` are read-only. Do not create, modify, or delete files in them, including through commands, builds, tests, or generated output.
 - Do not write outside `/home/trungh/ws_x1/x1-codex` without explicit user authorization.
+- Do not read `/home/trungh/ws_x1/x1` or use its contents as a source.
+- When reading `x-dartmesh-note`, exclude every `archive` directory.
 - Preserve these restrictions for future work unless the user explicitly changes them.
 
 # Git authorization
