@@ -1,5 +1,7 @@
 import { CircleCheck, AlertTriangle, Clock3 } from "lucide-react";
 
+import { sampleCandidate } from "./candidateData";
+
 type Attempt = {
   attempt_id: string;
   assignment_id: string;
@@ -16,14 +18,14 @@ type Attempt = {
 // AttemptRecord; absent observations remain absent rather than defaulting to zero.
 const attempts: Attempt[] = [
   {
-    attempt_id: "demo-attempt-03",
+    attempt_id: sampleCandidate.attemptId,
     assignment_id: "A-1042",
     opened_at: "2026-09-22T09:10:00Z",
     settled_at: "2026-09-22T09:22:00Z",
     outcome: "produced",
     termination: "exit status 0",
     exit_code: 0,
-    artifact_digest: `sha256:${"a".repeat(64)}`,
+    artifact_digest: sampleCandidate.artifactDigest,
   },
   {
     attempt_id: "demo-attempt-02",

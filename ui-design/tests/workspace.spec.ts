@@ -160,3 +160,41 @@ test("attempts preserve unknown outcomes and keyboard navigation", async ({
   await expect(page.getByRole("tabpanel")).toContainText("No sample attempts");
   await expect(page.getByRole("article")).toHaveCount(0);
 });
+
+test("candidate shows a scoped diff, file changes and unverified identities", async ({
+  page,
+}) => {
+  await page.goto("/");
+  await page.getByRole("button", { name: /A-1042.*Review retry/ }).click();
+  await page.getByRole("tab", { name: "Candidate", exact: true }).click();
+  const panel = page.getByRole("tabpanel");
+  await expect(panel).toContainText("demo-attempt-03");
+  await expect(panel).toContainText("synthetic, not verified");
+  await expect(panel).toContainText("1 added · 1 removed");
+  await expect(panel.locator(".diff-removed")).toContainText("return 1000;");
+  await expect(panel.locator(".diff-added")).toContainText("Math.min");
+  await page
+    .getByRole("button", { name: "src/webhooks/retry.test.ts Added" })
+    .click();
+  await expect(panel).toContainText("6 added · 0 removed");
+  await expect(panel.locator(".diff-removed")).toHaveCount(0);
+  await page.setViewportSize({ width: 390, height: 844 });
+  expect(
+    await page.evaluate(
+      () => document.documentElement.scrollWidth <= innerWidth,
+    ),
+  ).toBe(true);
+  await page
+    .getByRole("button", { name: "docs/webhook-retries.md Added" })
+    .click();
+  await expect(panel).toContainText(
+    "Review duplicate-event handling separately.",
+  );
+  await page.getByRole("button", { name: "Back to My Work" }).click();
+  await page
+    .getByRole("button", { name: /A-1041.*Authorize Payments/ })
+    .click();
+  await page.getByRole("tab", { name: "Candidate", exact: true }).click();
+  await expect(panel).toContainText("No sample candidate");
+  await expect(panel.locator(".diff-table")).toHaveCount(0);
+});

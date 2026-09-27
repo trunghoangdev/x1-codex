@@ -1980,3 +1980,139 @@ textarea::placeholder {
     grid-template-columns: 1fr;
   }
 }
+.candidate-identity {
+  display: grid;
+  gap: 17px;
+  padding: 20px;
+  margin: 22px 0;
+  background: #f6f8f1;
+  border: 1px solid var(--line);
+  border-radius: 7px;
+}
+.candidate-identity dt {
+  font-size: 10px;
+  color: #707b64;
+  display: flex;
+  gap: 6px;
+  margin-bottom: 6px;
+}
+.candidate-identity dd {
+  margin: 0;
+  font-size: 12px;
+  overflow-wrap: anywhere;
+}
+.candidate-identity code {
+  font-size: 11px;
+}
+.candidate-files {
+  display: grid;
+  gap: 7px;
+  margin-bottom: 20px;
+}
+.candidate-files button {
+  display: flex;
+  align-items: center;
+  gap: 9px;
+  text-align: left;
+  padding: 12px;
+  border: 1px solid var(--line);
+  border-radius: 5px;
+  background: #fff;
+  font-size: 11px;
+}
+.candidate-files button.selected {
+  background: #eef3e7;
+  border-color: #8ca37c;
+}
+.candidate-files button span {
+  flex: 1;
+  overflow-wrap: anywhere;
+  min-width: 0;
+}
+.candidate-files small {
+  font-size: 10px;
+  color: #64765a;
+}
+.diff-panel {
+  min-width: 0;
+  border: 1px solid var(--line);
+  border-radius: 6px;
+  overflow: hidden;
+}
+.diff-heading {
+  display: flex;
+  justify-content: space-between;
+  flex-wrap: wrap;
+  gap: 9px;
+  padding: 14px;
+  background: #f6f8f1;
+  font-size: 10px;
+}
+.diff-heading strong {
+  overflow-wrap: anywhere;
+}
+.diff-heading span {
+  color: #68765d;
+}
+.diff-scroll {
+  overflow-x: auto;
+}
+.diff-table {
+  border-collapse: collapse;
+  width: 100%;
+  font-size: 10px;
+  text-align: left;
+}
+.diff-table th {
+  font-weight: 500;
+  padding: 9px;
+  color: #707b64;
+  background: #fafbf8;
+}
+.diff-table td {
+  padding: 5px 9px;
+  vertical-align: top;
+}
+.diff-table td:not(:last-child) {
+  color: #64705e;
+  text-align: right;
+  width: 1%;
+}
+.diff-table code {
+  white-space: pre;
+  line-height: 1.8;
+}
+.diff-added {
+  background: #edf7e8;
+  color: #355b31;
+}
+.diff-removed {
+  background: #fbede7;
+  color: #824e3d;
+}
+.sr-only {
+  position: absolute;
+  width: 1px;
+  height: 1px;
+  padding: 0;
+  overflow: hidden;
+  clip: rect(0, 0, 0, 0);
+  white-space: nowrap;
+}
+.detail-layout > div {
+  min-width: 0;
+}
+.tabs {
+  overflow-x: auto;
+}
+.tabs button {
+  flex-shrink: 0;
+}
+@media (max-width: 620px) {
+  .tabs {
+    gap: 14px;
+  }
+  .tabs button {
+    font-size: 10px;
+  }
+}

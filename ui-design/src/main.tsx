@@ -29,7 +29,14 @@ import {
 } from "lucide-react";
 import "./styles.css";
 import { Attempts } from "./Attempts";
-const assignmentTabs = ["Overview", "Attempts", "Evidence", "Activity"];
+import { Candidate } from "./Candidate";
+const assignmentTabs = [
+  "Overview",
+  "Attempts",
+  "Candidate",
+  "Evidence",
+  "Activity",
+];
 
 type View = "My Work" | "Organization" | "Evidence";
 type Kind = "Assessment" | "Authority" | "Work" | "Reconciliation";
@@ -708,6 +715,8 @@ function App() {
                           </button>
                         ))}
                       </>
+                    ) : tab === "Candidate" ? (
+                      <Candidate key={selected.id} assignmentId={selected.id} />
                     ) : tab === "Attempts" ? (
                       <Attempts assignmentId={selected.id} />
                     ) : (
