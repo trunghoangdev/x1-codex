@@ -406,3 +406,42 @@ test("evidence and inspector stay scoped and expose only connected references", 
     ),
   ).toBe(true);
 });
+
+test("attempt failures distinguish process exit, platform state and cleanup", async ({
+  page,
+}) => {
+  await page.goto("/");
+  await page.getByRole("button", { name: /A-1042.*Review retry/ }).click();
+  await page.getByRole("tab", { name: "Attempts", exact: true }).click();
+  const failed = page.getByRole("article", {
+    name: "demo-attempt-process-failure",
+    exact: true,
+  });
+  await expect(failed).toContainText("exit status 1");
+  await expect(
+    failed
+      .locator("div")
+      .filter({ has: page.locator("dt", { hasText: "Platform state" }) })
+      .last(),
+  ).toContainText("Not recorded");
+  await expect(failed).toContainText("Destroyed · recorded by harness");
+  await expect(failed).toContainText("No artifact reference recorded");
+  await expect(failed).toContainText("does not establish a platform refusal");
+  const produced = page.getByRole("article", {
+    name: "demo-attempt-03",
+    exact: true,
+  });
+  await expect(produced).toContainText("admitted");
+  const neverStarted = page.getByRole("article", {
+    name: "demo-attempt-02",
+    exact: true,
+  });
+  await expect(neverStarted).toContainText("Not observed");
+  await expect(neverStarted).not.toContainText("Destroyed");
+  await page.setViewportSize({ width: 390, height: 844 });
+  expect(
+    await page.evaluate(
+      () => document.documentElement.scrollWidth <= innerWidth,
+    ),
+  ).toBe(true);
+});

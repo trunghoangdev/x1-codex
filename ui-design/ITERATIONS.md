@@ -79,3 +79,17 @@ The workspace Evidence page groups records by assignment and links available ses
 Validation: production build and all ten browser tests passed. New coverage checks assignment isolation, unavailable evidence, per-artifact content and reference behavior, and inspector layout at phone width. No remote records were copied or backend connected. Initial screenshots remain historical previews.
 
 Next proposed slice: inspect a bounded set of sanitized SF metadata from the authorized development host to refine fixtures against observed data, without exposing logs or credentials or running assignments.
+
+## 07 — Process failure and independent attempt observations
+
+A bounded read-only inspection of allowlisted attempt/validation JSON metadata on the authorized development host informed this iteration. Only aggregate state classifications and field-presence information were returned. No raw diagnostic streams, objectives, credentials, artifact bodies or production identifiers were copied into this repository. Nothing was executed or modified remotely.
+
+The inspected sample included produced/admitted attempts and failed attempts with an observed nonzero process exit but no reported platform state or artifact reference. The UI now represents that second shape explicitly, instead of illustrating every failure as a process that never started.
+
+Open **A-1042 → Attempts** for four synthetic examples. Platform state, process exit, and ephemeral cleanup now appear separately. Missing observations remain “Not recorded”; a process failure does not become a platform refusal. The cleanup wording follows the local SF harness's `destroyed` record value; it is an illustrative observation, not independent cleanup verification.
+
+No open attempts, absent exit codes, or failed validator observations were seen in the bounded sample. Existing examples for those cases remain clearly synthetic edge cases, not claims about production history. The sample is not a complete inventory and cannot establish the absence of other outcomes.
+
+Validation: production build and all eleven browser tests passed. Added coverage checks process-failure semantics, missing platform/artifact coordinates, observed versus unknown cleanup, and mobile overflow. Live data remains disconnected.
+
+Next proposed slice: make the growing assignment interface easier to scan on mobile, with refreshed preview screenshots of the current screens.

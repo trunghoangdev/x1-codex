@@ -12,6 +12,8 @@ type Attempt = {
   exit_code?: number;
   artifact_digest?: string;
   failure?: string;
+  state?: string;
+  ephemeral_cleanup?: string;
 };
 
 // Synthetic fixtures, not copied from production. Field names follow SF's
@@ -26,6 +28,20 @@ const attempts: Attempt[] = [
     termination: "exit status 0",
     exit_code: 0,
     artifact_digest: sampleCandidate.artifactDigest,
+    state: "admitted",
+    ephemeral_cleanup: "destroyed",
+  },
+  {
+    attempt_id: "demo-attempt-process-failure",
+    assignment_id: "A-1042",
+    opened_at: "2026-09-22T08:50:00Z",
+    settled_at: "2026-09-22T08:52:00Z",
+    outcome: "failed",
+    termination: "exit status 1",
+    exit_code: 1,
+    ephemeral_cleanup: "destroyed",
+    failure:
+      "Sample: the process ran and returned a nonzero exit status. No platform state or artifact reference was recorded. This does not establish a platform refusal.",
   },
   {
     attempt_id: "demo-attempt-02",
@@ -63,6 +79,11 @@ export function Attempts({ assignmentId }: { assignmentId: string }) {
       <p className="summary">
         An attempt describes execution. Producing a result does not approve the
         candidate or establish an external effect.
+      </p>
+      <p className="demo-note">
+        Synthetic examples informed by SF record shapes. No production records
+        or raw diagnostics are displayed. Open and launch-failure examples
+        illustrate cases beyond the inspected development sample.
       </p>
       {records.length === 0 ? (
         <div className="empty-state">
@@ -118,12 +139,29 @@ export function Attempts({ assignmentId }: { assignmentId: string }) {
                     {a.exit_code === undefined ? "Not observed" : a.exit_code}
                   </dd>
                 </div>
+                <div>
+                  <dt>Platform state</dt>
+                  <dd>{a.state ?? "Not recorded"}</dd>
+                </div>
+                <div>
+                  <dt>Ephemeral cleanup</dt>
+                  <dd>
+                    {a.ephemeral_cleanup === "destroyed"
+                      ? "Destroyed · recorded by harness"
+                      : "Not recorded"}
+                  </dd>
+                </div>
               </dl>
               {a.artifact_digest && (
                 <div className="attempt-artifact">
                   <span>Artifact reference · synthetic, not verified</span>
                   <code>{a.artifact_digest}</code>
                 </div>
+              )}
+              {!a.artifact_digest && (
+                <p className="attempt-explanation">
+                  No artifact reference recorded.
+                </p>
               )}
               {a.failure && <p className="attempt-explanation">{a.failure}</p>}
               {a.outcome === "open" && (
