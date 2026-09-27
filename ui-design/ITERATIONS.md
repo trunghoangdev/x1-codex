@@ -55,3 +55,15 @@ These are fictional prerequisites and a synthetic, unverified digest. No real ga
 Validation: production build and all eight browser tests passed. Coverage includes missing/refused prerequisites, cancellation, required rationale, exact subject in confirmation/history, locked completed decisions and mobile overflow. A prior test was narrowed to its Checks panel so the new, separate release scenario selector does not count as a validator selector.
 
 Next proposed slice: a structured decision receipt showing actor, subject, rationale and recording time, with a clear distinction between a local demo record and a server-admitted decision.
+
+## 05 — Structured local decision receipt
+
+Submit a response, then choose **View record** or open **Activity**. A structured receipt replaces the previous free-text activity entry and records a local unique ID, assignment, decision, browser-clock timestamp, demo actor, role, simulated permission, subject, rationale, and release prerequisite snapshot when applicable.
+
+Release decisions retain the exact sample release digest and target. A-1042 assessment receipts refer to the sample candidate-bytes digest. Other sample subjects explicitly state that no immutable digest is connected. The record is copied at submission, filtered by exact assignment ID, and remains stable while navigating in the same session. Historical sample activity no longer acquires a misleading “Just now” timestamp after a response.
+
+The receipt says **LOCAL DEMO RECORD** and explicitly states that no server admitted it, no identity/authority service verified it, and no external effect was established. Refresh clears it. No remote data, persistence, signatures, or backend admission were introduced.
+
+Validation: production build and all nine browser tests passed. New coverage checks actor, permission, subject context, multiline rationale, timestamp stability, assignment isolation, mobile layout and refresh reset.
+
+Next proposed slice: unify the Evidence view and artifact inspector with the assignment-scoped candidate and decision records, replacing the remaining generic sample links.

@@ -2253,3 +2253,44 @@ textarea::placeholder {
   margin: 14px 0;
   color: #657454;
 }
+.decision-receipt {
+  margin: 22px 0;
+  padding: 20px;
+  border: 1px solid #d8e2cc;
+  border-radius: 8px;
+  background: #fafcf6;
+}
+.receipt-heading {
+  display: flex;
+  align-items: center;
+  flex-wrap: wrap;
+  gap: 10px;
+  color: #466438;
+  margin-bottom: 14px;
+}
+.detail-panel .receipt-heading h3 {
+  margin: 0;
+}
+.decision-receipt dd {
+  overflow-wrap: anywhere;
+}
+.decision-receipt h4 {
+  margin: 18px 0 9px;
+  font-size: 12px;
+  font-weight: 600;
+}
+.receipt-rationale {
+  white-space: pre-wrap;
+  overflow-wrap: anywhere;
+  font-size: 12px;
+  line-height: 1.9;
+}
+.receipt-prerequisites {
+  font-size: 11px;
+  color: #657454;
+}
+@media (max-width: 620px) {
+  .decision-receipt {
+    padding: 15px;
+  }
+}

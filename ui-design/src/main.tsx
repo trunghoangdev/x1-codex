@@ -31,6 +31,8 @@ import "./styles.css";
 import { Attempts } from "./Attempts";
 import { Candidate } from "./Candidate";
 import { Checks } from "./Checks";
+import { DecisionReceipt, type ResponseRecord } from "./DecisionReceipt";
+import { sampleCandidate } from "./candidateData";
 import {
   ReleaseReview,
   ReleaseSubject,
@@ -181,7 +183,7 @@ function App() {
   const [artifact, setArtifact] = useState<string | null>(null);
   const [mobile, setMobile] = useState(false);
   const [showCompleted, setShowCompleted] = useState(false);
-  const [activity, setActivity] = useState<string[]>([]);
+  const [receipts, setReceipts] = useState<ResponseRecord[]>([]);
   const headingRef = useRef<HTMLHeadingElement>(null);
   const active = assignments.filter((a) => !completed[a.id]);
   const visible = assignments.filter(
@@ -212,10 +214,27 @@ function App() {
       return;
     if (decision === "Approval" && readiness !== "ready") return;
     setCompleted((prev) => ({ ...prev, [selected.id]: decision }));
-    setActivity((prev) => [
-      `${decision} · ${selected.id} · ${selected.kind === "Authority" ? `${releaseSubject.label} · ${releaseSubject.digest} · ${releaseSubject.target} · prerequisites: ${readiness} · ` : ""}${reason.trim()}`,
-      ...prev,
-    ]);
+    const record: ResponseRecord = {
+      id: `demo-receipt-${crypto.randomUUID()}`,
+      assignmentId: selected.id,
+      decision,
+      recordedAt: new Date().toISOString(),
+      actor: "Alex Morgan",
+      role: selected.role,
+      permission: selected.authority,
+      rationale: reason.trim(),
+      subject:
+        selected.kind === "Authority"
+          ? { ...releaseSubject }
+          : selected.id === sampleCandidate.assignmentId
+            ? {
+                label: sampleCandidate.label,
+                digest: sampleCandidate.candidateDigest,
+              }
+            : { label: selected.artifact },
+      prerequisites: selected.kind === "Authority" ? readiness : undefined,
+    };
+    setReceipts((prev) => [record, ...prev]);
     setNotice(
       `${decision} recorded in this demo. No external action was taken.`,
     );
@@ -740,8 +759,21 @@ function App() {
                       <>
                         <div className="section-label">ASSIGNMENT HISTORY</div>
                         <h2>A traceable chain of responsibility</h2>
+                        {receipts
+                          .filter(
+                            (record) => record.assignmentId === selected.id,
+                          )
+                          .map((record) => (
+                            <DecisionReceipt key={record.id} record={record} />
+                          ))}
+                        {!receipts.some(
+                          (record) => record.assignmentId === selected.id,
+                        ) && (
+                          <p className="summary">
+                            No response recorded in this demo session.
+                          </p>
+                        )}
                         {[
-                          ...activity.filter((a) => a.includes(selected.id)),
                           "Test runner attached test evidence · demo",
                           "Codex worker submitted its contribution · demo",
                           "Assignment admitted and assigned to Alex · demo",
@@ -750,11 +782,7 @@ function App() {
                             <span className="timeline-dot" />
                             <div>
                               <strong>{a}</strong>
-                              <small>
-                                {i === 0 && completed[selected.id]
-                                  ? "Just now in this session"
-                                  : "September 22 · sample record"}
-                              </small>
+                              <small>September 22 · sample record</small>
                             </div>
                           </div>
                         ))}

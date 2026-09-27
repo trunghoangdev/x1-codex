@@ -310,3 +310,51 @@ test("release approval requires prerequisites and binds its exact subject", asyn
     ),
   ).toBe(true);
 });
+
+test("decision receipt snapshots identity, time and rationale without leaking across assignments", async ({
+  page,
+}) => {
+  await page.goto("/");
+  await page.getByRole("button", { name: "View release assignment" }).click();
+  await page
+    .getByRole("button", { name: "Refuse release", exact: true })
+    .click();
+  const rationale =
+    "Publication evidence is missing.\nRecheck before authorizing the exact candidate.";
+  await page.getByLabel("Decision rationale").fill(rationale);
+  await page.getByRole("button", { name: "Record refusal" }).click();
+  await page.getByRole("button", { name: "View record", exact: true }).click();
+  const receipt = page.getByRole("article", { name: "Decision receipt" });
+  await expect(receipt).toContainText("Refusal receipt");
+  await expect(receipt).toContainText("Alex Morgan");
+  await expect(receipt).toContainText("release.approve");
+  await expect(receipt).toContainText("Not admitted by a server");
+  await expect(receipt).toContainText("Snapshot of prerequisites: missing");
+  await expect(receipt.locator(".receipt-rationale")).toHaveText(rationale);
+  const recordedAt = await receipt.locator("time").getAttribute("datetime");
+  expect(Number.isNaN(Date.parse(recordedAt!))).toBe(false);
+  await page.getByRole("button", { name: "Back to My Work" }).click();
+  await page.getByRole("button", { name: /A-1042.*Review retry/ }).click();
+  await page.getByRole("tab", { name: "Activity", exact: true }).click();
+  await expect(receipt).toHaveCount(0);
+  await page.getByRole("button", { name: "Back to My Work" }).click();
+  await page.getByRole("button", { name: "Completed", exact: true }).click();
+  await page
+    .getByRole("button", { name: /A-1041.*Authorize Payments/ })
+    .click();
+  await page.getByRole("tab", { name: "Activity", exact: true }).click();
+  await expect(receipt.locator("time")).toHaveAttribute(
+    "datetime",
+    recordedAt!,
+  );
+  await page.setViewportSize({ width: 390, height: 844 });
+  expect(
+    await page.evaluate(
+      () => document.documentElement.scrollWidth <= innerWidth,
+    ),
+  ).toBe(true);
+  await page.reload();
+  await page.getByRole("button", { name: "View release assignment" }).click();
+  await page.getByRole("tab", { name: "Activity", exact: true }).click();
+  await expect(receipt).toHaveCount(0);
+});
