@@ -31,6 +31,12 @@ import "./styles.css";
 import { Attempts } from "./Attempts";
 import { Candidate } from "./Candidate";
 import { Checks } from "./Checks";
+import {
+  ReleaseReview,
+  ReleaseSubject,
+  releaseSubject,
+  type Readiness,
+} from "./ReleaseReview";
 const assignmentTabs = [
   "Overview",
   "Attempts",
@@ -168,6 +174,7 @@ function App() {
   const [query, setQuery] = useState("");
   const [completed, setCompleted] = useState<Record<string, string>>({});
   const [tab, setTab] = useState("Overview");
+  const [readiness, setReadiness] = useState<Readiness>("missing");
   const [decision, setDecision] = useState<string | null>(null);
   const [reason, setReason] = useState("");
   const [notice, setNotice] = useState("");
@@ -201,10 +208,12 @@ function App() {
     setTab("Overview");
   }
   function commitDecision() {
-    if (!selected || !reason.trim() || !decision) return;
+    if (!selected || !reason.trim() || !decision || completed[selected.id])
+      return;
+    if (decision === "Approval" && readiness !== "ready") return;
     setCompleted((prev) => ({ ...prev, [selected.id]: decision }));
     setActivity((prev) => [
-      `${decision} · ${selected.id} · ${reason.trim()}`,
+      `${decision} · ${selected.id} · ${selected.kind === "Authority" ? `${releaseSubject.label} · ${releaseSubject.digest} · ${releaseSubject.target} · prerequisites: ${readiness} · ` : ""}${reason.trim()}`,
       ...prev,
     ]);
     setNotice(
@@ -498,7 +507,7 @@ function App() {
                   <section className="focus-card">
                     <div className="focus-label">
                       <span className="live-dot" />
-                      READY FOR YOUR DECISION
+                      RELEASE REVIEW
                     </div>
                     <div className="focus-art">
                       <ShieldCheck size={35} />
@@ -514,7 +523,7 @@ function App() {
                     <p>
                       {completed["A-1041"]
                         ? "Your demo decision is available in the assignment history."
-                        : "Payments API v1.8.2 has its review and test evidence attached."}
+                        : "Inspect the exact release candidate and its prerequisites before deciding."}
                     </p>
                     <button onClick={() => open(assignments[1])}>
                       View release assignment <ArrowRight size={16} />
@@ -772,6 +781,13 @@ function App() {
                       <strong>{selected.id} · exact input only</strong>
                     </div>
                     <div className="section-rule" />
+                    {selected.kind === "Authority" && (
+                      <ReleaseReview
+                        readiness={readiness}
+                        onChange={setReadiness}
+                        locked={!!completed[selected.id]}
+                      />
+                    )}
                     {completed[selected.id] ? (
                       <div className="recorded">
                         <CircleCheck size={25} />
@@ -795,6 +811,10 @@ function App() {
                         </p>
                         <button
                           className="button primary wide"
+                          disabled={
+                            selected.kind === "Authority" &&
+                            readiness !== "ready"
+                          }
                           onClick={() => {
                             setReason("");
                             setDecision(
@@ -1099,6 +1119,15 @@ function App() {
           <p>
             You are recording a response for <strong>{selected.title}</strong>.
           </p>
+          {selected.kind === "Authority" && (
+            <>
+              <ReleaseSubject />
+              <p className="demo-note">
+                Prerequisite snapshot: {readiness}. This decision applies only
+                to the subject above.
+              </p>
+            </>
+          )}
           <label className="textarea-label" htmlFor="rationale">
             {selected.kind === "Work"
               ? "Contribution and acceptance criteria"
@@ -1129,7 +1158,10 @@ function App() {
             </button>
             <button
               className="button primary"
-              disabled={!reason.trim()}
+              disabled={
+                !reason.trim() ||
+                (decision === "Approval" && readiness !== "ready")
+              }
               onClick={commitDecision}
             >
               Record {decision.toLowerCase()}

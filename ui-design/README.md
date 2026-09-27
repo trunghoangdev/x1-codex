@@ -80,3 +80,5 @@ See [ITERATIONS.md](ITERATIONS.md). The first update adds **Attempts** to assign
 The second update adds **A-1042 → Candidate**: select a changed file to inspect its computed sample line diff and fixed base reference. This is illustrative source content, not a production candidate. See iteration 02 in the progress document for validation and scope.
 
 The third update adds **A-1042 → Checks**: preview passed, refused, or could-not-run validator observations independently of human decisions. No real validator runs when the scenario selector changes. See iteration 03 for scope and validation.
+
+The fourth update strengthens **A-1041 → release review**. Approval starts disabled because sample prerequisites are missing. Use **Preview release prerequisites → All prerequisites satisfied — demo** to exercise approval, or record a refusal. The confirmation and local Activity include the exact sample release subject and target. See iteration 04 for limitations and validation.

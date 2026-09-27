@@ -53,6 +53,10 @@ for (const response of ["Approval", "Refusal"]) {
   }) => {
     await page.goto("/");
     await page.getByRole("button", { name: "View release assignment" }).click();
+    if (response === "Approval")
+      await page
+        .getByLabel("Preview release prerequisites")
+        .selectOption("ready");
     await page
       .getByRole("button", {
         name: response === "Approval" ? "Approve release" : "Refuse release",
@@ -69,9 +73,7 @@ for (const response of ["Approval", "Refusal"]) {
     await page
       .getByRole("button", { name: `Record ${response.toLowerCase()}` })
       .click();
-    await expect(page.getByRole("status")).toContainText(
-      `${response} recorded`,
-    );
+    await expect(page.locator(".toast")).toContainText(`${response} recorded`);
     await page
       .getByRole("navigation")
       .getByRole("button", { name: "Evidence", exact: true })
@@ -253,5 +255,58 @@ test("checks distinguish observations from decisions without changing work", asy
     .click();
   await page.getByRole("tab", { name: "Checks", exact: true }).click();
   await expect(page.getByRole("tabpanel")).toContainText("No sample checks");
-  await expect(page.getByRole("combobox")).toHaveCount(0);
+  await expect(page.getByRole("tabpanel").getByRole("combobox")).toHaveCount(0);
+});
+
+test("release approval requires prerequisites and binds its exact subject", async ({
+  page,
+}) => {
+  await page.goto("/");
+  await page.getByRole("button", { name: "View release assignment" }).click();
+  const approve = page.getByRole("button", {
+    name: "Approve release",
+    exact: true,
+  });
+  const selector = page.getByLabel("Preview release prerequisites");
+  await expect(approve).toBeDisabled();
+  await expect(
+    page.getByRole("button", { name: "Refuse release", exact: true }),
+  ).toBeEnabled();
+  await selector.selectOption("refused");
+  await expect(approve).toBeDisabled();
+  await expect(
+    page.getByRole("region", { name: "Release prerequisites" }),
+  ).toContainText("Refused · sample");
+  await selector.selectOption("ready");
+  await approve.click();
+  const modal = page.getByRole("dialog");
+  await expect(modal).toContainText("sha256:" + "c".repeat(64));
+  await expect(modal).toContainText("Production · Payments API");
+  await expect(
+    page.getByRole("button", { name: "Record approval" }),
+  ).toBeDisabled();
+  await page.getByRole("button", { name: "Cancel", exact: true }).click();
+  await expect(selector).toBeEnabled();
+  await selector.selectOption("missing");
+  await expect(approve).toBeDisabled();
+  await selector.selectOption("ready");
+  await approve.click();
+  await page
+    .getByLabel("Decision rationale")
+    .fill("Reviewed the sample exact subject and prerequisites.");
+  await page.getByRole("button", { name: "Record approval" }).click();
+  await expect(selector).toBeDisabled();
+  await page.getByRole("tab", { name: "Activity", exact: true }).click();
+  await expect(page.getByRole("tabpanel")).toContainText(
+    "sha256:" + "c".repeat(64),
+  );
+  await expect(page.getByRole("tabpanel")).toContainText(
+    "prerequisites: ready",
+  );
+  await page.setViewportSize({ width: 390, height: 844 });
+  expect(
+    await page.evaluate(
+      () => document.documentElement.scrollWidth <= innerWidth,
+    ),
+  ).toBe(true);
 });

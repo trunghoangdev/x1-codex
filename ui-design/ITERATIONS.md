@@ -43,3 +43,15 @@ No validator was executed and no production observation was copied. The digest i
 Validation: production build and all seven browser tests passed, covering the three observation states, absent exit status, diagnostics, assessment separation, assignment isolation, mobile overflow and prior flows.
 
 Next proposed slice: connect the existing release decision demo to an explicit prerequisite summary and exact decision subject, keeping unavailable evidence visibly unavailable.
+
+## 04 — Release prerequisites and exact decision subject
+
+Open **A-1041**. Its authority panel now identifies the sample release digest and production target, separately from A-1042's review candidate. A labeled preview offers missing evidence (default), satisfied prerequisites, and publication refused scenarios. Approval is disabled unless prerequisites are satisfied; refusal remains available with a required rationale.
+
+The confirmation dialog repeats the exact subject. Recording a decision retains its subject, target and prerequisite scenario in local Activity, and locks the scenario selector for that completed assignment. Cancel makes no decision. The submit handler also rejects an approval with unsatisfied prerequisites or a second response to completed work.
+
+These are fictional prerequisites and a synthetic, unverified digest. No real gate runs, no backend enforces authority, and no release is executed. Choosing “satisfied” only exercises the UI. Existing release approval tests now explicitly select that scenario; they still establish that a decision does not establish an external effect.
+
+Validation: production build and all eight browser tests passed. Coverage includes missing/refused prerequisites, cancellation, required rationale, exact subject in confirmation/history, locked completed decisions and mobile overflow. A prior test was narrowed to its Checks panel so the new, separate release scenario selector does not count as a validator selector.
+
+Next proposed slice: a structured decision receipt showing actor, subject, rationale and recording time, with a clear distinction between a local demo record and a server-admitted decision.
