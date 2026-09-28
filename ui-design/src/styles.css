@@ -2471,3 +2471,18 @@ textarea::placeholder {
 .decision-problem .button {
   min-height: 44px;
 }
+.route-warning {
+  border: 1px solid #e5ccb4;
+  border-radius: 7px;
+  padding: 18px;
+  margin-bottom: 24px;
+  background: #fcf3e9;
+}
+.route-warning strong {
+  font-size: 13px;
+}
+.route-warning p {
+  font-size: 12px;
+  line-height: 1.8;
+  margin: 9px 0 14px;
+}

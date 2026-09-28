@@ -1,3 +1,4 @@
+import { useWorkspaceRoute } from "./useWorkspaceRoute";
 import { DecisionProblem, decisionBlocked } from "./ReleaseReview";
 import React, { useEffect, useRef, useState } from "react";
 import { createRoot } from "react-dom/client";
@@ -153,13 +154,21 @@ const iconFor = {
   Reconciliation: GitBranch,
 };
 function App() {
-  const [view, setView] = useState<View>("My Work");
-  const [selected, setSelected] = useState<Assignment | null>(null);
+  const { route, navigate: changeRoute } = useWorkspaceRoute(
+    assignments.map((a) => a.id),
+    assignmentTabs,
+  );
+  const view = route.view;
+  const selected = assignments.find((a) => a.id === route.assignmentId) ?? null;
+  const tab = route.tab;
+  function setTab(next: string) {
+    if (selected)
+      changeRoute({ view: "My Work", assignmentId: selected.id, tab: next });
+  }
   const [filter, setFilter] = useState<Kind | "All">("All");
   const [query, setQuery] = useState("");
   const [completed, setCompleted] = useState<Record<string, string>>({});
   const [checkScenario, setCheckScenario] = useState<Scenario>("passed");
-  const [tab, setTab] = useState("Overview");
   const [readiness, setReadiness] = useState<Readiness>("missing");
   const [decision, setDecision] = useState<string | null>(null);
   const [reason, setReason] = useState("");
@@ -184,14 +193,16 @@ function App() {
       return () => clearTimeout(timer);
     }
   }, [notice]);
-  function navigate(next: View) {
-    setView(next);
-    setSelected(null);
+  useEffect(() => {
+    setDecision(null);
+    setArtifact(null);
     setMobile(false);
+  }, [route.view, route.assignmentId, route.tab, route.invalid]);
+  function navigate(next: View) {
+    changeRoute({ view: next, tab: "Overview" });
   }
-  function open(a: Assignment) {
-    setSelected(a);
-    setTab("Overview");
+  function open(a: Assignment, nextTab = "Overview") {
+    changeRoute({ view: "My Work", assignmentId: a.id, tab: nextTab });
   }
   function navigateRelated(next: RelatedTab) {
     setTab(next);
@@ -335,6 +346,21 @@ function App() {
           </div>
         </header>
         <main>
+          {route.invalid && (
+            <div className="route-warning" role="alert">
+              <strong>This link does not match an available screen.</strong>
+              <p>
+                Showing My Work. Select an assignment or return to a valid
+                workspace link.
+              </p>
+              <button
+                className="button secondary"
+                onClick={() => navigate("My Work")}
+              >
+                Open My Work
+              </button>
+            </div>
+          )}
           {view === "My Work" && !selected && (
             <>
               <div className="page-heading">
@@ -578,7 +604,7 @@ function App() {
           )}
           {view === "My Work" && selected && (
             <>
-              <button className="back-link" onClick={() => setSelected(null)}>
+              <button className="back-link" onClick={() => navigate("My Work")}>
                 <ArrowLeft size={16} />
                 Back to My Work
               </button>
@@ -1104,9 +1130,7 @@ function App() {
                             key={record.id}
                             className="artifact-link evidence-row"
                             onClick={() => {
-                              setView("My Work");
-                              open(a);
-                              setTab("Activity");
+                              open(a, "Activity");
                             }}
                           >
                             <FileCheck2 size={20} />
@@ -1124,7 +1148,6 @@ function App() {
                 <button
                   className="artifact-link evidence-row"
                   onClick={() => {
-                    setView("My Work");
                     open(assignments[1]);
                   }}
                 >

@@ -86,8 +86,11 @@ for (const response of ["Approval", "Refusal"]) {
     ).toContainText("Not established");
     await page.reload();
     await expect(
-      page.getByRole("button", { name: /A-1041.*Authorize Payments/ }),
+      page.getByRole("heading", { name: "Evidence, connected." }),
     ).toBeVisible();
+    await expect(
+      page.locator(".chain-node").filter({ hasText: "Authority" }),
+    ).toContainText("Awaiting decision");
   });
 }
 
@@ -354,8 +357,9 @@ test("decision receipt snapshots identity, time and rationale without leaking ac
     ),
   ).toBe(true);
   await page.reload();
-  await page.getByRole("button", { name: "View release assignment" }).click();
-  await page.getByRole("tab", { name: "Activity", exact: true }).click();
+  await expect(
+    page.getByRole("tab", { name: "Activity", exact: true }),
+  ).toHaveAttribute("aria-selected", "true");
   await expect(receipt).toHaveCount(0);
 });
 
@@ -631,3 +635,39 @@ for (const state of ["load-error", "stale", "revoked"]) {
     ).toHaveCount(0);
   });
 }
+
+test("assignment URLs restore screens and support browser history safely", async ({
+  page,
+}) => {
+  await page.goto("/#/assignments/A-1042/candidate");
+  await expect(page.getByRole("tabpanel")).toContainText(
+    "Inspect what this candidate changes",
+  );
+  await page.getByRole("button", { name: "Review candidate checks" }).click();
+  await expect(page).toHaveURL(/#\/assignments\/A-1042\/checks$/);
+  await page.goBack();
+  await expect(
+    page.getByRole("tab", { name: "Candidate", exact: true }),
+  ).toHaveAttribute("aria-selected", "true");
+  await page.goForward();
+  await expect(
+    page.getByRole("tab", { name: "Checks", exact: true }),
+  ).toHaveAttribute("aria-selected", "true");
+  await page.reload();
+  await expect(
+    page.getByRole("tab", { name: "Checks", exact: true }),
+  ).toHaveAttribute("aria-selected", "true");
+  await page.getByRole("button", { name: "Submit assessment" }).click();
+  await page.goBack();
+  await expect(page.getByRole("dialog")).toHaveCount(0);
+  await page.goto("/#/assignments/unknown/activity");
+  await expect(page.getByRole("alert")).toContainText("does not match");
+  await page.getByRole("button", { name: "Open My Work", exact: true }).click();
+  await expect(page).toHaveURL(/#\/work$/);
+  await page.goto("/#/assignments/A-1042/not-a-tab");
+  await expect(page.getByRole("alert")).toBeVisible();
+  await page.goto("/#/organization");
+  await expect(
+    page.getByRole("heading", { name: "One team. Clear responsibility." }),
+  ).toBeVisible();
+});

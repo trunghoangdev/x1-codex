@@ -139,3 +139,19 @@ The displayed release subject is an old snapshot in the candidate-changed scenar
 Validation: production build and all seventeen browser tests passed. Three added scenarios cover blocked actions, invalidation after opening confirmation, preserved rationale, safe reset, absent receipts and phone-width overflow. Previews remain at iteration 08.
 
 Next proposed slice: URL-addressable assignment tabs and browser Back/Forward, preserving context without implying persistence of demo responses.
+
+## 12 — URL-addressable screens and browser history
+
+Workspace screens and assignment tabs now use hash routes, suitable for the static prototype without server-side route rewriting:
+
+- `#/work`, `#/organization`, `#/evidence`
+- `#/assignments/A-1042/overview`
+- `#/assignments/A-1042/candidate` (and attempts, checks, evidence, activity)
+
+UI navigation and related-record links update the URL. Direct links and browser Back/Forward restore the selected assignment/tab. Refresh preserves the screen but resets demo decisions, receipts and scenario state. These values are never encoded in the URL. Repeated navigation to the same destination does not create a duplicate history entry.
+
+Invalid assignment IDs, unknown tabs and malformed routes show an explicit warning with a recovery link to My Work. Route changes dismiss open confirmation/inspector dialogs, preventing a dialog from remaining attached to a different screen. This is view navigation, not backend routing or persistence. Inbox filters, search and scroll positions are outside this slice.
+
+Existing refresh tests were adjusted to check the restored screen and absence of prior session decisions, rather than expecting every refresh to return to the inbox. New browser coverage checks direct links, history navigation, refresh, dialog dismissal and invalid-link recovery. Preview screenshots remain at iteration 08.
+
+Validation: production build and all eighteen browser tests passed for iteration 12.
