@@ -5,6 +5,10 @@ This directory contains plain TypeScript data and view models, with no React imp
 - `models.ts`: frontend assignment, attempt, local response and preview-state types.
 - `assignments.ts`: the fictional inbox and assignment records.
 - `attempts.ts`: synthetic execution examples, referencing the shared sample candidate.
+- `candidate.ts`: synthetic candidate and before/after file bodies.
+- `evidence.ts`: assignment-scoped artifact fixtures and lookup helpers.
+- `checks.ts`: alternative validator observation scenarios; shared types live in `models.ts`.
+- `requirements.ts`: authored sample review criteria, independent of candidate file contents.
 - `release.ts`: one synthetic release subject shared by evidence, confirmation and receipts.
 
 Components consume these values. Evidence data no longer imports a UI component to obtain the release identity. Decision receipts and preview types are likewise independent of rendering.
@@ -17,4 +21,4 @@ No fetch calls, endpoints, authentication, server admission, runtime JSON valida
 
 ## Remaining extraction
 
-This is an incremental boundary, not a finished data layer. Candidate and artifact fixtures remain in `candidateData.ts` and `evidenceData.ts`. Requirements, check scenarios, organization cards and historical activity still need separate treatment. No generic repository abstraction is introduced before the actual application contract is available.
+This is an incremental boundary, not a finished data layer. Candidate, evidence, requirements and validator observation fixtures now live here. Organization cards, historical activity and some release-preview presentation/policy logic still remain in components. No generic repository abstraction is introduced before the actual application contract is available.

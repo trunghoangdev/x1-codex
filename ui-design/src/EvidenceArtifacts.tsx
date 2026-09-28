@@ -1,5 +1,5 @@
 import { ArrowUpRight, FileCode2 } from "lucide-react";
-import { evidenceFor, type EvidenceArtifact } from "./evidenceData";
+import { evidenceFor, type EvidenceArtifact } from "./data/evidence";
 export function EvidenceArtifacts({
   assignmentId,
   onInspect,

@@ -2,7 +2,7 @@ import { attempts } from "./data/attempts";
 import { RelatedRecords, type NavigateRelated } from "./RelatedRecords";
 import { CircleCheck, AlertTriangle, Clock3 } from "lucide-react";
 
-import { sampleCandidate } from "./candidateData";
+import { sampleCandidate } from "./data/candidate";
 
 const labels = {
   produced: "Produced",

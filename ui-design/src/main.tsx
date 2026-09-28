@@ -40,13 +40,14 @@ import {
 import "./styles.css";
 import { Attempts } from "./Attempts";
 import { Candidate } from "./Candidate";
-import { Checks, type Scenario } from "./Checks";
+import { Checks } from "./Checks";
+import type { Scenario } from "./data/models";
 import type { RelatedTab } from "./RelatedRecords";
 import { AssignmentRequirements } from "./AssignmentRequirements";
 import { EvidenceArtifacts, ArtifactContents } from "./EvidenceArtifacts";
-import { evidenceFor, inputFor, type EvidenceArtifact } from "./evidenceData";
+import { evidenceFor, inputFor, type EvidenceArtifact } from "./data/evidence";
 import { DecisionReceipt } from "./DecisionReceipt";
-import { sampleCandidate } from "./candidateData";
+import { sampleCandidate } from "./data/candidate";
 import { ReleaseReview, ReleaseSubject } from "./ReleaseReview";
 const assignmentTabs = [
   "Overview",

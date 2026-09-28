@@ -111,3 +111,5 @@ Iteration 11 adds **A-1041** preview states for failed data loading, changed can
 Iteration 12 adds shareable **screen URLs**. For example, open `http://localhost:4173/#/assignments/A-1042/candidate` to go directly to Candidate. Browser Back/Forward is supported. Refresh keeps the screen but clears all demo response data; sharing an Activity URL does not share a receipt. Invalid links show a warning and a recovery action. Use the port printed by your local Vite server if it differs.
 
 Iteration 13 starts separating fixtures from UI under [`src/data`](src/data/README.md). Assignment/attempt fixtures, the shared release identity and frontend types are now component-independent. The prototype still runs entirely on sample data; this does not introduce or define a production API.
+
+Iteration 14 moves candidate/evidence fixtures, authored review requirements and validator scenarios into `src/data`. The displayed values and interactions are unchanged. See the [data boundary guide](src/data/README.md) for the current structure and remaining work.

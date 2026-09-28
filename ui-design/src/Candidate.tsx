@@ -1,7 +1,7 @@
 import { RelatedRecords, type NavigateRelated } from "./RelatedRecords";
 import { useState } from "react";
 import { FileCode2, GitBranch } from "lucide-react";
-import { sampleCandidate } from "./candidateData";
+import { sampleCandidate } from "./data/candidate";
 
 type Row = {
   kind: "context" | "removed" | "added";

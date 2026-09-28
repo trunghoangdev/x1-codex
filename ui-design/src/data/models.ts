@@ -42,3 +42,11 @@ export type Attempt = {
   state?: string;
   ephemeral_cleanup?: string;
 };
+
+export type Scenario = "passed" | "refused" | "unavailable";
+export type Observation = {
+  executed: boolean;
+  exit_code?: number;
+  termination?: string;
+  diagnostics: string;
+};

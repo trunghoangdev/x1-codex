@@ -1,5 +1,5 @@
 import type { Attempt } from "./models";
-import { sampleCandidate } from "../candidateData";
+import { sampleCandidate } from "./candidate";
 // Synthetic fixtures, not copied from production. Field names follow SF's
 // AttemptRecord; absent observations remain absent rather than defaulting to zero.
 export const attempts: Attempt[] = [

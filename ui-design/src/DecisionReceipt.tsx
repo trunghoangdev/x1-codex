@@ -1,6 +1,6 @@
 import type { ResponseRecord } from "./data/models";
 import { RelatedRecords, type NavigateRelated } from "./RelatedRecords";
-import { sampleCandidate } from "./candidateData";
+import { sampleCandidate } from "./data/candidate";
 import { releaseSubject } from "./data/release";
 import { FileCheck2 } from "lucide-react";
 export function DecisionReceipt({

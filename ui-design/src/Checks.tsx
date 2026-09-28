@@ -1,3 +1,5 @@
+import type { Scenario } from "./data/models";
+import { observations } from "./data/checks";
 import { RelatedRecords, type NavigateRelated } from "./RelatedRecords";
 import {
   CircleCheck,
@@ -5,36 +7,8 @@ import {
   HelpCircle,
   ShieldCheck,
 } from "lucide-react";
-import { sampleCandidate } from "./candidateData";
+import { sampleCandidate } from "./data/candidate";
 
-export type Scenario = "passed" | "refused" | "unavailable";
-type Observation = {
-  executed: boolean;
-  exit_code?: number;
-  termination?: string;
-  diagnostics: string;
-};
-const observations: Record<Scenario, Observation> = {
-  passed: {
-    executed: true,
-    exit_code: 0,
-    termination: "exit status 0",
-    diagnostics:
-      "Sample: the declared retry-delay check passed. This does not assess the entire assignment objective.",
-  },
-  refused: {
-    executed: true,
-    exit_code: 1,
-    termination: "exit status 1",
-    diagnostics:
-      "Sample: the retry interval exceeded the declared upper bound.",
-  },
-  unavailable: {
-    executed: false,
-    diagnostics:
-      "Sample: the validator could not be launched. No candidate verdict was observed.",
-  },
-};
 export function Checks({
   assignmentId,
   response,

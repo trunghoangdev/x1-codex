@@ -163,3 +163,13 @@ Moved fictional assignment and attempt records, shared release identity, and com
 `src/data/README.md` documents the distinction between prototype view models and the still-unestablished backend API contract, plus the remaining extraction work. This slice introduces no network calls, API endpoints, persistence or production authorization. Existing candidate/evidence modules and remaining inline scenario fixtures are explicitly identified; this is not claimed as a complete data layer.
 
 Validation: production build and all eighteen existing browser tests passed after extraction. No new behavior was introduced, so the existing end-to-end regression suite was used rather than adding tests that mirror file moves.
+
+## 14 — Candidate, evidence and check fixture extraction
+
+Moved candidate and evidence modules into `src/data`, extracted validator observation alternatives and authored review requirements from components, and moved observation types into the shared frontend models. Updated all consumers to use the new paths directly; no compatibility re-export files remain.
+
+The data directory has no React/component imports. Candidate relationships, digest labels, missing-data behavior and requirement-versus-result semantics remain unchanged. Requirements remain explicitly authored rather than inferred from candidate output. Organization snapshots, historical activity and some release-preview presentation/policy logic remain in components and are documented as remaining work.
+
+No new runtime behavior, API contract, fetch operation or persistence was introduced. Preview screenshots remain at iteration 08.
+
+Validation: production build and all eighteen existing browser tests passed. This is a fixture/module refactor; no tests were added solely to assert file placement.
