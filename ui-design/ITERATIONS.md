@@ -155,3 +155,11 @@ Invalid assignment IDs, unknown tabs and malformed routes show an explicit warni
 Existing refresh tests were adjusted to check the restored screen and absence of prior session decisions, rather than expecting every refresh to return to the inbox. New browser coverage checks direct links, history navigation, refresh, dialog dismissal and invalid-link recovery. Preview screenshots remain at iteration 08.
 
 Validation: production build and all eighteen browser tests passed for iteration 12.
+
+## 13 — First data/model extraction
+
+Moved fictional assignment and attempt records, shared release identity, and common frontend types out of rendering components into `src/data`. Evidence now obtains the release identity from a plain data module rather than importing the ReleaseReview component. The record values and user-facing behavior are unchanged.
+
+`src/data/README.md` documents the distinction between prototype view models and the still-unestablished backend API contract, plus the remaining extraction work. This slice introduces no network calls, API endpoints, persistence or production authorization. Existing candidate/evidence modules and remaining inline scenario fixtures are explicitly identified; this is not claimed as a complete data layer.
+
+Validation: production build and all eighteen existing browser tests passed after extraction. No new behavior was introduced, so the existing end-to-end regression suite was used rather than adding tests that mirror file moves.

@@ -1,5 +1,5 @@
-export type Readiness =
-  "missing" | "ready" | "refused" | "load-error" | "stale" | "revoked";
+import type { Readiness } from "./data/models";
+import { releaseSubject } from "./data/release";
 export const decisionBlocked = (state: Readiness) =>
   ["load-error", "stale", "revoked"].includes(state);
 const blockedMessages: Partial<Record<Readiness, string>> = {
@@ -32,11 +32,6 @@ export function DecisionProblem({
     </div>
   );
 }
-export const releaseSubject = {
-  label: "Payments API v1.8.2",
-  digest: `sha256:${"c".repeat(64)}`,
-  target: "Production · Payments API",
-};
 export function ReleaseSubject() {
   return (
     <div className="release-subject">

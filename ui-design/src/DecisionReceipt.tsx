@@ -1,19 +1,8 @@
+import type { ResponseRecord } from "./data/models";
 import { RelatedRecords, type NavigateRelated } from "./RelatedRecords";
 import { sampleCandidate } from "./candidateData";
-import { releaseSubject } from "./ReleaseReview";
+import { releaseSubject } from "./data/release";
 import { FileCheck2 } from "lucide-react";
-export type ResponseRecord = {
-  id: string;
-  assignmentId: string;
-  decision: string;
-  recordedAt: string;
-  actor: string;
-  role: string;
-  permission: string;
-  rationale: string;
-  subject: { label: string; digest?: string; target?: string };
-  prerequisites?: string;
-};
 export function DecisionReceipt({
   record,
   onNavigate,

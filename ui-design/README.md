@@ -109,3 +109,5 @@ Iteration 10 connects **A-1042 → Attempts → Inspect produced candidate → R
 Iteration 11 adds **A-1041** preview states for failed data loading, changed candidate and revoked authority. Both decisions are blocked, including when invalidation is simulated inside confirmation. **Reset demo review** returns to missing evidence; it performs no backend request and restores no real permission. See iteration 11 for behavior and validation.
 
 Iteration 12 adds shareable **screen URLs**. For example, open `http://localhost:4173/#/assignments/A-1042/candidate` to go directly to Candidate. Browser Back/Forward is supported. Refresh keeps the screen but clears all demo response data; sharing an Activity URL does not share a receipt. Invalid links show a warning and a recovery action. Use the port printed by your local Vite server if it differs.
+
+Iteration 13 starts separating fixtures from UI under [`src/data`](src/data/README.md). Assignment/attempt fixtures, the shared release identity and frontend types are now component-independent. The prototype still runs entirely on sample data; this does not introduce or define a production API.

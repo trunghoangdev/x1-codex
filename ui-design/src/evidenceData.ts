@@ -1,5 +1,5 @@
 import { sampleCandidate } from "./candidateData";
-import { releaseSubject } from "./ReleaseReview";
+import { releaseSubject } from "./data/release";
 export type EvidenceArtifact = {
   id: string;
   assignmentId: string;
