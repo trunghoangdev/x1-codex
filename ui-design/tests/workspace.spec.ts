@@ -445,3 +445,39 @@ test("attempt failures distinguish process exit, platform state and cleanup", as
     ),
   ).toBe(true);
 });
+
+test("phone assignment tabs are all visible and response shortcut moves focus", async ({
+  page,
+}) => {
+  await page.setViewportSize({ width: 390, height: 844 });
+  await page.goto("/");
+  await page.getByRole("button", { name: /A-1042.*Review retry/ }).click();
+  const tabs = page.getByRole("tab");
+  await expect(tabs).toHaveCount(6);
+  for (const tab of await tabs.all()) {
+    const box = await tab.boundingBox();
+    expect(box!.height).toBeGreaterThanOrEqual(44);
+    expect(box!.x).toBeGreaterThanOrEqual(0);
+    expect(box!.x + box!.width).toBeLessThanOrEqual(390);
+  }
+  await page.getByRole("tab", { name: "Candidate", exact: true }).click();
+  await expect(page.getByRole("tabpanel")).toContainText(
+    "Inspect what this candidate changes",
+  );
+  await page
+    .getByRole("button", { name: "Review authority & response" })
+    .click();
+  const authority = page.getByRole("region", {
+    name: "Assignment authority and response",
+  });
+  await expect(authority).toBeFocused();
+  expect((await authority.boundingBox())!.y).toBeGreaterThanOrEqual(64);
+  await expect(
+    authority.getByRole("button", { name: "Submit assessment" }),
+  ).toBeVisible();
+  expect(
+    await page.evaluate(
+      () => document.documentElement.scrollWidth <= innerWidth,
+    ),
+  ).toBe(true);
+});

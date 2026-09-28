@@ -93,3 +93,13 @@ No open attempts, absent exit codes, or failed validator observations were seen 
 Validation: production build and all eleven browser tests passed. Added coverage checks process-failure semantics, missing platform/artifact coordinates, observed versus unknown cleanup, and mobile overflow. Live data remains disconnected.
 
 Next proposed slice: make the growing assignment interface easier to scan on mobile, with refreshed preview screenshots of the current screens.
+
+## 08 — Mobile assignment navigation and refreshed previews
+
+At phone widths, the six assignment tabs now use a two-row grid with at least 44px touch targets. Candidate file buttons, scenario selectors and response actions also have larger touch targets. A mobile/tablet “Review authority & response” shortcut scrolls to and focuses the authority panel, avoiding a long scroll through candidate content. Existing keyboard tab navigation remains available.
+
+The capture script now regenerates twelve previews, including Attempts, Candidate, Checks, a local receipt, release prerequisites and mobile candidate review. It disables animations during capture to avoid recording intermediate tab transitions. It also uses a cautious assessment rationale rather than asserting that the sample test report proves duplicate-event coverage.
+
+Validation: production build and all twelve browser tests passed. The new test verifies that every phone tab fits horizontally with a 44px target and that the response shortcut transfers focus to the intended panel. Desktop release and mobile candidate screenshots were visually inspected. No backend, remote operation or data-contract change was introduced.
+
+The current preview files replace the historical initial screenshots mentioned in earlier iterations.

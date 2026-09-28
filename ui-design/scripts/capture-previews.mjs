@@ -9,28 +9,92 @@ const page = await browser.newPage({
   deviceScaleFactor: 1,
 });
 await page.goto("http://127.0.0.1:4173");
-await page.screenshot({ path: "previews/01-my-work.png", fullPage: true });
+await page.screenshot({
+  path: "previews/01-my-work.png",
+  animations: "disabled",
+  fullPage: true,
+});
 await page.getByRole("button", { name: /A-1042.*Review retry/ }).click();
-await page.screenshot({ path: "previews/02-assignment.png", fullPage: true });
+await page.screenshot({
+  path: "previews/02-assignment.png",
+  animations: "disabled",
+  fullPage: true,
+});
 await page.getByRole("button", { name: "Submit assessment" }).click();
 await page
   .getByLabel("Decision rationale")
   .fill(
-    "Reviewed the exact source change and AR-775 test evidence. Duplicate event handling and retry behavior meet the acceptance criteria.",
+    "Reviewed the illustrative retry changes. Duplicate-event handling and verified test evidence still need separate review.",
   );
-await page.screenshot({ path: "previews/03-assessment.png", fullPage: true });
+await page.screenshot({
+  path: "previews/03-assessment.png",
+  animations: "disabled",
+  fullPage: true,
+});
 await page.keyboard.press("Escape");
+for (const [tab, name] of [
+  ["Attempts", "07-attempts"],
+  ["Candidate", "08-candidate"],
+  ["Checks", "09-checks"],
+]) {
+  await page.getByRole("tab", { name: tab, exact: true }).click();
+  await page.screenshot({
+    path: `previews/${name}.png`,
+    animations: "disabled",
+    fullPage: true,
+  });
+}
+await page.getByRole("button", { name: "Submit assessment" }).click();
+await page
+  .getByLabel("Decision rationale")
+  .fill(
+    "Sample review: additional evidence is required before accepting the entire objective.",
+  );
+await page.getByRole("button", { name: "Record assessment" }).click();
+await page.getByRole("button", { name: "View record", exact: true }).click();
+await page.locator(".toast").waitFor({ state: "hidden" });
+await page.screenshot({
+  path: "previews/10-receipt.png",
+  animations: "disabled",
+  fullPage: true,
+});
+await page.getByRole("button", { name: "Back to My Work" }).click();
+await page.getByRole("button", { name: "View release assignment" }).click();
+await page.screenshot({
+  path: "previews/11-release-review.png",
+  animations: "disabled",
+  fullPage: true,
+});
 await page
   .getByRole("navigation")
   .getByRole("button", { name: "Organization", exact: true })
   .click();
-await page.screenshot({ path: "previews/04-organization.png", fullPage: true });
+await page.screenshot({
+  path: "previews/04-organization.png",
+  animations: "disabled",
+  fullPage: true,
+});
 await page
   .getByRole("navigation")
   .getByRole("button", { name: "Evidence", exact: true })
   .click();
-await page.screenshot({ path: "previews/05-evidence.png", fullPage: true });
+await page.screenshot({
+  path: "previews/05-evidence.png",
+  animations: "disabled",
+  fullPage: true,
+});
 await page.setViewportSize({ width: 390, height: 844 });
 await page.goto("http://127.0.0.1:4173");
-await page.screenshot({ path: "previews/06-mobile.png", fullPage: true });
+await page.screenshot({
+  path: "previews/06-mobile.png",
+  animations: "disabled",
+  fullPage: true,
+});
+await page.getByRole("button", { name: /A-1042.*Review retry/ }).click();
+await page.getByRole("tab", { name: "Candidate", exact: true }).click();
+await page.screenshot({
+  path: "previews/12-mobile-candidate.png",
+  animations: "disabled",
+  fullPage: true,
+});
 await browser.close();

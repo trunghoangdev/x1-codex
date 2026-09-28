@@ -594,6 +594,19 @@ function App() {
                   </span>
                 </div>
               </div>
+              <button
+                className="mobile-review-jump button secondary"
+                onClick={() => {
+                  const panel = document.getElementById("assignment-authority");
+                  panel?.scrollIntoView({
+                    block: "start",
+                    behavior: "instant",
+                  });
+                  panel?.focus({ preventScroll: true });
+                }}
+              >
+                Review authority & response <ArrowRight size={16} />
+              </button>
               <div className="detail-layout">
                 <div>
                   <div
@@ -765,7 +778,12 @@ function App() {
                   </section>
                 </div>
                 <aside>
-                  <section className="panel authority-panel">
+                  <section
+                    className="panel authority-panel"
+                    id="assignment-authority"
+                    tabIndex={-1}
+                    aria-label="Assignment authority and response"
+                  >
                     <div className="section-label">
                       <ShieldCheck size={15} /> YOUR AUTHORITY
                     </div>

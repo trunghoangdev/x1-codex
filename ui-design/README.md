@@ -88,3 +88,16 @@ The fifth update adds a **structured decision receipt** under **Activity** after
 The sixth update scopes **Evidence** to each assignment and gives **Artifact Inspector** explicit per-record content and reference availability. The workspace Evidence page groups records by assignment and links session receipts. Release test/assessment records that are not connected are now shown as unavailable. See iteration 06 for details.
 
 The seventh update refines **A-1042 → Attempts** using state patterns from a bounded read-only development metadata review. It adds a process-exited-with-error example and separates platform state, process exit and cleanup observations. All displayed records remain synthetic; no production data connection was added.
+
+## Current previews — iteration 08
+
+The preview files have been refreshed; earlier notes describing them as initial-design snapshots are historical.
+
+- [Attempts](previews/07-attempts.png)
+- [Candidate and diff](previews/08-candidate.png)
+- [Checks](previews/09-checks.png)
+- [Decision receipt](previews/10-receipt.png)
+- [Release prerequisites](previews/11-release-review.png)
+- [Mobile candidate review](previews/12-mobile-candidate.png)
+
+Phone assignment navigation now displays all six tabs in two rows. **Review authority & response** jumps to and focuses the action panel. Build and all twelve browser tests passed for this iteration.

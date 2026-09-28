@@ -2306,3 +2306,64 @@ textarea::placeholder {
   font-size: 10px;
   margin-top: 8px;
 }
+/* Iteration 08: all assignment destinations remain visible and touchable. */
+.mobile-review-jump {
+  display: none;
+}
+#assignment-authority {
+  scroll-margin-top: 84px;
+}
+@media (max-width: 800px) {
+  .mobile-review-jump {
+    display: inline-flex;
+    min-height: 44px;
+    margin-top: 22px;
+  }
+}
+@media (max-width: 620px) {
+  .tabs {
+    display: grid;
+    grid-template-columns: repeat(3, minmax(0, 1fr));
+    gap: 0;
+    overflow: visible;
+    background: #f6f7f3;
+    border: 1px solid var(--line);
+    border-radius: 7px;
+    padding: 4px;
+  }
+  .tabs button {
+    justify-content: center;
+    align-items: center;
+    min-height: 44px;
+    padding: 10px 5px;
+    font-size: 12px;
+    border-radius: 4px;
+  }
+  .tabs button.selected {
+    background: #e8efdf;
+    border-bottom-color: #658054;
+  }
+  .candidate-files button {
+    min-height: 48px;
+    font-size: 12px;
+  }
+  .check-scenario select {
+    min-height: 44px;
+  }
+  .detail-panel .summary {
+    font-size: 13px;
+  }
+  .attempt-heading {
+    font-size: 13px;
+  }
+  .attempt-fields dd {
+    font-size: 12px;
+  }
+  .authority-panel .button {
+    min-height: 44px;
+  }
+  .back-link {
+    min-height: 44px;
+    margin-bottom: 12px;
+  }
+}
