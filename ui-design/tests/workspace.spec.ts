@@ -481,3 +481,40 @@ test("phone assignment tabs are all visible and response shortcut moves focus", 
     ),
   ).toBe(true);
 });
+
+test("overview separates permitted scope, required deliverables and unproven criteria", async ({
+  page,
+}) => {
+  await page.goto("/");
+  await page.getByRole("button", { name: /A-1042.*Review retry/ }).click();
+  const requirements = page.getByRole("region", {
+    name: "Work requirements",
+    exact: true,
+  });
+  await expect(requirements).toContainText(
+    "184c72a81f995c8fa31f997269a4c5c91c0e403d2",
+  );
+  await expect(requirements).toContainText("demo-retry-delay-validator");
+  await expect(requirements).toContainText("do not grant you permission");
+  const allowed = page.getByRole("region", { name: "Permitted output scope" });
+  const required = page.getByRole("region", { name: "Required effect paths" });
+  await expect(allowed.getByRole("listitem")).toHaveCount(3);
+  await expect(required.getByRole("listitem")).toHaveCount(2);
+  await expect(allowed).toContainText("docs/webhook-retries.md");
+  await expect(required).not.toContainText("docs/webhook-retries.md");
+  await expect(requirements).toContainText("Prevent duplicate payment effects");
+  await expect(requirements).toContainText(
+    "current illustrative snippets do not establish this",
+  );
+  await expect(requirements).toContainText("No criterion is marked satisfied");
+  await page.setViewportSize({ width: 390, height: 844 });
+  expect(
+    await page.evaluate(
+      () => document.documentElement.scrollWidth <= innerWidth,
+    ),
+  ).toBe(true);
+  await page.getByRole("button", { name: "Back to My Work" }).click();
+  await page.getByRole("button", { name: /A-1038.*Clarify/ }).click();
+  await expect(requirements).toContainText("not connected");
+  await expect(requirements).not.toContainText("src/webhooks");
+});

@@ -101,3 +101,5 @@ The preview files have been refreshed; earlier notes describing them as initial-
 - [Mobile candidate review](previews/12-mobile-candidate.png)
 
 Phone assignment navigation now displays all six tabs in two rows. **Review authority & response** jumps to and focuses the action panel. Build and all twelve browser tests passed for this iteration.
+
+Iteration 09 expands **A-1042 → Overview** with explicit review requirements: fixed base, permitted paths, required deliverables, validator, publication criterion and evidence needed for acceptance. These are authored sample requirements, not passed checks or production configuration. Other assignments display missing-detail states. The screenshots above reflect iteration 08; run the app for this update.

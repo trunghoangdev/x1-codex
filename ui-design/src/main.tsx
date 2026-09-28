@@ -31,6 +31,7 @@ import "./styles.css";
 import { Attempts } from "./Attempts";
 import { Candidate } from "./Candidate";
 import { Checks } from "./Checks";
+import { AssignmentRequirements } from "./AssignmentRequirements";
 import { EvidenceArtifacts, ArtifactContents } from "./EvidenceArtifacts";
 import { evidenceFor, inputFor, type EvidenceArtifact } from "./evidenceData";
 import { DecisionReceipt, type ResponseRecord } from "./DecisionReceipt";
@@ -664,6 +665,7 @@ function App() {
                         <div className="section-label">THE RESPONSIBILITY</div>
                         <h2>A clear next step, with the full context.</h2>
                         <p className="summary">{selected.summary}</p>
+                        <AssignmentRequirements assignmentId={selected.id} />
                         <div className="section-rule" />
                         <h3>Exact input</h3>
                         <button

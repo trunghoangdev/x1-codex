@@ -103,3 +103,15 @@ The capture script now regenerates twelve previews, including Attempts, Candidat
 Validation: production build and all twelve browser tests passed. The new test verifies that every phone tab fits horizontally with a 44px target and that the response shortcut transfers focus to the intended panel. Desktop release and mobile candidate screenshots were visually inspected. No backend, remote operation or data-contract change was introduced.
 
 The current preview files replace the historical initial screenshots mentioned in earlier iterations.
+
+## 09 — Explicit assignment review requirements
+
+Open **A-1042 → Overview**. A new Work requirements section provides the review basis: source repository, exact sample base revision shared with Candidate, declared validator, publication criterion, permitted output scope, required effect paths and criteria with the evidence needed to judge them.
+
+Requirements are authored independently of candidate file contents. In the example, documentation is permitted but is not a required effect path. Criteria include bounded retry delay, duplicate-payment prevention, required candidate contents and publication admissibility. No criterion is shown as passed, and the sample snippets explicitly do not establish duplicate-event correctness.
+
+This section describes the underlying work being reviewed, not additional repository-write permission for the reviewer. Other assignments explicitly state that detailed source/scope/criteria are not connected. All requirements are fictional, not imported or reconstructed production assignments. Existing preview screenshots remain at iteration 08.
+
+Validation: production build and all thirteen browser tests passed. New coverage checks base/validator references, scope versus required-path distinctions, unproven criteria, reviewer authority boundaries, assignment isolation and mobile overflow.
+
+Next proposed slice: connect attempt, candidate, checks and receipt views with subject-scoped navigation.
