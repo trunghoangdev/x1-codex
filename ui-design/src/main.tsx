@@ -89,7 +89,33 @@ function App() {
   const [checkScenario, setCheckScenario] = useState<Scenario>("passed");
   const [readiness, setReadiness] = useState<Readiness>("missing");
   const [decision, setDecision] = useState<string | null>(null);
-  const [reason, setReason] = useState("");
+  const [drafts, setDrafts] = useState<Record<string, Record<string, string>>>(
+    {},
+  );
+  const reason =
+    selected && decision ? (drafts[selected.id]?.[decision] ?? "") : "";
+  function setReason(value: string) {
+    if (!selected || !decision) return;
+    const id = selected.id,
+      kind = decision;
+    setDrafts((previous) => ({
+      ...previous,
+      [id]: { ...previous[id], [kind]: value },
+    }));
+  }
+  function discardDraft(id: string, kind: string) {
+    if (
+      !window.confirm(
+        `Delete the ${kind.toLowerCase()} draft for ${id}? This cannot be undone.`,
+      )
+    )
+      return;
+    setDrafts((previous) => {
+      const remaining = { ...previous[id] };
+      delete remaining[kind];
+      return { ...previous, [id]: remaining };
+    });
+  }
   const [notice, setNotice] = useState("");
   const [artifact, setArtifact] = useState<EvidenceArtifact | null>(null);
   const [mobile, setMobile] = useState(false);
@@ -157,7 +183,11 @@ function App() {
       `${decision} recorded in this demo. No external action was taken.`,
     );
     setDecision(null);
-    setReason("");
+    setDrafts((previous) => {
+      const remaining = { ...previous };
+      delete remaining[selected.id];
+      return remaining;
+    });
   }
   return (
     <div className="app">
@@ -776,6 +806,42 @@ function App() {
                         locked={!!completed[selected.id]}
                       />
                     )}
+                    {!completed[selected.id] &&
+                      Object.entries(drafts[selected.id] ?? {}).some(
+                        ([, text]) => text.trim(),
+                      ) && (
+                        <section
+                          className="draft-list"
+                          aria-label="Saved drafts"
+                        >
+                          <h3>Drafts in this session</h3>
+                          <p>
+                            Not submitted. Refresh clears drafts. Recording any
+                            response completes this assignment and clears its
+                            drafts.
+                          </p>
+                          {Object.entries(drafts[selected.id] ?? {})
+                            .filter(([, text]) => text.trim())
+                            .map(([kind]) => (
+                              <div className="draft-actions" key={kind}>
+                                <button
+                                  className="button secondary"
+                                  onClick={() => setDecision(kind)}
+                                >
+                                  Continue {kind.toLowerCase()} draft
+                                </button>
+                                <button
+                                  className="text-link"
+                                  onClick={() =>
+                                    discardDraft(selected.id, kind)
+                                  }
+                                >
+                                  Delete {kind.toLowerCase()} draft
+                                </button>
+                              </div>
+                            ))}
+                        </section>
+                      )}
                     {completed[selected.id] ? (
                       <div className="recorded">
                         <CircleCheck size={25} />
@@ -804,7 +870,6 @@ function App() {
                             readiness !== "ready"
                           }
                           onClick={() => {
-                            setReason("");
                             setDecision(
                               selected.kind === "Authority"
                                 ? "Approval"
@@ -830,7 +895,6 @@ function App() {
                             className="button secondary wide"
                             disabled={decisionBlocked(readiness)}
                             onClick={() => {
-                              setReason("");
                               setDecision("Refusal");
                             }}
                           >
@@ -1161,6 +1225,10 @@ function App() {
               />
             </>
           )}
+          <p className="demo-note">
+            Draft kept in this session as you type. Closing this dialog does not
+            submit or delete it. Refresh clears it.
+          </p>
           <label className="textarea-label" htmlFor="rationale">
             {selected.kind === "Work"
               ? "Contribution and acceptance criteria"

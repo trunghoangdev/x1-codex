@@ -671,3 +671,55 @@ test("assignment URLs restore screens and support browser history safely", async
     page.getByRole("heading", { name: "One team. Clear responsibility." }),
   ).toBeVisible();
 });
+
+test("drafts survive navigation, stay isolated and clear only on deletion or submission", async ({
+  page,
+}) => {
+  await page.goto("/#/assignments/A-1042/overview");
+  await page.getByRole("button", { name: "Submit assessment" }).click();
+  await page
+    .getByLabel("Decision rationale")
+    .fill("Draft assessment requiring more evidence.");
+  await page.keyboard.press("Escape");
+  await page.getByRole("tab", { name: "Evidence" }).click();
+  await page.getByRole("button", { name: "Continue assessment draft" }).click();
+  await expect(page.getByLabel("Decision rationale")).toHaveValue(
+    "Draft assessment requiring more evidence.",
+  );
+  await page.getByRole("button", { name: "Cancel", exact: true }).click();
+  await page.getByRole("button", { name: "Back to My Work" }).click();
+  await page.getByRole("button", { name: "View release assignment" }).click();
+  await page
+    .getByRole("button", { name: "Refuse release", exact: true })
+    .click();
+  await expect(page.getByLabel("Decision rationale")).toHaveValue("");
+  await page.getByLabel("Decision rationale").fill("Draft refusal.");
+  await page.keyboard.press("Escape");
+  await page.getByLabel("Preview release prerequisites").selectOption("ready");
+  await page
+    .getByRole("button", { name: "Approve release", exact: true })
+    .click();
+  await expect(page.getByLabel("Decision rationale")).toHaveValue("");
+  await page.keyboard.press("Escape");
+  page.once("dialog", (d) => d.dismiss());
+  await page.getByRole("button", { name: "Delete refusal draft" }).click();
+  await expect(
+    page.getByRole("button", { name: "Continue refusal draft" }),
+  ).toBeVisible();
+  page.once("dialog", (d) => d.accept());
+  await page.getByRole("button", { name: "Delete refusal draft" }).click();
+  await expect(
+    page.getByRole("button", { name: "Continue refusal draft" }),
+  ).toHaveCount(0);
+  await page.getByRole("button", { name: "Back to My Work" }).click();
+  await page.getByRole("button", { name: /A-1042.*Review retry/ }).click();
+  await page.getByRole("button", { name: "Continue assessment draft" }).click();
+  await page.getByRole("button", { name: "Record assessment" }).click();
+  await expect(page.getByRole("region", { name: "Saved drafts" })).toHaveCount(
+    0,
+  );
+  await page.getByRole("button", { name: "View record", exact: true }).click();
+  await expect(
+    page.getByRole("article", { name: "Decision receipt" }),
+  ).toContainText("Draft assessment requiring more evidence.");
+});

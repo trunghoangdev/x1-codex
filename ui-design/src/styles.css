@@ -2486,3 +2486,30 @@ textarea::placeholder {
   line-height: 1.8;
   margin: 9px 0 14px;
 }
+.draft-list {
+  margin: 20px 0;
+  padding: 14px;
+  border: 1px solid #dedfc6;
+  border-radius: 7px;
+  background: #f8f8ed;
+}
+.draft-list h3 {
+  font-size: 13px;
+}
+.draft-list p {
+  font-size: 11px;
+  line-height: 1.8;
+  margin: 10px 0;
+  color: #69755f;
+}
+.draft-actions {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  gap: 10px;
+  margin: 15px 0;
+}
+.draft-actions .button {
+  min-height: 44px;
+  font-size: 11px;
+}

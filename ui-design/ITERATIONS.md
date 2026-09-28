@@ -173,3 +173,13 @@ The data directory has no React/component imports. Candidate relationships, dige
 No new runtime behavior, API contract, fetch operation or persistence was introduced. Preview screenshots remain at iteration 08.
 
 Validation: production build and all eighteen existing browser tests passed. This is a fixture/module refactor; no tests were added solely to assert file placement.
+
+## 15 — Session-only response drafts
+
+Response text is now stored separately for each assignment and response kind. Typing keeps a draft in React memory; closing by Cancel, Escape, outside click or screen navigation does not submit or discard it. The authority panel lists nonempty drafts with Continue and Delete actions. Deletion requires explicit confirmation and can be cancelled.
+
+Approval and refusal drafts cannot overwrite each other or appear on another assignment. Resuming a draft does not bypass prerequisite or invalidation checks. Successful submission creates the existing receipt and clears all drafts for the completed assignment, as explained in the draft panel. Drafts and submitted receipts remain distinct.
+
+This slice uses no localStorage, backend or durable save. Refresh/closing the browser clears drafts; the dialog and draft panel state that limitation. No unload-warning behavior was added. Preview screenshots remain at iteration 08.
+
+Validation: production build and all nineteen browser tests passed. The new test covers closing/resuming, cross-tab and cross-assignment navigation, approval/refusal isolation, cancelled and confirmed deletion, and transition from draft to receipt after submission.
