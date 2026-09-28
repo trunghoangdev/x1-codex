@@ -117,3 +117,5 @@ Iteration 14 moves candidate/evidence fixtures, authored review requirements and
 Iteration 15 adds **session-only response drafts**. Type a rationale, close the dialog, inspect other tabs, then choose **Continue … draft** in the authority panel. Drafts are isolated by assignment and response type. Delete asks for confirmation; submitting a response clears that assignment's drafts and creates its local receipt. Refresh clears drafts; nothing is persisted or sent to a backend.
 
 Iteration 16 improves **Candidate** with a changed-file search and **Unified / Side by side** layouts. File filtering preserves the current diff; split view shows base/candidate line numbers and scrolls inside its panel on mobile. The feature still uses small synthetic file bodies.
+
+Iteration 17 keeps the selected candidate file, diff layout and path filter while you move between tabs or assignments in the same session. An existing A-1042 draft can be resumed directly from Candidate, Evidence or Checks. Refresh resets this view state and drafts; scroll positions are not retained.

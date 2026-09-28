@@ -193,3 +193,13 @@ Candidate now offers **Unified** and **Side by side** views of the same computed
 No editing, patch application, syntax highlighting or backend was added. Expanding/collapsing large unchanged regions is outside this slice. Screenshots remain at iteration 08.
 
 Validation: production build and all twenty browser tests passed. Added coverage verifies replacement pairing, added-file blank base cells, path filtering and empty-state recovery, selected-file stability, layout switching, counts and mobile overflow.
+
+## 17 — Preserve candidate review context
+
+Candidate view state now lives in session memory keyed by assignment and sample candidate identity. The selected file, Unified/Side-by-side mode and file-path filter survive tab switches, browser history navigation and visiting another assignment. They reset on refresh; no localStorage or URL persistence is introduced. This slice does not preserve scroll positions.
+
+When A-1042 has an unsent response draft, Candidate, Evidence and Checks show **Resume … while reviewing** near the top of the review panel. It opens the existing draft, using the same submission rules and receipt flow. Other assignments do not borrow this shortcut or candidate state, and completed assignments do not display draft shortcuts.
+
+The candidate component receives controlled view state rather than owning state that disappears when its tab unmounts. The current prototype still has only one inspectable candidate; this does not claim a production candidate-switching contract. Screenshots remain at iteration 08.
+
+Validation: production build and all twenty-one browser tests passed. The added end-to-end test covers draft resumption from Evidence, Back navigation restoring the selected file/filter/layout, isolation from the release assignment, restoration after returning from the inbox, and reset after refresh.

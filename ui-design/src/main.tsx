@@ -39,7 +39,11 @@ import {
 } from "lucide-react";
 import "./styles.css";
 import { Attempts } from "./Attempts";
-import { Candidate } from "./Candidate";
+import {
+  Candidate,
+  initialCandidateView,
+  type CandidateViewState,
+} from "./Candidate";
 import { Checks } from "./Checks";
 import type { Scenario } from "./data/models";
 import type { RelatedTab } from "./RelatedRecords";
@@ -86,6 +90,23 @@ function App() {
   const [filter, setFilter] = useState<Kind | "All">("All");
   const [query, setQuery] = useState("");
   const [completed, setCompleted] = useState<Record<string, string>>({});
+  const [candidateViews, setCandidateViews] = useState<
+    Record<string, CandidateViewState>
+  >({});
+  const candidateViewKey = selected
+    ? `${selected.id}:${sampleCandidate.candidateDigest}`
+    : "";
+  const candidateView =
+    candidateViews[candidateViewKey] ?? initialCandidateView;
+  function updateCandidateView(patch: Partial<CandidateViewState>) {
+    setCandidateViews((previous) => ({
+      ...previous,
+      [candidateViewKey]: {
+        ...(previous[candidateViewKey] ?? initialCandidateView),
+        ...patch,
+      },
+    }));
+  }
   const [checkScenario, setCheckScenario] = useState<Scenario>("passed");
   const [readiness, setReadiness] = useState<Readiness>("missing");
   const [decision, setDecision] = useState<string | null>(null);
@@ -642,6 +663,30 @@ function App() {
                     id="assignment-tabpanel"
                     aria-labelledby={`tab-${tab}`}
                   >
+                    {selected.id === sampleCandidate.assignmentId &&
+                      ["Candidate", "Evidence", "Checks"].includes(tab) &&
+                      !completed[selected.id] &&
+                      Object.entries(drafts[selected.id] ?? {}).some(
+                        ([, text]) => text.trim(),
+                      ) && (
+                        <aside
+                          className="review-draft-shortcut"
+                          aria-label="Review draft shortcuts"
+                        >
+                          <strong>Your draft is kept in this session</strong>
+                          {Object.entries(drafts[selected.id] ?? {})
+                            .filter(([, text]) => text.trim())
+                            .map(([kind]) => (
+                              <button
+                                key={kind}
+                                className="button secondary"
+                                onClick={() => setDecision(kind)}
+                              >
+                                Resume {kind.toLowerCase()} while reviewing
+                              </button>
+                            ))}
+                        </aside>
+                      )}
                     {tab === "Overview" ? (
                       <>
                         <div className="section-label">THE RESPONSIBILITY</div>
@@ -727,6 +772,8 @@ function App() {
                       />
                     ) : tab === "Candidate" ? (
                       <Candidate
+                        viewState={candidateView}
+                        onViewChange={updateCandidateView}
                         key={selected.id}
                         assignmentId={selected.id}
                         onNavigate={navigateRelated}

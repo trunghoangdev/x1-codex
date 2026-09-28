@@ -760,3 +760,60 @@ test("diff layouts keep line pairing and file filtering does not change the sele
     "6 added · 0 removed",
   );
 });
+
+test("review context and draft survive tabs, history and assignment navigation", async ({
+  page,
+}) => {
+  await page.goto("/#/assignments/A-1042/candidate");
+  await page.getByLabel("Find a changed file").fill("retry.test");
+  await page
+    .getByRole("button", { name: "src/webhooks/retry.test.ts Added" })
+    .click();
+  await page.getByRole("button", { name: "Side by side", exact: true }).click();
+  await page.getByRole("button", { name: "Submit assessment" }).click();
+  await page
+    .getByLabel("Decision rationale")
+    .fill("Keep this review draft alongside the selected test file.");
+  await page.keyboard.press("Escape");
+  await page.getByRole("tab", { name: "Evidence" }).click();
+  await page
+    .getByRole("button", { name: "Resume assessment while reviewing" })
+    .click();
+  await expect(page.getByLabel("Decision rationale")).toHaveValue(
+    "Keep this review draft alongside the selected test file.",
+  );
+  await page.keyboard.press("Escape");
+  await page.goBack();
+  await expect(page.getByLabel("Find a changed file")).toHaveValue(
+    "retry.test",
+  );
+  await expect(
+    page.getByRole("button", { name: "Side by side", exact: true }),
+  ).toHaveAttribute("aria-pressed", "true");
+  await expect(page.locator(".diff-heading")).toContainText("retry.test.ts");
+  await page.getByRole("button", { name: "Back to My Work" }).click();
+  await page.getByRole("button", { name: "View release assignment" }).click();
+  await page.getByRole("tab", { name: "Candidate", exact: true }).click();
+  await expect(page.getByRole("tabpanel")).toContainText("No sample candidate");
+  await expect(
+    page.getByRole("complementary", { name: "Review draft shortcuts" }),
+  ).toHaveCount(0);
+  await page.getByRole("button", { name: "Back to My Work" }).click();
+  await page.getByRole("button", { name: /A-1042.*Review retry/ }).click();
+  await page.getByRole("tab", { name: "Candidate", exact: true }).click();
+  await expect(page.locator(".diff-heading")).toContainText("retry.test.ts");
+  await expect(page.getByLabel("Find a changed file")).toHaveValue(
+    "retry.test",
+  );
+  await page.reload();
+  await expect(page.getByLabel("Find a changed file")).toHaveValue("");
+  await expect(
+    page.getByRole("button", { name: "Unified", exact: true }),
+  ).toHaveAttribute("aria-pressed", "true");
+  await expect(page.locator(".diff-heading")).toContainText(
+    "src/webhooks/retry.ts",
+  );
+  await expect(
+    page.getByRole("button", { name: "Resume assessment while reviewing" }),
+  ).toHaveCount(0);
+});

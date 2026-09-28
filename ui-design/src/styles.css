@@ -2568,3 +2568,22 @@ textarea::placeholder {
   font-size: 12px;
   margin-bottom: 10px;
 }
+.review-draft-shortcut {
+  display: flex;
+  align-items: center;
+  flex-wrap: wrap;
+  gap: 12px;
+  padding: 14px;
+  margin-bottom: 22px;
+  background: #f8f8ed;
+  border: 1px solid #dedfc6;
+  border-radius: 7px;
+}
+.review-draft-shortcut strong {
+  font-size: 12px;
+  font-weight: 500;
+}
+.review-draft-shortcut .button {
+  min-height: 44px;
+  font-size: 11px;
+}

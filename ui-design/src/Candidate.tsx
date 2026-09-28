@@ -1,19 +1,33 @@
 import { diffLines, splitRows } from "./diff";
 import { RelatedRecords, type NavigateRelated } from "./RelatedRecords";
-import { useState } from "react";
 import { FileCode2, GitBranch } from "lucide-react";
 import { sampleCandidate } from "./data/candidate";
 
+export type CandidateViewState = {
+  index: number;
+  mode: "unified" | "split";
+  fileQuery: string;
+};
+export const initialCandidateView: CandidateViewState = {
+  index: 0,
+  mode: "unified",
+  fileQuery: "",
+};
 export function Candidate({
   assignmentId,
   onNavigate,
+  viewState,
+  onViewChange,
 }: {
   assignmentId: string;
   onNavigate: NavigateRelated;
+  viewState: CandidateViewState;
+  onViewChange: (patch: Partial<CandidateViewState>) => void;
 }) {
-  const [index, setIndex] = useState(0);
-  const [mode, setMode] = useState<"unified" | "split">("unified");
-  const [fileQuery, setFileQuery] = useState("");
+  const { index, mode, fileQuery } = viewState;
+  const setIndex = (index: number) => onViewChange({ index });
+  const setMode = (mode: "unified" | "split") => onViewChange({ mode });
+  const setFileQuery = (fileQuery: string) => onViewChange({ fileQuery });
   if (assignmentId !== sampleCandidate.assignmentId)
     return (
       <div className="empty-state">
@@ -26,7 +40,7 @@ export function Candidate({
       </div>
     );
   const candidate = sampleCandidate,
-    file = candidate.files[index],
+    file = candidate.files[index] ?? candidate.files[0],
     rows = diffLines(file.before, file.after);
   const additions = rows.filter((r) => r.kind === "added").length,
     removals = rows.filter((r) => r.kind === "removed").length;
