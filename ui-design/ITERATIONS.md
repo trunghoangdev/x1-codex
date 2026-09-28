@@ -183,3 +183,13 @@ Approval and refusal drafts cannot overwrite each other or appear on another ass
 This slice uses no localStorage, backend or durable save. Refresh/closing the browser clears drafts; the dialog and draft panel state that limitation. No unload-warning behavior was added. Preview screenshots remain at iteration 08.
 
 Validation: production build and all nineteen browser tests passed. The new test covers closing/resuming, cross-tab and cross-assignment navigation, approval/refusal isolation, cancelled and confirmed deletion, and transition from draft to receipt after submission.
+
+## 16 — Diff layout and changed-file search
+
+Candidate now offers **Unified** and **Side by side** views of the same computed line diff. Split mode pairs removed/added lines within each change block and preserves independent base/candidate line numbers, with empty cells where one side has no line. Plus/minus markers supplement color. The line-diff logic is separated into `src/diff.ts` and remains sized for the small in-memory fixtures, not large production patches.
+
+**Find a changed file** filters paths case-insensitively. Filtering does not silently select another file or clear the open diff. An empty result explains this and provides a clear-filter action. Switching layout keeps the selected file and counts. Split mode scrolls inside the diff region on small screens; Unified remains the default.
+
+No editing, patch application, syntax highlighting or backend was added. Expanding/collapsing large unchanged regions is outside this slice. Screenshots remain at iteration 08.
+
+Validation: production build and all twenty browser tests passed. Added coverage verifies replacement pairing, added-file blank base cells, path filtering and empty-state recovery, selected-file stability, layout switching, counts and mobile overflow.

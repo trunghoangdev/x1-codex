@@ -115,3 +115,5 @@ Iteration 13 starts separating fixtures from UI under [`src/data`](src/data/READ
 Iteration 14 moves candidate/evidence fixtures, authored review requirements and validator scenarios into `src/data`. The displayed values and interactions are unchanged. See the [data boundary guide](src/data/README.md) for the current structure and remaining work.
 
 Iteration 15 adds **session-only response drafts**. Type a rationale, close the dialog, inspect other tabs, then choose **Continue … draft** in the authority panel. Drafts are isolated by assignment and response type. Delete asks for confirmation; submitting a response clears that assignment's drafts and creates its local receipt. Refresh clears drafts; nothing is persisted or sent to a backend.
+
+Iteration 16 improves **Candidate** with a changed-file search and **Unified / Side by side** layouts. File filtering preserves the current diff; split view shows base/candidate line numbers and scrolls inside its panel on mobile. The feature still uses small synthetic file bodies.

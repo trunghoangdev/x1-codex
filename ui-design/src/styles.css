@@ -2513,3 +2513,58 @@ textarea::placeholder {
   min-height: 44px;
   font-size: 11px;
 }
+.diff-file-search {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+  margin: 16px 0 8px;
+  font-size: 12px;
+  color: #53674b;
+}
+.diff-file-search input {
+  padding: 12px;
+  border: 1px solid #dce3d5;
+  border-radius: 5px;
+  background: #fff;
+  min-height: 44px;
+  color: #354c30;
+}
+.diff-mode {
+  display: flex;
+  gap: 8px;
+  margin: 18px 0;
+}
+.diff-mode button {
+  min-height: 44px;
+}
+.diff-mode button[aria-pressed="true"] {
+  background: #e8efdf;
+  border-color: #8ca37c;
+}
+.split-diff {
+  min-width: 680px;
+}
+.diff-table.split-diff td:nth-child(2),
+.diff-table.split-diff td:nth-child(4) {
+  width: 49%;
+  text-align: left;
+}
+.diff-table.split-diff td.diff-removed {
+  color: #824e3d;
+}
+.diff-table.split-diff td.diff-added {
+  color: #355b31;
+}
+.diff-absent {
+  background: #f2f3ef;
+}
+.diff-empty {
+  border: 1px solid var(--line);
+  border-radius: 6px;
+  padding: 14px;
+  margin: 12px 0;
+}
+.diff-empty p {
+  font-size: 12px;
+  margin-bottom: 10px;
+}

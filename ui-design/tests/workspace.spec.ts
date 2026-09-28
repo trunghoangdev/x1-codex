@@ -723,3 +723,40 @@ test("drafts survive navigation, stay isolated and clear only on deletion or sub
     page.getByRole("article", { name: "Decision receipt" }),
   ).toContainText("Draft assessment requiring more evidence.");
 });
+
+test("diff layouts keep line pairing and file filtering does not change the selected subject", async ({
+  page,
+}) => {
+  await page.goto("/#/assignments/A-1042/candidate");
+  await page.getByRole("button", { name: "Side by side", exact: true }).click();
+  const table = page.locator(".split-diff");
+  await expect(table.locator("tbody tr")).toHaveCount(3);
+  const replacement = table.locator("tbody tr").nth(1);
+  await expect(replacement.locator("td").nth(1)).toContainText(
+    "−   return 1000;",
+  );
+  await expect(replacement.locator("td").nth(3)).toContainText("Math.min");
+  await page.getByLabel("Find a changed file").fill("retry.test");
+  await expect(page.locator(".candidate-files button")).toHaveCount(1);
+  await page
+    .getByRole("button", { name: "src/webhooks/retry.test.ts Added" })
+    .click();
+  await expect(table.locator("tbody tr")).toHaveCount(6);
+  await expect(table.locator(".diff-absent")).toHaveCount(6);
+  await page.getByLabel("Find a changed file").fill("does-not-exist");
+  await expect(page.getByRole("status")).toContainText("No matching files");
+  await expect(page.locator(".diff-heading")).toContainText("retry.test.ts");
+  await page.getByRole("button", { name: "Clear file filter" }).click();
+  await expect(page.locator(".candidate-files button")).toHaveCount(3);
+  await page.setViewportSize({ width: 390, height: 844 });
+  expect(
+    await page.evaluate(
+      () => document.documentElement.scrollWidth <= innerWidth,
+    ),
+  ).toBe(true);
+  await page.getByRole("button", { name: "Unified", exact: true }).click();
+  await expect(page.locator(".split-diff")).toHaveCount(0);
+  await expect(page.locator(".diff-heading")).toContainText(
+    "6 added · 0 removed",
+  );
+});
