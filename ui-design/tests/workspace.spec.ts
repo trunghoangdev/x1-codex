@@ -518,3 +518,56 @@ test("overview separates permitted scope, required deliverables and unproven cri
   await expect(requirements).toContainText("not connected");
   await expect(requirements).not.toContainText("src/webhooks");
 });
+
+test("related records preserve assignment, checked subject and preview state", async ({
+  page,
+}) => {
+  await page.goto("/");
+  await page.getByRole("button", { name: /A-1042.*Review retry/ }).click();
+  await page.getByRole("tab", { name: "Attempts", exact: true }).click();
+  await expect(
+    page
+      .getByRole("article", {
+        name: "demo-attempt-process-failure",
+        exact: true,
+      })
+      .getByRole("button"),
+  ).toHaveCount(0);
+  await page
+    .getByRole("article", { name: "demo-attempt-03", exact: true })
+    .getByRole("button", { name: "Inspect produced candidate" })
+    .click();
+  await expect(
+    page.getByRole("tab", { name: "Candidate", exact: true }),
+  ).toBeFocused();
+  await expect(page.getByRole("tabpanel")).toContainText("demo-attempt-03");
+  await page.getByRole("button", { name: "Review candidate checks" }).click();
+  await page
+    .getByLabel("Preview an alternative observation")
+    .selectOption("unavailable");
+  await expect(
+    page.getByRole("button", { name: "View recorded response" }),
+  ).toHaveCount(0);
+  await page.getByRole("button", { name: "Inspect checked candidate" }).click();
+  await page.getByRole("button", { name: "Review candidate checks" }).click();
+  await expect(
+    page.getByLabel("Preview an alternative observation"),
+  ).toHaveValue("unavailable");
+  await page.getByRole("button", { name: "Submit assessment" }).click();
+  await page
+    .getByLabel("Decision rationale")
+    .fill("Evidence needed; validator could not run.");
+  await page.getByRole("button", { name: "Record assessment" }).click();
+  await page.getByRole("button", { name: "View recorded response" }).click();
+  await expect(
+    page.getByRole("article", { name: "Decision receipt" }),
+  ).toContainText("A-1042");
+  await page.getByRole("button", { name: "Inspect receipt candidate" }).click();
+  await expect(page.getByRole("tabpanel")).toContainText("demo-attempt-03");
+  await page.setViewportSize({ width: 390, height: 844 });
+  expect(
+    await page.evaluate(
+      () => document.documentElement.scrollWidth <= innerWidth,
+    ),
+  ).toBe(true);
+});

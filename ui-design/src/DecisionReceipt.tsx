@@ -1,3 +1,6 @@
+import { RelatedRecords, type NavigateRelated } from "./RelatedRecords";
+import { sampleCandidate } from "./candidateData";
+import { releaseSubject } from "./ReleaseReview";
 import { FileCheck2 } from "lucide-react";
 export type ResponseRecord = {
   id: string;
@@ -11,7 +14,13 @@ export type ResponseRecord = {
   subject: { label: string; digest?: string; target?: string };
   prerequisites?: string;
 };
-export function DecisionReceipt({ record }: { record: ResponseRecord }) {
+export function DecisionReceipt({
+  record,
+  onNavigate,
+}: {
+  record: ResponseRecord;
+  onNavigate: NavigateRelated;
+}) {
   return (
     <article className="decision-receipt" aria-label="Decision receipt">
       <div className="receipt-heading">
@@ -75,6 +84,20 @@ export function DecisionReceipt({ record }: { record: ResponseRecord }) {
           Snapshot of prerequisites: {record.prerequisites}
         </p>
       )}
+      {record.assignmentId === sampleCandidate.assignmentId &&
+        record.subject.digest === sampleCandidate.candidateDigest && (
+          <RelatedRecords
+            onNavigate={onNavigate}
+            links={[{ tab: "Candidate", label: "Inspect receipt candidate" }]}
+          />
+        )}
+      {record.assignmentId === "A-1041" &&
+        record.subject.digest === releaseSubject.digest && (
+          <RelatedRecords
+            onNavigate={onNavigate}
+            links={[{ tab: "Evidence", label: "Inspect release subject" }]}
+          />
+        )}
       <h4>Recorded rationale</h4>
       <p className="receipt-rationale">{record.rationale}</p>
       <p className="demo-note">

@@ -30,7 +30,8 @@ import {
 import "./styles.css";
 import { Attempts } from "./Attempts";
 import { Candidate } from "./Candidate";
-import { Checks } from "./Checks";
+import { Checks, type Scenario } from "./Checks";
+import type { RelatedTab } from "./RelatedRecords";
 import { AssignmentRequirements } from "./AssignmentRequirements";
 import { EvidenceArtifacts, ArtifactContents } from "./EvidenceArtifacts";
 import { evidenceFor, inputFor, type EvidenceArtifact } from "./evidenceData";
@@ -156,6 +157,7 @@ function App() {
   const [filter, setFilter] = useState<Kind | "All">("All");
   const [query, setQuery] = useState("");
   const [completed, setCompleted] = useState<Record<string, string>>({});
+  const [checkScenario, setCheckScenario] = useState<Scenario>("passed");
   const [tab, setTab] = useState("Overview");
   const [readiness, setReadiness] = useState<Readiness>("missing");
   const [decision, setDecision] = useState<string | null>(null);
@@ -189,6 +191,10 @@ function App() {
   function open(a: Assignment) {
     setSelected(a);
     setTab("Overview");
+  }
+  function navigateRelated(next: RelatedTab) {
+    setTab(next);
+    document.getElementById(`tab-${next}`)?.focus();
   }
   function commitDecision() {
     if (!selected || !reason.trim() || !decision || completed[selected.id])
@@ -739,11 +745,21 @@ function App() {
                         key={selected.id}
                         assignmentId={selected.id}
                         response={completed[selected.id]}
+                        onNavigate={navigateRelated}
+                        scenario={checkScenario}
+                        setScenario={setCheckScenario}
                       />
                     ) : tab === "Candidate" ? (
-                      <Candidate key={selected.id} assignmentId={selected.id} />
+                      <Candidate
+                        key={selected.id}
+                        assignmentId={selected.id}
+                        onNavigate={navigateRelated}
+                      />
                     ) : tab === "Attempts" ? (
-                      <Attempts assignmentId={selected.id} />
+                      <Attempts
+                        assignmentId={selected.id}
+                        onNavigate={navigateRelated}
+                      />
                     ) : (
                       <>
                         <div className="section-label">ASSIGNMENT HISTORY</div>
@@ -753,7 +769,11 @@ function App() {
                             (record) => record.assignmentId === selected.id,
                           )
                           .map((record) => (
-                            <DecisionReceipt key={record.id} record={record} />
+                            <DecisionReceipt
+                              key={record.id}
+                              record={record}
+                              onNavigate={navigateRelated}
+                            />
                           ))}
                         {!receipts.some(
                           (record) => record.assignmentId === selected.id,

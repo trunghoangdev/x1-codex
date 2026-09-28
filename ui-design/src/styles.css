@@ -2434,3 +2434,13 @@ textarea::placeholder {
     grid-template-columns: 1fr;
   }
 }
+.related-records {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 9px;
+  margin: 18px 0;
+}
+.related-records .button {
+  min-height: 44px;
+  font-size: 11px;
+}

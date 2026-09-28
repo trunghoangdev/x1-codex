@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { RelatedRecords, type NavigateRelated } from "./RelatedRecords";
 import {
   CircleCheck,
   AlertTriangle,
@@ -7,7 +7,7 @@ import {
 } from "lucide-react";
 import { sampleCandidate } from "./candidateData";
 
-type Scenario = "passed" | "refused" | "unavailable";
+export type Scenario = "passed" | "refused" | "unavailable";
 type Observation = {
   executed: boolean;
   exit_code?: number;
@@ -38,11 +38,16 @@ const observations: Record<Scenario, Observation> = {
 export function Checks({
   assignmentId,
   response,
+  onNavigate,
+  scenario,
+  setScenario,
 }: {
   assignmentId: string;
   response?: string;
+  onNavigate: NavigateRelated;
+  scenario: Scenario;
+  setScenario: (value: Scenario) => void;
 }) {
-  const [scenario, setScenario] = useState<Scenario>("passed");
   if (assignmentId !== sampleCandidate.assignmentId)
     return (
       <div className="empty-state">
@@ -67,6 +72,15 @@ export function Checks({
       : AlertTriangle;
   return (
     <div className="checks-view">
+      <RelatedRecords
+        onNavigate={onNavigate}
+        links={[
+          { tab: "Candidate", label: "Inspect checked candidate" },
+          ...(response
+            ? [{ tab: "Activity" as const, label: "View recorded response" }]
+            : []),
+        ]}
+      />
       <div className="section-label">CHECKS · SAMPLE DATA</div>
       <h2>Observed results, separate decisions.</h2>
       <p className="summary">

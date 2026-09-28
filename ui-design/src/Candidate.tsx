@@ -1,3 +1,4 @@
+import { RelatedRecords, type NavigateRelated } from "./RelatedRecords";
 import { useState } from "react";
 import { FileCode2, GitBranch } from "lucide-react";
 import { sampleCandidate } from "./candidateData";
@@ -36,7 +37,13 @@ export function diffLines(before: string[], after: string[]): Row[] {
   }
   return rows;
 }
-export function Candidate({ assignmentId }: { assignmentId: string }) {
+export function Candidate({
+  assignmentId,
+  onNavigate,
+}: {
+  assignmentId: string;
+  onNavigate: NavigateRelated;
+}) {
   const [index, setIndex] = useState(0);
   if (assignmentId !== sampleCandidate.assignmentId)
     return (
@@ -56,6 +63,13 @@ export function Candidate({ assignmentId }: { assignmentId: string }) {
     removals = rows.filter((r) => r.kind === "removed").length;
   return (
     <div className="candidate-view">
+      <RelatedRecords
+        onNavigate={onNavigate}
+        links={[
+          { tab: "Attempts", label: "View producing attempt" },
+          { tab: "Checks", label: "Review candidate checks" },
+        ]}
+      />
       <div className="section-label">CANDIDATE & DIFF · SAMPLE DATA</div>
       <h2>Inspect what this candidate changes.</h2>
       <p className="summary">

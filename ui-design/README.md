@@ -103,3 +103,5 @@ The preview files have been refreshed; earlier notes describing them as initial-
 Phone assignment navigation now displays all six tabs in two rows. **Review authority & response** jumps to and focuses the action panel. Build and all twelve browser tests passed for this iteration.
 
 Iteration 09 expands **A-1042 → Overview** with explicit review requirements: fixed base, permitted paths, required deliverables, validator, publication criterion and evidence needed for acceptance. These are authored sample requirements, not passed checks or production configuration. Other assignments display missing-detail states. The screenshots above reflect iteration 08; run the app for this update.
+
+Iteration 10 connects **A-1042 → Attempts → Inspect produced candidate → Review candidate checks → View recorded response** (after submission). Receipts link back to their matching subject; failed attempts have no candidate shortcut. Related-record navigation focuses the destination tab and retains the Checks preview. See iteration 10 for scope and validation.

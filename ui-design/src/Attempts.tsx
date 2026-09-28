@@ -1,3 +1,4 @@
+import { RelatedRecords, type NavigateRelated } from "./RelatedRecords";
 import { CircleCheck, AlertTriangle, Clock3 } from "lucide-react";
 
 import { sampleCandidate } from "./candidateData";
@@ -70,7 +71,13 @@ const icons = { produced: CircleCheck, failed: AlertTriangle, open: Clock3 };
 function timestamp(value: string) {
   return value.replace("T", " ").replace("Z", " UTC");
 }
-export function Attempts({ assignmentId }: { assignmentId: string }) {
+export function Attempts({
+  assignmentId,
+  onNavigate,
+}: {
+  assignmentId: string;
+  onNavigate: NavigateRelated;
+}) {
   const records = attempts.filter((a) => a.assignment_id === assignmentId);
   return (
     <div className="attempts-view">
@@ -163,6 +170,15 @@ export function Attempts({ assignmentId }: { assignmentId: string }) {
                   No artifact reference recorded.
                 </p>
               )}
+              {a.attempt_id === sampleCandidate.attemptId &&
+                a.artifact_digest === sampleCandidate.artifactDigest && (
+                  <RelatedRecords
+                    onNavigate={onNavigate}
+                    links={[
+                      { tab: "Candidate", label: "Inspect produced candidate" },
+                    ]}
+                  />
+                )}
               {a.failure && <p className="attempt-explanation">{a.failure}</p>}
               {a.outcome === "open" && (
                 <p className="attempt-explanation">

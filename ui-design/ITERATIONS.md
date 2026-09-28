@@ -115,3 +115,15 @@ This section describes the underlying work being reviewed, not additional reposi
 Validation: production build and all thirteen browser tests passed. New coverage checks base/validator references, scope versus required-path distinctions, unproven criteria, reviewer authority boundaries, assignment isolation and mobile overflow.
 
 Next proposed slice: connect attempt, candidate, checks and receipt views with subject-scoped navigation.
+
+## 10 — Subject-scoped related-record navigation
+
+A-1042 now supports a connected review journey: its producing attempt opens the matching candidate, Candidate links to the producing attempt and Checks, and Checks links to Activity only after a response exists. The receipt links back to its exact sample candidate only when assignment and subject digest match. A release receipt instead links to its release Evidence; it never points to the unrelated review candidate.
+
+Attempts without a connected candidate do not offer a candidate link. Related-record navigation preserves the selected assignment and focuses the destination tab. The Checks scenario is now session state, so leaving and returning to it does not silently reset a could-not-run preview to passed. Only A-1042 currently has this preview model.
+
+These are navigation links over explicit sample relationships, not verified provenance or evidence that any particular preview was used to make a decision. Receipts remain local session records; there is no backend or URL routing change. The previews remain at iteration 08.
+
+Validation: production build and all fourteen browser tests passed. The new journey test follows the producing attempt through Candidate, Checks and Receipt, verifies unavailable links stay absent, checks destination focus and preview retention, and confirms mobile layout.
+
+Next proposed slice: explicit unavailable/error/stale-data states before connecting a live backend.
