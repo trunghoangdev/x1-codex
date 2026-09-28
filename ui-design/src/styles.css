@@ -2587,3 +2587,45 @@ textarea::placeholder {
   min-height: 44px;
   font-size: 11px;
 }
+.work-filters {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: flex-end;
+  gap: 12px;
+  padding: 0 24px 20px;
+}
+.work-filters label {
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+  font-size: 10px;
+  color: #617354;
+}
+.work-filters select {
+  max-width: 100%;
+  min-height: 44px;
+  border: 1px solid #dce3d5;
+  border-radius: 5px;
+  background: white;
+  padding: 9px;
+  color: #354c30;
+  font-size: 11px;
+}
+.work-filters .draft-toggle {
+  flex-direction: row;
+  align-items: center;
+  min-height: 44px;
+}
+.work-filters input {
+  width: 16px;
+  height: 16px;
+}
+.work-filters .text-link {
+  min-height: 44px;
+}
+.work-filter-note {
+  padding: 0 24px 16px;
+  font-size: 11px;
+  line-height: 1.7;
+  color: #69755f;
+}

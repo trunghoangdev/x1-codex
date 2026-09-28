@@ -203,3 +203,13 @@ When A-1042 has an unsent response draft, Candidate, Evidence and Checks show **
 The candidate component receives controlled view state rather than owning state that disappears when its tab unmounts. The current prototype still has only one inspectable candidate; this does not claim a production candidate-switching contract. Screenshots remain at iteration 08.
 
 Validation: production build and all twenty-one browser tests passed. The added end-to-end test covers draft resumption from Evidence, Back navigation restoring the selected file/filter/layout, isolation from the release assignment, restoration after returning from the inbox, and reset after refresh.
+
+## 18 — My Work filters and return context
+
+My Work adds project filtering, **Has a draft**, draft badges, and **Due soonest** sorting. Sorting uses the authored sample order Today → Tomorrow → Friday, not a live calendar or production deadline calculation. **Reset all filters** restores the complete open-work view, including search and response-kind filters.
+
+Filter state is encoded in the hash URL and retained when opening assignments and returning to My Work. Browser history restores filter selections; search replaces the current history entry to avoid an entry per keystroke. For example: `#/work?project=Payments+API&sort=due`. Unknown projects produce an explicit unavailable option and empty view; unsupported kind/sort values fall back to defaults.
+
+URLs contain only filter values. Draft text, decisions and completion state remain session-only and disappear on refresh. A shared drafts-only link therefore does not share drafts. Empty-state and filter notes explain this boundary. No backend or durable persistence was added. Preview screenshots remain at iteration 08.
+
+Validation: production build and all twenty-two browser tests passed. New coverage checks direct filter links, history restoration, assignment return context, draft filtering and refresh reset, reset-all behavior, sample due ordering, mobile overflow and unknown filter values.

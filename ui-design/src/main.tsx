@@ -1,3 +1,4 @@
+import { defaultWorkFilters, type WorkFilters } from "./workFilters";
 import { assignments } from "./data/assignments";
 import type {
   Assignment,
@@ -85,10 +86,28 @@ function App() {
   const tab = route.tab;
   function setTab(next: string) {
     if (selected)
-      changeRoute({ view: "My Work", assignmentId: selected.id, tab: next });
+      changeRoute({
+        view: "My Work",
+        assignmentId: selected.id,
+        tab: next,
+        work: route.work,
+      });
   }
-  const [filter, setFilter] = useState<Kind | "All">("All");
-  const [query, setQuery] = useState("");
+  const work = route.work ?? defaultWorkFilters;
+  const {
+    kind: filter,
+    query,
+    completed: showCompleted,
+    project,
+    draftsOnly,
+    sort,
+  } = work;
+  function updateWork(patch: Partial<WorkFilters>, replace = false) {
+    changeRoute({ ...route, work: { ...work, ...patch } }, replace);
+  }
+  const setFilter = (kind: Kind | "All") => updateWork({ kind });
+  const setQuery = (query: string) => updateWork({ query }, true);
+  const setShowCompleted = (completed: boolean) => updateWork({ completed });
   const [completed, setCompleted] = useState<Record<string, string>>({});
   const [candidateViews, setCandidateViews] = useState<
     Record<string, CandidateViewState>
@@ -140,18 +159,26 @@ function App() {
   const [notice, setNotice] = useState("");
   const [artifact, setArtifact] = useState<EvidenceArtifact | null>(null);
   const [mobile, setMobile] = useState(false);
-  const [showCompleted, setShowCompleted] = useState(false);
   const [receipts, setReceipts] = useState<ResponseRecord[]>([]);
   const headingRef = useRef<HTMLHeadingElement>(null);
   const active = assignments.filter((a) => !completed[a.id]);
-  const visible = assignments.filter(
-    (a) =>
-      (showCompleted ? !!completed[a.id] : !completed[a.id]) &&
-      (filter === "All" || a.kind === filter) &&
-      `${a.id} ${a.title} ${a.project}`
-        .toLowerCase()
-        .includes(query.toLowerCase()),
-  );
+  const hasDraft = (id: string) =>
+    Object.values(drafts[id] ?? {}).some((text) => text.trim());
+  const dueOrder: Record<string, number> = { Today: 0, Tomorrow: 1, Friday: 2 };
+  const visible = assignments
+    .filter(
+      (a) =>
+        (showCompleted ? !!completed[a.id] : !completed[a.id]) &&
+        (filter === "All" || a.kind === filter) &&
+        (project === "All" || a.project === project) &&
+        (!draftsOnly || hasDraft(a.id)) &&
+        `${a.id} ${a.title} ${a.project}`
+          .toLowerCase()
+          .includes(query.toLowerCase()),
+    )
+    .sort((a, b) =>
+      sort === "due" ? (dueOrder[a.due] ?? 99) - (dueOrder[b.due] ?? 99) : 0,
+    );
   useEffect(() => {
     if (notice) {
       const timer = setTimeout(() => setNotice(""), 6000);
@@ -164,10 +191,15 @@ function App() {
     setMobile(false);
   }, [route.view, route.assignmentId, route.tab, route.invalid]);
   function navigate(next: View) {
-    changeRoute({ view: next, tab: "Overview" });
+    changeRoute({ view: next, tab: "Overview", work: route.work });
   }
   function open(a: Assignment, nextTab = "Overview") {
-    changeRoute({ view: "My Work", assignmentId: a.id, tab: nextTab });
+    changeRoute({
+      view: "My Work",
+      assignmentId: a.id,
+      tab: nextTab,
+      work: route.work,
+    });
   }
   function navigateRelated(next: RelatedTab) {
     setTab(next);
@@ -362,8 +394,10 @@ function App() {
                     <button
                       key={kind}
                       onClick={() => {
-                        setFilter(filter === kind ? "All" : kind);
-                        setShowCompleted(false);
+                        updateWork({
+                          kind: filter === kind ? "All" : kind,
+                          completed: false,
+                        });
                       }}
                       aria-pressed={filter === kind}
                       className={`stat-card ${filter === kind ? "chosen" : ""}`}
@@ -419,6 +453,69 @@ function App() {
                       />
                     </label>
                   </div>
+                  <div className="work-filters">
+                    <label htmlFor="work-project">
+                      Project
+                      <select
+                        id="work-project"
+                        aria-label="Project"
+                        value={project}
+                        onChange={(e) =>
+                          updateWork({ project: e.target.value })
+                        }
+                      >
+                        <option value="All">All projects</option>
+                        {[...new Set(assignments.map((a) => a.project))].map(
+                          (name) => (
+                            <option key={name}>{name}</option>
+                          ),
+                        )}
+                        {project !== "All" &&
+                          !assignments.some((a) => a.project === project) && (
+                            <option value={project}>
+                              {project} (unavailable)
+                            </option>
+                          )}
+                      </select>
+                    </label>
+                    <label>
+                      Sort by
+                      <select
+                        aria-label="Sort by"
+                        value={sort}
+                        onChange={(e) =>
+                          updateWork({
+                            sort: e.target.value as WorkFilters["sort"],
+                          })
+                        }
+                      >
+                        <option value="default">Default order</option>
+                        <option value="due">Due soonest · sample dates</option>
+                      </select>
+                    </label>
+                    <label className="draft-toggle">
+                      <input
+                        type="checkbox"
+                        checked={draftsOnly}
+                        onChange={(e) =>
+                          updateWork({ draftsOnly: e.target.checked })
+                        }
+                      />
+                      Has a draft
+                    </label>
+                    <button
+                      className="text-link"
+                      onClick={() => updateWork(defaultWorkFilters)}
+                    >
+                      Reset all filters
+                    </button>
+                  </div>
+                  {draftsOnly && (
+                    <p className="work-filter-note">
+                      Drafts exist only in this session. Sharing this link or
+                      refreshing does not carry draft content.
+                    </p>
+                  )}
                   {filter !== "All" && (
                     <div className="filter-strip">
                       <span>{kindLabels[filter]}</span>
@@ -456,6 +553,9 @@ function App() {
                             <span className="assignment-sub">
                               <span className="mini-avatar">AM</span>
                               {a.role}
+                              {hasDraft(a.id) && (
+                                <span className="count-badge">Draft</span>
+                              )}
                             </span>
                           </span>
                           <span className="assignment-right">
@@ -481,19 +581,17 @@ function App() {
                         <h3>
                           {query
                             ? "No matching assignments"
-                            : "You’re all caught up here"}
+                            : "No assignments in this view"}
                         </h3>
                         <p>
                           {query
                             ? "Try another title, project, or assignment ID."
-                            : "Choose another category or return to all assignments."}
+                            : "Try different filters or show all work. Session-only drafts and completions reset on refresh."}
                         </p>
                         <button
                           className="button secondary"
                           onClick={() => {
-                            setFilter("All");
-                            setQuery("");
-                            setShowCompleted(false);
+                            updateWork(defaultWorkFilters);
                           }}
                         >
                           Show all work

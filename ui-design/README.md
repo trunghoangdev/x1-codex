@@ -119,3 +119,5 @@ Iteration 15 adds **session-only response drafts**. Type a rationale, close the 
 Iteration 16 improves **Candidate** with a changed-file search and **Unified / Side by side** layouts. File filtering preserves the current diff; split view shows base/candidate line numbers and scrolls inside its panel on mobile. The feature still uses small synthetic file bodies.
 
 Iteration 17 keeps the selected candidate file, diff layout and path filter while you move between tabs or assignments in the same session. An existing A-1042 draft can be resumed directly from Candidate, Evidence or Checks. Refresh resets this view state and drafts; scroll positions are not retained.
+
+Iteration 18 improves **My Work** with project and draft filters, draft badges, sample due-date sorting and a reset action. Filters stay in the URL while opening assignments and returning, and support browser history. Try `http://localhost:4173/#/work?project=Payments+API&sort=due`. Drafts and completed responses still disappear on refresh; sharing a filter URL shares no response content.

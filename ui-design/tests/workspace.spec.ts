@@ -817,3 +817,54 @@ test("review context and draft survive tabs, history and assignment navigation",
     page.getByRole("button", { name: "Resume assessment while reviewing" }),
   ).toHaveCount(0);
 });
+
+test("My Work filters round-trip through URLs and preserve assignment context", async ({
+  page,
+}) => {
+  await page.goto("/#/work?project=Payments+API&sort=due");
+  await expect(page.locator(".assignment-row")).toHaveCount(3);
+  await expect(page.getByLabel("Project", { exact: true })).toHaveValue(
+    "Payments API",
+  );
+  await page
+    .getByLabel("Project", { exact: true })
+    .selectOption("Team Workspace");
+  await expect(page.locator(".assignment-row")).toHaveCount(2);
+  await page.goBack();
+  await expect(page.getByLabel("Project", { exact: true })).toHaveValue(
+    "Payments API",
+  );
+  await page.getByRole("button", { name: /A-1042.*Review retry/ }).click();
+  await page.getByRole("button", { name: "Submit assessment" }).click();
+  await page
+    .getByLabel("Decision rationale")
+    .fill("A draft for inbox filtering.");
+  await page.keyboard.press("Escape");
+  await page.getByRole("button", { name: "Back to My Work" }).click();
+  await expect(page.getByLabel("Project", { exact: true })).toHaveValue(
+    "Payments API",
+  );
+  await page.getByLabel("Has a draft").check();
+  await expect(page.locator(".assignment-row")).toHaveCount(1);
+  await expect(page.locator(".assignment-row")).toContainText("Draft");
+  await expect(page).toHaveURL(/drafts=1/);
+  await page.reload();
+  await expect(page.getByLabel("Has a draft")).toBeChecked();
+  await expect(page.locator(".assignment-row")).toHaveCount(0);
+  await page.getByRole("button", { name: "Reset all filters" }).click();
+  await expect(page.locator(".assignment-row")).toHaveCount(5);
+  await page.getByLabel("Sort by", { exact: true }).selectOption("due");
+  const rows = await page.locator(".assignment-row").allTextContents();
+  expect(rows.slice(0, 3).every((text) => text.includes("Today"))).toBe(true);
+  await page.setViewportSize({ width: 390, height: 844 });
+  expect(
+    await page.evaluate(
+      () => document.documentElement.scrollWidth <= innerWidth,
+    ),
+  ).toBe(true);
+  await page.goto("/#/work?kind=invalid&sort=invalid&project=Unknown");
+  await expect(page.getByLabel("Sort by", { exact: true })).toHaveValue(
+    "default",
+  );
+  await expect(page.locator(".assignment-row")).toHaveCount(0);
+});
