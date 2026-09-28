@@ -2444,3 +2444,30 @@ textarea::placeholder {
   min-height: 44px;
   font-size: 11px;
 }
+.decision-problem {
+  margin: 18px 0;
+  padding: 15px;
+  border: 1px solid #e5ccb4;
+  border-radius: 7px;
+  background: #fcf3e9;
+}
+.decision-problem strong {
+  color: #83542e;
+  font-size: 12px;
+}
+.decision-problem p {
+  margin: 10px 0;
+  font-size: 12px;
+  line-height: 1.8;
+  color: #735a45;
+}
+.decision-problem small {
+  display: block;
+  font-size: 10px;
+  line-height: 1.8;
+  margin-top: 10px;
+  color: #77634f;
+}
+.decision-problem .button {
+  min-height: 44px;
+}

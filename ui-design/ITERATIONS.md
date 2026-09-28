@@ -127,3 +127,15 @@ These are navigation links over explicit sample relationships, not verified prov
 Validation: production build and all fourteen browser tests passed. The new journey test follows the producing attempt through Candidate, Checks and Receipt, verifies unavailable links stay absent, checks destination focus and preview retention, and confirms mobile layout.
 
 Next proposed slice: explicit unavailable/error/stale-data states before connecting a live backend.
+
+## 11 — Unavailable and invalidated release decision context
+
+Open **A-1041 → Preview release prerequisites** for three additional fictional cases: review-data load failure, candidate changed, and authority revoked. Each explains the problem and blocks both approval and refusal. Missing prerequisite evidence remains a different state: it blocks approval but permits a reasoned refusal while the decision context itself is available.
+
+The confirmation dialog can simulate invalidation after it opens. Typed rationale is preserved while the context is blocked, but the submit control and submission handler both reject recording. No receipt or completion is created. Reset closes an invalidated dialog and returns the demo to missing evidence; it does not grant readiness or claim a server refresh or restored authority.
+
+The displayed release subject is an old snapshot in the candidate-changed scenario. The UI does not manufacture a replacement candidate or silently apply the previous rationale to a new subject. This remains a local design simulation, not server-side authorization, concurrency control or real error recovery. Other assignment types are outside this slice.
+
+Validation: production build and all seventeen browser tests passed. Three added scenarios cover blocked actions, invalidation after opening confirmation, preserved rationale, safe reset, absent receipts and phone-width overflow. Previews remain at iteration 08.
+
+Next proposed slice: URL-addressable assignment tabs and browser Back/Forward, preserving context without implying persistence of demo responses.

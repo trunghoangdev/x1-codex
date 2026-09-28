@@ -1,3 +1,4 @@
+import { DecisionProblem, decisionBlocked } from "./ReleaseReview";
 import React, { useEffect, useRef, useState } from "react";
 import { createRoot } from "react-dom/client";
 import {
@@ -199,6 +200,7 @@ function App() {
   function commitDecision() {
     if (!selected || !reason.trim() || !decision || completed[selected.id])
       return;
+    if (selected.kind === "Authority" && decisionBlocked(readiness)) return;
     if (decision === "Approval" && readiness !== "ready") return;
     setCompleted((prev) => ({ ...prev, [selected.id]: decision }));
     const record: ResponseRecord = {
@@ -882,6 +884,7 @@ function App() {
                         {selected.kind === "Authority" && (
                           <button
                             className="button secondary wide"
+                            disabled={decisionBlocked(readiness)}
                             onClick={() => {
                               setReason("");
                               setDecision("Refusal");
@@ -1192,6 +1195,31 @@ function App() {
               </p>
             </>
           )}
+          {selected.kind === "Authority" && (
+            <>
+              <label className="check-scenario">
+                Simulate a change before recording
+                <select
+                  value={decisionBlocked(readiness) ? readiness : "unchanged"}
+                  onChange={(e) => setReadiness(e.target.value as Readiness)}
+                >
+                  <option value="unchanged" disabled>
+                    No change
+                  </option>
+                  <option value="load-error">Review data load failed</option>
+                  <option value="stale">Candidate changed</option>
+                  <option value="revoked">Authority revoked</option>
+                </select>
+              </label>
+              <DecisionProblem
+                state={readiness}
+                onReset={() => {
+                  setReadiness("missing");
+                  setDecision(null);
+                }}
+              />
+            </>
+          )}
           <label className="textarea-label" htmlFor="rationale">
             {selected.kind === "Work"
               ? "Contribution and acceptance criteria"
@@ -1224,6 +1252,7 @@ function App() {
               className="button primary"
               disabled={
                 !reason.trim() ||
+                (selected.kind === "Authority" && decisionBlocked(readiness)) ||
                 (decision === "Approval" && readiness !== "ready")
               }
               onClick={commitDecision}

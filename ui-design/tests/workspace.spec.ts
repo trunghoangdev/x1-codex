@@ -571,3 +571,63 @@ test("related records preserve assignment, checked subject and preview state", a
     ),
   ).toBe(true);
 });
+
+for (const state of ["load-error", "stale", "revoked"]) {
+  test(`release ${state} blocks both decisions and resets without granting readiness`, async ({
+    page,
+  }) => {
+    await page.goto("/");
+    await page.getByRole("button", { name: "View release assignment" }).click();
+    await page.getByLabel("Preview release prerequisites").selectOption(state);
+    await expect(
+      page.getByRole("button", { name: "Approve release", exact: true }),
+    ).toBeDisabled();
+    await expect(
+      page.getByRole("button", { name: "Refuse release", exact: true }),
+    ).toBeDisabled();
+    await expect(page.getByRole("alert")).toContainText("Decision unavailable");
+    await page.getByRole("button", { name: "Reset demo review" }).click();
+    await expect(page.getByLabel("Preview release prerequisites")).toHaveValue(
+      "missing",
+    );
+    await expect(
+      page.getByRole("button", { name: "Approve release", exact: true }),
+    ).toBeDisabled();
+    await expect(
+      page.getByRole("button", { name: "Refuse release", exact: true }),
+    ).toBeEnabled();
+    await page
+      .getByLabel("Preview release prerequisites")
+      .selectOption("ready");
+    await page
+      .getByRole("button", { name: "Approve release", exact: true })
+      .click();
+    await page
+      .getByLabel("Decision rationale")
+      .fill("This rationale must not admit a decision after invalidation.");
+    await page
+      .getByLabel("Simulate a change before recording")
+      .selectOption(state);
+    await expect(
+      page.getByRole("button", { name: "Record approval" }),
+    ).toBeDisabled();
+    await expect(page.getByLabel("Decision rationale")).toHaveValue(
+      "This rationale must not admit a decision after invalidation.",
+    );
+    await page.setViewportSize({ width: 390, height: 844 });
+    expect(
+      await page.evaluate(
+        () => document.documentElement.scrollWidth <= innerWidth,
+      ),
+    ).toBe(true);
+    await page
+      .getByRole("dialog")
+      .getByRole("button", { name: "Reset demo review" })
+      .click();
+    await expect(page.getByRole("dialog")).toHaveCount(0);
+    await page.getByRole("tab", { name: "Activity", exact: true }).click();
+    await expect(
+      page.getByRole("article", { name: "Decision receipt" }),
+    ).toHaveCount(0);
+  });
+}
