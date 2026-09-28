@@ -121,3 +121,5 @@ Iteration 16 improves **Candidate** with a changed-file search and **Unified / S
 Iteration 17 keeps the selected candidate file, diff layout and path filter while you move between tabs or assignments in the same session. An existing A-1042 draft can be resumed directly from Candidate, Evidence or Checks. Refresh resets this view state and drafts; scroll positions are not retained.
 
 Iteration 18 improves **My Work** with project and draft filters, draft badges, sample due-date sorting and a reset action. Filters stay in the URL while opening assignments and returning, and support browser history. Try `http://localhost:4173/#/work?project=Payments+API&sort=due`. Drafts and completed responses still disappear on refresh; sharing a filter URL shares no response content.
+
+Iteration 19 improves keyboard access and reading comfort: **Skip to main content**, stronger focus rings, navigation state announcements, background isolation while dialogs are open, and focus restoration on close. Supporting text is larger/darker in selected areas; mobile controls have larger targets and form text. See iteration 19 for scope and validation.

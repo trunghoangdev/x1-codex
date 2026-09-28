@@ -244,6 +244,16 @@ function App() {
   }
   return (
     <div className="app">
+      <a
+        className="skip-link"
+        href="#main-content"
+        onClick={(event) => {
+          event.preventDefault();
+          document.getElementById("main-content")?.focus();
+        }}
+      >
+        Skip to main content
+      </a>
       <aside className={`sidebar ${mobile ? "mobile-open" : ""}`}>
         <a
           className="brand"
@@ -269,7 +279,7 @@ function App() {
           <span className="live-dot" title="Demo workspace" />
         </div>
         <div className="nav-label">WORKSPACE</div>
-        <nav aria-label="Main navigation">
+        <nav id="workspace-navigation" aria-label="Main navigation">
           {(
             [
               ["My Work", Inbox],
@@ -280,6 +290,7 @@ function App() {
             <button
               key={name}
               className={`nav-item ${view === name ? "active" : ""}`}
+              aria-current={view === name ? "page" : undefined}
               onClick={() => navigate(name)}
             >
               <Icon size={19} />
@@ -326,6 +337,8 @@ function App() {
             <button
               className="icon-button mobile-menu"
               aria-label="Toggle navigation"
+              aria-expanded={mobile}
+              aria-controls="workspace-navigation"
               onClick={() => setMobile(!mobile)}
             >
               <Menu size={20} />
@@ -346,7 +359,7 @@ function App() {
             <span className="tiny-avatar">AM</span>
           </div>
         </header>
-        <main>
+        <main id="main-content" tabIndex={-1}>
           {route.invalid && (
             <div className="route-warning" role="alert">
               <strong>This link does not match an available screen.</strong>
@@ -1382,7 +1395,7 @@ function App() {
           </label>
           <textarea
             id="rationale"
-            autoFocus
+            data-initial-focus
             rows={5}
             value={reason}
             onChange={(e) => setReason(e.target.value)}
@@ -1450,10 +1463,22 @@ function Modal({
     const el = ref.current;
     const focusables = () =>
       el?.querySelectorAll<HTMLElement>(
-        'button:not(:disabled), textarea, input, [tabindex="0"]',
+        'button:not(:disabled), textarea:not(:disabled), input:not(:disabled), select:not(:disabled), a[href], [tabindex="0"]',
       );
+    const siblings = Array.from(
+      el?.parentElement?.parentElement?.children ?? [],
+    ).filter(
+      (node): node is HTMLElement =>
+        node instanceof HTMLElement && node !== el?.parentElement,
+    );
+    const inertBefore = siblings.map((node) => node.inert);
+    siblings.forEach((node) => {
+      node.inert = true;
+    });
     const elements = focusables();
-    (el?.querySelector<HTMLElement>("[autofocus]") || elements?.[0])?.focus();
+    (
+      el?.querySelector<HTMLElement>("[data-initial-focus]") || elements?.[0]
+    )?.focus();
     function key(e: KeyboardEvent) {
       if (e.key === "Escape") onClose();
       if (e.key === "Tab") {
@@ -1476,7 +1501,10 @@ function Modal({
     return () => {
       document.removeEventListener("keydown", key);
       document.body.style.overflow = old;
-      previous?.focus();
+      siblings.forEach((node, index) => {
+        node.inert = inertBefore[index];
+      });
+      if (previous?.isConnected) previous.focus();
     };
   }, []);
   return (

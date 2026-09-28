@@ -868,3 +868,63 @@ test("My Work filters round-trip through URLs and preserve assignment context", 
   );
   await expect(page.locator(".assignment-row")).toHaveCount(0);
 });
+
+test("keyboard access skips navigation and dialogs contain focus then restore the opener", async ({
+  page,
+}) => {
+  await page.goto("/");
+  await page.keyboard.press("Tab");
+  await expect(
+    page.getByRole("link", { name: "Skip to main content" }),
+  ).toBeFocused();
+  await page.keyboard.press("Enter");
+  await expect(page.getByRole("main")).toBeFocused();
+  await expect(page).not.toHaveURL(/main-content/);
+  await page.goto("/#/assignments/A-1042/overview");
+  const opener = page.getByRole("button", {
+    name: "Submit assessment",
+    exact: true,
+  });
+  await opener.focus();
+  await page.keyboard.press("Enter");
+  const dialog = page.getByRole("dialog");
+  await expect(page.getByLabel("Decision rationale")).toBeFocused();
+  expect(
+    await page
+      .locator(".main-shell")
+      .evaluate((el) => (el as HTMLElement).inert),
+  ).toBe(true);
+  const close = dialog.getByRole("button", { name: "Close dialog" });
+  await close.focus();
+  await page.keyboard.press("Shift+Tab");
+  expect(
+    await dialog.evaluate((el) => el.contains(document.activeElement)),
+  ).toBe(true);
+  await page.keyboard.press("Tab");
+  await expect(close).toBeFocused();
+  await page.keyboard.press("Escape");
+  await expect(dialog).toHaveCount(0);
+  await expect(opener).toBeFocused();
+  expect(
+    await page
+      .locator(".main-shell")
+      .evaluate((el) => (el as HTMLElement).inert),
+  ).toBe(false);
+  await page.setViewportSize({ width: 390, height: 844 });
+  const menu = page.getByRole("button", { name: "Toggle navigation" });
+  await expect(menu).toHaveAttribute("aria-expanded", "false");
+  await expect(
+    page.getByRole("navigation", {
+      name: "Main navigation",
+      includeHidden: true,
+    }),
+  ).toBeHidden();
+  const box = await menu.boundingBox();
+  expect(box!.width).toBeGreaterThanOrEqual(44);
+  expect(box!.height).toBeGreaterThanOrEqual(44);
+  await menu.click();
+  await expect(menu).toHaveAttribute("aria-expanded", "true");
+  await expect(
+    page.getByRole("navigation", { name: "Main navigation" }),
+  ).toBeVisible();
+});

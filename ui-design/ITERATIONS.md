@@ -213,3 +213,17 @@ Filter state is encoded in the hash URL and retained when opening assignments an
 URLs contain only filter values. Draft text, decisions and completion state remain session-only and disappear on refresh. A shared drafts-only link therefore does not share drafts. Empty-state and filter notes explain this boundary. No backend or durable persistence was added. Preview screenshots remain at iteration 08.
 
 Validation: production build and all twenty-two browser tests passed. New coverage checks direct filter links, history restoration, assignment return context, draft filtering and refresh reset, reset-all behavior, sample due ordering, mobile overflow and unknown filter values.
+
+## 19 — Keyboard access and reading comfort
+
+Added **Skip to main content** without changing the hash route, current-page semantics on workspace navigation, and expanded/control semantics on the mobile navigation toggle. Keyboard focus now uses a darker blue ring, including dropdowns and programmatically focusable content.
+
+Response dialogs initially focus the rationale field. The Tab loop includes enabled dropdowns and links; the surrounding app is inert while a dialog is open. Closing restores the opener when it still exists, and restores the previous inert state and page scrolling. This applies to the shared response/evidence dialog component.
+
+Selected supporting labels now use 12px text; dialog explanations and placeholders use darker colors. Icon buttons have a 44px minimum target. On phones, compact text actions and filter buttons have 44px targets and form text uses 16px to improve readability. Existing reduced-motion support is retained.
+
+This is a focused usability pass, not a comprehensive WCAG certification or screen-reader audit. Screenshots remain at iteration 08; the live prototype shows these changes.
+
+The closed mobile sidebar is also hidden from keyboard navigation and the accessibility tree, rather than merely translated offscreen.
+
+Validation: production build and the 23-test browser suite passed. After the final mobile-sidebar fix, the responsive-navigation and keyboard-access tests were rerun successfully. Coverage includes skip-link focus without changing routes, initial rationale focus, Tab wrapping, background isolation, Escape and opener restoration, mobile navigation visibility/state and minimum icon target size.
