@@ -1,3 +1,4 @@
+import { WorkDataPreview } from "./WorkDataPreview";
 import { defaultWorkFilters, type WorkFilters } from "./workFilters";
 import { assignments } from "./data/assignments";
 import type {
@@ -376,7 +377,7 @@ function App() {
             </div>
           )}
           {view === "My Work" && !selected && (
-            <>
+            <WorkDataPreview>
               <div className="page-heading">
                 <div>
                   <div className="eyebrow">YOUR WORKSPACE, IN FOCUS</div>
@@ -680,7 +681,7 @@ function App() {
                   </section>
                 </aside>
               </div>
-            </>
+            </WorkDataPreview>
           )}
           {view === "My Work" && selected && (
             <>

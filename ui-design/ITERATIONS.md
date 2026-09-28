@@ -227,3 +227,15 @@ This is a focused usability pass, not a comprehensive WCAG certification or scre
 The closed mobile sidebar is also hidden from keyboard navigation and the accessibility tree, rather than merely translated offscreen.
 
 Validation: production build and the 23-test browser suite passed. After the final mobile-sidebar fix, the responsive-navigation and keyboard-access tests were rerun successfully. Coverage includes skip-link focus without changing routes, initial rationale focus, Tab wrapping, background isolation, Escape and opener restoration, mobile navigation visibility/state and minimum icon target size.
+
+## 20 — My Work loading, empty and error previews
+
+My Work now has a labeled **Data preview** selector for Loaded sample work, Loading, No assigned work and Load failed. The selector explicitly states that these are sample scenarios and that retry sends no SF request. This slice covers the inbox; existing release-specific failure previews remain separate.
+
+Loading and error views hide assignment counts, rows and release shortcuts. Failure describes the assignment count as unknown rather than zero. The successful empty response is distinct from a loaded list with no filter matches. Loading is announced through a status region and the content region exposes its busy state; failure uses an alert.
+
+**Retry sample load** shows loading and restores the loaded fixtures after 800ms. Choosing a different scenario or leaving My Work cancels that timer. Successful retry returns focus to the scenario selector. Restore sample work exits the empty scenario. Filters, drafts and decisions are unchanged; the preview itself resets to Loaded when leaving/reopening My Work or refreshing. Refresh still clears session drafts/decisions as before. The manual Loading scenario remains loading until another scenario is selected.
+
+No network integration, durable persistence or server error contract was added. Preview images remain at iteration 08.
+
+Validation: production build and all 24 browser tests passed. Added coverage checks failure versus empty data, hidden inbox counts, loading/busy state, retry recovery and focus, preserved project filter, cancellation when selecting another scenario, refresh reset and mobile overflow.

@@ -928,3 +928,54 @@ test("keyboard access skips navigation and dialogs contain focus then restore th
     page.getByRole("navigation", { name: "Main navigation" }),
   ).toBeVisible();
 });
+
+test("My Work distinguishes load failure, loading, empty data and filtered results", async ({
+  page,
+}) => {
+  await page.goto("/#/work?project=Payments+API");
+  const preview = page.getByLabel("Data preview", { exact: true });
+  await preview.selectOption("error");
+  await expect(page.getByRole("alert")).toContainText(
+    "assignment count is unknown",
+  );
+  await expect(page.locator(".stat-grid")).toHaveCount(0);
+  await expect(page.locator(".assignment-row")).toHaveCount(0);
+  await page.getByRole("button", { name: "Retry sample load" }).click();
+  await expect(
+    page.getByRole("heading", { name: "Loading assignments…" }),
+  ).toBeVisible();
+  await expect(page.locator(".data-state")).toHaveAttribute(
+    "aria-busy",
+    "true",
+  );
+  await expect(page.locator(".assignment-row")).toHaveCount(3);
+  await expect(preview).toBeFocused();
+  await expect(page.getByLabel("Project", { exact: true })).toHaveValue(
+    "Payments API",
+  );
+  await preview.selectOption("empty");
+  await expect(
+    page.getByRole("heading", { name: "No work assigned to you" }),
+  ).toBeVisible();
+  await expect(page.getByRole("button", { name: "Show all work" })).toHaveCount(
+    0,
+  );
+  await page.getByRole("button", { name: "Restore sample work" }).click();
+  await expect(page.locator(".assignment-row")).toHaveCount(3);
+  await preview.selectOption("loading");
+  await expect(page.getByRole("status")).toContainText("Loading sample work");
+  await page.setViewportSize({ width: 390, height: 844 });
+  expect(
+    await page.evaluate(
+      () => document.documentElement.scrollWidth <= innerWidth,
+    ),
+  ).toBe(true);
+  await preview.selectOption("error");
+  await page.getByRole("button", { name: "Retry sample load" }).click();
+  await preview.selectOption("empty");
+  await page.waitForTimeout(1000);
+  await expect(preview).toHaveValue("empty");
+  await page.reload();
+  await expect(preview).toHaveValue("ready");
+  await expect(page.locator(".assignment-row")).toHaveCount(3);
+});

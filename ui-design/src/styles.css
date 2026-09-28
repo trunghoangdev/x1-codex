@@ -2701,3 +2701,56 @@ textarea::placeholder,
     flex-wrap: wrap;
   }
 }
+
+.data-preview {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 12px;
+  padding: 16px;
+  margin-bottom: 20px;
+  background: #eef1e9;
+  border: 1px solid #d6ddce;
+  border-radius: 8px;
+}
+.data-preview label {
+  font-weight: 600;
+}
+.data-preview select {
+  font: inherit;
+  min-height: 44px;
+  max-width: 100%;
+  padding: 8px;
+  background: white;
+  color: #233330;
+  border: 1px solid #78856f;
+  border-radius: 5px;
+}
+.data-preview p,
+.data-state p {
+  color: #526343;
+  line-height: 1.7;
+}
+.data-preview p {
+  margin: 0;
+  font-size: 12px;
+}
+.data-state {
+  padding: 28px;
+}
+.data-state h2 {
+  margin-top: 24px;
+}
+.data-load-announcement {
+  font-size: 12px;
+  color: #526343;
+  margin-bottom: 12px;
+}
+@media (max-width: 700px) {
+  .data-preview select {
+    font-size: 16px;
+  }
+  .data-state {
+    padding: 20px;
+  }
+}
