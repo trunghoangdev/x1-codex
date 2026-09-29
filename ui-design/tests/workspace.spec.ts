@@ -1084,3 +1084,46 @@ test("Activity and evidence lookup stay scoped to their assignment", async ({
     ),
   ).toBe(true);
 });
+
+test("inbox counts follow load state and screen changes move keyboard focus", async ({
+  page,
+}) => {
+  await page.goto("/");
+  const badge = page
+    .getByRole("navigation", { name: "Main navigation" })
+    .getByRole("button", { name: /My Work/ })
+    .locator("b");
+  const preview = page.getByLabel("Data preview", { exact: true });
+  await expect(badge).toHaveText("5");
+  await preview.focus();
+  for (const state of ["loading", "error"]) {
+    await preview.selectOption(state);
+    await expect(badge).toHaveText("—");
+    await expect(badge).toHaveAttribute(
+      "aria-label",
+      "Assignment count unavailable",
+    );
+    await expect(preview).toBeFocused();
+  }
+  await preview.selectOption("empty");
+  await expect(badge).toHaveText("0");
+  await preview.selectOption("error");
+  await page.getByRole("button", { name: "Retry sample load" }).click();
+  await expect(badge).toHaveText("5");
+  await expect(preview).toBeFocused();
+  await page.getByRole("button", { name: /A-1042.*Review retry/ }).focus();
+  await page.keyboard.press("Enter");
+  await expect(page.getByRole("heading", { level: 1 })).toBeFocused();
+  await page.getByRole("tab", { name: "Candidate", exact: true }).click();
+  await expect(
+    page.getByRole("tab", { name: "Candidate", exact: true }),
+  ).toBeFocused();
+  await page.getByRole("button", { name: "Back to My Work" }).click();
+  await expect(page.getByRole("heading", { level: 1 })).toBeFocused();
+  await page.goBack();
+  await expect(page.getByRole("heading", { level: 1 })).toBeFocused();
+  await page.getByRole("button", { name: "Organization", exact: true }).click();
+  await expect(
+    page.getByRole("heading", { name: "One team. Clear responsibility." }),
+  ).toBeFocused();
+});

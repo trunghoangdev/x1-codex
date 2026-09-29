@@ -1,10 +1,17 @@
 import { useEffect, useRef, useState, type ReactNode } from "react";
 
-type State = "ready" | "loading" | "empty" | "error";
+export type WorkDataState = "ready" | "loading" | "empty" | "error";
 
 /** UI scenarios only; no request or server state is represented here. */
-export function WorkDataPreview({ children }: { children: ReactNode }) {
-  const [state, setState] = useState<State>("ready");
+export function WorkDataPreview({
+  children,
+  state,
+  setState,
+}: {
+  children: ReactNode;
+  state: WorkDataState;
+  setState: (state: WorkDataState) => void;
+}) {
   const [retrying, setRetrying] = useState(false);
   const selector = useRef<HTMLSelectElement>(null);
   useEffect(() => {
@@ -26,7 +33,7 @@ export function WorkDataPreview({ children }: { children: ReactNode }) {
           value={state}
           onChange={(event) => {
             setRetrying(false);
-            setState(event.target.value as State);
+            setState(event.target.value as WorkDataState);
           }}
         >
           <option value="ready">Loaded sample work</option>
@@ -56,7 +63,7 @@ export function WorkDataPreview({ children }: { children: ReactNode }) {
           aria-label="My Work loading state"
           aria-busy={state === "loading"}
         >
-          <h1>My Work</h1>
+          <h1 tabIndex={-1}>My Work</h1>
           {state === "loading" && (
             <>
               <h2>Loading assignments…</h2>

@@ -271,3 +271,13 @@ Refreshed all twelve existing screenshots and added split diff, load-error and A
 This is a UI prototype checkpoint, not production readiness. No backend integration, authorization or durable persistence was added. The existing footer design label is retained.
 
 Validation: capture script completed successfully, production build and all 26 browser tests passed, and local links in README and WALKTHROUGH resolve.
+
+## 24 — Consistent inbox counts and screen focus
+
+My Work's data-preview state now belongs to the app so its sidebar count matches the inbox: unavailable (—, with an accessible label) for loading/error, zero for a successful empty result, and the current open-assignment count for loaded fixtures. Retry restores the current session count. Leaving My Work resets the preview as before; session responses and filters remain intact.
+
+After an in-app screen change, including browser history between screens, focus moves to the destination heading. The initial page load, tab changes and filter updates do not trigger this move. Focus runs after route-driven dialog cleanup so restoring a dialog opener cannot override the destination focus. Headings are programmatically focusable without entering normal Tab order.
+
+No persistence or backend behavior changed. Preview images remain the iteration 23 checkpoint.
+
+Validation: production build and 26 existing browser tests passed. The added test passed after explicitly focusing the scenario selector before asserting focus retention. It verifies unavailable/empty/recovered sidebar counts, Enter navigation, tab focus, return navigation and browser Back (27 tests total).

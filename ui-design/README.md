@@ -126,3 +126,5 @@ Iteration 21 expands **Organization** with a personal sample work queue: respons
 Iteration 22 adds **Activity type** filtering and scoped evidence inspector links. Activity no longer repeats a generic history across assignments. Evidence lists support search by ID, title or producer with clear empty states; workspace groups also expose receipts for assignments without evidence fixtures. See iteration 22 for boundaries.
 
 Additional v1 previews: [Split diff](previews/13-split-diff.png), [Load error](previews/14-load-error.png), [Activity](previews/15-activity.png). See the [walkthrough](WALKTHROUGH.md) for screenshot session context.
+
+Iteration 24 fixes inbox/sidebar count consistency during loading, failure and empty previews, and moves focus to the destination heading when navigating between screens. Tab and filter interactions retain their own focus. Screenshots above remain the iteration 23 checkpoint.

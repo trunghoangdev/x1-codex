@@ -1,6 +1,6 @@
 import { AssignmentActivity } from "./AssignmentActivity";
 import { OrganizationWork } from "./OrganizationWork";
-import { WorkDataPreview } from "./WorkDataPreview";
+import { WorkDataPreview, type WorkDataState } from "./WorkDataPreview";
 import { defaultWorkFilters, type WorkFilters } from "./workFilters";
 import { assignments } from "./data/assignments";
 import type {
@@ -162,7 +162,20 @@ function App() {
   const [artifact, setArtifact] = useState<EvidenceArtifact | null>(null);
   const [mobile, setMobile] = useState(false);
   const [receipts, setReceipts] = useState<ResponseRecord[]>([]);
-  const headingRef = useRef<HTMLHeadingElement>(null);
+  const [workDataState, setWorkDataState] = useState<WorkDataState>("ready");
+  const screenKey = `${route.view}:${route.assignmentId ?? ""}:${!!route.invalid}`;
+  const previousScreen = useRef(screenKey);
+  useEffect(() => {
+    if (route.view !== "My Work" || route.assignmentId)
+      setWorkDataState("ready");
+    if (previousScreen.current === screenKey) return;
+    previousScreen.current = screenKey;
+    // Run after route-driven dialogs have closed and restored their opener.
+    const frame = requestAnimationFrame(() => {
+      document.querySelector<HTMLElement>("main h1")?.focus();
+    });
+    return () => cancelAnimationFrame(frame);
+  }, [screenKey, route.view, route.assignmentId]);
   const active = assignments.filter((a) => !completed[a.id]);
   const hasDraft = (id: string) =>
     Object.values(drafts[id] ?? {}).some((text) => text.trim());
@@ -297,7 +310,21 @@ function App() {
             >
               <Icon size={19} />
               <span>{name}</span>
-              {name === "My Work" && <b>{active.length}</b>}
+              {name === "My Work" && (
+                <b
+                  aria-label={
+                    workDataState === "loading" || workDataState === "error"
+                      ? "Assignment count unavailable"
+                      : undefined
+                  }
+                >
+                  {workDataState === "loading" || workDataState === "error"
+                    ? "—"
+                    : workDataState === "empty"
+                      ? 0
+                      : active.length}
+                </b>
+              )}
             </button>
           ))}
         </nav>
@@ -378,11 +405,11 @@ function App() {
             </div>
           )}
           {view === "My Work" && !selected && (
-            <WorkDataPreview>
+            <WorkDataPreview state={workDataState} setState={setWorkDataState}>
               <div className="page-heading">
                 <div>
                   <div className="eyebrow">YOUR WORKSPACE, IN FOCUS</div>
-                  <h1 ref={headingRef}>
+                  <h1 tabIndex={-1}>
                     Good morning, Alex<span className="heading-dot">.</span>
                   </h1>
                   <p>
@@ -696,7 +723,7 @@ function App() {
                   <span> / </span>
                   {selected.project}
                 </div>
-                <h1>{selected.title}</h1>
+                <h1 tabIndex={-1}>{selected.title}</h1>
                 <div className="detail-meta">
                   <span className={`badge ${selected.kind.toLowerCase()}`}>
                     {completed[selected.id] ||
@@ -1059,7 +1086,7 @@ function App() {
               <div className="page-heading">
                 <div>
                   <div className="eyebrow">PEOPLE + AGENTS</div>
-                  <h1>One team. Clear responsibility.</h1>
+                  <h1 tabIndex={-1}>One team. Clear responsibility.</h1>
                   <p>
                     See who contributes, who assesses, and who has the authority
                     to decide.
@@ -1182,7 +1209,7 @@ function App() {
               <div className="page-heading">
                 <div>
                   <div className="eyebrow">THE RECORD BEHIND THE WORK</div>
-                  <h1>Evidence, connected.</h1>
+                  <h1 tabIndex={-1}>Evidence, connected.</h1>
                   <p>Inspect the artifacts and decisions behind a result.</p>
                 </div>
                 <span className="badge neutral">Sample records</span>
