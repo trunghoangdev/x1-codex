@@ -1,4 +1,4 @@
-import { chromium } from "@playwright/test";
+import { chromium, expect } from "@playwright/test";
 import { mkdir } from "node:fs/promises";
 
 // Run against the local development server on port 4173.
@@ -94,6 +94,31 @@ await page.getByRole("button", { name: /A-1042.*Review retry/ }).click();
 await page.getByRole("tab", { name: "Candidate", exact: true }).click();
 await page.screenshot({
   path: "previews/12-mobile-candidate.png",
+  animations: "disabled",
+  fullPage: true,
+});
+await page.setViewportSize({ width: 1440, height: 1100 });
+await page.goto("http://127.0.0.1:4173/#/assignments/A-1042/candidate");
+await page.getByRole("button", { name: "Side by side", exact: true }).click();
+await page.screenshot({
+  path: "previews/13-split-diff.png",
+  animations: "disabled",
+  fullPage: true,
+});
+await page.goto("http://127.0.0.1:4173/#/work");
+await page.getByLabel("Data preview", { exact: true }).selectOption("error");
+await expect(page.getByRole("alert")).toContainText("Could not load your work");
+await page.screenshot({
+  path: "previews/14-load-error.png",
+  animations: "disabled",
+  fullPage: true,
+});
+await page.getByRole("button", { name: "Retry sample load" }).click();
+await expect(page.locator(".assignment-row")).toHaveCount(5);
+await page.goto("http://127.0.0.1:4173/#/assignments/A-1042/activity");
+await page.getByLabel("Activity type").selectOption("evidence");
+await page.screenshot({
+  path: "previews/15-activity.png",
   animations: "disabled",
   fullPage: true,
 });

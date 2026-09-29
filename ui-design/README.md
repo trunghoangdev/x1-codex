@@ -1,4 +1,4 @@
-# Forge workspace · design exploration 01
+# Forge workspace · UI prototype v1
 
 An interactive English-language design for humans and AI workers collaborating in a Software Factory. The opening screen makes the user's next responsibility clear; assignment details connect that responsibility to its input, evidence, and authority.
 
@@ -15,12 +15,7 @@ Open the local URL printed by Vite. For a production build, run `npm run build`.
 
 ## Walkthrough
 
-1. On **My Work**, select a responsibility card or search by assignment ID, title, or project.
-2. Open **A-1042**. Read the assignment, inspect its evidence, and submit an assessment with a rationale. The reviewer can submit an assessment, but has no deployment approval action on this assignment.
-3. Return to My Work. The completed assignment has moved to **Completed**, and its inbox count has decreased.
-4. Open **A-1041** to approve or refuse the exact release candidate. A rationale is required. The recorded decision appears in Activity.
-5. Visit **Organization** to inspect human, AI, and deterministic worker roles.
-6. Visit **Evidence** to follow the illustrative chain from contribution to release decision. Recording an approval leaves the external effect unconfirmed.
+Follow the [complete demo walkthrough](WALKTHROUGH.md) for review, draft, evidence, release decision, recovery and mobile flows. It includes expected results and links to current screenshots.
 
 ## Design decisions
 
@@ -33,11 +28,11 @@ Open the local URL printed by Vite. For a production build, run `npm run build`.
 
 ## Scope and boundaries
 
-This is a design prototype using React, TypeScript, Vite, and Lucide icons. All people, IDs, dates, digests, snippets, records, and organizational activity are fictional. Organization cards show a fixed illustrative snapshot. Evidence records and the inspector are illustrative, not verified artifacts.
+This is a design prototype using React, TypeScript, Vite, and Lucide icons. All people, IDs, dates, digests, snippets, records, and organizational activity are fictional. Organization combines illustrative role snapshots with session-aware assignment summaries. Evidence records and the inspector are illustrative, not verified artifacts.
 
 Responses live only in React state and reset on refresh. There is no authentication, backend, actual authorization check, durable storage, live event stream, or external execution. A real implementation must obtain identity and permissions from the application API and submit commands for server-side authorization and governed admission. The UI must not treat its local state as an authoritative record.
 
-Before production: design rejection/error/offline/concurrent-update states; define versioned API contracts; connect exact artifact provenance; add authentication and server-enforced permissions; conduct a full accessibility review and user testing. The visible multi-role persona exists solely to exercise both review and authority flows.
+Before production: extend the existing failure previews to production rejection/offline/concurrent-update handling; define versioned API contracts; connect exact artifact provenance; add authentication and server-enforced permissions; conduct a full accessibility review and user testing. The visible multi-role persona exists solely to exercise both review and authority flows.
 
 This design is an original implementation based on the allowed repository discussions. It contains no copied private planning documents and uses no material from the excluded `x1` repository.
 
@@ -61,7 +56,7 @@ The browser suite checks the assessment and approval/refusal flows, required rat
 
 To regenerate, start Vite on port 4173, then run `PLAYWRIGHT_BROWSERS_PATH=../.cache/ms-playwright node scripts/capture-previews.mjs` from this directory.
 
-Validation in the current workspace: production build passed; all four Playwright tests passed in Chromium. Desktop and 390px mobile screenshots were inspected. This is not a complete accessibility or cross-browser certification.
+Validation at the v1 checkpoint: production build and 26 browser tests passed. The capture script exercises desktop and 390px mobile flows; selected screenshots were visually reviewed. This is not a complete accessibility or cross-browser certification.
 
 This environment lacked the Chromium NSS/NSPR shared libraries. They were extracted into the repository-local `.cache/browser-libs/` without installing system packages. When testing here, use:
 
@@ -89,9 +84,9 @@ The sixth update scopes **Evidence** to each assignment and gives **Artifact Ins
 
 The seventh update refines **A-1042 → Attempts** using state patterns from a bounded read-only development metadata review. It adds a process-exited-with-error example and separates platform state, process exit and cleanup observations. All displayed records remain synthetic; no production data connection was added.
 
-## Current previews — iteration 08
+## Current previews — iteration 23 · v1
 
-The preview files have been refreshed; earlier notes describing them as initial-design snapshots are historical.
+All 15 preview files reflect the iteration 23 checkpoint. Earlier iteration notes below describe historical validation and screenshot freshness.
 
 - [Attempts](previews/07-attempts.png)
 - [Candidate and diff](previews/08-candidate.png)
@@ -129,3 +124,5 @@ Iteration 20 adds **Data preview** on My Work: loaded, loading, no assigned work
 Iteration 21 expands **Organization** with a personal sample work queue: responsible role, waiting reason, next step and direct assignment navigation. Release blockers follow the current prerequisite preview; completed local responses link to Activity without implying deployment success. See iteration 21 for scope.
 
 Iteration 22 adds **Activity type** filtering and scoped evidence inspector links. Activity no longer repeats a generic history across assignments. Evidence lists support search by ID, title or producer with clear empty states; workspace groups also expose receipts for assignments without evidence fixtures. See iteration 22 for boundaries.
+
+Additional v1 previews: [Split diff](previews/13-split-diff.png), [Load error](previews/14-load-error.png), [Activity](previews/15-activity.png). See the [walkthrough](WALKTHROUGH.md) for screenshot session context.

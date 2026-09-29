@@ -261,3 +261,13 @@ Evidence lists support case-insensitive search by record ID, title or producer, 
 Filters reset when their component unmounts or the page refreshes; this slice adds no URL persistence or server search. All records remain sample/session data, and no new relationship between A-1042 and the A-1041 release is inferred. Preview screenshots remain at iteration 08.
 
 Validation: production build and all 25 existing browser tests passed. The new scoped lookup test passed after correcting its Evidence-tab locator to allow the existing count badge. It covers activity filters, inspector focus restoration, case-insensitive search, empty recovery, cross-assignment isolation, missing history and mobile overflow (26 tests total).
+
+## 23 — Prototype v1 demo checkpoint
+
+Refreshed all twelve existing screenshots and added split diff, load-error and Activity evidence-filter previews (15 total). The capture script exercises the current UI and asserts recovery from the sample load failure. Reviewed the mobile inbox and desktop Organization captures visually.
+
+`WALKTHROUGH.md` provides a complete English demo sequence with expected behavior, screenshots, reset instructions and session boundaries. README now points to it and distinguishes current previews from historical iteration notes. Screenshots capture different session moments; the walkthrough identifies this rather than implying one persistent dataset.
+
+This is a UI prototype checkpoint, not production readiness. No backend integration, authorization or durable persistence was added. The existing footer design label is retained.
+
+Validation: capture script completed successfully, production build and all 26 browser tests passed, and local links in README and WALKTHROUGH resolve.
