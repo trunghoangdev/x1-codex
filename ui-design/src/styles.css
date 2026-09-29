@@ -2754,3 +2754,44 @@ textarea::placeholder,
     padding: 20px;
   }
 }
+
+.org-work {
+  padding: 24px;
+  margin-bottom: 24px;
+}
+.org-work > p,
+.org-work-item p {
+  color: #526343;
+  line-height: 1.7;
+}
+.org-work-grid {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 16px;
+  margin-top: 20px;
+}
+.org-work-item {
+  border: 1px solid var(--line);
+  border-radius: 8px;
+  padding: 20px;
+  min-width: 0;
+}
+.org-work-item h3 {
+  font-size: 16px;
+  line-height: 1.5;
+}
+.org-work-item .button {
+  min-height: 44px;
+  white-space: normal;
+}
+.org-work-next {
+  font-size: 13px;
+}
+@media (max-width: 700px) {
+  .org-work-grid {
+    grid-template-columns: 1fr;
+  }
+  .org-work {
+    padding: 16px;
+  }
+}

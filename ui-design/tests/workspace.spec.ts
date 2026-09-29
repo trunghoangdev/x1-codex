@@ -979,3 +979,56 @@ test("My Work distinguishes load failure, loading, empty data and filtered resul
   await expect(preview).toHaveValue("ready");
   await expect(page.locator(".assignment-row")).toHaveCount(3);
 });
+
+test("Organization connects responsibilities, release blockers and local responses", async ({
+  page,
+}) => {
+  await page.goto("/#/organization");
+  const work = page.getByRole("region", { name: "Needs your attention" });
+  await expect(work).toContainText("5 open assignments");
+  await expect(work).toContainText("Approval is blocked");
+  await expect(work).toContainText("staging effect is unconfirmed");
+  await work.getByRole("button", { name: "Open assignment · A-1041" }).click();
+  await expect(page).toHaveURL(/assignments\/A-1041\/overview/);
+  await page
+    .getByLabel("Preview release prerequisites")
+    .selectOption("revoked");
+  await page.getByRole("button", { name: "Organization", exact: true }).click();
+  await expect(work).toContainText(
+    "Both decisions are blocked: release authority",
+  );
+  await work.getByRole("button", { name: "Open assignment · A-1042" }).click();
+  await page
+    .getByRole("button", { name: "Submit assessment", exact: true })
+    .click();
+  await page
+    .getByLabel("Decision rationale")
+    .fill("Reviewed the sample contribution and evidence.");
+  await page.getByRole("button", { name: "Record assessment" }).click();
+  await page.getByRole("button", { name: "Organization", exact: true }).click();
+  await expect(work).toContainText("4 open assignments");
+  await expect(work).toContainText("Downstream outcome is not established");
+  await expect(
+    page
+      .locator(".role-card")
+      .filter({
+        has: page.getByRole("heading", { name: "Reviewer", exact: true }),
+      }),
+  ).toContainText("1 awaiting review");
+  await work.getByRole("button", { name: "View response · A-1042" }).click();
+  await expect(page).toHaveURL(/assignments\/A-1042\/activity/);
+  await expect(page.getByRole("tabpanel")).toContainText(
+    "Reviewed the sample contribution",
+  );
+  await page.goBack();
+  await page.setViewportSize({ width: 390, height: 844 });
+  await expect(work).toBeVisible();
+  expect(
+    await page.evaluate(
+      () => document.documentElement.scrollWidth <= innerWidth,
+    ),
+  ).toBe(true);
+  await page.reload();
+  await expect(work).toContainText("5 open assignments");
+  await expect(work).toContainText("Approval is blocked");
+});

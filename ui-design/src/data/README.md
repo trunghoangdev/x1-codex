@@ -9,6 +9,7 @@ This directory contains plain TypeScript data and view models, with no React imp
 - `evidence.ts`: assignment-scoped artifact fixtures and lookup helpers.
 - `checks.ts`: alternative validator observation scenarios; shared types live in `models.ts`.
 - `requirements.ts`: authored sample review criteria, independent of candidate file contents.
+- `organization.ts`: authored waiting/next-step explanations and release-state summaries.
 - `release.ts`: one synthetic release subject shared by evidence, confirmation and receipts.
 
 Components consume these values. Evidence data no longer imports a UI component to obtain the release identity. Decision receipts and preview types are likewise independent of rendering.

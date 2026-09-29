@@ -1,3 +1,4 @@
+import { OrganizationWork } from "./OrganizationWork";
 import { WorkDataPreview } from "./WorkDataPreview";
 import { defaultWorkFilters, type WorkFilters } from "./workFilters";
 import { assignments } from "./data/assignments";
@@ -1104,6 +1105,11 @@ function App() {
                 </div>
                 <Users size={55} />
               </div>
+              <OrganizationWork
+                completed={completed}
+                readiness={readiness}
+                onOpen={open}
+              />
               <div className="role-grid">
                 {[
                   {
@@ -1130,7 +1136,7 @@ function App() {
                     type: "Human · You",
                     initials: "AM",
                     permission: "Submit assessments",
-                    count: "2 awaiting review",
+                    count: `${active.filter((a) => a.kind === "Assessment").length} awaiting review`,
                     icon: FileCheck2,
                   },
                   {
@@ -1139,7 +1145,9 @@ function App() {
                     type: "Human · You",
                     initials: "AM",
                     permission: "Approve or refuse releases",
-                    count: "1 decision requested",
+                    count: completed["A-1041"]
+                      ? "Local response recorded"
+                      : "1 decision requested",
                     icon: ShieldCheck,
                   },
                   {
@@ -1148,7 +1156,7 @@ function App() {
                     type: "Deterministic worker",
                     initials: "RR",
                     permission: "Execute authorized releases",
-                    count: "Awaiting authorization",
+                    count: "Execution status not connected",
                     icon: GitBranch,
                   },
                 ].map(

@@ -239,3 +239,15 @@ Loading and error views hide assignment counts, rows and release shortcuts. Fail
 No network integration, durable persistence or server error contract was added. Preview images remain at iteration 08.
 
 Validation: production build and all 24 browser tests passed. Added coverage checks failure versus empty data, hidden inbox counts, loading/busy state, retry recovery and focus, preserved project filter, cancellation when selecting another scenario, refresh reset and mobile overflow.
+
+## 21 — Organization responsibilities and next steps
+
+Organization now includes **Needs your attention**, covering the five sample assignments owned by Alex Morgan. Each card shows the project, responsible person/role, why the work is waiting, the next review step and an assignment link. The scope is explicitly personal sample work, not an organization-wide backlog or inferred dependency graph.
+
+Release explanations follow the same session prerequisite state used by the assignment, distinguishing missing/refused evidence from blocked decisions due to load errors, changed candidates or revoked authority. Staging reconciliation retains its unconfirmed-effect explanation. Authored explanations live in `src/data/organization.ts`; they are not backend dependency records.
+
+After a local response, the card links to the assignment Activity receipt and explicitly leaves downstream effects unestablished. Open-work counts, Reviewer counts and the Release authority summary update with session decisions. Executor status is shown as not connected instead of implying a confirmed authorization or execution result. Other role cards remain illustrative snapshots. Refresh resets session decisions and prerequisite scenarios.
+
+The card grid becomes a single column on phones. No backend integration or action execution was added. Preview images remain at iteration 08.
+
+Validation: production build and all 25 browser tests passed. Added coverage checks assignment links, shared revoked-authority state, local response/count updates, Activity receipt navigation, browser Back, mobile overflow and session reset on refresh.
