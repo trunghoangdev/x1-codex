@@ -299,3 +299,13 @@ Project, role and status filters combine within the personal sample queue. Group
 Screenshots remain the iteration 23 checkpoint. This slice does not change the surrounding illustrative role cards.
 
 Validation: production build and all 29 browser tests passed. Added coverage checks initial groups, combined filters and empty recovery, release readiness transitions, local-response grouping/links and mobile overflow.
+
+## 27 — Preserve lookup context and inbox return position
+
+Evidence search and Activity type are now controlled by per-assignment session state in the app. They survive tab changes and assignment/screen navigation. Evidence search is shared between an assignment tab and its matching workspace Evidence group; different assignments remain isolated. Refresh clears both, and they are not encoded in URLs.
+
+Opening an assignment from My Work remembers its row and scroll position. Returning via the UI or browser history restores focus and scroll to that row when it remains in the current list. If the row has disappeared after a response or filtering, the destination heading receives focus instead. A changed viewport can bring an offscreen row back into view. This is bounded inbox restoration, not general scroll persistence across every screen.
+
+No durable storage or backend integration was added. Screenshots remain the iteration 23 checkpoint.
+
+Validation: production build and all 30 browser tests passed. Added coverage checks per-assignment lookup state across tabs, UI/history inbox return focus, mobile scroll restoration, completed-row fallback, isolation and refresh reset.

@@ -1132,7 +1132,7 @@ test("inbox counts follow load state and screen changes move keyboard focus", as
     page.getByRole("tab", { name: "Candidate", exact: true }),
   ).toBeFocused();
   await page.getByRole("button", { name: "Back to My Work" }).click();
-  await expect(page.getByRole("heading", { level: 1 })).toBeFocused();
+  await expect(page.locator("#work-row-A-1042")).toBeFocused();
   await page.goBack();
   await expect(page.getByRole("heading", { level: 1 })).toBeFocused();
   await page.getByRole("button", { name: "Organization", exact: true }).click();
@@ -1233,4 +1233,50 @@ test("Organization groups work by response state and combines project/role filte
       () => document.documentElement.scrollWidth <= innerWidth,
     ),
   ).toBe(true);
+});
+
+test("review filters survive navigation and inbox restores the opened row", async ({
+  page,
+}) => {
+  await page.setViewportSize({ width: 390, height: 844 });
+  await page.goto("/#/work");
+  const row = page.locator("#work-row-A-1042");
+  await row.scrollIntoViewIfNeeded();
+  const y = await page.evaluate(() => scrollY);
+  await row.click();
+  await page.getByRole("tab", { name: /^Evidence/ }).click();
+  await page.getByLabel("Find evidence for A-1042").fill("AR-775");
+  await page.getByRole("tab", { name: "Activity", exact: true }).click();
+  await page.getByLabel("Activity type").selectOption("evidence");
+  await page.getByRole("tab", { name: /^Evidence/ }).click();
+  await expect(page.getByLabel("Find evidence for A-1042")).toHaveValue(
+    "AR-775",
+  );
+  await page.getByRole("button", { name: "Back to My Work" }).click();
+  await expect(row).toBeFocused();
+  expect(Math.abs((await page.evaluate(() => scrollY)) - y)).toBeLessThan(5);
+  await page.goBack();
+  await expect(page.getByLabel("Find evidence for A-1042")).toHaveValue(
+    "AR-775",
+  );
+  await page.goForward();
+  await expect(row).toBeFocused();
+  await row.click();
+  await page.getByRole("tab", { name: "Activity", exact: true }).click();
+  await expect(page.getByLabel("Activity type")).toHaveValue("evidence");
+  await page
+    .getByRole("button", { name: "Submit assessment", exact: true })
+    .click();
+  await page
+    .getByLabel("Decision rationale")
+    .fill("Sample context restoration check.");
+  await page.getByRole("button", { name: "Record assessment" }).click();
+  await page.getByRole("button", { name: "Back to My Work" }).click();
+  await expect(page.getByRole("heading", { level: 1 })).toBeFocused();
+  await expect(row).toHaveCount(0);
+  await page.goto("/#/assignments/A-1041/evidence");
+  await expect(page.getByLabel("Find evidence for A-1041")).toHaveValue("");
+  await page.goto("/#/assignments/A-1042/evidence");
+  await page.reload();
+  await expect(page.getByLabel("Find evidence for A-1042")).toHaveValue("");
 });

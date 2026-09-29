@@ -132,3 +132,5 @@ Iteration 24 fixes inbox/sidebar count consistency during loading, failure and e
 Iteration 25 collapses scenario selectors under **Demo controls** by default. Expand them to change a sample scenario; closing them preserves the selection and keeps results/blockers visible. The walkthrough reflects this interaction.
 
 Iteration 26 groups Organization work into **Awaiting response**, **Blocked** and **Responded**, with combined project/role/status filters and empty-state recovery. Release blockers follow the current demo prerequisites; local responses move into Responded without implying execution success.
+
+Iteration 27 preserves Evidence searches and Activity filters per assignment for the session. Returning to My Work restores the opened row and scroll position when available, otherwise the heading. Refresh clears this context.

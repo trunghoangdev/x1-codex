@@ -1,4 +1,3 @@
-import { useState } from "react";
 import { DecisionReceipt } from "./DecisionReceipt";
 import { evidenceFor, type EvidenceArtifact } from "./data/evidence";
 import type { ResponseRecord } from "./data/models";
@@ -9,13 +8,16 @@ export function AssignmentActivity({
   receipts,
   onNavigate,
   onInspect,
+  filter,
+  setFilter,
 }: {
   assignmentId: string;
+  filter: string;
+  setFilter: (value: string) => void;
   receipts: ResponseRecord[];
   onNavigate: NavigateRelated;
   onInspect: (record: EvidenceArtifact) => void;
 }) {
-  const [filter, setFilter] = useState("all");
   const responses = receipts.filter((r) => r.assignmentId === assignmentId);
   const evidence = evidenceFor(assignmentId);
   const count =

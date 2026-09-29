@@ -64,6 +64,6 @@ At phone width, use the navigation toggle and assignment tabs. The response shor
 
 ## End with the boundaries
 
-Screen URLs and My Work filters are shareable. Drafts, receipts, completions and scenario choices are session-only; refresh clears them. Activity/evidence searches reset when their view unmounts. Screenshots show selected moments, not one persistent cross-image database: Organization/Evidence include the captured assessment, while mobile and later previews start fresh sessions.
+Screen URLs and My Work filters are shareable. Drafts, receipts, completions and scenario choices are session-only; refresh clears them. Activity filters and Evidence searches survive navigation per assignment and reset on refresh. Returning to My Work restores the opened row when it remains in the list. Screenshots show selected moments, not one persistent cross-image database: Organization/Evidence include the captured assessment, while mobile and later previews start fresh sessions.
 
 Prototype v1 is a UI review checkpoint. It includes no authentication, durable storage, governed command admission, real worker runs or deployment. Production integration, broad accessibility testing and customer usability feedback remain separate work.

@@ -164,15 +164,40 @@ function App() {
   const [mobile, setMobile] = useState(false);
   const [receipts, setReceipts] = useState<ResponseRecord[]>([]);
   const [workDataState, setWorkDataState] = useState<WorkDataState>("ready");
+  const [evidenceQueries, setEvidenceQueries] = useState<
+    Record<string, string>
+  >({});
+  const [activityFilters, setActivityFilters] = useState<
+    Record<string, string>
+  >({});
+  const inboxReturn = useRef<{ id: string; y: number } | null>(null);
   const screenKey = `${route.view}:${route.assignmentId ?? ""}:${!!route.invalid}`;
   const previousScreen = useRef(screenKey);
   useEffect(() => {
     if (route.view !== "My Work" || route.assignmentId)
       setWorkDataState("ready");
     if (previousScreen.current === screenKey) return;
+    const previous = previousScreen.current;
     previousScreen.current = screenKey;
     // Run after route-driven dialogs have closed and restored their opener.
     const frame = requestAnimationFrame(() => {
+      const saved = inboxReturn.current;
+      if (
+        route.view === "My Work" &&
+        !route.assignmentId &&
+        saved &&
+        previous.startsWith(`My Work:${saved.id}:`)
+      ) {
+        const row = document.getElementById(`work-row-${saved.id}`);
+        if (row) {
+          row.focus({ preventScroll: true });
+          window.scrollTo(0, saved.y);
+          const bounds = row.getBoundingClientRect();
+          if (bounds.bottom < 64 || bounds.top > innerHeight)
+            row.scrollIntoView({ block: "center" });
+          return;
+        }
+      }
       document.querySelector<HTMLElement>("main h1")?.focus();
     });
     return () => cancelAnimationFrame(frame);
@@ -210,6 +235,8 @@ function App() {
     changeRoute({ view: next, tab: "Overview", work: route.work });
   }
   function open(a: Assignment, nextTab = "Overview") {
+    if (view === "My Work" && !selected)
+      inboxReturn.current = { id: a.id, y: window.scrollY };
     changeRoute({
       view: "My Work",
       assignmentId: a.id,
@@ -580,6 +607,7 @@ function App() {
                       return (
                         <button
                           className="assignment-row"
+                          id={`work-row-${a.id}`}
                           key={a.id}
                           onClick={() => open(a)}
                         >
@@ -900,6 +928,13 @@ function App() {
                         <EvidenceArtifacts
                           key={selected.id}
                           assignmentId={selected.id}
+                          query={evidenceQueries[selected.id] ?? ""}
+                          setQuery={(value) =>
+                            setEvidenceQueries((old) => ({
+                              ...old,
+                              [selected.id]: value,
+                            }))
+                          }
                           onInspect={setArtifact}
                         />
                       </>
@@ -930,6 +965,13 @@ function App() {
                         key={selected.id}
                         assignmentId={selected.id}
                         receipts={receipts}
+                        filter={activityFilters[selected.id] ?? "all"}
+                        setFilter={(value) =>
+                          setActivityFilters((old) => ({
+                            ...old,
+                            [selected.id]: value,
+                          }))
+                        }
                         onNavigate={navigateRelated}
                         onInspect={setArtifact}
                       />
@@ -1275,6 +1317,13 @@ function App() {
                       </h3>
                       <EvidenceArtifacts
                         assignmentId={a.id}
+                        query={evidenceQueries[a.id] ?? ""}
+                        setQuery={(value) =>
+                          setEvidenceQueries((old) => ({
+                            ...old,
+                            [a.id]: value,
+                          }))
+                        }
                         onInspect={setArtifact}
                       />
                       {receipts

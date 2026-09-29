@@ -1,14 +1,16 @@
-import { useState } from "react";
 import { ArrowUpRight, FileCode2 } from "lucide-react";
 import { evidenceFor, type EvidenceArtifact } from "./data/evidence";
 export function EvidenceArtifacts({
   assignmentId,
   onInspect,
+  query,
+  setQuery,
 }: {
   assignmentId: string;
+  query: string;
+  setQuery: (value: string) => void;
   onInspect: (artifact: EvidenceArtifact) => void;
 }) {
-  const [query, setQuery] = useState("");
   const records = evidenceFor(assignmentId);
   const visible = records.filter((record) =>
     `${record.id} ${record.title} ${record.producer}`
