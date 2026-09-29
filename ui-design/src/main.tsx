@@ -1,3 +1,4 @@
+import { AssignmentActivity } from "./AssignmentActivity";
 import { OrganizationWork } from "./OrganizationWork";
 import { WorkDataPreview } from "./WorkDataPreview";
 import { defaultWorkFilters, type WorkFilters } from "./workFilters";
@@ -53,7 +54,6 @@ import type { RelatedTab } from "./RelatedRecords";
 import { AssignmentRequirements } from "./AssignmentRequirements";
 import { EvidenceArtifacts, ArtifactContents } from "./EvidenceArtifacts";
 import { evidenceFor, inputFor, type EvidenceArtifact } from "./data/evidence";
-import { DecisionReceipt } from "./DecisionReceipt";
 import { sampleCandidate } from "./data/candidate";
 import { ReleaseReview, ReleaseSubject } from "./ReleaseReview";
 const assignmentTabs = [
@@ -870,6 +870,7 @@ function App() {
                           artifact before recording your decision.
                         </p>
                         <EvidenceArtifacts
+                          key={selected.id}
                           assignmentId={selected.id}
                           onInspect={setArtifact}
                         />
@@ -897,41 +898,13 @@ function App() {
                         onNavigate={navigateRelated}
                       />
                     ) : (
-                      <>
-                        <div className="section-label">ASSIGNMENT HISTORY</div>
-                        <h2>A traceable chain of responsibility</h2>
-                        {receipts
-                          .filter(
-                            (record) => record.assignmentId === selected.id,
-                          )
-                          .map((record) => (
-                            <DecisionReceipt
-                              key={record.id}
-                              record={record}
-                              onNavigate={navigateRelated}
-                            />
-                          ))}
-                        {!receipts.some(
-                          (record) => record.assignmentId === selected.id,
-                        ) && (
-                          <p className="summary">
-                            No response recorded in this demo session.
-                          </p>
-                        )}
-                        {[
-                          "Test runner attached test evidence · demo",
-                          "Codex worker submitted its contribution · demo",
-                          "Assignment admitted and assigned to Alex · demo",
-                        ].map((a, i) => (
-                          <div className="timeline-item" key={i}>
-                            <span className="timeline-dot" />
-                            <div>
-                              <strong>{a}</strong>
-                              <small>September 22 · sample record</small>
-                            </div>
-                          </div>
-                        ))}
-                      </>
+                      <AssignmentActivity
+                        key={selected.id}
+                        assignmentId={selected.id}
+                        receipts={receipts}
+                        onNavigate={navigateRelated}
+                        onInspect={setArtifact}
+                      />
                     )}
                   </section>
                 </div>
@@ -1258,7 +1231,11 @@ function App() {
                   ))}
                 </div>
                 {assignments
-                  .filter((a) => evidenceFor(a.id).length > 0)
+                  .filter(
+                    (a) =>
+                      evidenceFor(a.id).length > 0 ||
+                      receipts.some((r) => r.assignmentId === a.id),
+                  )
                   .map((a) => (
                     <section
                       className="evidence-group"

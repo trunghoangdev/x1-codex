@@ -127,3 +127,5 @@ Iteration 19 improves keyboard access and reading comfort: **Skip to main conten
 Iteration 20 adds **Data preview** on My Work: loaded, loading, no assigned work and load failed. Failure hides unknown counts; a successful empty response differs from a filtered list with no matches. **Retry sample load** simulates recovery without contacting SF or clearing session work. The preview resets when reopening My Work. See iteration 20 for details.
 
 Iteration 21 expands **Organization** with a personal sample work queue: responsible role, waiting reason, next step and direct assignment navigation. Release blockers follow the current prerequisite preview; completed local responses link to Activity without implying deployment success. See iteration 21 for scope.
+
+Iteration 22 adds **Activity type** filtering and scoped evidence inspector links. Activity no longer repeats a generic history across assignments. Evidence lists support search by ID, title or producer with clear empty states; workspace groups also expose receipts for assignments without evidence fixtures. See iteration 22 for boundaries.

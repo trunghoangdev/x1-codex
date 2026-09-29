@@ -1,3 +1,4 @@
+import { useState } from "react";
 import { ArrowUpRight, FileCode2 } from "lucide-react";
 import { evidenceFor, type EvidenceArtifact } from "./data/evidence";
 export function EvidenceArtifacts({
@@ -7,7 +8,13 @@ export function EvidenceArtifacts({
   assignmentId: string;
   onInspect: (artifact: EvidenceArtifact) => void;
 }) {
+  const [query, setQuery] = useState("");
   const records = evidenceFor(assignmentId);
+  const visible = records.filter((record) =>
+    `${record.id} ${record.title} ${record.producer}`
+      .toLowerCase()
+      .includes(query.trim().toLowerCase()),
+  );
   if (!records.length)
     return (
       <div className="empty-state">
@@ -21,7 +28,26 @@ export function EvidenceArtifacts({
     );
   return (
     <>
-      {records.map((record) => (
+      <label className="record-filter">
+        Find evidence · {assignmentId}
+        <input
+          type="search"
+          aria-label={`Find evidence for ${assignmentId}`}
+          placeholder="Record ID, title or producer"
+          value={query}
+          onChange={(e) => setQuery(e.target.value)}
+        />
+      </label>
+      {visible.length === 0 && (
+        <div className="empty-state">
+          <h3>No matching evidence</h3>
+          <p>Try another record ID, title or producer within {assignmentId}.</p>
+          <button className="button secondary" onClick={() => setQuery("")}>
+            Clear evidence search
+          </button>
+        </div>
+      )}
+      {visible.map((record) => (
         <button
           className="artifact-link evidence-row"
           key={record.id}

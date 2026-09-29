@@ -1009,11 +1009,9 @@ test("Organization connects responsibilities, release blockers and local respons
   await expect(work).toContainText("4 open assignments");
   await expect(work).toContainText("Downstream outcome is not established");
   await expect(
-    page
-      .locator(".role-card")
-      .filter({
-        has: page.getByRole("heading", { name: "Reviewer", exact: true }),
-      }),
+    page.locator(".role-card").filter({
+      has: page.getByRole("heading", { name: "Reviewer", exact: true }),
+    }),
   ).toContainText("1 awaiting review");
   await work.getByRole("button", { name: "View response · A-1042" }).click();
   await expect(page).toHaveURL(/assignments\/A-1042\/activity/);
@@ -1031,4 +1029,58 @@ test("Organization connects responsibilities, release blockers and local respons
   await page.reload();
   await expect(work).toContainText("5 open assignments");
   await expect(work).toContainText("Approval is blocked");
+});
+
+test("Activity and evidence lookup stay scoped to their assignment", async ({
+  page,
+}) => {
+  await page.goto("/#/assignments/A-1042/activity");
+  await page.getByLabel("Activity type").selectOption("responses");
+  await expect(
+    page.getByRole("heading", { name: "No records in this activity view" }),
+  ).toBeVisible();
+  await page.getByRole("button", { name: "Show all activity" }).click();
+  await page.getByRole("button", { name: "Inspect AR-775" }).click();
+  await expect(page.getByRole("dialog")).toContainText("A-1042");
+  await page.keyboard.press("Escape");
+  await expect(
+    page.getByRole("button", { name: "Inspect AR-775" }),
+  ).toBeFocused();
+  await page.getByRole("tab", { name: /^Evidence/ }).click();
+  await page.getByLabel("Find evidence for A-1042").fill("ar-775");
+  await expect(page.getByRole("tabpanel").locator(".evidence-row")).toHaveCount(
+    1,
+  );
+  await page.getByLabel("Find evidence for A-1042").fill("AR-801");
+  await expect(
+    page.getByRole("heading", { name: "No matching evidence" }),
+  ).toBeVisible();
+  await page.getByRole("button", { name: "Clear evidence search" }).click();
+  await expect(page.getByRole("tabpanel").locator(".evidence-row")).toHaveCount(
+    3,
+  );
+  await page.goto("/#/assignments/A-1041/activity");
+  await expect(
+    page.getByRole("button", { name: "Inspect AR-801" }),
+  ).toBeVisible();
+  await expect(
+    page.getByRole("button", { name: "Inspect AR-775" }),
+  ).toHaveCount(0);
+  await page.goto("/#/assignments/A-1038/activity");
+  await expect(
+    page.getByRole("heading", { name: "No records in this activity view" }),
+  ).toBeVisible();
+  await page.goto("/#/evidence");
+  await page.setViewportSize({ width: 390, height: 844 });
+  await page.getByLabel("Find evidence for A-1042").fill("test");
+  await expect(
+    page
+      .getByRole("region", { name: "Evidence for A-1041" })
+      .locator(".evidence-row"),
+  ).toHaveCount(1);
+  expect(
+    await page.evaluate(
+      () => document.documentElement.scrollWidth <= innerWidth,
+    ),
+  ).toBe(true);
 });

@@ -2795,3 +2795,32 @@ textarea::placeholder,
     padding: 16px;
   }
 }
+
+.record-filter {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 12px;
+  margin: 16px 0;
+  font-size: 13px;
+  color: #526343;
+}
+.record-filter input,
+.record-filter select {
+  font: inherit;
+  min-height: 44px;
+  min-width: 0;
+  max-width: 100%;
+  padding: 10px;
+  border: 1px solid #78856f;
+  border-radius: 5px;
+  background: white;
+  color: #233330;
+}
+@media (max-width: 700px) {
+  .record-filter input,
+  .record-filter select {
+    font-size: 16px;
+    width: 100%;
+  }
+}

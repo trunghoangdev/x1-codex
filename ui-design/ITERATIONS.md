@@ -251,3 +251,13 @@ After a local response, the card links to the assignment Activity receipt and ex
 The card grid becomes a single column on phones. No backend integration or action execution was added. Preview images remain at iteration 08.
 
 Validation: production build and all 25 browser tests passed. Added coverage checks assignment links, shared revoked-authority state, local response/count updates, Activity receipt navigation, browser Back, mobile overflow and session reset on refresh.
+
+## 22 — Scoped Activity and evidence lookup
+
+Activity now filters between All records, Local responses and Sample evidence. It renders only session receipts and evidence fixtures attached to the selected assignment. Evidence entries open the same scoped inspector; closing restores focus to the trigger. The old identical three-event history shown on every assignment was removed. Available fixtures are explicitly not presented as verified publication events or a chronological server log. Assignments without connected records show an honest empty state.
+
+Evidence lists support case-insensitive search by record ID, title or producer, with no-match recovery. Searches are independent per assignment group, and never pull records from other assignments. The workspace Evidence index now also includes assignments that have a local receipt but no evidence fixture. Existing related-record links in Attempts, Candidate, Checks and receipts remain intact.
+
+Filters reset when their component unmounts or the page refreshes; this slice adds no URL persistence or server search. All records remain sample/session data, and no new relationship between A-1042 and the A-1041 release is inferred. Preview screenshots remain at iteration 08.
+
+Validation: production build and all 25 existing browser tests passed. The new scoped lookup test passed after correcting its Evidence-tab locator to allow the existing count badge. It covers activity filters, inspector focus restoration, case-insensitive search, empty recovery, cross-assignment isolation, missing history and mobile overflow (26 tests total).
