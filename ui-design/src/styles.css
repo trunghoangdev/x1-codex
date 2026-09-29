@@ -2848,3 +2848,40 @@ textarea::placeholder,
 .demo-controls .data-preview {
   margin: 0;
 }
+
+.org-filters {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: end;
+  gap: 12px;
+  margin: 20px 0;
+}
+.org-filters label {
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+  font-size: 13px;
+}
+.org-filters select {
+  font: inherit;
+  min-height: 44px;
+  max-width: 100%;
+  padding: 10px;
+  background: white;
+  color: #233330;
+  border: 1px solid #78856f;
+  border-radius: 5px;
+}
+.org-status-group {
+  border-top: 1px solid var(--line);
+  margin-top: 24px;
+  padding-top: 16px;
+}
+@media (max-width: 700px) {
+  .org-filters label {
+    width: 100%;
+  }
+  .org-filters select {
+    font-size: 16px;
+  }
+}

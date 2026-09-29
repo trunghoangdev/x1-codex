@@ -1173,3 +1173,64 @@ test("demo controls start collapsed and retain selected scenarios when toggled",
     ),
   ).toBe(true);
 });
+
+test("Organization groups work by response state and combines project/role filters", async ({
+  page,
+}) => {
+  await page.goto("/#/organization");
+  const waiting = page.getByRole("region", {
+    name: "Awaiting response",
+    exact: true,
+  });
+  const blocked = page.getByRole("region", { name: "Blocked", exact: true });
+  const responded = page.getByRole("region", {
+    name: "Responded",
+    exact: true,
+  });
+  await expect(waiting.locator(".org-work-item")).toHaveCount(4);
+  await expect(blocked.locator(".org-work-item")).toHaveCount(1);
+  await expect(responded.locator(".org-work-item")).toHaveCount(0);
+  await page.getByLabel("Organization project").selectOption("Team Workspace");
+  await page.getByLabel("Organization role").selectOption("Reviewer");
+  await expect(waiting.locator(".org-work-item")).toHaveCount(1);
+  await expect(waiting).toContainText("A-1032");
+  await page.getByLabel("Organization status").selectOption("blocked");
+  await expect(
+    page.getByRole("heading", { name: "No assignments match these filters" }),
+  ).toBeVisible();
+  await page
+    .getByRole("button", { name: "Show all organization work" })
+    .click();
+  await blocked
+    .getByRole("button", { name: "Open assignment · A-1041" })
+    .click();
+  await selectScenario(
+    page.getByLabel("Preview release prerequisites"),
+    "ready",
+  );
+  await page.getByRole("button", { name: "Organization", exact: true }).click();
+  await expect(waiting.locator(".org-work-item")).toHaveCount(5);
+  await expect(blocked.locator(".org-work-item")).toHaveCount(0);
+  await waiting
+    .getByRole("button", { name: "Open assignment · A-1042" })
+    .click();
+  await page
+    .getByRole("button", { name: "Submit assessment", exact: true })
+    .click();
+  await page
+    .getByLabel("Decision rationale")
+    .fill("Sample assessment for grouped work.");
+  await page.getByRole("button", { name: "Record assessment" }).click();
+  await page.getByRole("button", { name: "Organization", exact: true }).click();
+  await expect(responded.locator(".org-work-item")).toHaveCount(1);
+  await expect(waiting.locator(".org-work-item")).toHaveCount(4);
+  await expect(
+    responded.getByRole("button", { name: "View response · A-1042" }),
+  ).toBeVisible();
+  await page.setViewportSize({ width: 390, height: 844 });
+  expect(
+    await page.evaluate(
+      () => document.documentElement.scrollWidth <= innerWidth,
+    ),
+  ).toBe(true);
+});

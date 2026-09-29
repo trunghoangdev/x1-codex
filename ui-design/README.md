@@ -130,3 +130,5 @@ Additional v1 previews: [Split diff](previews/13-split-diff.png), [Load error](p
 Iteration 24 fixes inbox/sidebar count consistency during loading, failure and empty previews, and moves focus to the destination heading when navigating between screens. Tab and filter interactions retain their own focus. Screenshots above remain the iteration 23 checkpoint.
 
 Iteration 25 collapses scenario selectors under **Demo controls** by default. Expand them to change a sample scenario; closing them preserves the selection and keeps results/blockers visible. The walkthrough reflects this interaction.
+
+Iteration 26 groups Organization work into **Awaiting response**, **Blocked** and **Responded**, with combined project/role/status filters and empty-state recovery. Release blockers follow the current demo prerequisites; local responses move into Responded without implying execution success.

@@ -48,7 +48,7 @@ Use **Preview release prerequisites** to inspect missing evidence, refused asses
 
 ## 5. Return to the organization
 
-Open **Organization**. **Needs your attention** identifies the responsible person, waiting reason and next step for each sample assignment. Recorded responses have links to Activity; remaining release blockers follow the current scenario. The queue covers Alex's five sample assignments, not the full organization backlog.
+Open **Organization**. **Needs your attention** identifies the responsible person, waiting reason and next step for each sample assignment. Use Project, Role and Status to narrow the Awaiting response, Blocked and Responded groups. Reset the filters to restore all sample assignments. Recorded responses have links to Activity; remaining release blockers follow the current scenario. The queue covers Alex's five sample assignments, not the full organization backlog.
 
 Open workspace **Evidence**. Search within each assignment group independently. A-1042 evidence stays separate from A-1041. The release chain keeps unconnected evidence and unestablished effects explicit.
 

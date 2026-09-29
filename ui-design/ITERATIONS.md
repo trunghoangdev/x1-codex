@@ -289,3 +289,13 @@ My Work, Checks, release prerequisites and decision-change simulation controls n
 The dialog focus loop includes summaries and skips controls hidden inside closed disclosures. My Work retry/restore returns focus to the scenario selector when expanded, or the visible summary when collapsed. The capture script and walkthrough now open controls explicitly before selecting scenarios. Screenshots remain the iteration 23 checkpoint.
 
 Validation: production build and all 28 browser tests passed. Existing scenario tests now expand controls through their summary before selection; added coverage verifies collapsed defaults, keyboard expansion, preserved error state, retry focus while collapsed and mobile overflow.
+
+## 26 — Organization status groups and filters
+
+Organization separates Awaiting response, Blocked and Responded into labeled groups. Local responses take precedence over prerequisite previews. An open A-1041 is blocked whenever its current preview is not ready; missing/refused prerequisites block approval while refusal can remain available. Load-error/stale/revoked block both decisions. A-1035 remains awaiting reconciliation, since an unconfirmed effect does not itself block submitting a response.
+
+Project, role and status filters combine within the personal sample queue. Group counts reflect filters; the overall open count continues to describe all five sample assignments. Empty combinations have a reset action, and recorded responses remain directly linked to Activity. Filters reset when leaving Organization or refreshing; no URL persistence or backend workflow inference is added.
+
+Screenshots remain the iteration 23 checkpoint. This slice does not change the surrounding illustrative role cards.
+
+Validation: production build and all 29 browser tests passed. Added coverage checks initial groups, combined filters and empty recovery, release readiness transitions, local-response grouping/links and mobile overflow.
