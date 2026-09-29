@@ -1,3 +1,4 @@
+import { DemoControls } from "./DemoControls";
 import { useEffect, useRef, useState, type ReactNode } from "react";
 
 export type WorkDataState = "ready" | "loading" | "empty" | "error";
@@ -19,33 +20,37 @@ export function WorkDataPreview({
     const timer = window.setTimeout(() => {
       setState("ready");
       setRetrying(false);
-      selector.current?.focus();
+      const details = selector.current?.closest("details");
+      if (details?.open) selector.current?.focus();
+      else details?.querySelector("summary")?.focus();
     }, 800);
     return () => window.clearTimeout(timer);
   }, [retrying]);
   return (
     <>
-      <section className="data-preview" aria-label="My Work data preview">
-        <label htmlFor="work-data-state">Data preview</label>
-        <select
-          id="work-data-state"
-          ref={selector}
-          value={state}
-          onChange={(event) => {
-            setRetrying(false);
-            setState(event.target.value as WorkDataState);
-          }}
-        >
-          <option value="ready">Loaded sample work</option>
-          <option value="loading">Loading</option>
-          <option value="empty">No assigned work</option>
-          <option value="error">Load failed</option>
-        </select>
-        <p>
-          Sample scenarios only. Retry simulates a successful load; no SF
-          request is sent.
-        </p>
-      </section>
+      <DemoControls context="My Work">
+        <section className="data-preview" aria-label="My Work data preview">
+          <label htmlFor="work-data-state">Data preview</label>
+          <select
+            id="work-data-state"
+            ref={selector}
+            value={state}
+            onChange={(event) => {
+              setRetrying(false);
+              setState(event.target.value as WorkDataState);
+            }}
+          >
+            <option value="ready">Loaded sample work</option>
+            <option value="loading">Loading</option>
+            <option value="empty">No assigned work</option>
+            <option value="error">Load failed</option>
+          </select>
+          <p>
+            Sample scenarios only. Retry simulates a successful load; no SF
+            request is sent.
+          </p>
+        </section>
+      </DemoControls>
       <div role="status" className="data-load-announcement">
         {state === "loading"
           ? "Loading sample work…"
@@ -109,7 +114,9 @@ export function WorkDataPreview({
                 className="button secondary"
                 onClick={() => {
                   setState("ready");
-                  selector.current?.focus();
+                  const details = selector.current?.closest("details");
+                  if (details?.open) selector.current?.focus();
+                  else details?.querySelector("summary")?.focus();
                 }}
               >
                 Restore sample work

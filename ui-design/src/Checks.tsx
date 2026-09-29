@@ -1,3 +1,4 @@
+import { DemoControls } from "./DemoControls";
 import type { Scenario } from "./data/models";
 import { observations } from "./data/checks";
 import { RelatedRecords, type NavigateRelated } from "./RelatedRecords";
@@ -61,17 +62,19 @@ export function Checks({
         A validator answers a specific check. Its result does not accept the
         candidate, grant approval, or establish an effect.
       </p>
-      <label className="check-scenario">
-        Preview an alternative observation
-        <select
-          value={scenario}
-          onChange={(e) => setScenario(e.target.value as Scenario)}
-        >
-          <option value="passed">Validator passed</option>
-          <option value="refused">Validator refused</option>
-          <option value="unavailable">Could not run</option>
-        </select>
-      </label>
+      <DemoControls context="Checks">
+        <label className="check-scenario">
+          Preview an alternative observation
+          <select
+            value={scenario}
+            onChange={(e) => setScenario(e.target.value as Scenario)}
+          >
+            <option value="passed">Validator passed</option>
+            <option value="refused">Validator refused</option>
+            <option value="unavailable">Could not run</option>
+          </select>
+        </label>
+      </DemoControls>
       <p className="demo-note">
         These are independent fictional scenarios, not a history of three runs.
         Switching the preview changes no assignment or decision.

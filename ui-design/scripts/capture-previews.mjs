@@ -106,6 +106,7 @@ await page.screenshot({
   fullPage: true,
 });
 await page.goto("http://127.0.0.1:4173/#/work");
+await page.locator(".demo-controls summary").click();
 await page.getByLabel("Data preview", { exact: true }).selectOption("error");
 await expect(page.getByRole("alert")).toContainText("Could not load your work");
 await page.screenshot({

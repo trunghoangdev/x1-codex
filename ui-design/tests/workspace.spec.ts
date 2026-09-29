@@ -1,4 +1,4 @@
-import { test, expect } from "@playwright/test";
+import { test, expect, type Locator } from "@playwright/test";
 
 test("reviewer assesses evidence, records rationale and completes the assignment", async ({
   page,
@@ -54,9 +54,10 @@ for (const response of ["Approval", "Refusal"]) {
     await page.goto("/");
     await page.getByRole("button", { name: "View release assignment" }).click();
     if (response === "Approval")
-      await page
-        .getByLabel("Preview release prerequisites")
-        .selectOption("ready");
+      await selectScenario(
+        page.getByLabel("Preview release prerequisites"),
+        "ready",
+      );
     await page
       .getByRole("button", {
         name: response === "Approval" ? "Approve release" : "Refuse release",
@@ -219,7 +220,7 @@ test("checks distinguish observations from decisions without changing work", asy
   await expect(page.locator(".check-gates")).toContainText(
     "Not established by this validator",
   );
-  await selector.selectOption("refused");
+  await selectScenario(selector, "refused");
   await expect(observation).toContainText("Validator refused");
   await expect(
     observation
@@ -227,7 +228,7 @@ test("checks distinguish observations from decisions without changing work", asy
       .filter({ has: page.locator("dt", { hasText: "Exit code" }) })
       .last(),
   ).toContainText("1");
-  await selector.selectOption("unavailable");
+  await selectScenario(selector, "unavailable");
   await expect(observation).toContainText("Could not run");
   await expect(
     observation.locator("dd").filter({ hasText: "Not observed" }),
@@ -275,12 +276,12 @@ test("release approval requires prerequisites and binds its exact subject", asyn
   await expect(
     page.getByRole("button", { name: "Refuse release", exact: true }),
   ).toBeEnabled();
-  await selector.selectOption("refused");
+  await selectScenario(selector, "refused");
   await expect(approve).toBeDisabled();
   await expect(
     page.getByRole("region", { name: "Release prerequisites" }),
   ).toContainText("Refused · sample");
-  await selector.selectOption("ready");
+  await selectScenario(selector, "ready");
   await approve.click();
   const modal = page.getByRole("dialog");
   await expect(modal).toContainText("sha256:" + "c".repeat(64));
@@ -290,9 +291,9 @@ test("release approval requires prerequisites and binds its exact subject", asyn
   ).toBeDisabled();
   await page.getByRole("button", { name: "Cancel", exact: true }).click();
   await expect(selector).toBeEnabled();
-  await selector.selectOption("missing");
+  await selectScenario(selector, "missing");
   await expect(approve).toBeDisabled();
-  await selector.selectOption("ready");
+  await selectScenario(selector, "ready");
   await approve.click();
   await page
     .getByLabel("Decision rationale")
@@ -546,9 +547,10 @@ test("related records preserve assignment, checked subject and preview state", a
   ).toBeFocused();
   await expect(page.getByRole("tabpanel")).toContainText("demo-attempt-03");
   await page.getByRole("button", { name: "Review candidate checks" }).click();
-  await page
-    .getByLabel("Preview an alternative observation")
-    .selectOption("unavailable");
+  await selectScenario(
+    page.getByLabel("Preview an alternative observation"),
+    "unavailable",
+  );
   await expect(
     page.getByRole("button", { name: "View recorded response" }),
   ).toHaveCount(0);
@@ -582,7 +584,10 @@ for (const state of ["load-error", "stale", "revoked"]) {
   }) => {
     await page.goto("/");
     await page.getByRole("button", { name: "View release assignment" }).click();
-    await page.getByLabel("Preview release prerequisites").selectOption(state);
+    await selectScenario(
+      page.getByLabel("Preview release prerequisites"),
+      state,
+    );
     await expect(
       page.getByRole("button", { name: "Approve release", exact: true }),
     ).toBeDisabled();
@@ -600,18 +605,20 @@ for (const state of ["load-error", "stale", "revoked"]) {
     await expect(
       page.getByRole("button", { name: "Refuse release", exact: true }),
     ).toBeEnabled();
-    await page
-      .getByLabel("Preview release prerequisites")
-      .selectOption("ready");
+    await selectScenario(
+      page.getByLabel("Preview release prerequisites"),
+      "ready",
+    );
     await page
       .getByRole("button", { name: "Approve release", exact: true })
       .click();
     await page
       .getByLabel("Decision rationale")
       .fill("This rationale must not admit a decision after invalidation.");
-    await page
-      .getByLabel("Simulate a change before recording")
-      .selectOption(state);
+    await selectScenario(
+      page.getByLabel("Simulate a change before recording"),
+      state,
+    );
     await expect(
       page.getByRole("button", { name: "Record approval" }),
     ).toBeDisabled();
@@ -695,7 +702,10 @@ test("drafts survive navigation, stay isolated and clear only on deletion or sub
   await expect(page.getByLabel("Decision rationale")).toHaveValue("");
   await page.getByLabel("Decision rationale").fill("Draft refusal.");
   await page.keyboard.press("Escape");
-  await page.getByLabel("Preview release prerequisites").selectOption("ready");
+  await selectScenario(
+    page.getByLabel("Preview release prerequisites"),
+    "ready",
+  );
   await page
     .getByRole("button", { name: "Approve release", exact: true })
     .click();
@@ -826,9 +836,10 @@ test("My Work filters round-trip through URLs and preserve assignment context", 
   await expect(page.getByLabel("Project", { exact: true })).toHaveValue(
     "Payments API",
   );
-  await page
-    .getByLabel("Project", { exact: true })
-    .selectOption("Team Workspace");
+  await selectScenario(
+    page.getByLabel("Project", { exact: true }),
+    "Team Workspace",
+  );
   await expect(page.locator(".assignment-row")).toHaveCount(2);
   await page.goBack();
   await expect(page.getByLabel("Project", { exact: true })).toHaveValue(
@@ -853,7 +864,7 @@ test("My Work filters round-trip through URLs and preserve assignment context", 
   await expect(page.locator(".assignment-row")).toHaveCount(0);
   await page.getByRole("button", { name: "Reset all filters" }).click();
   await expect(page.locator(".assignment-row")).toHaveCount(5);
-  await page.getByLabel("Sort by", { exact: true }).selectOption("due");
+  await selectScenario(page.getByLabel("Sort by", { exact: true }), "due");
   const rows = await page.locator(".assignment-row").allTextContents();
   expect(rows.slice(0, 3).every((text) => text.includes("Today"))).toBe(true);
   await page.setViewportSize({ width: 390, height: 844 });
@@ -934,7 +945,7 @@ test("My Work distinguishes load failure, loading, empty data and filtered resul
 }) => {
   await page.goto("/#/work?project=Payments+API");
   const preview = page.getByLabel("Data preview", { exact: true });
-  await preview.selectOption("error");
+  await selectScenario(preview, "error");
   await expect(page.getByRole("alert")).toContainText(
     "assignment count is unknown",
   );
@@ -953,7 +964,7 @@ test("My Work distinguishes load failure, loading, empty data and filtered resul
   await expect(page.getByLabel("Project", { exact: true })).toHaveValue(
     "Payments API",
   );
-  await preview.selectOption("empty");
+  await selectScenario(preview, "empty");
   await expect(
     page.getByRole("heading", { name: "No work assigned to you" }),
   ).toBeVisible();
@@ -962,7 +973,7 @@ test("My Work distinguishes load failure, loading, empty data and filtered resul
   );
   await page.getByRole("button", { name: "Restore sample work" }).click();
   await expect(page.locator(".assignment-row")).toHaveCount(3);
-  await preview.selectOption("loading");
+  await selectScenario(preview, "loading");
   await expect(page.getByRole("status")).toContainText("Loading sample work");
   await page.setViewportSize({ width: 390, height: 844 });
   expect(
@@ -970,9 +981,9 @@ test("My Work distinguishes load failure, loading, empty data and filtered resul
       () => document.documentElement.scrollWidth <= innerWidth,
     ),
   ).toBe(true);
-  await preview.selectOption("error");
+  await selectScenario(preview, "error");
   await page.getByRole("button", { name: "Retry sample load" }).click();
-  await preview.selectOption("empty");
+  await selectScenario(preview, "empty");
   await page.waitForTimeout(1000);
   await expect(preview).toHaveValue("empty");
   await page.reload();
@@ -990,9 +1001,10 @@ test("Organization connects responsibilities, release blockers and local respons
   await expect(work).toContainText("staging effect is unconfirmed");
   await work.getByRole("button", { name: "Open assignment · A-1041" }).click();
   await expect(page).toHaveURL(/assignments\/A-1041\/overview/);
-  await page
-    .getByLabel("Preview release prerequisites")
-    .selectOption("revoked");
+  await selectScenario(
+    page.getByLabel("Preview release prerequisites"),
+    "revoked",
+  );
   await page.getByRole("button", { name: "Organization", exact: true }).click();
   await expect(work).toContainText(
     "Both decisions are blocked: release authority",
@@ -1035,7 +1047,7 @@ test("Activity and evidence lookup stay scoped to their assignment", async ({
   page,
 }) => {
   await page.goto("/#/assignments/A-1042/activity");
-  await page.getByLabel("Activity type").selectOption("responses");
+  await selectScenario(page.getByLabel("Activity type"), "responses");
   await expect(
     page.getByRole("heading", { name: "No records in this activity view" }),
   ).toBeVisible();
@@ -1095,9 +1107,10 @@ test("inbox counts follow load state and screen changes move keyboard focus", as
     .locator("b");
   const preview = page.getByLabel("Data preview", { exact: true });
   await expect(badge).toHaveText("5");
+  await page.locator(".demo-controls summary").click();
   await preview.focus();
   for (const state of ["loading", "error"]) {
-    await preview.selectOption(state);
+    await selectScenario(preview, state);
     await expect(badge).toHaveText("—");
     await expect(badge).toHaveAttribute(
       "aria-label",
@@ -1105,9 +1118,9 @@ test("inbox counts follow load state and screen changes move keyboard focus", as
     );
     await expect(preview).toBeFocused();
   }
-  await preview.selectOption("empty");
+  await selectScenario(preview, "empty");
   await expect(badge).toHaveText("0");
-  await preview.selectOption("error");
+  await selectScenario(preview, "error");
   await page.getByRole("button", { name: "Retry sample load" }).click();
   await expect(badge).toHaveText("5");
   await expect(preview).toBeFocused();
@@ -1126,4 +1139,37 @@ test("inbox counts follow load state and screen changes move keyboard focus", as
   await expect(
     page.getByRole("heading", { name: "One team. Clear responsibility." }),
   ).toBeFocused();
+});
+
+async function selectScenario(locator: Locator, value: string) {
+  const details = locator.locator("xpath=ancestor::details[1]");
+  if ((await details.count()) && !(await details.getAttribute("open"))) {
+    if (!(await locator.isVisible())) await details.locator("summary").click();
+  }
+  await locator.selectOption(value);
+}
+
+test("demo controls start collapsed and retain selected scenarios when toggled", async ({
+  page,
+}) => {
+  await page.goto("/");
+  const summary = page.locator(".demo-controls summary");
+  const preview = page.getByLabel("Data preview", { exact: true });
+  await expect(preview).toBeHidden();
+  await summary.focus();
+  await page.keyboard.press("Enter");
+  await expect(preview).toBeVisible();
+  await preview.selectOption("error");
+  await summary.click();
+  await expect(preview).toBeHidden();
+  await expect(page.getByRole("alert")).toContainText("Could not load");
+  await page.getByRole("button", { name: "Retry sample load" }).click();
+  await expect(page.locator(".assignment-row")).toHaveCount(5);
+  await expect(summary).toBeFocused();
+  await page.setViewportSize({ width: 390, height: 844 });
+  expect(
+    await page.evaluate(
+      () => document.documentElement.scrollWidth <= innerWidth,
+    ),
+  ).toBe(true);
 });

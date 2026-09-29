@@ -1,3 +1,4 @@
+import { DemoControls } from "./DemoControls";
 import type { Readiness } from "./data/models";
 import { releaseSubject } from "./data/release";
 export const decisionBlocked = (state: Readiness) =>
@@ -58,21 +59,23 @@ export function ReleaseReview({
   return (
     <section className="release-review" aria-label="Release prerequisites">
       <ReleaseSubject />
-      <label className="check-scenario">
-        Preview release prerequisites
-        <select
-          value={readiness}
-          disabled={locked}
-          onChange={(e) => onChange(e.target.value as Readiness)}
-        >
-          <option value="missing">Evidence missing</option>
-          <option value="ready">All prerequisites satisfied — demo</option>
-          <option value="refused">Publication refused</option>
-          <option value="load-error">Review data load failed</option>
-          <option value="stale">Candidate changed</option>
-          <option value="revoked">Authority revoked</option>
-        </select>
-      </label>
+      <DemoControls context="Release prerequisites">
+        <label className="check-scenario">
+          Preview release prerequisites
+          <select
+            value={readiness}
+            disabled={locked}
+            onChange={(e) => onChange(e.target.value as Readiness)}
+          >
+            <option value="missing">Evidence missing</option>
+            <option value="ready">All prerequisites satisfied — demo</option>
+            <option value="refused">Publication refused</option>
+            <option value="load-error">Review data load failed</option>
+            <option value="stale">Candidate changed</option>
+            <option value="revoked">Authority revoked</option>
+          </select>
+        </label>
+      </DemoControls>
       <p className="demo-note">
         Alternative fictional scenarios. Selecting one does not run a check or
         establish real authority.

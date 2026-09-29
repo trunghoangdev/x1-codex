@@ -2824,3 +2824,27 @@ textarea::placeholder,
     width: 100%;
   }
 }
+
+.demo-controls {
+  border: 1px solid var(--line);
+  border-radius: 6px;
+  margin: 12px 0;
+  background: #f6f7f3;
+}
+.demo-controls summary {
+  cursor: pointer;
+  padding: 12px 16px;
+  min-height: 44px;
+  font-size: 13px;
+  color: #405638;
+}
+.demo-controls summary:focus-visible {
+  outline: 3px solid #285b93;
+  outline-offset: 3px;
+}
+.demo-controls-body {
+  padding: 0 16px 16px;
+}
+.demo-controls .data-preview {
+  margin: 0;
+}

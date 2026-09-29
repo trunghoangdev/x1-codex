@@ -281,3 +281,11 @@ After an in-app screen change, including browser history between screens, focus 
 No persistence or backend behavior changed. Preview images remain the iteration 23 checkpoint.
 
 Validation: production build and 26 existing browser tests passed. The added test passed after explicitly focusing the scenario selector before asserting focus retention. It verifies unavailable/empty/recovered sidebar counts, Enter navigation, tab focus, return navigation and browser Back (27 tests total).
+
+## 25 — Collapsible demo controls
+
+My Work, Checks, release prerequisites and decision-change simulation controls now use native details/summary disclosures, collapsed by default. Keyboard users can toggle them with Enter or Space. Collapsing controls does not reset the scenario; actual observations, blocking messages, action availability and sample-data labels remain outside the disclosure. Reopening a screen resets disclosure visibility with component mounting.
+
+The dialog focus loop includes summaries and skips controls hidden inside closed disclosures. My Work retry/restore returns focus to the scenario selector when expanded, or the visible summary when collapsed. The capture script and walkthrough now open controls explicitly before selecting scenarios. Screenshots remain the iteration 23 checkpoint.
+
+Validation: production build and all 28 browser tests passed. Existing scenario tests now expand controls through their summary before selection; added coverage verifies collapsed defaults, keyboard expansion, preserved error state, retry focus while collapsed and mobile overflow.

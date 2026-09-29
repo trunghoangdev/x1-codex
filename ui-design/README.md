@@ -128,3 +128,5 @@ Iteration 22 adds **Activity type** filtering and scoped evidence inspector link
 Additional v1 previews: [Split diff](previews/13-split-diff.png), [Load error](previews/14-load-error.png), [Activity](previews/15-activity.png). See the [walkthrough](WALKTHROUGH.md) for screenshot session context.
 
 Iteration 24 fixes inbox/sidebar count consistency during loading, failure and empty previews, and moves focus to the destination heading when navigating between screens. Tab and filter interactions retain their own focus. Screenshots above remain the iteration 23 checkpoint.
+
+Iteration 25 collapses scenario selectors under **Demo controls** by default. Expand them to change a sample scenario; closing them preserves the selection and keeps results/blockers visible. The walkthrough reflects this interaction.

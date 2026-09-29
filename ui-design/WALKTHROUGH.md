@@ -8,6 +8,8 @@ From `ui-design`, run `npm run dev -- --port 4173 --strictPort` and open the URL
 
 Explain that Alex Morgan is a sample persona with several roles. A role's label is not a production permission check. The demo day and deadlines are fixed samples.
 
+Demo scenario selectors are collapsed by default under **Demo controls**. Expand the relevant group before changing Data preview, Checks, release prerequisites or decision-change simulations. Collapsing controls preserves the selected scenario; results and blocking messages remain visible.
+
 ## 1. Find the next responsibility
 
 On **My Work**, leave **Data preview** at **Loaded sample work**. Select **Payments API** under Project. The list contains three assignments. Point out the distinction between assessment, authority and reconciliation. Open **A-1042**.

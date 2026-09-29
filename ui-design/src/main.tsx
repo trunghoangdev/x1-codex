@@ -1,3 +1,4 @@
+import { DemoControls } from "./DemoControls";
 import { AssignmentActivity } from "./AssignmentActivity";
 import { OrganizationWork } from "./OrganizationWork";
 import { WorkDataPreview, type WorkDataState } from "./WorkDataPreview";
@@ -1373,20 +1374,22 @@ function App() {
           )}
           {selected.kind === "Authority" && (
             <>
-              <label className="check-scenario">
-                Simulate a change before recording
-                <select
-                  value={decisionBlocked(readiness) ? readiness : "unchanged"}
-                  onChange={(e) => setReadiness(e.target.value as Readiness)}
-                >
-                  <option value="unchanged" disabled>
-                    No change
-                  </option>
-                  <option value="load-error">Review data load failed</option>
-                  <option value="stale">Candidate changed</option>
-                  <option value="revoked">Authority revoked</option>
-                </select>
-              </label>
+              <DemoControls context="Decision changes">
+                <label className="check-scenario">
+                  Simulate a change before recording
+                  <select
+                    value={decisionBlocked(readiness) ? readiness : "unchanged"}
+                    onChange={(e) => setReadiness(e.target.value as Readiness)}
+                  >
+                    <option value="unchanged" disabled>
+                      No change
+                    </option>
+                    <option value="load-error">Review data load failed</option>
+                    <option value="stale">Candidate changed</option>
+                    <option value="revoked">Authority revoked</option>
+                  </select>
+                </label>
+              </DemoControls>
               <DecisionProblem
                 state={readiness}
                 onReset={() => {
@@ -1475,9 +1478,11 @@ function Modal({
     const previous = document.activeElement as HTMLElement | null;
     const el = ref.current;
     const focusables = () =>
-      el?.querySelectorAll<HTMLElement>(
-        'button:not(:disabled), textarea:not(:disabled), input:not(:disabled), select:not(:disabled), a[href], [tabindex="0"]',
-      );
+      Array.from(
+        el?.querySelectorAll<HTMLElement>(
+          'button:not(:disabled), textarea:not(:disabled), input:not(:disabled), select:not(:disabled), summary, a[href], [tabindex="0"]',
+        ) ?? [],
+      ).filter((node) => node.getClientRects().length > 0);
     const siblings = Array.from(
       el?.parentElement?.parentElement?.children ?? [],
     ).filter(
