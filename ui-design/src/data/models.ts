@@ -26,6 +26,11 @@ export type ResponseRecord = {
   rationale: string;
   subject: { label: string; digest?: string; target?: string };
   prerequisites?: string;
+  assessment?: {
+    conclusion:
+      "Meets criteria" | "Changes requested" | "Insufficient evidence";
+    evidence: { id: string; title: string; assignmentId: string }[];
+  };
 };
 export type Readiness =
   "missing" | "ready" | "refused" | "load-error" | "stale" | "revoked";

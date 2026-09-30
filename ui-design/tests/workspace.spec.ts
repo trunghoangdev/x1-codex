@@ -30,6 +30,9 @@ test("reviewer assesses evidence, records rationale and completes the assignment
     .fill(
       "Duplicate delivery is covered by AR-775; the contribution meets the acceptance criteria.",
     );
+  await page
+    .getByLabel("Assessment conclusion", { exact: true })
+    .selectOption("Insufficient evidence");
   await page.getByRole("button", { name: "Record assessment" }).click();
   await expect(page.getByRole("status")).toContainText("Assessment recorded");
   await page.getByRole("tab", { name: "Activity" }).click();
@@ -245,6 +248,9 @@ test("checks distinguish observations from decisions without changing work", asy
   await page
     .getByLabel("Decision rationale")
     .fill("The validator could not run. Further evidence is needed.");
+  await page
+    .getByLabel("Assessment conclusion", { exact: true })
+    .selectOption("Insufficient evidence");
   await page.getByRole("button", { name: "Record assessment" }).click();
   await expect(page.locator(".check-gates")).toContainText(
     "Recorded in this demo session",
@@ -563,6 +569,9 @@ test("related records preserve assignment, checked subject and preview state", a
   await page
     .getByLabel("Decision rationale")
     .fill("Evidence needed; validator could not run.");
+  await page
+    .getByLabel("Assessment conclusion", { exact: true })
+    .selectOption("Insufficient evidence");
   await page.getByRole("button", { name: "Record assessment" }).click();
   await page.getByRole("button", { name: "View recorded response" }).click();
   await expect(
@@ -724,6 +733,9 @@ test("drafts survive navigation, stay isolated and clear only on deletion or sub
   await page.getByRole("button", { name: "Back to My Work" }).click();
   await page.getByRole("button", { name: /A-1042.*Review retry/ }).click();
   await page.getByRole("button", { name: "Continue assessment draft" }).click();
+  await page
+    .getByLabel("Assessment conclusion", { exact: true })
+    .selectOption("Insufficient evidence");
   await page.getByRole("button", { name: "Record assessment" }).click();
   await expect(page.getByRole("region", { name: "Saved drafts" })).toHaveCount(
     0,
@@ -1016,6 +1028,9 @@ test("Organization connects responsibilities, release blockers and local respons
   await page
     .getByLabel("Decision rationale")
     .fill("Reviewed the sample contribution and evidence.");
+  await page
+    .getByLabel("Assessment conclusion", { exact: true })
+    .selectOption("Insufficient evidence");
   await page.getByRole("button", { name: "Record assessment" }).click();
   await page.getByRole("button", { name: "Organization", exact: true }).click();
   await expect(work).toContainText("4 open assignments");
@@ -1220,6 +1235,9 @@ test("Organization groups work by response state and combines project/role filte
   await page
     .getByLabel("Decision rationale")
     .fill("Sample assessment for grouped work.");
+  await page
+    .getByLabel("Assessment conclusion", { exact: true })
+    .selectOption("Insufficient evidence");
   await page.getByRole("button", { name: "Record assessment" }).click();
   await page.getByRole("button", { name: "Organization", exact: true }).click();
   await expect(responded.locator(".org-work-item")).toHaveCount(1);
@@ -1270,6 +1288,9 @@ test("review filters survive navigation and inbox restores the opened row", asyn
   await page
     .getByLabel("Decision rationale")
     .fill("Sample context restoration check.");
+  await page
+    .getByLabel("Assessment conclusion", { exact: true })
+    .selectOption("Insufficient evidence");
   await page.getByRole("button", { name: "Record assessment" }).click();
   await page.getByRole("button", { name: "Back to My Work" }).click();
   await expect(page.getByRole("heading", { level: 1 })).toBeFocused();
@@ -1279,4 +1300,78 @@ test("review filters survive navigation and inbox restores the opened row", asyn
   await page.goto("/#/assignments/A-1042/evidence");
   await page.reload();
   await expect(page.getByLabel("Find evidence for A-1042")).toHaveValue("");
+});
+
+test("A-1042 assessment snapshots explicit conclusion and cited evidence", async ({
+  page,
+}) => {
+  await page.goto("/#/assignments/A-1042/overview");
+  await page
+    .getByRole("button", { name: "Submit assessment", exact: true })
+    .click();
+  const conclusion = page.getByLabel("Assessment conclusion", { exact: true });
+  await page
+    .getByLabel("Decision rationale")
+    .fill("Need candidate-specific coverage.");
+  await expect(
+    page.getByRole("button", { name: "Record assessment" }),
+  ).toBeDisabled();
+  await conclusion.selectOption("Changes requested");
+  await page.getByRole("checkbox", { name: /AR-775/ }).check();
+  await page.keyboard.press("Escape");
+  await page.getByRole("button", { name: "Continue assessment draft" }).click();
+  await expect(conclusion).toHaveValue("Changes requested");
+  await expect(page.getByRole("checkbox", { name: /AR-775/ })).toBeChecked();
+  await page.getByRole("button", { name: "Record assessment" }).click();
+  await page.getByRole("tab", { name: "Activity", exact: true }).click();
+  const receipt = page.getByRole("region", {
+    name: "Assessment conclusion and evidence",
+  });
+  await expect(receipt).toContainText("Changes requested");
+  await expect(receipt).toContainText("AR-775 · Test results · A-1042");
+  await expect(receipt).not.toContainText("AR-801");
+  await page.reload();
+  await expect(receipt).toHaveCount(0);
+});
+
+test("structured-only assessment drafts can be resumed and deleted", async ({
+  page,
+}) => {
+  await page.goto("/#/assignments/A-1042/overview");
+  await page
+    .getByRole("button", { name: "Submit assessment", exact: true })
+    .click();
+  await page
+    .getByLabel("Assessment conclusion", { exact: true })
+    .selectOption("Meets criteria");
+  await page.getByRole("checkbox", { name: /AR-771/ }).check();
+  await page.keyboard.press("Escape");
+  await page.getByRole("button", { name: "Continue assessment draft" }).click();
+  await expect(page.getByLabel("Decision rationale")).toHaveValue("");
+  await expect(
+    page.getByLabel("Assessment conclusion", { exact: true }),
+  ).toHaveValue("Meets criteria");
+  await page.keyboard.press("Escape");
+  page.once("dialog", (dialog) => dialog.accept());
+  await page.getByRole("button", { name: "Delete assessment draft" }).click();
+  await page
+    .getByRole("button", { name: "Submit assessment", exact: true })
+    .click();
+  await expect(
+    page.getByLabel("Assessment conclusion", { exact: true }),
+  ).toHaveValue("");
+  await expect(
+    page.getByRole("checkbox", { name: /AR-771/ }),
+  ).not.toBeChecked();
+  await page
+    .getByLabel("Assessment conclusion", { exact: true })
+    .selectOption("Insufficient evidence");
+  await page
+    .getByLabel("Decision rationale")
+    .fill("No candidate-specific evidence available.");
+  await page.getByRole("button", { name: "Record assessment" }).click();
+  await page.getByRole("tab", { name: "Activity", exact: true }).click();
+  await expect(
+    page.getByRole("region", { name: "Assessment conclusion and evidence" }),
+  ).toContainText("No evidence cited");
 });

@@ -50,6 +50,9 @@ await page
   .fill(
     "Sample review: additional evidence is required before accepting the entire objective.",
   );
+await page
+  .getByLabel("Assessment conclusion", { exact: true })
+  .selectOption("Insufficient evidence");
 await page.getByRole("button", { name: "Record assessment" }).click();
 await page.getByRole("button", { name: "View record", exact: true }).click();
 await page.locator(".toast").waitFor({ state: "hidden" });

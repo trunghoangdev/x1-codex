@@ -2924,3 +2924,30 @@ main h3,
   min-width: 0;
   max-width: 100%;
 }
+
+.assessment-fields {
+  border: 1px solid var(--line);
+  border-radius: 6px;
+  margin: 20px 0;
+  min-width: 0;
+  padding: 14px;
+}
+.assessment-fields p {
+  font-size: 12px;
+  line-height: 1.7;
+  color: #526343;
+}
+.assessment-fields select {
+  display: block;
+  width: 100%;
+  min-height: 44px;
+  font: inherit;
+  margin: 8px 0;
+}
+.assessment-evidence {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  min-height: 44px;
+  overflow-wrap: anywhere;
+}

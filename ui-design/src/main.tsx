@@ -135,6 +135,19 @@ function App() {
   const [drafts, setDrafts] = useState<Record<string, Record<string, string>>>(
     {},
   );
+  const [assessmentConclusion, setAssessmentConclusion] = useState<
+    NonNullable<ResponseRecord["assessment"]>["conclusion"] | ""
+  >("");
+  const [assessmentEvidence, setAssessmentEvidence] = useState<string[]>([]);
+  const hasAssessmentDraft =
+    !!assessmentConclusion || assessmentEvidence.length > 0;
+  const assessmentForm = selected?.id === "A-1042" && decision === "Assessment";
+  const draftEntries = (id: string) => {
+    const entries = { ...drafts[id] };
+    if (id === "A-1042" && hasAssessmentDraft && !entries.Assessment?.trim())
+      entries.Assessment = "Structured assessment draft";
+    return Object.entries(entries);
+  };
   const reason =
     selected && decision ? (drafts[selected.id]?.[decision] ?? "") : "";
   function setReason(value: string) {
@@ -153,6 +166,10 @@ function App() {
       )
     )
       return;
+    if (id === "A-1042" && kind === "Assessment") {
+      setAssessmentConclusion("");
+      setAssessmentEvidence([]);
+    }
     setDrafts((previous) => {
       const remaining = { ...previous[id] };
       delete remaining[kind];
@@ -204,7 +221,7 @@ function App() {
   }, [screenKey, route.view, route.assignmentId]);
   const active = assignments.filter((a) => !completed[a.id]);
   const hasDraft = (id: string) =>
-    Object.values(drafts[id] ?? {}).some((text) => text.trim());
+    draftEntries(id).some(([, text]) => text.trim());
   const dueOrder: Record<string, number> = { Today: 0, Tomorrow: 1, Friday: 2 };
   const visible = assignments
     .filter(
@@ -251,6 +268,7 @@ function App() {
   function commitDecision() {
     if (!selected || !reason.trim() || !decision || completed[selected.id])
       return;
+    if (assessmentForm && !assessmentConclusion) return;
     if (selected.kind === "Authority" && decisionBlocked(readiness)) return;
     if (decision === "Approval" && readiness !== "ready") return;
     setCompleted((prev) => ({ ...prev, [selected.id]: decision }));
@@ -263,6 +281,19 @@ function App() {
       role: selected.role,
       permission: selected.authority,
       rationale: reason.trim(),
+      assessment:
+        assessmentForm && assessmentConclusion
+          ? {
+              conclusion: assessmentConclusion,
+              evidence: evidenceFor(selected.id)
+                .filter((e) => assessmentEvidence.includes(e.id))
+                .map(({ id, title, assignmentId }) => ({
+                  id,
+                  title,
+                  assignmentId,
+                })),
+            }
+          : undefined,
       subject:
         selected.kind === "Authority"
           ? { ...releaseSubject }
@@ -279,6 +310,10 @@ function App() {
       `${decision} recorded in this demo. No external action was taken.`,
     );
     setDecision(null);
+    if (selected.id === "A-1042") {
+      setAssessmentConclusion("");
+      setAssessmentEvidence([]);
+    }
     setDrafts((previous) => {
       const remaining = { ...previous };
       delete remaining[selected.id];
@@ -835,15 +870,15 @@ function App() {
                     {selected.id === sampleCandidate.assignmentId &&
                       ["Candidate", "Evidence", "Checks"].includes(tab) &&
                       !completed[selected.id] &&
-                      Object.entries(drafts[selected.id] ?? {}).some(
-                        ([, text]) => text.trim(),
+                      draftEntries(selected.id).some(([, text]) =>
+                        text.trim(),
                       ) && (
                         <aside
                           className="review-draft-shortcut"
                           aria-label="Review draft shortcuts"
                         >
                           <strong>Your draft is kept in this session</strong>
-                          {Object.entries(drafts[selected.id] ?? {})
+                          {draftEntries(selected.id)
                             .filter(([, text]) => text.trim())
                             .map(([kind]) => (
                               <button
@@ -1010,8 +1045,8 @@ function App() {
                       />
                     )}
                     {!completed[selected.id] &&
-                      Object.entries(drafts[selected.id] ?? {}).some(
-                        ([, text]) => text.trim(),
+                      draftEntries(selected.id).some(([, text]) =>
+                        text.trim(),
                       ) && (
                         <section
                           className="draft-list"
@@ -1023,7 +1058,7 @@ function App() {
                             response completes this assignment and clears its
                             drafts.
                           </p>
-                          {Object.entries(drafts[selected.id] ?? {})
+                          {draftEntries(selected.id)
                             .filter(([, text]) => text.trim())
                             .map(([kind]) => (
                               <div className="draft-actions" key={kind}>
@@ -1452,6 +1487,56 @@ function App() {
             Draft kept in this session as you type. Closing this dialog does not
             submit or delete it. Refresh clears it.
           </p>
+          {assessmentForm && (
+            <fieldset className="assessment-fields">
+              <legend>Assessment · proposed sample choices</legend>
+              <label>
+                Assessment conclusion (required)
+                <select
+                  aria-label="Assessment conclusion"
+                  value={assessmentConclusion}
+                  onChange={(e) =>
+                    setAssessmentConclusion(
+                      e.target.value as typeof assessmentConclusion,
+                    )
+                  }
+                >
+                  <option value="">Choose a conclusion</option>
+                  <option>Meets criteria</option>
+                  <option>Changes requested</option>
+                  <option>Insufficient evidence</option>
+                </select>
+              </label>
+              <p>
+                These are UI proposals, not an SF contract. A conclusion does
+                not authorize release or verify evidence.
+              </p>
+              <p>
+                Referenced evidence (optional). Select only records you used;
+                inspecting a record does not select it.
+              </p>
+              {evidenceFor(selected.id).map((evidence) => (
+                <label key={evidence.id} className="assessment-evidence">
+                  <input
+                    type="checkbox"
+                    checked={assessmentEvidence.includes(evidence.id)}
+                    onChange={(event) =>
+                      setAssessmentEvidence((old) =>
+                        event.target.checked
+                          ? [...old, evidence.id]
+                          : old.filter((id) => id !== evidence.id),
+                      )
+                    }
+                  />
+                  {evidence.id} · {evidence.title}
+                </label>
+              ))}
+              <p>
+                No selection will be recorded as “No evidence cited”. References
+                remain unverified sample records.
+              </p>
+            </fieldset>
+          )}
           <label className="textarea-label" htmlFor="rationale">
             {selected.kind === "Work"
               ? "Contribution and acceptance criteria"
@@ -1484,6 +1569,7 @@ function App() {
               className="button primary"
               disabled={
                 !reason.trim() ||
+                (assessmentForm && !assessmentConclusion) ||
                 (selected.kind === "Authority" && decisionBlocked(readiness)) ||
                 (decision === "Approval" && readiness !== "ready")
               }

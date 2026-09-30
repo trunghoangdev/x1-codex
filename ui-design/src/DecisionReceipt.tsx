@@ -87,6 +87,28 @@ export function DecisionReceipt({
             links={[{ tab: "Evidence", label: "Inspect release subject" }]}
           />
         )}
+      {record.assessment && (
+        <section aria-label="Assessment conclusion and evidence">
+          <h4>Assessment conclusion</h4>
+          <p>{record.assessment.conclusion}</p>
+          <h4>Referenced evidence</h4>
+          {record.assessment.evidence.length ? (
+            <ul>
+              {record.assessment.evidence.map((e) => (
+                <li key={e.id}>
+                  {e.id} · {e.title} · {e.assignmentId}
+                </li>
+              ))}
+            </ul>
+          ) : (
+            <p>No evidence cited.</p>
+          )}
+          <p className="demo-note">
+            Proposed UI conclusion. Cited sample records are not verified. No
+            release authorization or downstream outcome is established.
+          </p>
+        </section>
+      )}
       <h4>Recorded rationale</h4>
       <p className="receipt-rationale">{record.rationale}</p>
       <p className="demo-note">

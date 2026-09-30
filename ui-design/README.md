@@ -136,3 +136,5 @@ Iteration 26 groups Organization work into **Awaiting response**, **Blocked** an
 Iteration 27 preserves Evidence searches and Activity filters per assignment for the session. Returning to My Work restores the opened row and scroll position when available, otherwise the heading. Refresh clears this context.
 
 Iteration 28 checks long content and larger lists using browser-only fixture overrides: 50 assignments, 63 evidence records and a long multiline rationale on mobile/desktop. Long labels now wrap, and Organization handles missing authored details. The normal demo dataset is unchanged; this is not a large-scale performance benchmark.
+
+Iteration 29 adds an explicit proposed assessment conclusion and optional cited evidence for A-1042. Drafts preserve these selections, and receipts snapshot them alongside rationale. No downstream workflow or real authorization is implied.

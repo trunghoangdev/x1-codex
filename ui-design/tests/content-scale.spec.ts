@@ -57,6 +57,9 @@ for (const width of [390, 1440]) {
     const rationale = ("Sample reasoning. " + token + "\n").repeat(15);
     await page.getByLabel("Decision rationale").fill(rationale);
     await fits();
+    await page
+      .getByLabel("Assessment conclusion", { exact: true })
+      .selectOption("Insufficient evidence");
     await page.getByRole("button", { name: "Record assessment" }).click();
     await page.getByRole("tab", { name: "Activity", exact: true }).click();
     await expect(page.locator(".receipt-rationale")).toHaveText(

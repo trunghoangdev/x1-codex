@@ -319,3 +319,13 @@ The initial tests reproduced horizontal overflow on assignment detail screens. H
 This is a bounded content/layout check, not a performance benchmark or support claim for arbitrarily large datasets. Pagination/virtualization and backend data loading are outside this slice. Preview screenshots remain the iteration 23 checkpoint.
 
 Validation: production build and all 32 browser tests passed, including the two new content-scale cases at mobile and desktop widths.
+
+## 29 — Explicit A-1042 assessment conclusions
+
+A-1042 now requires an explicit Meets criteria, Changes requested or Insufficient evidence conclusion alongside the rationale. These are proposed UI choices, not an SF schema or workflow contract. Optional evidence checkboxes include only that assignment's fixtures; records are never selected merely because they were opened. Empty selection is recorded as No evidence cited.
+
+Conclusion and citations persist with the session draft, including drafts containing only structured selections. Confirmed deletion clears them; submission snapshots evidence ID/title/assignment and conclusion into the receipt, then clears the draft. Refresh resets session data. Other assignment response forms are unchanged.
+
+Recording a response still completes the local demo assignment regardless of conclusion. This slice does not create a revision request, grant release authority or establish downstream effects. Cited fixtures remain unverified. Screenshots remain at iteration 23; capture script and walkthrough now supply a conclusion before recording.
+
+Validation: production build and the 33-test suite passed; an additional targeted structured-draft test also passed (34 tests total). Coverage includes required conclusion, cited-record snapshot, draft resumption/deletion, no-evidence receipts, refresh reset and long-content/mobile regressions.
