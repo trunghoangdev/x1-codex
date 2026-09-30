@@ -34,7 +34,7 @@ test("reviewer assesses evidence, records rationale and completes the assignment
     .getByLabel("Assessment conclusion", { exact: true })
     .selectOption("Insufficient evidence");
   await page.getByRole("button", { name: "Record assessment" }).click();
-  await expect(page.getByRole("status")).toContainText("Assessment recorded");
+  await expect(page.locator(".toast")).toContainText("Assessment recorded");
   await page.getByRole("tab", { name: "Activity" }).click();
   await expect(page.getByRole("tabpanel")).toContainText(
     "Duplicate delivery is covered",
@@ -1571,6 +1571,10 @@ test("criterion assessments preserve draft details and snapshot independent evid
     .click();
   const criterion = "Prevent duplicate payment effects";
   await page
+    .locator(".criterion-review summary")
+    .filter({ hasText: criterion })
+    .click();
+  await page
     .getByLabel(`Status for ${criterion}`, { exact: true })
     .selectOption("Insufficient evidence");
   await page
@@ -1583,6 +1587,10 @@ test("criterion assessments preserve draft details and snapshot independent evid
     .check();
   await page.keyboard.press("Escape");
   await page.getByRole("button", { name: "Continue assessment draft" }).click();
+  await page
+    .locator(".criterion-review summary")
+    .filter({ hasText: criterion })
+    .click();
   await expect(
     page.getByLabel(`Status for ${criterion}`, { exact: true }),
   ).toHaveValue("Insufficient evidence");
@@ -1694,4 +1702,58 @@ test("revision cycle links exact subjects without inheriting prior decisions", a
   await expect(
     page.getByRole("region", { name: "Needs your attention" }),
   ).toContainText("5 open assignments");
+});
+
+test("long review collapses criteria without losing edits and offers keyboard section jumps", async ({
+  page,
+}) => {
+  await page.setViewportSize({ width: 390, height: 844 });
+  await page.goto("/#/assignments/A-1042/overview");
+  await page
+    .getByRole("button", { name: "Submit assessment", exact: true })
+    .click();
+  const summaries = page.locator(".criterion-review summary");
+  await expect(summaries).toHaveCount(4);
+  await expect(
+    page.getByLabel("Note for Bound retry delay", { exact: true }),
+  ).toBeHidden();
+  await page
+    .getByRole("button", { name: "Review criteria", exact: true })
+    .click();
+  await expect(
+    page.getByRole("region", { name: "Criterion assessments" }),
+  ).toBeFocused();
+  await summaries.first().focus();
+  await page.keyboard.press("Enter");
+  await page
+    .getByLabel("Status for Bound retry delay", { exact: true })
+    .selectOption("Needs changes");
+  await page
+    .getByLabel("Note for Bound retry delay", { exact: true })
+    .fill("Review the cap boundary case.");
+  await page
+    .getByRole("checkbox", { name: "Bound retry delay: AR-775", exact: true })
+    .check();
+  await summaries.first().click();
+  await expect(
+    page.getByLabel("Note for Bound retry delay", { exact: true }),
+  ).toBeHidden();
+  await expect(summaries.first()).toContainText(
+    "Needs changes · 1 cited · Note saved",
+  );
+  await expect(page.locator(".criterion-progress")).toContainText("1 of 4");
+  await summaries.first().focus();
+  await page.keyboard.press("Space");
+  await expect(
+    page.getByLabel("Note for Bound retry delay", { exact: true }),
+  ).toHaveValue("Review the cap boundary case.");
+  await page
+    .getByRole("button", { name: "Overall rationale", exact: true })
+    .click();
+  await expect(page.getByLabel("Decision rationale")).toBeFocused();
+  expect(
+    await page.evaluate(
+      () => document.documentElement.scrollWidth <= innerWidth,
+    ),
+  ).toBe(true);
 });

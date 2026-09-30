@@ -34,6 +34,8 @@ On **Evidence**, search `AR-775`, open Test results and read the limitation: the
 
 Choose **Submit assessment** and type: “Sample review: additional evidence is required before accepting the entire objective.” Close with Escape. The rationale stays as a session draft. Return to Candidate or Evidence and resume the draft with the review shortcut. Closing did not submit anything.
 
+Use **Review criteria** to jump to the criterion summaries. Expand only the criterion being reviewed; its summary retains status, citation count and note indicator when collapsed. Progress counts explicit reviewer statuses, not passed criteria. Use **Overall rationale** to return to the required rationale field.
+
 Under **Review each criterion**, mark Prevent duplicate payment effects as **Insufficient evidence**, explain the missing candidate-specific coverage, and optionally cite AR-775 for that criterion. Other criteria remain **Not reviewed** unless explicitly assessed. These observations do not automatically set the overall conclusion.
 
 Choose an **Assessment conclusion** (for this example, **Insufficient evidence**). Optionally cite AR-775; citing it does not verify it. Record the assessment, then open **Activity**. The receipt preserves the conclusion and cited records separately from the rationale. The local receipt records the rationale and subject; it is not server-admitted. Use **Activity type** to switch between local responses and sample evidence. Evidence entries are available records, not a chronological server event log.

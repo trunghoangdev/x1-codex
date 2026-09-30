@@ -369,3 +369,13 @@ Revision 1 and revision 2 have distinct synthetic digests. The first assessment 
 This cycle is deliberately independent of the existing assignments and local receipts. It is authored sample history, not automatically produced by selecting Changes requested on A-1042. No worker runs, files, assignments or server records are created. Missing file bodies and test reports remain explicit. Selection resets on leaving Organization or refresh. Screenshots remain the iteration 23 checkpoint.
 
 Validation: production build and all 40 browser tests passed. The new test checks keyboard selection/focus, explicit reference navigation, separate revision identities, pending reassessment, preserved earlier assessment, mobile overflow and reset without changing assignment counts.
+
+## 34 — Compact long assessments
+
+Per-criterion editors now start collapsed behind native details/summary controls. Each summary shows the criterion title, reviewer status, cited-record count and whether a note exists. Expanding/collapsing preserves edits; reopening the dialog resets disclosure visibility while keeping draft content. Only the chosen criteria need to occupy the full editor height.
+
+A progress line counts criteria with an explicit reviewer status, not passed criteria; notes or citations alone do not increase it. Review criteria and Overall rationale buttons move focus to the relevant section/input. The existing dialog focus loop includes visible summaries and skips collapsed inputs. No validation or receipt semantics changed.
+
+This reduces the default four expanded editors to four summaries; it does not add a wizard, mandatory completion rule or hidden automatic assessment. Screenshots remain at iteration 23.
+
+Validation: production build passed. 39 tests passed initially; after adapting two existing locators to the collapsed-editor/status behavior, all three targeted review tests passed (41 tests total). New coverage checks Enter/Space toggling, retained edits/citations, accurate status progress, section focus and mobile overflow.

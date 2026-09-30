@@ -146,3 +146,5 @@ Iteration 31 simulates response delivery with pending, rejection, offline and un
 Iteration 32 adds per-criterion statuses, notes and evidence citations to A-1042 assessments. Drafts retain these independently of the overall conclusion; receipts snapshot each criterion, including unreviewed and missing-evidence states.
 
 Iteration 33 adds a **Revision cycle · standalone sample** explorer in Organization. Five linked records demonstrate contribution, assessment, explicit revision request, revised contribution and pending reassessment, with separate subject identities and preserved earlier decisions. This does not advance real or session assignments.
+
+Iteration 34 makes long assessments easier to navigate: collapsible criterion editors show status/citation/note summaries, reviewer-status progress and direct jumps to criteria or overall rationale. Closing an editor preserves its draft.

@@ -1488,6 +1488,24 @@ function App() {
           title={`${decision} for ${selected.id}`}
           onClose={() => setDecision(null)}
         >
+          {assessmentForm && (
+            <nav className="review-jumps" aria-label="Assessment sections">
+              <button
+                className="button secondary"
+                onClick={() =>
+                  document.getElementById("criterion-assessments")?.focus()
+                }
+              >
+                Review criteria
+              </button>
+              <button
+                className="button secondary"
+                onClick={() => document.getElementById("rationale")?.focus()}
+              >
+                Overall rationale
+              </button>
+            </nav>
+          )}
           <ResponseSubmission submission={submission} />
           <fieldset className="response-form" disabled={deliveryLocked}>
             <div className="modal-kicker">

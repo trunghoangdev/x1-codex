@@ -3025,3 +3025,46 @@ main h3,
     grid-template-columns: minmax(0, 1fr);
   }
 }
+
+.criterion-review {
+  border: 1px solid var(--line);
+  border-radius: 6px;
+  margin: 12px 0;
+}
+.criterion-review summary {
+  cursor: pointer;
+  padding: 14px;
+  min-height: 44px;
+  overflow-wrap: anywhere;
+}
+.criterion-review summary strong {
+  font-size: 13px;
+}
+.criterion-review summary span {
+  display: block;
+  margin-top: 6px;
+  font-size: 12px;
+  color: #526343;
+}
+.criterion-review summary:focus-visible {
+  outline: 3px solid #285b93;
+  outline-offset: 3px;
+}
+.criterion-review .assessment-fields {
+  border: 0;
+  margin: 0;
+}
+.criterion-progress {
+  font-size: 13px;
+  color: #405638;
+  line-height: 1.7;
+}
+.review-jumps {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px;
+  margin-bottom: 16px;
+}
+.review-jumps button {
+  min-height: 44px;
+}
