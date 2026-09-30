@@ -26,10 +26,16 @@ await page
   .fill(
     "Reviewed the illustrative retry changes. Duplicate-event handling and verified test evidence still need separate review.",
   );
+await page
+  .getByLabel("Assessment conclusion", { exact: true })
+  .selectOption("Insufficient evidence");
+await page.locator(".modal").evaluate((el) => {
+  el.scrollTop = 0;
+});
 await page.screenshot({
   path: "previews/03-assessment.png",
   animations: "disabled",
-  fullPage: true,
+  fullPage: false,
 });
 await page.keyboard.press("Escape");
 for (const [tab, name] of [
@@ -126,4 +132,105 @@ await page.screenshot({
   animations: "disabled",
   fullPage: true,
 });
+// Fresh session for the independent workflow examples.
+await page.goto("http://127.0.0.1:4173/#/assignments/A-1042/overview");
+await page.reload();
+await page
+  .getByRole("button", { name: "Submit assessment", exact: true })
+  .click();
+await page
+  .getByRole("button", { name: "Review criteria", exact: true })
+  .click();
+await page
+  .locator(".criterion-review summary")
+  .filter({ hasText: "Prevent duplicate payment effects" })
+  .click();
+await page
+  .getByLabel("Status for Prevent duplicate payment effects", { exact: true })
+  .selectOption("Insufficient evidence");
+await page
+  .getByLabel("Note for Prevent duplicate payment effects", { exact: true })
+  .fill(
+    "The historical report does not establish duplicate-event coverage for this candidate.",
+  );
+await page
+  .getByRole("checkbox", {
+    name: "Prevent duplicate payment effects: AR-775",
+    exact: true,
+  })
+  .check();
+await page
+  .getByRole("button", { name: "Review criteria", exact: true })
+  .click();
+await page.locator("#criterion-assessments").evaluate((el) => {
+  const modal = el.closest(".modal");
+  modal.scrollTop +=
+    el.getBoundingClientRect().top - modal.getBoundingClientRect().top - 20;
+});
+await page.screenshot({
+  path: "previews/16-criterion-review.png",
+  animations: "disabled",
+  fullPage: false,
+});
+await page.setViewportSize({ width: 390, height: 844 });
+await page
+  .getByRole("button", { name: "Review criteria", exact: true })
+  .click();
+await page.locator("#criterion-assessments").evaluate((el) => {
+  const modal = el.closest(".modal");
+  modal.scrollTop +=
+    el.getBoundingClientRect().top - modal.getBoundingClientRect().top - 20;
+});
+await page.screenshot({
+  path: "previews/17-mobile-review.png",
+  animations: "disabled",
+  fullPage: false,
+});
+await page.setViewportSize({ width: 1440, height: 1100 });
+await page
+  .getByLabel("Assessment conclusion", { exact: true })
+  .selectOption("Insufficient evidence");
+await page
+  .getByLabel("Decision rationale")
+  .fill("Additional candidate-specific evidence is needed.");
+await page
+  .getByText("Demo controls · Response delivery", { exact: true })
+  .click();
+await page
+  .getByLabel("Delivery scenario", { exact: true })
+  .selectOption("unknown");
+await page
+  .getByRole("button", { name: "Record assessment", exact: true })
+  .click();
+await expect(
+  page.getByRole("region", { name: "Response delivery preview" }),
+).toContainText("Receipt status unknown");
+await page.locator(".modal").evaluate((el) => {
+  el.scrollTop = 0;
+});
+await page.screenshot({
+  path: "previews/18-delivery-unknown.png",
+  animations: "disabled",
+  fullPage: false,
+});
+await page.keyboard.press("Escape");
+await page.goto("http://127.0.0.1:4173/#/assignments/A-1035/overview");
+await expect(
+  page.getByRole("region", { name: "Staging reconciliation context" }),
+).toBeVisible();
+await page.screenshot({
+  path: "previews/19-reconciliation.png",
+  animations: "disabled",
+  fullPage: true,
+});
+await page.goto("http://127.0.0.1:4173/#/organization");
+await page
+  .getByRole("button", { name: "DEMO-A2 · Reassessment", exact: true })
+  .click();
+await page
+  .getByRole("region", { name: "Revision cycle · standalone sample" })
+  .screenshot({
+    path: "previews/20-revision-cycle.png",
+    animations: "disabled",
+  });
 await browser.close();

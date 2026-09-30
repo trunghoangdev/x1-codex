@@ -2,6 +2,8 @@
 
 An English-language, roughly 10-minute walkthrough of human review and release authority. All people, assignments, evidence and outcomes are fictional. This demonstrates the UI, not a working Software Factory integration.
 
+Current screenshots: iteration 35, 20 captures. Modal screenshots show the visible scrolled portion of the dialog; they do not imply every field fits at once.
+
 ## Start a clean session
 
 From `ui-design`, run `npm run dev -- --port 4173 --strictPort` and open the URL printed by Vite. Refresh once before presenting: this clears local responses, drafts and preview scenarios. Navigate to `#/work` to reset URL filters as well. No account or backend is required.
@@ -42,6 +44,8 @@ Choose an **Assessment conclusion** (for this example, **Insufficient evidence**
 
 [Assessment dialog](previews/03-assessment.png) · [Local receipt](previews/10-receipt.png) · [Activity evidence filter](previews/15-activity.png)
 
+[Criterion review](previews/16-criterion-review.png) · [Mobile review](previews/17-mobile-review.png)
+
 ## 4. Make a separate release decision
 
 Return to **My Work**. A-1042 is now under **Completed**. Open **A-1041**, the separate release subject. Approval starts disabled because prerequisite evidence is missing; refusal remains available.
@@ -70,15 +74,21 @@ At phone width, use the navigation toggle and assignment tabs. The response shor
 
 Open **A-1035** and compare Expected, Observed and Still needed. Observation 238 records request acceptance, not a running artifact or health result. Choose **Record reconciliation**, select **Still undetermined** and explain the additional evidence needed. Confirmed-effect and mismatch conclusions are unavailable for this incomplete fixture. The Activity receipt preserves the comparison; recording a response does not confirm or repeat the deployment.
 
+[Staging reconciliation](previews/19-reconciliation.png)
+
 ## Optional: response delivery failures
 
 Before recording a response, expand **Demo controls · Response delivery** and select a Delivery scenario. Rejected and Offline before sending retain the draft. Acknowledgement lost blocks resend until **Simulate status check: not received** explicitly resolves the sample uncertainty. Then select Receipt confirmed to retry. Closing during Sending also preserves an unknown status on resume. None of these actions contacts SF; refresh clears the entire simulation.
+
+[Unknown delivery outcome](previews/18-delivery-unknown.png)
 
 ## Optional: follow a revision cycle
 
 In **Organization**, find **Revision cycle · standalone sample**. Select DEMO-A1 to see Changes requested on revision 1, then follow its contribution reference. Open DEMO-C2 and follow the revision request back to DEMO-W2. Finally inspect DEMO-A2: its subject is revision 2 and its review remains pending. The earlier assessment is context, not a verdict on the new subject.
 
 This is a separate authored example, not A-1042 history. Recording Changes requested in the live prototype does not automatically create these records. No new candidate file bodies or verified test evidence are supplied by this example.
+
+[Revision cycle](previews/20-revision-cycle.png)
 
 ## End with the boundaries
 

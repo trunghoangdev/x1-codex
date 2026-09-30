@@ -379,3 +379,11 @@ A progress line counts criteria with an explicit reviewer status, not passed cri
 This reduces the default four expanded editors to four summaries; it does not add a wizard, mandatory completion rule or hidden automatic assessment. Screenshots remain at iteration 23.
 
 Validation: production build passed. 39 tests passed initially; after adapting two existing locators to the collapsed-editor/status behavior, all three targeted review tests passed (41 tests total). New coverage checks Enter/Space toggling, retained edits/citations, accurate status progress, section focus and mobile overflow.
+
+## 35 — Current workflow previews
+
+Refreshed the 15 existing previews and added criterion review, mobile review, unknown response delivery, staging reconciliation and pending reassessment in the revision cycle (20 total). The capture script fills a real criterion draft through the UI and waits for the unknown-delivery state before taking its image. These are screenshots of the prototype, not externally generated mockups.
+
+README and walkthrough link the current images and explain that modal images capture a visible scrolled region. Earlier iteration screenshot-freshness statements remain historical. No application behavior changed in this slice.
+
+Validation: production build passed; the updated capture script completed all 20 screenshots and exercised the UI flows. README/walkthrough links resolve. Mobile criterion review and revision-cycle captures were visually inspected. No application code changed, so the existing 41-test validation remains the prior behavior baseline rather than a new test run in this documentation slice.

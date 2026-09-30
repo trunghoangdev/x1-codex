@@ -56,7 +56,7 @@ The browser suite checks the assessment and approval/refusal flows, required rat
 
 To regenerate, start Vite on port 4173, then run `PLAYWRIGHT_BROWSERS_PATH=../.cache/ms-playwright node scripts/capture-previews.mjs` from this directory.
 
-Validation at the v1 checkpoint: production build and 26 browser tests passed. The capture script exercises desktop and 390px mobile flows; selected screenshots were visually reviewed. This is not a complete accessibility or cross-browser certification.
+Validation at the v1 checkpoint: production build and 41 browser tests passed. The capture script exercises desktop and 390px mobile flows; selected screenshots were visually reviewed. This is not a complete accessibility or cross-browser certification.
 
 This environment lacked the Chromium NSS/NSPR shared libraries. They were extracted into the repository-local `.cache/browser-libs/` without installing system packages. When testing here, use:
 
@@ -84,9 +84,9 @@ The sixth update scopes **Evidence** to each assignment and gives **Artifact Ins
 
 The seventh update refines **A-1042 → Attempts** using state patterns from a bounded read-only development metadata review. It adds a process-exited-with-error example and separates platform state, process exit and cleanup observations. All displayed records remain synthetic; no production data connection was added.
 
-## Current previews — iteration 23 · v1
+## Current previews — iteration 35
 
-All 15 preview files reflect the iteration 23 checkpoint. Earlier iteration notes below describe historical validation and screenshot freshness.
+All 20 preview files reflect the iteration 35 checkpoint. Earlier iteration notes below describe historical validation and screenshot freshness.
 
 - [Attempts](previews/07-attempts.png)
 - [Candidate and diff](previews/08-candidate.png)
@@ -148,3 +148,13 @@ Iteration 32 adds per-criterion statuses, notes and evidence citations to A-1042
 Iteration 33 adds a **Revision cycle · standalone sample** explorer in Organization. Five linked records demonstrate contribution, assessment, explicit revision request, revised contribution and pending reassessment, with separate subject identities and preserved earlier decisions. This does not advance real or session assignments.
 
 Iteration 34 makes long assessments easier to navigate: collapsible criterion editors show status/citation/note summaries, reviewer-status progress and direct jumps to criteria or overall rationale. Closing an editor preserves its draft.
+
+New workflow previews:
+
+- [Criterion review](previews/16-criterion-review.png)
+- [Mobile review](previews/17-mobile-review.png)
+- [Unknown delivery outcome](previews/18-delivery-unknown.png)
+- [Staging reconciliation](previews/19-reconciliation.png)
+- [Revision cycle — pending reassessment](previews/20-revision-cycle.png)
+
+Iteration 35 refreshes all previews and connects the walkthrough to the current assessment, delivery and reconciliation flows. Earlier screenshot-freshness notes are historical.
