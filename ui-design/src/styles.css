@@ -2951,3 +2951,20 @@ main h3,
   min-height: 44px;
   overflow-wrap: anywhere;
 }
+
+.reconciliation-review {
+  border: 1px solid var(--line);
+  padding: 16px;
+  border-radius: 6px;
+  margin: 16px 0;
+  overflow-wrap: anywhere;
+}
+.reconciliation-review p {
+  line-height: 1.7;
+  color: #526343;
+  font-size: 13px;
+}
+.reconciliation-review code {
+  overflow-wrap: anywhere;
+  font-size: 12px;
+}

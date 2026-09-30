@@ -329,3 +329,13 @@ Conclusion and citations persist with the session draft, including drafts contai
 Recording a response still completes the local demo assignment regardless of conclusion. This slice does not create a revision request, grant release authority or establish downstream effects. Cited fixtures remain unverified. Screenshots remain at iteration 23; capture script and walkthrough now supply a conclusion before recording.
 
 Validation: production build and the 33-test suite passed; an additional targeted structured-draft test also passed (34 tests total). Coverage includes required conclusion, cited-record snapshot, draft resumption/deletion, no-evidence receipts, refresh reset and long-content/mobile regressions.
+
+## 30 — A-1035 staging reconciliation
+
+A-1035 Overview and its response dialog now compare the expected staging effect with observation 238, which establishes request acceptance only. The synthetic expected artifact digest is separate from the production release subject. Running artifact, health and observation time are explicitly unavailable; required follow-up evidence is listed.
+
+The response requires an explicit Still undetermined conclusion plus rationale. Confirmed-effect and mismatch choices are shown disabled because the current fixture supports neither. This slice deliberately contains only the existing incomplete-observation scenario; it does not invent successful deployment evidence. The conclusion survives closing/resuming a draft, including a structured-only draft, and is cleared on confirmed deletion or submission.
+
+The receipt snapshots target, expected effect/digest, observation, missing evidence and conclusion. Recording the response completes the local assignment response only: the staging effect stays unconfirmed, and no retry/deployment occurs. Refresh clears session state. These are UI proposal fields, not a backend reconciliation contract. Screenshots remain at iteration 23.
+
+Validation: production build and 34 existing browser tests passed. The new reconciliation test passed after checking native option.disabled directly (35 tests total). It verifies required conclusion, unavailable resolved outcomes, draft resumption, snapshot scope, mobile overflow and refresh reset.

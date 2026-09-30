@@ -87,6 +87,38 @@ export function DecisionReceipt({
             links={[{ tab: "Evidence", label: "Inspect release subject" }]}
           />
         )}
+      {record.reconciliation && (
+        <section aria-label="Reconciliation snapshot">
+          <h4>Reconciliation conclusion</h4>
+          <p>{record.reconciliation.conclusion}</p>
+          <dl className="attempt-fields">
+            <div>
+              <dt>Target</dt>
+              <dd>{record.reconciliation.target}</dd>
+            </div>
+            <div>
+              <dt>Expected effect</dt>
+              <dd>{record.reconciliation.expected}</dd>
+            </div>
+            <div>
+              <dt>Expected digest · synthetic</dt>
+              <dd>{record.reconciliation.expectedDigest}</dd>
+            </div>
+            <div>
+              <dt>Observed</dt>
+              <dd>{record.reconciliation.observed}</dd>
+            </div>
+            <div>
+              <dt>Missing evidence</dt>
+              <dd>{record.reconciliation.missing}</dd>
+            </div>
+          </dl>
+          <p>
+            Local response recorded. The staging effect remains unconfirmed; no
+            retry or deployment was performed.
+          </p>
+        </section>
+      )}
       {record.assessment && (
         <section aria-label="Assessment conclusion and evidence">
           <h4>Assessment conclusion</h4>

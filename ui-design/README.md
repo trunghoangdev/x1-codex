@@ -138,3 +138,5 @@ Iteration 27 preserves Evidence searches and Activity filters per assignment for
 Iteration 28 checks long content and larger lists using browser-only fixture overrides: 50 assignments, 63 evidence records and a long multiline rationale on mobile/desktop. Long labels now wrap, and Organization handles missing authored details. The normal demo dataset is unchanged; this is not a large-scale performance benchmark.
 
 Iteration 29 adds an explicit proposed assessment conclusion and optional cited evidence for A-1042. Drafts preserve these selections, and receipts snapshot them alongside rationale. No downstream workflow or real authorization is implied.
+
+Iteration 30 adds an expected-versus-observed reconciliation view for **A-1035**. The incomplete staging fixture permits **Still undetermined** with rationale; its receipt snapshots the comparison without implying deployment success.

@@ -26,6 +26,14 @@ export type ResponseRecord = {
   rationale: string;
   subject: { label: string; digest?: string; target?: string };
   prerequisites?: string;
+  reconciliation?: {
+    conclusion: "Still undetermined";
+    target: string;
+    expected: string;
+    expectedDigest: string;
+    observed: string;
+    missing: string;
+  };
   assessment?: {
     conclusion:
       "Meets criteria" | "Changes requested" | "Insufficient evidence";

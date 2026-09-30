@@ -1375,3 +1375,61 @@ test("structured-only assessment drafts can be resumed and deleted", async ({
     page.getByRole("region", { name: "Assessment conclusion and evidence" }),
   ).toContainText("No evidence cited");
 });
+
+test("reconciliation preserves unknown effects and snapshots the comparison", async ({
+  page,
+}) => {
+  await page.goto("/#/assignments/A-1035/overview");
+  await expect(
+    page.getByRole("region", { name: "Staging reconciliation context" }),
+  ).toContainText("Observation 238");
+  await page
+    .getByRole("button", { name: "Record reconciliation", exact: true })
+    .click();
+  const dialog = page.getByRole("dialog");
+  const record = dialog.getByRole("button", {
+    name: "Record reconciliation",
+    exact: true,
+  });
+  await page
+    .getByLabel("Decision rationale")
+    .fill(
+      "Obtain a target-specific artifact digest and health observation before concluding.",
+    );
+  await expect(record).toBeDisabled();
+  await page
+    .getByLabel("Reconciliation conclusion", { exact: true })
+    .selectOption("Still undetermined");
+  await expect(
+    dialog.getByRole("option", { name: /Expected effect confirmed/ }),
+  ).toHaveJSProperty("disabled", true);
+  await expect(
+    dialog.getByRole("option", { name: /Mismatch established/ }),
+  ).toHaveJSProperty("disabled", true);
+  await page.keyboard.press("Escape");
+  await page
+    .getByRole("button", { name: "Continue reconciliation draft" })
+    .click();
+  await expect(
+    page.getByLabel("Reconciliation conclusion", { exact: true }),
+  ).toHaveValue("Still undetermined");
+  await page.setViewportSize({ width: 390, height: 844 });
+  expect(
+    await page.evaluate(
+      () => document.documentElement.scrollWidth <= innerWidth,
+    ),
+  ).toBe(true);
+  await record.click();
+  await page.getByRole("tab", { name: "Activity", exact: true }).click();
+  const snapshot = page.getByRole("region", {
+    name: "Reconciliation snapshot",
+  });
+  await expect(snapshot).toContainText("Still undetermined");
+  await expect(snapshot).toContainText("Staging · Payments API");
+  await expect(snapshot).toContainText("d".repeat(64));
+  await expect(snapshot).toContainText("Observation 238");
+  await expect(snapshot).toContainText("staging effect remains unconfirmed");
+  await expect(snapshot).not.toContainText("Production");
+  await page.reload();
+  await expect(snapshot).toHaveCount(0);
+});

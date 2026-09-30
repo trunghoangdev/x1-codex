@@ -1,3 +1,5 @@
+import { ReconciliationReview } from "./ReconciliationReview";
+import { reconciliationSnapshot } from "./data/reconciliation";
 import { DemoControls } from "./DemoControls";
 import { AssignmentActivity } from "./AssignmentActivity";
 import { OrganizationWork } from "./OrganizationWork";
@@ -139,6 +141,11 @@ function App() {
     NonNullable<ResponseRecord["assessment"]>["conclusion"] | ""
   >("");
   const [assessmentEvidence, setAssessmentEvidence] = useState<string[]>([]);
+  const [reconciliationConclusion, setReconciliationConclusion] = useState<
+    "" | "Still undetermined"
+  >("");
+  const reconciliationForm =
+    selected?.id === "A-1035" && decision === "Reconciliation";
   const hasAssessmentDraft =
     !!assessmentConclusion || assessmentEvidence.length > 0;
   const assessmentForm = selected?.id === "A-1042" && decision === "Assessment";
@@ -146,6 +153,12 @@ function App() {
     const entries = { ...drafts[id] };
     if (id === "A-1042" && hasAssessmentDraft && !entries.Assessment?.trim())
       entries.Assessment = "Structured assessment draft";
+    if (
+      id === "A-1035" &&
+      reconciliationConclusion &&
+      !entries.Reconciliation?.trim()
+    )
+      entries.Reconciliation = "Structured reconciliation draft";
     return Object.entries(entries);
   };
   const reason =
@@ -170,6 +183,8 @@ function App() {
       setAssessmentConclusion("");
       setAssessmentEvidence([]);
     }
+    if (id === "A-1035" && kind === "Reconciliation")
+      setReconciliationConclusion("");
     setDrafts((previous) => {
       const remaining = { ...previous[id] };
       delete remaining[kind];
@@ -269,6 +284,7 @@ function App() {
     if (!selected || !reason.trim() || !decision || completed[selected.id])
       return;
     if (assessmentForm && !assessmentConclusion) return;
+    if (reconciliationForm && !reconciliationConclusion) return;
     if (selected.kind === "Authority" && decisionBlocked(readiness)) return;
     if (decision === "Approval" && readiness !== "ready") return;
     setCompleted((prev) => ({ ...prev, [selected.id]: decision }));
@@ -281,6 +297,10 @@ function App() {
       role: selected.role,
       permission: selected.authority,
       rationale: reason.trim(),
+      reconciliation:
+        reconciliationForm && reconciliationConclusion
+          ? { ...reconciliationSnapshot, conclusion: reconciliationConclusion }
+          : undefined,
       assessment:
         assessmentForm && assessmentConclusion
           ? {
@@ -310,6 +330,7 @@ function App() {
       `${decision} recorded in this demo. No external action was taken.`,
     );
     setDecision(null);
+    if (selected.id === "A-1035") setReconciliationConclusion("");
     if (selected.id === "A-1042") {
       setAssessmentConclusion("");
       setAssessmentEvidence([]);
@@ -896,7 +917,11 @@ function App() {
                         <div className="section-label">THE RESPONSIBILITY</div>
                         <h2>A clear next step, with the full context.</h2>
                         <p className="summary">{selected.summary}</p>
-                        <AssignmentRequirements assignmentId={selected.id} />
+                        {selected.id === "A-1035" ? (
+                          <ReconciliationReview />
+                        ) : (
+                          <AssignmentRequirements assignmentId={selected.id} />
+                        )}
                         <div className="section-rule" />
                         <h3>Exact input</h3>
                         <button
@@ -1487,6 +1512,37 @@ function App() {
             Draft kept in this session as you type. Closing this dialog does not
             submit or delete it. Refresh clears it.
           </p>
+          {reconciliationForm && (
+            <>
+              <ReconciliationReview />
+              <label className="record-filter">
+                Reconciliation conclusion (required)
+                <select
+                  aria-label="Reconciliation conclusion"
+                  value={reconciliationConclusion}
+                  onChange={(e) =>
+                    setReconciliationConclusion(
+                      e.target.value as typeof reconciliationConclusion,
+                    )
+                  }
+                >
+                  <option value="">Choose a conclusion</option>
+                  <option>Still undetermined</option>
+                  <option disabled>
+                    Expected effect confirmed — evidence unavailable
+                  </option>
+                  <option disabled>
+                    Mismatch established — evidence unavailable
+                  </option>
+                </select>
+              </label>
+              <p className="demo-note">
+                Proposed UI conclusion. Add what remains unknown and the
+                evidence needed next in your rationale. This records a response,
+                not a successful deployment.
+              </p>
+            </>
+          )}
           {assessmentForm && (
             <fieldset className="assessment-fields">
               <legend>Assessment · proposed sample choices</legend>
@@ -1570,6 +1626,7 @@ function App() {
               disabled={
                 !reason.trim() ||
                 (assessmentForm && !assessmentConclusion) ||
+                (reconciliationForm && !reconciliationConclusion) ||
                 (selected.kind === "Authority" && decisionBlocked(readiness)) ||
                 (decision === "Approval" && readiness !== "ready")
               }

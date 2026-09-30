@@ -62,6 +62,10 @@ At phone width, use the navigation toggle and assignment tabs. The response shor
 
 [Load failure](previews/14-load-error.png) · [Mobile inbox](previews/06-mobile.png) · [Mobile candidate](previews/12-mobile-candidate.png)
 
+## Optional: reconcile an unconfirmed staging effect
+
+Open **A-1035** and compare Expected, Observed and Still needed. Observation 238 records request acceptance, not a running artifact or health result. Choose **Record reconciliation**, select **Still undetermined** and explain the additional evidence needed. Confirmed-effect and mismatch conclusions are unavailable for this incomplete fixture. The Activity receipt preserves the comparison; recording a response does not confirm or repeat the deployment.
+
 ## End with the boundaries
 
 Screen URLs and My Work filters are shareable. Drafts, receipts, completions and scenario choices are session-only; refresh clears them. Activity filters and Evidence searches survive navigation per assignment and reset on refresh. Returning to My Work restores the opened row when it remains in the list. Screenshots show selected moments, not one persistent cross-image database: Organization/Evidence include the captured assessment, while mobile and later previews start fresh sessions.
