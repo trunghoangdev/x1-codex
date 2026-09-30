@@ -1317,11 +1317,11 @@ test("A-1042 assessment snapshots explicit conclusion and cited evidence", async
     page.getByRole("button", { name: "Record assessment" }),
   ).toBeDisabled();
   await conclusion.selectOption("Changes requested");
-  await page.getByRole("checkbox", { name: /AR-775/ }).check();
+  await page.getByRole("checkbox", { name: /^AR-775/ }).check();
   await page.keyboard.press("Escape");
   await page.getByRole("button", { name: "Continue assessment draft" }).click();
   await expect(conclusion).toHaveValue("Changes requested");
-  await expect(page.getByRole("checkbox", { name: /AR-775/ })).toBeChecked();
+  await expect(page.getByRole("checkbox", { name: /^AR-775/ })).toBeChecked();
   await page.getByRole("button", { name: "Record assessment" }).click();
   await page.getByRole("tab", { name: "Activity", exact: true }).click();
   const receipt = page.getByRole("region", {
@@ -1344,7 +1344,7 @@ test("structured-only assessment drafts can be resumed and deleted", async ({
   await page
     .getByLabel("Assessment conclusion", { exact: true })
     .selectOption("Meets criteria");
-  await page.getByRole("checkbox", { name: /AR-771/ }).check();
+  await page.getByRole("checkbox", { name: /^AR-771/ }).check();
   await page.keyboard.press("Escape");
   await page.getByRole("button", { name: "Continue assessment draft" }).click();
   await expect(page.getByLabel("Decision rationale")).toHaveValue("");
@@ -1361,7 +1361,7 @@ test("structured-only assessment drafts can be resumed and deleted", async ({
     page.getByLabel("Assessment conclusion", { exact: true }),
   ).toHaveValue("");
   await expect(
-    page.getByRole("checkbox", { name: /AR-771/ }),
+    page.getByRole("checkbox", { name: /^AR-771/ }),
   ).not.toBeChecked();
   await page
     .getByLabel("Assessment conclusion", { exact: true })
@@ -1560,4 +1560,85 @@ test("unknown approval delivery also blocks refusal for the same assignment", as
   await expect(
     page.getByRole("button", { name: "Record refusal", exact: true }),
   ).toBeDisabled();
+});
+
+test("criterion assessments preserve draft details and snapshot independent evidence", async ({
+  page,
+}) => {
+  await page.goto("/#/assignments/A-1042/overview");
+  await page
+    .getByRole("button", { name: "Submit assessment", exact: true })
+    .click();
+  const criterion = "Prevent duplicate payment effects";
+  await page
+    .getByLabel(`Status for ${criterion}`, { exact: true })
+    .selectOption("Insufficient evidence");
+  await page
+    .getByLabel(`Note for ${criterion}`, { exact: true })
+    .fill(
+      "AR-775 is historical; candidate-specific duplicate coverage is missing.",
+    );
+  await page
+    .getByRole("checkbox", { name: `${criterion}: AR-775`, exact: true })
+    .check();
+  await page.keyboard.press("Escape");
+  await page.getByRole("button", { name: "Continue assessment draft" }).click();
+  await expect(
+    page.getByLabel(`Status for ${criterion}`, { exact: true }),
+  ).toHaveValue("Insufficient evidence");
+  await expect(
+    page.getByRole("checkbox", { name: `${criterion}: AR-775`, exact: true }),
+  ).toBeChecked();
+  await expect(
+    page.getByLabel("Assessment conclusion", { exact: true }),
+  ).toHaveValue("");
+  await expect(
+    page.getByLabel("Status for Bound retry delay", { exact: true }),
+  ).toHaveValue("Not reviewed");
+  await page
+    .getByLabel("Assessment conclusion", { exact: true })
+    .selectOption("Insufficient evidence");
+  await page
+    .getByLabel("Decision rationale")
+    .fill("More evidence needed before acceptance.");
+  await page.setViewportSize({ width: 390, height: 844 });
+  expect(
+    await page.evaluate(
+      () => document.documentElement.scrollWidth <= innerWidth,
+    ),
+  ).toBe(true);
+  await page
+    .getByRole("button", { name: "Record assessment", exact: true })
+    .click();
+  await expect(
+    page.getByLabel(`Note for ${criterion}`, { exact: true }),
+  ).toBeDisabled();
+  await expect(page.getByRole("dialog")).toHaveCount(0);
+  await page.getByRole("tab", { name: "Activity", exact: true }).click();
+  const snapshots = page.getByRole("region", {
+    name: "Recorded criterion assessments",
+  });
+  await expect(snapshots.locator("article")).toHaveCount(4);
+  const duplicate = snapshots
+    .locator("article")
+    .filter({
+      has: page.getByRole("heading", { name: criterion, exact: true }),
+    });
+  await expect(duplicate).toContainText("Insufficient evidence");
+  await expect(duplicate).toContainText("AR-775 · Test results · A-1042");
+  await expect(duplicate).toContainText(
+    "candidate-specific duplicate coverage is missing",
+  );
+  const delay = snapshots
+    .locator("article")
+    .filter({
+      has: page.getByRole("heading", {
+        name: "Bound retry delay",
+        exact: true,
+      }),
+    });
+  await expect(delay).toContainText("Not reviewed");
+  await expect(delay).toContainText("No evidence cited");
+  await page.reload();
+  await expect(snapshots).toHaveCount(0);
 });

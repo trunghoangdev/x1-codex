@@ -142,3 +142,5 @@ Iteration 29 adds an explicit proposed assessment conclusion and optional cited 
 Iteration 30 adds an expected-versus-observed reconciliation view for **A-1035**. The incomplete staging fixture permits **Still undetermined** with rationale; its receipt snapshots the comparison without implying deployment success.
 
 Iteration 31 simulates response delivery with pending, rejection, offline and unknown acknowledgement states. Drafts survive unsuccessful attempts; unknown status requires explicit sample resolution before retry. Receipt confirmation remains local, with no network or durable deduplication.
+
+Iteration 32 adds per-criterion statuses, notes and evidence citations to A-1042 assessments. Drafts retain these independently of the overall conclusion; receipts snapshot each criterion, including unreviewed and missing-evidence states.

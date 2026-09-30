@@ -2281,7 +2281,8 @@ textarea::placeholder {
   font-size: 12px;
   font-weight: 600;
 }
-.receipt-rationale {
+.receipt-rationale,
+.criterion-note {
   white-space: pre-wrap;
   overflow-wrap: anywhere;
   font-size: 12px;

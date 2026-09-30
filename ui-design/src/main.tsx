@@ -1,3 +1,5 @@
+import { CriterionAssessment, snapshotCriteria } from "./CriterionAssessment";
+import type { CriterionReview } from "./data/models";
 import { useResponseSubmission } from "./useResponseSubmission";
 import { ResponseSubmission } from "./ResponseSubmission";
 import { ReconciliationReview } from "./ReconciliationReview";
@@ -148,8 +150,16 @@ function App() {
   >("");
   const reconciliationForm =
     selected?.id === "A-1035" && decision === "Reconciliation";
+  const [criterionReviews, setCriterionReviews] = useState<
+    Record<string, CriterionReview>
+  >({});
   const hasAssessmentDraft =
-    !!assessmentConclusion || assessmentEvidence.length > 0;
+    !!assessmentConclusion ||
+    assessmentEvidence.length > 0 ||
+    Object.values(criterionReviews).some(
+      (r) =>
+        r.status !== "Not reviewed" || r.note.trim() || r.evidenceIds.length,
+    );
   const assessmentForm = selected?.id === "A-1042" && decision === "Assessment";
   const draftEntries = (id: string) => {
     const entries = { ...drafts[id] };
@@ -184,6 +194,7 @@ function App() {
     if (id === "A-1042" && kind === "Assessment") {
       setAssessmentConclusion("");
       setAssessmentEvidence([]);
+      setCriterionReviews({});
     }
     if (id === "A-1035" && kind === "Reconciliation")
       setReconciliationConclusion("");
@@ -307,6 +318,7 @@ function App() {
         assessmentForm && assessmentConclusion
           ? {
               conclusion: assessmentConclusion,
+              criteria: snapshotCriteria(criterionReviews),
               evidence: evidenceFor(selected.id)
                 .filter((e) => assessmentEvidence.includes(e.id))
                 .map(({ id, title, assignmentId }) => ({
@@ -336,6 +348,7 @@ function App() {
     if (selected.id === "A-1042") {
       setAssessmentConclusion("");
       setAssessmentEvidence([]);
+      setCriterionReviews({});
     }
     setDrafts((previous) => {
       const remaining = { ...previous };
@@ -1609,6 +1622,14 @@ function App() {
                   References remain unverified sample records.
                 </p>
               </fieldset>
+            )}
+            {assessmentForm && (
+              <CriterionAssessment
+                reviews={criterionReviews}
+                onChange={(id, review) =>
+                  setCriterionReviews((old) => ({ ...old, [id]: review }))
+                }
+              />
             )}
             <label className="textarea-label" htmlFor="rationale">
               {selected.kind === "Work"

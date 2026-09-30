@@ -349,3 +349,13 @@ Unknown delivery blocks editing/resubmission until the explicit **Simulate statu
 All states are session-only and reset on refresh. This is not durable idempotency, server admission or a real offline queue. Existing authority/readiness validation still applies when starting a submission. Inputs are frozen during the pending attempt. Screenshots remain at iteration 23.
 
 Validation: production build and the 37-test suite passed. After making unknown status assignment-scoped, build and all three delivery tests passed, including the new approval/refusal conflict case (38 tests total). Coverage checks retained drafts, editing locks, no duplicate local receipt, explicit unknown resolution and close-during-send behavior.
+
+## 32 — Per-criterion A-1042 assessment
+
+Each of A-1042's four authored acceptance criteria now has a stable sample ID and a reviewer status (Not reviewed, Meets criterion, Needs changes or Insufficient evidence), optional note and assignment-scoped evidence selections. All start Not reviewed. Expected evidence remains visible next to the criterion; viewing an artifact never marks a criterion met.
+
+Criterion edits count as a session draft even without an overall conclusion or rationale. Closing/resuming preserves them; confirmed draft deletion and successful submission clear them. Sending/unknown delivery locks criterion controls with the rest of the form. Evidence at criterion level is independent of overall citations and of other criteria.
+
+Receipts snapshot all four criterion definitions, statuses, notes and cited record identities/titles. Unreviewed/no-evidence states are explicit. These are reviewer statements, not verified checks; they neither derive nor override the overall conclusion. Per-criterion completion is not a new mandatory SF rule: partial reviews can be recorded with the existing required overall conclusion and rationale. Refresh clears session data. Screenshots remain at iteration 23.
+
+Validation: production build and 37 tests passed initially. After giving criterion notes their own CSS class, build and all three targeted criterion/long-content tests passed (39 tests total). Coverage checks structured-only draft resumption, independent citations, unreviewed defaults, locked pending submission, receipt snapshots, mobile layout and refresh reset.

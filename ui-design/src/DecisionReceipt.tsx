@@ -141,6 +141,38 @@ export function DecisionReceipt({
           </p>
         </section>
       )}
+      {record.assessment?.criteria && (
+        <section aria-label="Recorded criterion assessments">
+          <h4>Criterion assessments · recorded snapshot</h4>
+          {record.assessment.criteria.map((criterion) => (
+            <article className="assessment-fields" key={criterion.id}>
+              <h4>{criterion.title}</h4>
+              <p>{criterion.detail}</p>
+              <p>Evidence needed: {criterion.expectedEvidence}</p>
+              <p>
+                <strong>{criterion.status}</strong>
+              </p>
+              <p className="criterion-note">
+                {criterion.note || "No reviewer note recorded."}
+              </p>
+              {criterion.evidence.length ? (
+                <ul>
+                  {criterion.evidence.map((e) => (
+                    <li key={e.id}>
+                      {e.id} · {e.title} · {e.assignmentId}
+                    </li>
+                  ))}
+                </ul>
+              ) : (
+                <p>No evidence cited for this criterion.</p>
+              )}
+            </article>
+          ))}
+          <p className="demo-note">
+            Reviewer statements, not verified checks or automatic acceptance.
+          </p>
+        </section>
+      )}
       <h4>Recorded rationale</h4>
       <p className="receipt-rationale">{record.rationale}</p>
       <p className="demo-note">

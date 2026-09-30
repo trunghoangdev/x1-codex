@@ -1,3 +1,21 @@
+export type CriterionReview = {
+  status:
+    | "Not reviewed"
+    | "Meets criterion"
+    | "Needs changes"
+    | "Insufficient evidence";
+  note: string;
+  evidenceIds: string[];
+};
+export type CriterionSnapshot = {
+  id: string;
+  title: string;
+  detail: string;
+  expectedEvidence: string;
+  status: CriterionReview["status"];
+  note: string;
+  evidence: { id: string; title: string; assignmentId: string }[];
+};
 // Frontend view models for this prototype. These are NOT Forge/SF API contracts.
 // Fields such as role, due and simulated permission are UI fixtures, not claims
 // that the current SF backend supplies them.
@@ -38,6 +56,7 @@ export type ResponseRecord = {
     conclusion:
       "Meets criteria" | "Changes requested" | "Insufficient evidence";
     evidence: { id: string; title: string; assignmentId: string }[];
+    criteria?: CriterionSnapshot[];
   };
 };
 export type Readiness =
