@@ -339,3 +339,13 @@ The response requires an explicit Still undetermined conclusion plus rationale. 
 The receipt snapshots target, expected effect/digest, observation, missing evidence and conclusion. Recording the response completes the local assignment response only: the staging effect stays unconfirmed, and no retry/deployment occurs. Refresh clears session state. These are UI proposal fields, not a backend reconciliation contract. Screenshots remain at iteration 23.
 
 Validation: production build and 34 existing browser tests passed. The new reconciliation test passed after checking native option.disabled directly (35 tests total). It verifies required conclusion, unavailable resolved outcomes, draft resumption, snapshot scope, mobile overflow and refresh reset.
+
+## 31 — Response delivery simulation
+
+Response dialogs now expose a collapsed Delivery scenario selector: receipt confirmed, rejected, offline before sending, or acknowledgement lost. Submitting locks editing and repeat submission for a 700ms simulation. Only confirmed receipt creates the local record and clears drafts; rejection/offline retain the draft without a receipt.
+
+Unknown delivery blocks editing/resubmission until the explicit **Simulate status check: not received** action. Closing or navigating away during a pending simulation cancels its timer and preserves an unknown state for resumption, rather than creating a late receipt on another screen. The simulated status check does not query SF; it only selects the not-received resolution. Unknown status blocks other response types for the same assignment as well.
+
+All states are session-only and reset on refresh. This is not durable idempotency, server admission or a real offline queue. Existing authority/readiness validation still applies when starting a submission. Inputs are frozen during the pending attempt. Screenshots remain at iteration 23.
+
+Validation: production build and the 37-test suite passed. After making unknown status assignment-scoped, build and all three delivery tests passed, including the new approval/refusal conflict case (38 tests total). Coverage checks retained drafts, editing locks, no duplicate local receipt, explicit unknown resolution and close-during-send behavior.

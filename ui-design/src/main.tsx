@@ -1,3 +1,5 @@
+import { useResponseSubmission } from "./useResponseSubmission";
+import { ResponseSubmission } from "./ResponseSubmission";
 import { ReconciliationReview } from "./ReconciliationReview";
 import { reconciliationSnapshot } from "./data/reconciliation";
 import { DemoControls } from "./DemoControls";
@@ -341,6 +343,12 @@ function App() {
       return remaining;
     });
   }
+  const submission = useResponseSubmission(
+    selected && decision ? selected.id : "",
+    commitDecision,
+  );
+  const deliveryLocked =
+    submission.state === "sending" || submission.state === "unknown";
   return (
     <div className="app">
       <a
@@ -1465,155 +1473,166 @@ function App() {
           title={`${decision} for ${selected.id}`}
           onClose={() => setDecision(null)}
         >
-          <div className="modal-kicker">
-            <ShieldCheck size={18} />
-            {selected.role} · {selected.authority}
-          </div>
-          <p>
-            You are recording a response for <strong>{selected.title}</strong>.
-          </p>
-          {selected.kind === "Authority" && (
-            <>
-              <ReleaseSubject />
-              <p className="demo-note">
-                Prerequisite snapshot: {readiness}. This decision applies only
-                to the subject above.
-              </p>
-            </>
-          )}
-          {selected.kind === "Authority" && (
-            <>
-              <DemoControls context="Decision changes">
-                <label className="check-scenario">
-                  Simulate a change before recording
+          <ResponseSubmission submission={submission} />
+          <fieldset className="response-form" disabled={deliveryLocked}>
+            <div className="modal-kicker">
+              <ShieldCheck size={18} />
+              {selected.role} · {selected.authority}
+            </div>
+            <p>
+              You are recording a response for <strong>{selected.title}</strong>
+              .
+            </p>
+            {selected.kind === "Authority" && (
+              <>
+                <ReleaseSubject />
+                <p className="demo-note">
+                  Prerequisite snapshot: {readiness}. This decision applies only
+                  to the subject above.
+                </p>
+              </>
+            )}
+            {selected.kind === "Authority" && (
+              <>
+                <DemoControls context="Decision changes">
+                  <label className="check-scenario">
+                    Simulate a change before recording
+                    <select
+                      value={
+                        decisionBlocked(readiness) ? readiness : "unchanged"
+                      }
+                      onChange={(e) =>
+                        setReadiness(e.target.value as Readiness)
+                      }
+                    >
+                      <option value="unchanged" disabled>
+                        No change
+                      </option>
+                      <option value="load-error">
+                        Review data load failed
+                      </option>
+                      <option value="stale">Candidate changed</option>
+                      <option value="revoked">Authority revoked</option>
+                    </select>
+                  </label>
+                </DemoControls>
+                <DecisionProblem
+                  state={readiness}
+                  onReset={() => {
+                    setReadiness("missing");
+                    setDecision(null);
+                  }}
+                />
+              </>
+            )}
+            <p className="demo-note">
+              Draft kept in this session as you type. Closing this dialog does
+              not submit or delete it. Refresh clears it.
+            </p>
+            {reconciliationForm && (
+              <>
+                <ReconciliationReview />
+                <label className="record-filter">
+                  Reconciliation conclusion (required)
                   <select
-                    value={decisionBlocked(readiness) ? readiness : "unchanged"}
-                    onChange={(e) => setReadiness(e.target.value as Readiness)}
-                  >
-                    <option value="unchanged" disabled>
-                      No change
-                    </option>
-                    <option value="load-error">Review data load failed</option>
-                    <option value="stale">Candidate changed</option>
-                    <option value="revoked">Authority revoked</option>
-                  </select>
-                </label>
-              </DemoControls>
-              <DecisionProblem
-                state={readiness}
-                onReset={() => {
-                  setReadiness("missing");
-                  setDecision(null);
-                }}
-              />
-            </>
-          )}
-          <p className="demo-note">
-            Draft kept in this session as you type. Closing this dialog does not
-            submit or delete it. Refresh clears it.
-          </p>
-          {reconciliationForm && (
-            <>
-              <ReconciliationReview />
-              <label className="record-filter">
-                Reconciliation conclusion (required)
-                <select
-                  aria-label="Reconciliation conclusion"
-                  value={reconciliationConclusion}
-                  onChange={(e) =>
-                    setReconciliationConclusion(
-                      e.target.value as typeof reconciliationConclusion,
-                    )
-                  }
-                >
-                  <option value="">Choose a conclusion</option>
-                  <option>Still undetermined</option>
-                  <option disabled>
-                    Expected effect confirmed — evidence unavailable
-                  </option>
-                  <option disabled>
-                    Mismatch established — evidence unavailable
-                  </option>
-                </select>
-              </label>
-              <p className="demo-note">
-                Proposed UI conclusion. Add what remains unknown and the
-                evidence needed next in your rationale. This records a response,
-                not a successful deployment.
-              </p>
-            </>
-          )}
-          {assessmentForm && (
-            <fieldset className="assessment-fields">
-              <legend>Assessment · proposed sample choices</legend>
-              <label>
-                Assessment conclusion (required)
-                <select
-                  aria-label="Assessment conclusion"
-                  value={assessmentConclusion}
-                  onChange={(e) =>
-                    setAssessmentConclusion(
-                      e.target.value as typeof assessmentConclusion,
-                    )
-                  }
-                >
-                  <option value="">Choose a conclusion</option>
-                  <option>Meets criteria</option>
-                  <option>Changes requested</option>
-                  <option>Insufficient evidence</option>
-                </select>
-              </label>
-              <p>
-                These are UI proposals, not an SF contract. A conclusion does
-                not authorize release or verify evidence.
-              </p>
-              <p>
-                Referenced evidence (optional). Select only records you used;
-                inspecting a record does not select it.
-              </p>
-              {evidenceFor(selected.id).map((evidence) => (
-                <label key={evidence.id} className="assessment-evidence">
-                  <input
-                    type="checkbox"
-                    checked={assessmentEvidence.includes(evidence.id)}
-                    onChange={(event) =>
-                      setAssessmentEvidence((old) =>
-                        event.target.checked
-                          ? [...old, evidence.id]
-                          : old.filter((id) => id !== evidence.id),
+                    aria-label="Reconciliation conclusion"
+                    value={reconciliationConclusion}
+                    onChange={(e) =>
+                      setReconciliationConclusion(
+                        e.target.value as typeof reconciliationConclusion,
                       )
                     }
-                  />
-                  {evidence.id} · {evidence.title}
+                  >
+                    <option value="">Choose a conclusion</option>
+                    <option>Still undetermined</option>
+                    <option disabled>
+                      Expected effect confirmed — evidence unavailable
+                    </option>
+                    <option disabled>
+                      Mismatch established — evidence unavailable
+                    </option>
+                  </select>
                 </label>
-              ))}
+                <p className="demo-note">
+                  Proposed UI conclusion. Add what remains unknown and the
+                  evidence needed next in your rationale. This records a
+                  response, not a successful deployment.
+                </p>
+              </>
+            )}
+            {assessmentForm && (
+              <fieldset className="assessment-fields">
+                <legend>Assessment · proposed sample choices</legend>
+                <label>
+                  Assessment conclusion (required)
+                  <select
+                    aria-label="Assessment conclusion"
+                    value={assessmentConclusion}
+                    onChange={(e) =>
+                      setAssessmentConclusion(
+                        e.target.value as typeof assessmentConclusion,
+                      )
+                    }
+                  >
+                    <option value="">Choose a conclusion</option>
+                    <option>Meets criteria</option>
+                    <option>Changes requested</option>
+                    <option>Insufficient evidence</option>
+                  </select>
+                </label>
+                <p>
+                  These are UI proposals, not an SF contract. A conclusion does
+                  not authorize release or verify evidence.
+                </p>
+                <p>
+                  Referenced evidence (optional). Select only records you used;
+                  inspecting a record does not select it.
+                </p>
+                {evidenceFor(selected.id).map((evidence) => (
+                  <label key={evidence.id} className="assessment-evidence">
+                    <input
+                      type="checkbox"
+                      checked={assessmentEvidence.includes(evidence.id)}
+                      onChange={(event) =>
+                        setAssessmentEvidence((old) =>
+                          event.target.checked
+                            ? [...old, evidence.id]
+                            : old.filter((id) => id !== evidence.id),
+                        )
+                      }
+                    />
+                    {evidence.id} · {evidence.title}
+                  </label>
+                ))}
+                <p>
+                  No selection will be recorded as “No evidence cited”.
+                  References remain unverified sample records.
+                </p>
+              </fieldset>
+            )}
+            <label className="textarea-label" htmlFor="rationale">
+              {selected.kind === "Work"
+                ? "Contribution and acceptance criteria"
+                : "Decision rationale"}{" "}
+              <span>Required</span>
+            </label>
+            <textarea
+              id="rationale"
+              data-initial-focus
+              rows={5}
+              value={reason}
+              onChange={(e) => setReason(e.target.value)}
+              placeholder="Explain your conclusion and cite the evidence you reviewed…"
+            />
+            <div className="inline-note">
+              <LockKeyhole size={17} />
               <p>
-                No selection will be recorded as “No evidence cited”. References
-                remain unverified sample records.
+                This simulates a record in this browser session. It does not
+                contact Forge, authorize a real release, or persist after
+                refresh.
               </p>
-            </fieldset>
-          )}
-          <label className="textarea-label" htmlFor="rationale">
-            {selected.kind === "Work"
-              ? "Contribution and acceptance criteria"
-              : "Decision rationale"}{" "}
-            <span>Required</span>
-          </label>
-          <textarea
-            id="rationale"
-            data-initial-focus
-            rows={5}
-            value={reason}
-            onChange={(e) => setReason(e.target.value)}
-            placeholder="Explain your conclusion and cite the evidence you reviewed…"
-          />
-          <div className="inline-note">
-            <LockKeyhole size={17} />
-            <p>
-              This simulates a record in this browser session. It does not
-              contact Forge, authorize a real release, or persist after refresh.
-            </p>
-          </div>
+            </div>
+          </fieldset>
           <div className="modal-actions">
             <button
               className="button secondary"
@@ -1624,13 +1643,14 @@ function App() {
             <button
               className="button primary"
               disabled={
+                deliveryLocked ||
                 !reason.trim() ||
                 (assessmentForm && !assessmentConclusion) ||
                 (reconciliationForm && !reconciliationConclusion) ||
                 (selected.kind === "Authority" && decisionBlocked(readiness)) ||
                 (decision === "Approval" && readiness !== "ready")
               }
-              onClick={commitDecision}
+              onClick={submission.send}
             >
               Record {decision.toLowerCase()}
               <Check size={16} />

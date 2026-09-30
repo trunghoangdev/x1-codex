@@ -140,3 +140,5 @@ Iteration 28 checks long content and larger lists using browser-only fixture ove
 Iteration 29 adds an explicit proposed assessment conclusion and optional cited evidence for A-1042. Drafts preserve these selections, and receipts snapshot them alongside rationale. No downstream workflow or real authorization is implied.
 
 Iteration 30 adds an expected-versus-observed reconciliation view for **A-1035**. The incomplete staging fixture permits **Still undetermined** with rationale; its receipt snapshots the comparison without implying deployment success.
+
+Iteration 31 simulates response delivery with pending, rejection, offline and unknown acknowledgement states. Drafts survive unsuccessful attempts; unknown status requires explicit sample resolution before retry. Receipt confirmation remains local, with no network or durable deduplication.

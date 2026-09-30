@@ -66,6 +66,10 @@ At phone width, use the navigation toggle and assignment tabs. The response shor
 
 Open **A-1035** and compare Expected, Observed and Still needed. Observation 238 records request acceptance, not a running artifact or health result. Choose **Record reconciliation**, select **Still undetermined** and explain the additional evidence needed. Confirmed-effect and mismatch conclusions are unavailable for this incomplete fixture. The Activity receipt preserves the comparison; recording a response does not confirm or repeat the deployment.
 
+## Optional: response delivery failures
+
+Before recording a response, expand **Demo controls · Response delivery** and select a Delivery scenario. Rejected and Offline before sending retain the draft. Acknowledgement lost blocks resend until **Simulate status check: not received** explicitly resolves the sample uncertainty. Then select Receipt confirmed to retry. Closing during Sending also preserves an unknown status on resume. None of these actions contacts SF; refresh clears the entire simulation.
+
 ## End with the boundaries
 
 Screen URLs and My Work filters are shareable. Drafts, receipts, completions and scenario choices are session-only; refresh clears them. Activity filters and Evidence searches survive navigation per assignment and reset on refresh. Returning to My Work restores the opened row when it remains in the list. Screenshots show selected moments, not one persistent cross-image database: Organization/Evidence include the captured assessment, while mobile and later previews start fresh sessions.

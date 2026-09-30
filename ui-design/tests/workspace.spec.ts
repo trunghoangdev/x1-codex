@@ -1433,3 +1433,131 @@ test("reconciliation preserves unknown effects and snapshots the comparison", as
   await page.reload();
   await expect(snapshot).toHaveCount(0);
 });
+
+test("response delivery preserves drafts and prevents unresolved duplicate submissions", async ({
+  page,
+}) => {
+  await page.goto("/#/assignments/A-1042/overview");
+  await page
+    .getByRole("button", { name: "Submit assessment", exact: true })
+    .click();
+  await page
+    .getByLabel("Assessment conclusion", { exact: true })
+    .selectOption("Insufficient evidence");
+  await page
+    .getByLabel("Decision rationale")
+    .fill("Retain this draft until receipt confirmation.");
+  const record = page.getByRole("button", {
+    name: "Record assessment",
+    exact: true,
+  });
+  const delivery = page.getByRole("region", {
+    name: "Response delivery preview",
+  });
+  for (const scenario of ["rejected", "offline"]) {
+    await selectScenario(
+      page.getByLabel("Delivery scenario", { exact: true }),
+      scenario,
+    );
+    await record.click();
+    await expect(record).toBeDisabled();
+    await expect(page.getByLabel("Decision rationale")).toBeDisabled();
+    await expect(delivery).toContainText(
+      scenario === "rejected"
+        ? "Sample response rejected"
+        : "Offline before sending · simulation",
+    );
+    await expect(record).toBeEnabled();
+    await expect(page.getByLabel("Decision rationale")).toHaveValue(
+      "Retain this draft until receipt confirmation.",
+    );
+  }
+  await selectScenario(
+    page.getByLabel("Delivery scenario", { exact: true }),
+    "unknown",
+  );
+  await record.click();
+  await expect(delivery).toContainText("Receipt status unknown");
+  await expect(record).toBeDisabled();
+  await page.keyboard.press("Escape");
+  await page.getByRole("button", { name: "Continue assessment draft" }).click();
+  await expect(delivery).toContainText("Receipt status unknown");
+  await expect(record).toBeDisabled();
+  await page
+    .getByRole("button", { name: "Simulate status check: not received" })
+    .click();
+  await selectScenario(
+    page.getByLabel("Delivery scenario", { exact: true }),
+    "success",
+  );
+  await record.click();
+  await expect(record).toBeDisabled();
+  await expect(page.getByRole("dialog")).toHaveCount(0);
+  await page.getByRole("tab", { name: "Activity", exact: true }).click();
+  await expect(
+    page.getByRole("article", { name: "Decision receipt" }),
+  ).toHaveCount(1);
+});
+
+test("closing while sending requires explicit status resolution on resume", async ({
+  page,
+}) => {
+  await page.goto("/#/assignments/A-1042/overview");
+  await page
+    .getByRole("button", { name: "Submit assessment", exact: true })
+    .click();
+  await page
+    .getByLabel("Assessment conclusion", { exact: true })
+    .selectOption("Insufficient evidence");
+  await page
+    .getByLabel("Decision rationale")
+    .fill("Unconfirmed delivery sample.");
+  await page
+    .getByRole("button", { name: "Record assessment", exact: true })
+    .click();
+  await page.keyboard.press("Escape");
+  await page.getByRole("button", { name: "Continue assessment draft" }).click();
+  await expect(
+    page.getByRole("region", { name: "Response delivery preview" }),
+  ).toContainText("Receipt status unknown");
+  await expect(
+    page.getByRole("button", { name: "Record assessment", exact: true }),
+  ).toBeDisabled();
+});
+
+test("unknown approval delivery also blocks refusal for the same assignment", async ({
+  page,
+}) => {
+  await page.goto("/#/assignments/A-1041/overview");
+  await selectScenario(
+    page.getByLabel("Preview release prerequisites"),
+    "ready",
+  );
+  await page
+    .getByRole("button", { name: "Approve release", exact: true })
+    .click();
+  await page
+    .getByLabel("Decision rationale")
+    .fill("Sample approval subject checked.");
+  await selectScenario(
+    page.getByLabel("Delivery scenario", { exact: true }),
+    "unknown",
+  );
+  await page
+    .getByRole("button", { name: "Record approval", exact: true })
+    .click();
+  await expect(
+    page.getByRole("region", { name: "Response delivery preview" }),
+  ).toContainText("Receipt status unknown");
+  await page.keyboard.press("Escape");
+  await page
+    .getByRole("button", { name: "Refuse release", exact: true })
+    .click();
+  await expect(
+    page.getByRole("region", { name: "Response delivery preview" }),
+  ).toContainText("Receipt status unknown");
+  await expect(page.getByLabel("Decision rationale")).toBeDisabled();
+  await expect(
+    page.getByRole("button", { name: "Record refusal", exact: true }),
+  ).toBeDisabled();
+});
