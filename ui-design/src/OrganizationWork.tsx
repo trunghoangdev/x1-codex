@@ -144,13 +144,15 @@ export function OrganizationWork({
                           ? `${response} recorded in this session. Downstream outcome is not established.`
                           : assignment.id === "A-1041"
                             ? releaseWait[readiness]
-                            : record.wait}
+                            : (record?.wait ??
+                              "Waiting details are not connected for this assignment.")}
                       </p>
                       <p className="org-work-next">
                         <strong>Next step: </strong>
                         {response
                           ? "Inspect the local decision receipt."
-                          : record.next}
+                          : (record?.next ??
+                            "Open the assignment to inspect the available context.")}
                       </p>
                       <button
                         className="button secondary"

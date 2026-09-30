@@ -134,3 +134,5 @@ Iteration 25 collapses scenario selectors under **Demo controls** by default. Ex
 Iteration 26 groups Organization work into **Awaiting response**, **Blocked** and **Responded**, with combined project/role/status filters and empty-state recovery. Release blockers follow the current demo prerequisites; local responses move into Responded without implying execution success.
 
 Iteration 27 preserves Evidence searches and Activity filters per assignment for the session. Returning to My Work restores the opened row and scroll position when available, otherwise the heading. Refresh clears this context.
+
+Iteration 28 checks long content and larger lists using browser-only fixture overrides: 50 assignments, 63 evidence records and a long multiline rationale on mobile/desktop. Long labels now wrap, and Organization handles missing authored details. The normal demo dataset is unchanged; this is not a large-scale performance benchmark.

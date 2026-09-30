@@ -309,3 +309,13 @@ Opening an assignment from My Work remembers its row and scroll position. Return
 No durable storage or backend integration was added. Screenshots remain the iteration 23 checkpoint.
 
 Validation: production build and all 30 browser tests passed. Added coverage checks per-assignment lookup state across tabs, UI/history inbox return focus, mobile scroll restoration, completed-row fallback, isolation and refresh reset.
+
+## 28 — Long-content and larger-list review
+
+Added browser-only fixture overrides for 50 assignments, 63 evidence records on A-1042, long unbroken titles/project/producer names and a multiline rationale of over 4,000 characters. The normal demo fixtures remain unchanged. Tests exercise search, assignment details, evidence inspection, response recording, receipts and Organization at 390px and 1440px.
+
+The initial tests reproduced horizontal overflow on assignment detail screens. Human-readable headings, metadata and artifact labels now wrap long values; flex/grid children can shrink within their containers. Code and diff regions retain their own scrolling rather than globally hiding overflow. Organization now shows explicit missing-detail text when an assignment lacks an authored waiting reason or next step, instead of assuming a matching fixture exists.
+
+This is a bounded content/layout check, not a performance benchmark or support claim for arbitrarily large datasets. Pagination/virtualization and backend data loading are outside this slice. Preview screenshots remain the iteration 23 checkpoint.
+
+Validation: production build and all 32 browser tests passed, including the two new content-scale cases at mobile and desktop widths.

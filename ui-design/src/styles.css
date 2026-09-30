@@ -2885,3 +2885,42 @@ textarea::placeholder,
     font-size: 16px;
   }
 }
+
+/* Long human-readable values wrap; source/diff regions retain local scrolling. */
+main h1,
+main h2,
+main h3,
+.modal h2,
+.modal h3,
+.assignment-meta,
+.assignment-sub,
+.assignment-main,
+.detail-meta,
+.summary,
+.artifact-link,
+.org-work-item,
+.timeline-item,
+.modal > p,
+.receipt-heading,
+.release-subject p {
+  overflow-wrap: anywhere;
+  min-width: 0;
+}
+.assignment-meta,
+.assignment-sub,
+.detail-meta {
+  flex-wrap: wrap;
+}
+.artifact-link > span,
+.timeline-item > div,
+.modal-header h2 {
+  min-width: 0;
+}
+.artifact-properties {
+  grid-template-columns: 100px minmax(0, 1fr);
+}
+.work-filters > label,
+.org-filters > label {
+  min-width: 0;
+  max-width: 100%;
+}
