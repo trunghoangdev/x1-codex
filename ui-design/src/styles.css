@@ -2976,3 +2976,52 @@ main h3,
   margin: 0;
   min-width: 0;
 }
+
+.revision-cycle {
+  padding: 24px;
+  margin-bottom: 24px;
+}
+.revision-cycle p {
+  color: #526343;
+  line-height: 1.7;
+}
+.revision-steps {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 12px;
+  padding-left: 24px;
+}
+.revision-steps li {
+  margin-right: 16px;
+}
+.revision-steps button {
+  min-height: 44px;
+  white-space: normal;
+}
+.revision-steps [aria-current="step"] {
+  border: 2px solid #2c5145;
+  font-weight: 600;
+}
+.revision-record {
+  border-top: 1px solid var(--line);
+  padding-top: 20px;
+  overflow-wrap: anywhere;
+}
+.revision-record code {
+  font-size: 12px;
+  overflow-wrap: anywhere;
+}
+.revision-record .text-link {
+  min-height: 44px;
+  white-space: normal;
+  text-align: left;
+}
+@media (max-width: 700px) {
+  .revision-cycle {
+    padding: 16px;
+  }
+  .revision-steps {
+    display: grid;
+    grid-template-columns: minmax(0, 1fr);
+  }
+}

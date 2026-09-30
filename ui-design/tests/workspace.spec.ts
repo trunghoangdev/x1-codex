@@ -1619,26 +1619,79 @@ test("criterion assessments preserve draft details and snapshot independent evid
     name: "Recorded criterion assessments",
   });
   await expect(snapshots.locator("article")).toHaveCount(4);
-  const duplicate = snapshots
-    .locator("article")
-    .filter({
-      has: page.getByRole("heading", { name: criterion, exact: true }),
-    });
+  const duplicate = snapshots.locator("article").filter({
+    has: page.getByRole("heading", { name: criterion, exact: true }),
+  });
   await expect(duplicate).toContainText("Insufficient evidence");
   await expect(duplicate).toContainText("AR-775 · Test results · A-1042");
   await expect(duplicate).toContainText(
     "candidate-specific duplicate coverage is missing",
   );
-  const delay = snapshots
-    .locator("article")
-    .filter({
-      has: page.getByRole("heading", {
-        name: "Bound retry delay",
-        exact: true,
-      }),
-    });
+  const delay = snapshots.locator("article").filter({
+    has: page.getByRole("heading", {
+      name: "Bound retry delay",
+      exact: true,
+    }),
+  });
   await expect(delay).toContainText("Not reviewed");
   await expect(delay).toContainText("No evidence cited");
   await page.reload();
   await expect(snapshots).toHaveCount(0);
+});
+
+test("revision cycle links exact subjects without inheriting prior decisions", async ({
+  page,
+}) => {
+  await page.goto("/#/organization");
+  const cycle = page.getByRole("region", {
+    name: "Revision cycle · standalone sample",
+  });
+  const record = page.getByRole("article", {
+    name: "Selected revision record",
+  });
+  await cycle
+    .getByRole("button", { name: "DEMO-A1 · Assessment", exact: true })
+    .focus();
+  await page.keyboard.press("Enter");
+  await expect(record.getByRole("heading", { level: 3 })).toBeFocused();
+  await expect(record).toContainText("Changes requested");
+  await expect(record).toContainText("sha256:" + "e".repeat(64));
+  await record
+    .getByRole("button", { name: "Assesses exact contribution → DEMO-C1" })
+    .click();
+  await expect(record).toContainText("Initial retry implementation");
+  await cycle
+    .getByRole("button", { name: "DEMO-C2 · Contribution", exact: true })
+    .click();
+  await expect(record).toContainText("sha256:" + "f".repeat(64));
+  await expect(record).toContainText("not yet assessed");
+  await record
+    .getByRole("button", { name: "Responds to revision request → DEMO-W2" })
+    .click();
+  await expect(record).toContainText("Add duplicate-event tests");
+  await cycle
+    .getByRole("button", { name: "DEMO-A2 · Reassessment", exact: true })
+    .click();
+  await expect(record).toContainText("Awaiting review · no conclusion");
+  await expect(record).toContainText("sha256:" + "f".repeat(64));
+  await record
+    .getByRole("button", {
+      name: "Earlier assessment for context only → DEMO-A1",
+    })
+    .click();
+  await expect(record).toContainText("sha256:" + "e".repeat(64));
+  await expect(
+    cycle.getByRole("button", { name: "DEMO-A1 · Assessment", exact: true }),
+  ).toHaveAttribute("aria-current", "step");
+  await page.setViewportSize({ width: 390, height: 844 });
+  expect(
+    await page.evaluate(
+      () => document.documentElement.scrollWidth <= innerWidth,
+    ),
+  ).toBe(true);
+  await page.reload();
+  await expect(record).toContainText("Initial retry implementation");
+  await expect(
+    page.getByRole("region", { name: "Needs your attention" }),
+  ).toContainText("5 open assignments");
 });

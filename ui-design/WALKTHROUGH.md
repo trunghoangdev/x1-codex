@@ -72,6 +72,12 @@ Open **A-1035** and compare Expected, Observed and Still needed. Observation 238
 
 Before recording a response, expand **Demo controls · Response delivery** and select a Delivery scenario. Rejected and Offline before sending retain the draft. Acknowledgement lost blocks resend until **Simulate status check: not received** explicitly resolves the sample uncertainty. Then select Receipt confirmed to retry. Closing during Sending also preserves an unknown status on resume. None of these actions contacts SF; refresh clears the entire simulation.
 
+## Optional: follow a revision cycle
+
+In **Organization**, find **Revision cycle · standalone sample**. Select DEMO-A1 to see Changes requested on revision 1, then follow its contribution reference. Open DEMO-C2 and follow the revision request back to DEMO-W2. Finally inspect DEMO-A2: its subject is revision 2 and its review remains pending. The earlier assessment is context, not a verdict on the new subject.
+
+This is a separate authored example, not A-1042 history. Recording Changes requested in the live prototype does not automatically create these records. No new candidate file bodies or verified test evidence are supplied by this example.
+
 ## End with the boundaries
 
 Screen URLs and My Work filters are shareable. Drafts, receipts, completions and scenario choices are session-only; refresh clears them. Activity filters and Evidence searches survive navigation per assignment and reset on refresh. Returning to My Work restores the opened row when it remains in the list. Screenshots show selected moments, not one persistent cross-image database: Organization/Evidence include the captured assessment, while mobile and later previews start fresh sessions.

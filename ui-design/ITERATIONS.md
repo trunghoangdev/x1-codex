@@ -359,3 +359,13 @@ Criterion edits count as a session draft even without an overall conclusion or r
 Receipts snapshot all four criterion definitions, statuses, notes and cited record identities/titles. Unreviewed/no-evidence states are explicit. These are reviewer statements, not verified checks; they neither derive nor override the overall conclusion. Per-criterion completion is not a new mandatory SF rule: partial reviews can be recorded with the existing required overall conclusion and rationale. Refresh clears session data. Screenshots remain at iteration 23.
 
 Validation: production build and 37 tests passed initially. After giving criterion notes their own CSS class, build and all three targeted criterion/long-content tests passed (39 tests total). Coverage checks structured-only draft resumption, independent citations, unreviewed defaults, locked pending submission, receipt snapshots, mobile layout and refresh reset.
+
+## 33 — Explicit revision-cycle scenario
+
+Organization now includes a standalone five-record cycle: DEMO-C1 contribution, DEMO-A1 changes-requested assessment, DEMO-W2 revision request, DEMO-C2 revised contribution and DEMO-A2 pending reassessment. Selecting a step opens its actor, state, subject and explicit references; reference buttons navigate to the actual related sample record and focus its heading.
+
+Revision 1 and revision 2 have distinct synthetic digests. The first assessment stays attached to revision 1, while the second assessment awaits review of revision 2. The worker's claimed new coverage is not a verified result. Earlier records are preserved, and nothing implies release authorization or deployment success.
+
+This cycle is deliberately independent of the existing assignments and local receipts. It is authored sample history, not automatically produced by selecting Changes requested on A-1042. No worker runs, files, assignments or server records are created. Missing file bodies and test reports remain explicit. Selection resets on leaving Organization or refresh. Screenshots remain the iteration 23 checkpoint.
+
+Validation: production build and all 40 browser tests passed. The new test checks keyboard selection/focus, explicit reference navigation, separate revision identities, pending reassessment, preserved earlier assessment, mobile overflow and reset without changing assignment counts.

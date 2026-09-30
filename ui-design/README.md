@@ -144,3 +144,5 @@ Iteration 30 adds an expected-versus-observed reconciliation view for **A-1035**
 Iteration 31 simulates response delivery with pending, rejection, offline and unknown acknowledgement states. Drafts survive unsuccessful attempts; unknown status requires explicit sample resolution before retry. Receipt confirmation remains local, with no network or durable deduplication.
 
 Iteration 32 adds per-criterion statuses, notes and evidence citations to A-1042 assessments. Drafts retain these independently of the overall conclusion; receipts snapshot each criterion, including unreviewed and missing-evidence states.
+
+Iteration 33 adds a **Revision cycle · standalone sample** explorer in Organization. Five linked records demonstrate contribution, assessment, explicit revision request, revised contribution and pending reassessment, with separate subject identities and preserved earlier decisions. This does not advance real or session assignments.

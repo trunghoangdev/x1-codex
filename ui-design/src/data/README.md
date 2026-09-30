@@ -10,6 +10,7 @@ This directory contains plain TypeScript data and view models, with no React imp
 - `checks.ts`: alternative validator observation scenarios; shared types live in `models.ts`.
 - `requirements.ts`: authored sample review criteria, independent of candidate file contents.
 - `organization.ts`: authored waiting/next-step explanations and release-state summaries.
+- `revisionCycle.ts`: independent five-record contribution/review/revision scenario with explicit references and synthetic subject identities.
 - `reconciliation.ts`: independent synthetic staging expectation and incomplete observation for A-1035.
 - `release.ts`: one synthetic release subject shared by evidence, confirmation and receipts.
 

@@ -1,3 +1,4 @@
+import { RevisionCycle } from "./RevisionCycle";
 import { CriterionAssessment, snapshotCriteria } from "./CriterionAssessment";
 import type { CriterionReview } from "./data/models";
 import { useResponseSubmission } from "./useResponseSubmission";
@@ -1234,6 +1235,7 @@ function App() {
                 readiness={readiness}
                 onOpen={open}
               />
+              <RevisionCycle />
               <div className="role-grid">
                 {[
                   {
