@@ -2,15 +2,19 @@
 
 An English-language, roughly 10-minute walkthrough of human review and release authority. All people, assignments, evidence and outcomes are fictional. This demonstrates the UI, not a working Software Factory integration.
 
-Current screenshots: iteration 35, 20 captures. Modal screenshots show the visible scrolled portion of the dialog; they do not imply every field fits at once.
+Workflow screenshots: iteration 35, 20 captures; these predate the organization overview. Modal screenshots show the visible scrolled portion of the dialog; they do not imply every field fits at once.
 
 ## Start a clean session
 
-From `ui-design`, run `npm run dev -- --port 4173 --strictPort` and open the URL printed by Vite. Refresh once before presenting: this clears local responses, drafts and preview scenarios. Navigate to `#/work` to reset URL filters as well. No account or backend is required.
+From `ui-design`, run `npm run dev -- --port 4173 --strictPort` and open the URL printed by Vite. Refresh once before presenting: this clears local responses, drafts and preview scenarios. The root URL opens Organization; `#/work` opens the personal inbox with reset filters. No account or backend is required.
 
 Explain that Alex Morgan is a sample persona with several roles. A role's label is not a production permission check. The demo day and deadlines are fixed samples.
 
 Demo scenario selectors are collapsed by default under **Demo controls**. Expand the relevant group before changing Data preview, Checks, release prerequisites or decision-change simulations. Collapsing controls preserves the selected scenario; results and blocking messages remain visible.
+
+## Organization first
+
+Start at the root URL. Compare the two workstreams, their goals, coordination and unverified outcomes. Inspect the scoped role bindings: Alex holds several distinct responsibilities. The production release, staging reconciliation and accessibility assessment remain separate related work, without invented dependency links. Open a workstream assignment or select **Open My Work · Alex** for personal responsibilities.
 
 ## 1. Find the next responsibility
 

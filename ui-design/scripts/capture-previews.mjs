@@ -8,7 +8,7 @@ const page = await browser.newPage({
   viewport: { width: 1440, height: 1100 },
   deviceScaleFactor: 1,
 });
-await page.goto("http://127.0.0.1:4173");
+await page.goto("http://127.0.0.1:4173/#/work");
 await page.screenshot({
   path: "previews/01-my-work.png",
   animations: "disabled",
@@ -93,7 +93,7 @@ await page.screenshot({
   fullPage: true,
 });
 await page.setViewportSize({ width: 390, height: 844 });
-await page.goto("http://127.0.0.1:4173");
+await page.goto("http://127.0.0.1:4173/#/work");
 await page.screenshot({
   path: "previews/06-mobile.png",
   animations: "disabled",
@@ -233,4 +233,11 @@ await page
     path: "previews/20-revision-cycle.png",
     animations: "disabled",
   });
+await page.setViewportSize({ width: 1440, height: 1000 });
+await page.goto("http://127.0.0.1:4173");
+await page.screenshot({
+  path: "previews/21-organization-overview.png",
+  fullPage: true,
+  animations: "disabled",
+});
 await browser.close();

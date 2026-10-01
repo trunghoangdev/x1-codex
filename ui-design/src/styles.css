@@ -3068,3 +3068,57 @@ main h3,
 .review-jumps button {
   min-height: 44px;
 }
+
+.org-overview-section {
+  margin-bottom: 28px;
+}
+.org-overview-section > p {
+  color: var(--muted);
+  line-height: 1.6;
+}
+.org-stream-grid {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 20px;
+}
+.org-stream {
+  padding: 24px;
+  min-width: 0;
+  overflow-wrap: anywhere;
+}
+.org-stream h3 {
+  font-size: 21px;
+  margin: 16px 0;
+}
+.org-stream p,
+.role-card p {
+  line-height: 1.6;
+}
+.org-stream-assignment {
+  border-top: 1px solid #e4e8ed;
+  padding: 16px 0;
+}
+.org-stream-assignment button {
+  text-align: left;
+  white-space: normal;
+  overflow-wrap: anywhere;
+}
+.org-outcome {
+  padding: 16px;
+  background: #f3f6f8;
+  border-radius: 8px;
+}
+@media (max-width: 800px) {
+  .org-stream-grid {
+    grid-template-columns: 1fr;
+  }
+}
+.org-stream > p {
+  margin: 12px 0;
+}
+.org-stream h4 {
+  margin: 20px 0 12px;
+}
+.org-overview-section > p {
+  margin: 8px 0 16px;
+}

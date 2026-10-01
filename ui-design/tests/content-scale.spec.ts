@@ -33,7 +33,7 @@ for (const width of [390, 1440]) {
           () => document.documentElement.scrollWidth <= innerWidth,
         ),
       ).toBe(true);
-    await page.goto("/");
+    await page.goto("/#/work");
     await expect(page.locator(".assignment-row")).toHaveCount(50);
     await fits();
     await page.getByLabel("Search assignments").fill("SCALE-44");

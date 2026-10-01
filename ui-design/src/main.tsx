@@ -1,3 +1,4 @@
+import { OrganizationOverview } from "./OrganizationOverview";
 import { Modal } from "./Modal";
 import { ResponseDialog } from "./ResponseDialog";
 import { useResponseDrafts } from "./useResponseDrafts";
@@ -339,8 +340,8 @@ function App() {
         <nav id="workspace-navigation" aria-label="Main navigation">
           {(
             [
-              ["My Work", Inbox],
               ["Organization", Users],
+              ["My Work", Inbox],
               ["Evidence", Layers3],
             ] as const
           ).map(([name, Icon]) => (
@@ -1144,126 +1145,18 @@ function App() {
           )}
           {view === "Organization" && (
             <>
-              <div className="page-heading">
-                <div>
-                  <div className="eyebrow">PEOPLE + AGENTS</div>
-                  <h1 tabIndex={-1}>One team. Clear responsibility.</h1>
-                  <p>
-                    See who contributes, who assesses, and who has the authority
-                    to decide.
-                  </p>
-                </div>
-                <span className="badge work">Software Factory</span>
-              </div>
-              <div className="org-banner">
-                <div>
-                  <span className="section-label">ORGANIZATION</span>
-                  <h2>Build software with accountable collaboration.</h2>
-                  <p>
-                    Human judgment and specialized workers, connected through
-                    explicit assignments.
-                  </p>
-                </div>
-                <Users size={55} />
-              </div>
+              <OrganizationOverview
+                completed={completed}
+                readiness={readiness}
+                onOpen={open}
+                onMyWork={() => navigate("My Work")}
+              />
               <OrganizationWork
                 completed={completed}
                 readiness={readiness}
                 onOpen={open}
               />
               <RevisionCycle />
-              <div className="role-grid">
-                {[
-                  {
-                    role: "Planner",
-                    name: "Jamie Chen",
-                    type: "Human",
-                    initials: "JC",
-                    permission: "Propose assignments",
-                    count: "2 planning",
-                    icon: BookOpen,
-                  },
-                  {
-                    role: "Developer",
-                    name: "Codex worker",
-                    type: "AI worker",
-                    initials: "CW",
-                    permission: "Submit source contributions",
-                    count: "1 contribution ready",
-                    icon: Code2,
-                  },
-                  {
-                    role: "Reviewer",
-                    name: "Alex Morgan",
-                    type: "Human · You",
-                    initials: "AM",
-                    permission: "Submit assessments",
-                    count: `${active.filter((a) => a.kind === "Assessment").length} awaiting review`,
-                    icon: FileCheck2,
-                  },
-                  {
-                    role: "Release authority",
-                    name: "Alex Morgan",
-                    type: "Human · You",
-                    initials: "AM",
-                    permission: "Approve or refuse releases",
-                    count: completed["A-1041"]
-                      ? "Local response recorded"
-                      : "1 decision requested",
-                    icon: ShieldCheck,
-                  },
-                  {
-                    role: "Executor",
-                    name: "Release runner",
-                    type: "Deterministic worker",
-                    initials: "RR",
-                    permission: "Execute authorized releases",
-                    count: "Execution status not connected",
-                    icon: GitBranch,
-                  },
-                ].map(
-                  ({
-                    role,
-                    name,
-                    type,
-                    initials,
-                    permission,
-                    count,
-                    icon: Icon,
-                  }) => (
-                    <section className="panel role-card" key={role}>
-                      <div className="role-top">
-                        <span className="row-icon work">
-                          <Icon size={22} />
-                        </span>
-                        <span className="badge neutral">{type}</span>
-                      </div>
-                      <h2>{role}</h2>
-                      <div className="role-person">
-                        <span className="avatar">{initials}</span>
-                        <strong>{name}</strong>
-                      </div>
-                      <div className="section-rule" />
-                      <p className="role-permission">
-                        <LockKeyhole size={14} />
-                        {permission}
-                      </p>
-                      <span className="role-count">
-                        <span className="live-dot" />
-                        {count} · sample
-                      </span>
-                    </section>
-                  ),
-                )}
-              </div>
-              <div className="inline-note">
-                <ShieldCheck size={19} />
-                <p>
-                  Roles describe responsibility. A worker binding identifies who
-                  performs it. Permission to contribute does not imply
-                  permission to approve or execute.
-                </p>
-              </div>
             </>
           )}
           {view === "Evidence" && (

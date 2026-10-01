@@ -20,7 +20,8 @@ const viewPaths: Record<WorkspaceView, string> = {
 export function useWorkspaceRoute(ids: string[], tabs: string[]) {
   function read(): WorkspaceRoute {
     const fallback: WorkspaceRoute = { view: "My Work", tab: "Overview" };
-    if (!location.hash || location.hash === "#") return fallback;
+    if (!location.hash || location.hash === "#")
+      return { ...fallback, view: "Organization" };
     const raw = location.hash.slice(1);
     const separator = raw.indexOf("?");
     fallback.work = readWorkFilters(

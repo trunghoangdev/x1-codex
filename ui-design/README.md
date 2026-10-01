@@ -1,6 +1,6 @@
 # Forge workspace · UI prototype v1
 
-An interactive English-language design for humans and AI workers collaborating in a Software Factory. The opening screen makes the user's next responsibility clear; assignment details connect that responsibility to its input, evidence, and authority.
+An interactive English-language design for humans and AI workers collaborating in a Software Factory. The opening Organization screen connects shared goals, parallel workstreams and scoped worker roles. My Work is Alex's personal entry into assignments, evidence and decisions.
 
 ## Run
 
@@ -19,10 +19,10 @@ Follow the [complete demo walkthrough](WALKTHROUGH.md) for review, draft, eviden
 
 ## Design decisions
 
-- **Information hierarchy:** responsibility first, then input, evidence, authority, and response.
+- **Information hierarchy:** organization goals and coordination first; personal responsibilities then connect to input, evidence, authority and responses.
 - **Visual language:** deep green navigation, warm neutral surfaces, restrained amber for authority, slate blue for assessments, and lavender for reconciliation. Text labels accompany color.
 - **Typography:** system sans-serif; no remote font dependency.
-- **Navigation:** My Work, Organization, Evidence. More administrative screens should be designed around demonstrated operational needs.
+- **Navigation:** Organization (default), My Work, Evidence. More administrative screens should be designed around demonstrated operational needs.
 - **Layout:** persistent desktop navigation; responsive cards and assignment rows; a navigation toggle on narrow screens. Assignment authority stays visible beside its context on large screens and follows it on small screens.
 - **Interaction:** search, responsibility filters, completed work, assignment tabs, artifact inspection, rationale validation, local decision records, keyboard-focus containment and Escape dismissal for dialogs.
 
@@ -167,3 +167,9 @@ Iteration 36 extracts response presentation and draft state without changing UI 
 - `useResponseSubmission.ts`: existing app-owned delivery simulation.
 
 Receipt creation and page composition still live in `main.tsx`; this is an incremental refactor.
+
+## Organization overview
+
+Two authored workstreams model payment webhook reliability and invitation improvements. Four workers hold seven scoped role bindings. See [the organization model](ORGANIZATION-MODEL.md) for the scenario boundaries and next increment. Existing iteration 35 previews predate this overview.
+
+[Organization overview · iteration 37](previews/21-organization-overview.png)

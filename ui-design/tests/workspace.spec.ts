@@ -5,7 +5,7 @@ test("reviewer assesses evidence, records rationale and completes the assignment
 }) => {
   const errors: string[] = [];
   page.on("pageerror", (error) => errors.push(error.message));
-  await page.goto("/");
+  await page.goto("/#/work");
   await page
     .getByRole("textbox", { name: "Search assignments" })
     .fill("A-1042");
@@ -54,7 +54,7 @@ for (const response of ["Approval", "Refusal"]) {
   test(`${response} requires rationale and does not establish a deployment effect`, async ({
     page,
   }) => {
-    await page.goto("/");
+    await page.goto("/#/work");
     await page.getByRole("button", { name: "View release assignment" }).click();
     if (response === "Approval")
       await selectScenario(
@@ -102,7 +102,7 @@ test("filters, responsive navigation and modal fit a phone screen", async ({
   page,
 }) => {
   await page.setViewportSize({ width: 390, height: 844 });
-  await page.goto("/");
+  await page.goto("/#/work");
   await page.getByRole("button", { name: /Needs my authority/ }).click();
   await expect(page.locator(".assignment-row")).toHaveCount(1);
   await page.getByRole("button", { name: "Clear filter" }).click();
@@ -132,7 +132,7 @@ test("filters, responsive navigation and modal fit a phone screen", async ({
 test("attempts preserve unknown outcomes and keyboard navigation", async ({
   page,
 }) => {
-  await page.goto("/");
+  await page.goto("/#/work");
   await page.getByRole("button", { name: /A-1042.*Review retry/ }).click();
   await page.getByRole("tab", { name: "Overview", exact: true }).focus();
   await page.keyboard.press("ArrowRight");
@@ -173,7 +173,7 @@ test("attempts preserve unknown outcomes and keyboard navigation", async ({
 test("candidate shows a scoped diff, file changes and unverified identities", async ({
   page,
 }) => {
-  await page.goto("/");
+  await page.goto("/#/work");
   await page.getByRole("button", { name: /A-1042.*Review retry/ }).click();
   await page.getByRole("tab", { name: "Candidate", exact: true }).click();
   const panel = page.getByRole("tabpanel");
@@ -211,7 +211,7 @@ test("candidate shows a scoped diff, file changes and unverified identities", as
 test("checks distinguish observations from decisions without changing work", async ({
   page,
 }) => {
-  await page.goto("/");
+  await page.goto("/#/work");
   await page.getByRole("button", { name: /A-1042.*Review retry/ }).click();
   await page.getByRole("tab", { name: "Checks", exact: true }).click();
   const observation = page.getByRole("article", {
@@ -271,7 +271,7 @@ test("checks distinguish observations from decisions without changing work", asy
 test("release approval requires prerequisites and binds its exact subject", async ({
   page,
 }) => {
-  await page.goto("/");
+  await page.goto("/#/work");
   await page.getByRole("button", { name: "View release assignment" }).click();
   const approve = page.getByRole("button", {
     name: "Approve release",
@@ -324,7 +324,7 @@ test("release approval requires prerequisites and binds its exact subject", asyn
 test("decision receipt snapshots identity, time and rationale without leaking across assignments", async ({
   page,
 }) => {
-  await page.goto("/");
+  await page.goto("/#/work");
   await page.getByRole("button", { name: "View release assignment" }).click();
   await page
     .getByRole("button", { name: "Refuse release", exact: true })
@@ -373,7 +373,7 @@ test("decision receipt snapshots identity, time and rationale without leaking ac
 test("evidence and inspector stay scoped and expose only connected references", async ({
   page,
 }) => {
-  await page.goto("/");
+  await page.goto("/#/work");
   await page.getByRole("button", { name: "View release assignment" }).click();
   await page.getByRole("tab", { name: "Evidence", exact: false }).click();
   const panel = page.getByRole("tabpanel");
@@ -421,7 +421,7 @@ test("evidence and inspector stay scoped and expose only connected references", 
 test("attempt failures distinguish process exit, platform state and cleanup", async ({
   page,
 }) => {
-  await page.goto("/");
+  await page.goto("/#/work");
   await page.getByRole("button", { name: /A-1042.*Review retry/ }).click();
   await page.getByRole("tab", { name: "Attempts", exact: true }).click();
   const failed = page.getByRole("article", {
@@ -461,7 +461,7 @@ test("phone assignment tabs are all visible and response shortcut moves focus", 
   page,
 }) => {
   await page.setViewportSize({ width: 390, height: 844 });
-  await page.goto("/");
+  await page.goto("/#/work");
   await page.getByRole("button", { name: /A-1042.*Review retry/ }).click();
   const tabs = page.getByRole("tab");
   await expect(tabs).toHaveCount(6);
@@ -496,7 +496,7 @@ test("phone assignment tabs are all visible and response shortcut moves focus", 
 test("overview separates permitted scope, required deliverables and unproven criteria", async ({
   page,
 }) => {
-  await page.goto("/");
+  await page.goto("/#/work");
   await page.getByRole("button", { name: /A-1042.*Review retry/ }).click();
   const requirements = page.getByRole("region", {
     name: "Work requirements",
@@ -533,7 +533,7 @@ test("overview separates permitted scope, required deliverables and unproven cri
 test("related records preserve assignment, checked subject and preview state", async ({
   page,
 }) => {
-  await page.goto("/");
+  await page.goto("/#/work");
   await page.getByRole("button", { name: /A-1042.*Review retry/ }).click();
   await page.getByRole("tab", { name: "Attempts", exact: true }).click();
   await expect(
@@ -591,7 +591,7 @@ for (const state of ["load-error", "stale", "revoked"]) {
   test(`release ${state} blocks both decisions and resets without granting readiness`, async ({
     page,
   }) => {
-    await page.goto("/");
+    await page.goto("/#/work");
     await page.getByRole("button", { name: "View release assignment" }).click();
     await selectScenario(
       page.getByLabel("Preview release prerequisites"),
@@ -895,7 +895,7 @@ test("My Work filters round-trip through URLs and preserve assignment context", 
 test("keyboard access skips navigation and dialogs contain focus then restore the opener", async ({
   page,
 }) => {
-  await page.goto("/");
+  await page.goto("/#/work");
   await page.keyboard.press("Tab");
   await expect(
     page.getByRole("link", { name: "Skip to main content" }),
@@ -1034,6 +1034,18 @@ test("Organization connects responsibilities, release blockers and local respons
   await page.getByRole("button", { name: "Record assessment" }).click();
   await page.getByRole("button", { name: "Organization", exact: true }).click();
   await expect(work).toContainText("4 open assignments");
+  await expect(
+    page.getByRole("article", {
+      name: "Payment webhook reliability",
+      exact: true,
+    }),
+  ).toContainText("Local response recorded");
+  await expect(
+    page.getByRole("article", {
+      name: "Payment webhook reliability",
+      exact: true,
+    }),
+  ).toContainText("Not verified");
   await expect(work).toContainText("Downstream outcome is not established");
   await expect(
     page.locator(".role-card").filter({
@@ -1115,7 +1127,7 @@ test("Activity and evidence lookup stay scoped to their assignment", async ({
 test("inbox counts follow load state and screen changes move keyboard focus", async ({
   page,
 }) => {
-  await page.goto("/");
+  await page.goto("/#/work");
   const badge = page
     .getByRole("navigation", { name: "Main navigation" })
     .getByRole("button", { name: /My Work/ })
@@ -1167,7 +1179,7 @@ async function selectScenario(locator: Locator, value: string) {
 test("demo controls start collapsed and retain selected scenarios when toggled", async ({
   page,
 }) => {
-  await page.goto("/");
+  await page.goto("/#/work");
   const summary = page.locator(".demo-controls summary");
   const preview = page.getByLabel("Data preview", { exact: true });
   await expect(preview).toBeHidden();
@@ -1756,4 +1768,40 @@ test("long review collapses criteria without losing edits and offers keyboard se
       () => document.documentElement.scrollWidth <= innerWidth,
     ),
   ).toBe(true);
+});
+
+test("Organization is the default entry with scoped workers and independent goals", async ({
+  page,
+}) => {
+  await page.goto("/");
+  const streams = page.getByRole("region", {
+    name: "Organization workstreams",
+  });
+  await expect(streams.getByRole("article")).toHaveCount(2);
+  await expect(
+    page
+      .getByRole("region", { name: "Roles and worker bindings" })
+      .getByRole("article"),
+  ).toHaveCount(7);
+  const payment = page.getByRole("article", {
+    name: "Payment webhook reliability",
+    exact: true,
+  });
+  await expect(payment).toContainText("Not verified");
+  await payment
+    .getByRole("button", { name: "3 attached evidence records · inspect" })
+    .click();
+  await expect(page).toHaveURL(/assignments\/A-1042\/evidence/);
+  await page.goBack();
+  await expect(streams).toBeVisible();
+  await page.getByRole("button", { name: "Open My Work · Alex" }).click();
+  await expect(page).toHaveURL(/#\/work/);
+  await page.goto("/");
+  await page.setViewportSize({ width: 390, height: 844 });
+  await expect(streams).toBeVisible();
+  expect(
+    await page.evaluate(
+      () => document.documentElement.scrollWidth <= window.innerWidth,
+    ),
+  ).toBeTruthy();
 });

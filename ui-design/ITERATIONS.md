@@ -397,3 +397,11 @@ Delivery state remains in the existing app-owned `useResponseSubmission` hook; r
 No field, validation rule, markup behavior, storage boundary or sample data changed. The shared modal keeps its existing focus, inert-background and Escape behavior. Iteration 35 previews remain current.
 
 Validation: production build and all 41 existing browser tests passed after extraction, including draft isolation/deletion, delivery ambiguity, modal focus, long content and structured receipts. No tests were added solely to assert file placement.
+
+## 37 — Organization-first overview
+
+Organization becomes the default root screen and first navigation entry. My Work remains the explicit personal route. The overview introduces two authored workstreams, four workers and seven scoped role bindings; current assignments link to their details and attached evidence. Separate production, staging and accessibility subjects stay outside the modeled streams rather than acquiring invented dependencies.
+
+Local response labels update independently of unverified goal outcomes. Existing personal attention and revision-cycle sections remain available below the organization overview. The new model is sample design data, not an SF API contract, org-wide backlog or real permission enforcement. `ORGANIZATION-MODEL.md` records these boundaries and the next workstream-detail increment.
+
+Validation: production build and all 42 browser tests passed. Added default-entry, workstream/evidence navigation, scoped-binding count and mobile-width coverage; extended response coverage to verify the goal remains unverified. A new desktop overview preview supplements the iteration 35 workflow images.
