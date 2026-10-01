@@ -158,3 +158,12 @@ New workflow previews:
 - [Revision cycle — pending reassessment](previews/20-revision-cycle.png)
 
 Iteration 35 refreshes all previews and connects the walkthrough to the current assessment, delivery and reconciliation flows. Earlier screenshot-freshness notes are historical.
+
+Iteration 36 extracts response presentation and draft state without changing UI behavior:
+
+- `ResponseDialog.tsx`: response form, structured assessment/reconciliation inputs and delivery controls.
+- `useResponseDrafts.ts`: session drafts, structured fields, deletion and completion cleanup; invoked by the app.
+- `Modal.tsx`: shared dialog shell and keyboard/focus behavior.
+- `useResponseSubmission.ts`: existing app-owned delivery simulation.
+
+Receipt creation and page composition still live in `main.tsx`; this is an incremental refactor.

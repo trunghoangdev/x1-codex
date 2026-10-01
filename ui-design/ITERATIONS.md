@@ -387,3 +387,13 @@ Refreshed the 15 existing previews and added criterion review, mobile review, un
 README and walkthrough link the current images and explain that modal images capture a visible scrolled region. Earlier iteration screenshot-freshness statements remain historical. No application behavior changed in this slice.
 
 Validation: production build passed; the updated capture script completed all 20 screenshots and exercised the UI flows. README/walkthrough links resolve. Mobile criterion review and revision-cycle captures were visually inspected. No application code changed, so the existing 41-test validation remains the prior behavior baseline rather than a new test run in this documentation slice.
+
+## 36 — Response presentation and draft extraction
+
+Moved the shared focus-trapping dialog shell to `Modal.tsx`, the complete response form to `ResponseDialog.tsx`, and draft state/lifecycle operations to `useResponseDrafts.ts`. The application calls the draft hook unconditionally, preserving its lifetime across dialog closure and screen navigation. It clears an assignment's drafts through a named operation after recording a receipt.
+
+Delivery state remains in the existing app-owned `useResponseSubmission` hook; receipt creation, readiness and application navigation remain in the app. The dialog consumes those state owners instead of creating another copy. Main loses roughly 390 lines. This is a bounded refactor, not a complete decomposition of the application or a general backend response framework.
+
+No field, validation rule, markup behavior, storage boundary or sample data changed. The shared modal keeps its existing focus, inert-background and Escape behavior. Iteration 35 previews remain current.
+
+Validation: production build and all 41 existing browser tests passed after extraction, including draft isolation/deletion, delivery ambiguity, modal focus, long content and structured receipts. No tests were added solely to assert file placement.

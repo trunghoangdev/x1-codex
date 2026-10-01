@@ -1,11 +1,11 @@
+import { Modal } from "./Modal";
+import { ResponseDialog } from "./ResponseDialog";
+import { useResponseDrafts } from "./useResponseDrafts";
 import { RevisionCycle } from "./RevisionCycle";
-import { CriterionAssessment, snapshotCriteria } from "./CriterionAssessment";
-import type { CriterionReview } from "./data/models";
+import { snapshotCriteria } from "./CriterionAssessment";
 import { useResponseSubmission } from "./useResponseSubmission";
-import { ResponseSubmission } from "./ResponseSubmission";
 import { ReconciliationReview } from "./ReconciliationReview";
 import { reconciliationSnapshot } from "./data/reconciliation";
-import { DemoControls } from "./DemoControls";
 import { AssignmentActivity } from "./AssignmentActivity";
 import { OrganizationWork } from "./OrganizationWork";
 import { WorkDataPreview, type WorkDataState } from "./WorkDataPreview";
@@ -19,7 +19,7 @@ import type {
 } from "./data/models";
 import { releaseSubject } from "./data/release";
 import { useWorkspaceRoute } from "./useWorkspaceRoute";
-import { DecisionProblem, decisionBlocked } from "./ReleaseReview";
+import { decisionBlocked } from "./ReleaseReview";
 import React, { useEffect, useRef, useState } from "react";
 import { createRoot } from "react-dom/client";
 import {
@@ -63,7 +63,7 @@ import { AssignmentRequirements } from "./AssignmentRequirements";
 import { EvidenceArtifacts, ArtifactContents } from "./EvidenceArtifacts";
 import { evidenceFor, inputFor, type EvidenceArtifact } from "./data/evidence";
 import { sampleCandidate } from "./data/candidate";
-import { ReleaseReview, ReleaseSubject } from "./ReleaseReview";
+import { ReleaseReview } from "./ReleaseReview";
 const assignmentTabs = [
   "Overview",
   "Attempts",
@@ -138,73 +138,21 @@ function App() {
   }
   const [checkScenario, setCheckScenario] = useState<Scenario>("passed");
   const [readiness, setReadiness] = useState<Readiness>("missing");
-  const [decision, setDecision] = useState<string | null>(null);
-  const [drafts, setDrafts] = useState<Record<string, Record<string, string>>>(
-    {},
-  );
-  const [assessmentConclusion, setAssessmentConclusion] = useState<
-    NonNullable<ResponseRecord["assessment"]>["conclusion"] | ""
-  >("");
-  const [assessmentEvidence, setAssessmentEvidence] = useState<string[]>([]);
-  const [reconciliationConclusion, setReconciliationConclusion] = useState<
-    "" | "Still undetermined"
-  >("");
-  const reconciliationForm =
-    selected?.id === "A-1035" && decision === "Reconciliation";
-  const [criterionReviews, setCriterionReviews] = useState<
-    Record<string, CriterionReview>
-  >({});
-  const hasAssessmentDraft =
-    !!assessmentConclusion ||
-    assessmentEvidence.length > 0 ||
-    Object.values(criterionReviews).some(
-      (r) =>
-        r.status !== "Not reviewed" || r.note.trim() || r.evidenceIds.length,
-    );
-  const assessmentForm = selected?.id === "A-1042" && decision === "Assessment";
-  const draftEntries = (id: string) => {
-    const entries = { ...drafts[id] };
-    if (id === "A-1042" && hasAssessmentDraft && !entries.Assessment?.trim())
-      entries.Assessment = "Structured assessment draft";
-    if (
-      id === "A-1035" &&
-      reconciliationConclusion &&
-      !entries.Reconciliation?.trim()
-    )
-      entries.Reconciliation = "Structured reconciliation draft";
-    return Object.entries(entries);
-  };
-  const reason =
-    selected && decision ? (drafts[selected.id]?.[decision] ?? "") : "";
-  function setReason(value: string) {
-    if (!selected || !decision) return;
-    const id = selected.id,
-      kind = decision;
-    setDrafts((previous) => ({
-      ...previous,
-      [id]: { ...previous[id], [kind]: value },
-    }));
-  }
-  function discardDraft(id: string, kind: string) {
-    if (
-      !window.confirm(
-        `Delete the ${kind.toLowerCase()} draft for ${id}? This cannot be undone.`,
-      )
-    )
-      return;
-    if (id === "A-1042" && kind === "Assessment") {
-      setAssessmentConclusion("");
-      setAssessmentEvidence([]);
-      setCriterionReviews({});
-    }
-    if (id === "A-1035" && kind === "Reconciliation")
-      setReconciliationConclusion("");
-    setDrafts((previous) => {
-      const remaining = { ...previous[id] };
-      delete remaining[kind];
-      return { ...previous, [id]: remaining };
-    });
-  }
+  const responseDraft = useResponseDrafts(selected);
+  const {
+    decision,
+    setDecision,
+    assessmentConclusion,
+    assessmentEvidence,
+    reconciliationConclusion,
+    criterionReviews,
+    assessmentForm,
+    reconciliationForm,
+    draftEntries,
+    reason,
+    discardDraft,
+    clearDrafts,
+  } = responseDraft;
   const [notice, setNotice] = useState("");
   const [artifact, setArtifact] = useState<EvidenceArtifact | null>(null);
   const [mobile, setMobile] = useState(false);
@@ -345,24 +293,12 @@ function App() {
       `${decision} recorded in this demo. No external action was taken.`,
     );
     setDecision(null);
-    if (selected.id === "A-1035") setReconciliationConclusion("");
-    if (selected.id === "A-1042") {
-      setAssessmentConclusion("");
-      setAssessmentEvidence([]);
-      setCriterionReviews({});
-    }
-    setDrafts((previous) => {
-      const remaining = { ...previous };
-      delete remaining[selected.id];
-      return remaining;
-    });
+    clearDrafts(selected.id);
   }
   const submission = useResponseSubmission(
     selected && decision ? selected.id : "",
     commitDecision,
   );
-  const deliveryLocked =
-    submission.state === "sending" || submission.state === "unknown";
   return (
     <div className="app">
       <a
@@ -1484,220 +1420,13 @@ function App() {
         </div>
       )}
       {decision && selected && (
-        <Modal
-          title={`${decision} for ${selected.id}`}
-          onClose={() => setDecision(null)}
-        >
-          {assessmentForm && (
-            <nav className="review-jumps" aria-label="Assessment sections">
-              <button
-                className="button secondary"
-                onClick={() =>
-                  document.getElementById("criterion-assessments")?.focus()
-                }
-              >
-                Review criteria
-              </button>
-              <button
-                className="button secondary"
-                onClick={() => document.getElementById("rationale")?.focus()}
-              >
-                Overall rationale
-              </button>
-            </nav>
-          )}
-          <ResponseSubmission submission={submission} />
-          <fieldset className="response-form" disabled={deliveryLocked}>
-            <div className="modal-kicker">
-              <ShieldCheck size={18} />
-              {selected.role} · {selected.authority}
-            </div>
-            <p>
-              You are recording a response for <strong>{selected.title}</strong>
-              .
-            </p>
-            {selected.kind === "Authority" && (
-              <>
-                <ReleaseSubject />
-                <p className="demo-note">
-                  Prerequisite snapshot: {readiness}. This decision applies only
-                  to the subject above.
-                </p>
-              </>
-            )}
-            {selected.kind === "Authority" && (
-              <>
-                <DemoControls context="Decision changes">
-                  <label className="check-scenario">
-                    Simulate a change before recording
-                    <select
-                      value={
-                        decisionBlocked(readiness) ? readiness : "unchanged"
-                      }
-                      onChange={(e) =>
-                        setReadiness(e.target.value as Readiness)
-                      }
-                    >
-                      <option value="unchanged" disabled>
-                        No change
-                      </option>
-                      <option value="load-error">
-                        Review data load failed
-                      </option>
-                      <option value="stale">Candidate changed</option>
-                      <option value="revoked">Authority revoked</option>
-                    </select>
-                  </label>
-                </DemoControls>
-                <DecisionProblem
-                  state={readiness}
-                  onReset={() => {
-                    setReadiness("missing");
-                    setDecision(null);
-                  }}
-                />
-              </>
-            )}
-            <p className="demo-note">
-              Draft kept in this session as you type. Closing this dialog does
-              not submit or delete it. Refresh clears it.
-            </p>
-            {reconciliationForm && (
-              <>
-                <ReconciliationReview />
-                <label className="record-filter">
-                  Reconciliation conclusion (required)
-                  <select
-                    aria-label="Reconciliation conclusion"
-                    value={reconciliationConclusion}
-                    onChange={(e) =>
-                      setReconciliationConclusion(
-                        e.target.value as typeof reconciliationConclusion,
-                      )
-                    }
-                  >
-                    <option value="">Choose a conclusion</option>
-                    <option>Still undetermined</option>
-                    <option disabled>
-                      Expected effect confirmed — evidence unavailable
-                    </option>
-                    <option disabled>
-                      Mismatch established — evidence unavailable
-                    </option>
-                  </select>
-                </label>
-                <p className="demo-note">
-                  Proposed UI conclusion. Add what remains unknown and the
-                  evidence needed next in your rationale. This records a
-                  response, not a successful deployment.
-                </p>
-              </>
-            )}
-            {assessmentForm && (
-              <fieldset className="assessment-fields">
-                <legend>Assessment · proposed sample choices</legend>
-                <label>
-                  Assessment conclusion (required)
-                  <select
-                    aria-label="Assessment conclusion"
-                    value={assessmentConclusion}
-                    onChange={(e) =>
-                      setAssessmentConclusion(
-                        e.target.value as typeof assessmentConclusion,
-                      )
-                    }
-                  >
-                    <option value="">Choose a conclusion</option>
-                    <option>Meets criteria</option>
-                    <option>Changes requested</option>
-                    <option>Insufficient evidence</option>
-                  </select>
-                </label>
-                <p>
-                  These are UI proposals, not an SF contract. A conclusion does
-                  not authorize release or verify evidence.
-                </p>
-                <p>
-                  Referenced evidence (optional). Select only records you used;
-                  inspecting a record does not select it.
-                </p>
-                {evidenceFor(selected.id).map((evidence) => (
-                  <label key={evidence.id} className="assessment-evidence">
-                    <input
-                      type="checkbox"
-                      checked={assessmentEvidence.includes(evidence.id)}
-                      onChange={(event) =>
-                        setAssessmentEvidence((old) =>
-                          event.target.checked
-                            ? [...old, evidence.id]
-                            : old.filter((id) => id !== evidence.id),
-                        )
-                      }
-                    />
-                    {evidence.id} · {evidence.title}
-                  </label>
-                ))}
-                <p>
-                  No selection will be recorded as “No evidence cited”.
-                  References remain unverified sample records.
-                </p>
-              </fieldset>
-            )}
-            {assessmentForm && (
-              <CriterionAssessment
-                reviews={criterionReviews}
-                onChange={(id, review) =>
-                  setCriterionReviews((old) => ({ ...old, [id]: review }))
-                }
-              />
-            )}
-            <label className="textarea-label" htmlFor="rationale">
-              {selected.kind === "Work"
-                ? "Contribution and acceptance criteria"
-                : "Decision rationale"}{" "}
-              <span>Required</span>
-            </label>
-            <textarea
-              id="rationale"
-              data-initial-focus
-              rows={5}
-              value={reason}
-              onChange={(e) => setReason(e.target.value)}
-              placeholder="Explain your conclusion and cite the evidence you reviewed…"
-            />
-            <div className="inline-note">
-              <LockKeyhole size={17} />
-              <p>
-                This simulates a record in this browser session. It does not
-                contact Forge, authorize a real release, or persist after
-                refresh.
-              </p>
-            </div>
-          </fieldset>
-          <div className="modal-actions">
-            <button
-              className="button secondary"
-              onClick={() => setDecision(null)}
-            >
-              Cancel
-            </button>
-            <button
-              className="button primary"
-              disabled={
-                deliveryLocked ||
-                !reason.trim() ||
-                (assessmentForm && !assessmentConclusion) ||
-                (reconciliationForm && !reconciliationConclusion) ||
-                (selected.kind === "Authority" && decisionBlocked(readiness)) ||
-                (decision === "Approval" && readiness !== "ready")
-              }
-              onClick={submission.send}
-            >
-              Record {decision.toLowerCase()}
-              <Check size={16} />
-            </button>
-          </div>
-        </Modal>
+        <ResponseDialog
+          selected={selected}
+          draft={responseDraft}
+          readiness={readiness}
+          setReadiness={setReadiness}
+          submission={submission}
+        />
       )}
       {artifact && (
         <Modal title="Artifact inspector" onClose={() => setArtifact(null)}>
@@ -1714,96 +1443,6 @@ function App() {
           </button>
         </Modal>
       )}
-    </div>
-  );
-}
-function Modal({
-  title,
-  onClose,
-  children,
-}: {
-  title: string;
-  onClose: () => void;
-  children: React.ReactNode;
-}) {
-  const ref = useRef<HTMLDivElement>(null);
-  useEffect(() => {
-    const previous = document.activeElement as HTMLElement | null;
-    const el = ref.current;
-    const focusables = () =>
-      Array.from(
-        el?.querySelectorAll<HTMLElement>(
-          'button:not(:disabled), textarea:not(:disabled), input:not(:disabled), select:not(:disabled), summary, a[href], [tabindex="0"]',
-        ) ?? [],
-      ).filter((node) => node.getClientRects().length > 0);
-    const siblings = Array.from(
-      el?.parentElement?.parentElement?.children ?? [],
-    ).filter(
-      (node): node is HTMLElement =>
-        node instanceof HTMLElement && node !== el?.parentElement,
-    );
-    const inertBefore = siblings.map((node) => node.inert);
-    siblings.forEach((node) => {
-      node.inert = true;
-    });
-    const elements = focusables();
-    (
-      el?.querySelector<HTMLElement>("[data-initial-focus]") || elements?.[0]
-    )?.focus();
-    function key(e: KeyboardEvent) {
-      if (e.key === "Escape") onClose();
-      if (e.key === "Tab") {
-        const all = focusables();
-        if (!all?.length) return;
-        const first = all[0],
-          last = all[all.length - 1];
-        if (e.shiftKey && document.activeElement === first) {
-          e.preventDefault();
-          last.focus();
-        } else if (!e.shiftKey && document.activeElement === last) {
-          e.preventDefault();
-          first.focus();
-        }
-      }
-    }
-    document.addEventListener("keydown", key);
-    const old = document.body.style.overflow;
-    document.body.style.overflow = "hidden";
-    return () => {
-      document.removeEventListener("keydown", key);
-      document.body.style.overflow = old;
-      siblings.forEach((node, index) => {
-        node.inert = inertBefore[index];
-      });
-      if (previous?.isConnected) previous.focus();
-    };
-  }, []);
-  return (
-    <div
-      className="modal-backdrop"
-      onMouseDown={(e) => {
-        if (e.target === e.currentTarget) onClose();
-      }}
-    >
-      <div
-        className="modal"
-        role="dialog"
-        aria-modal="true"
-        aria-labelledby="modal-title"
-        ref={ref}
-      >
-        <div className="modal-header">
-          <h2 id="modal-title">{title}</h2>
-          <button
-            className="icon-button"
-            aria-label="Close dialog"
-            onClick={onClose}
-          >
-            <X size={20} />
-          </button>
-        </div>
-        {children}
-      </div>
     </div>
   );
 }
