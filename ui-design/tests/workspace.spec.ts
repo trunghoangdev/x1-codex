@@ -1052,6 +1052,21 @@ test("Organization connects responsibilities, release blockers and local respons
       has: page.getByRole("heading", { name: "Reviewer", exact: true }),
     }),
   ).toContainText("1 awaiting review");
+  await page
+    .getByRole("button", { name: "Explore workstream · WS-01" })
+    .click();
+  await expect(
+    page.getByRole("region", { name: "Workstream assignments and evidence" }),
+  ).toContainText(
+    "Local response recorded · handoff and outcome not established",
+  );
+  await expect(
+    page.getByRole("heading", { name: "Outcome remains unverified" }),
+  ).toBeVisible();
+  await expect(
+    page.getByRole("region", { name: "Coordination and handoffs" }),
+  ).toContainText("Conditional · no follow-up assignment");
+  await page.getByRole("button", { name: "Back to Organization" }).click();
   await work.getByRole("button", { name: "View response · A-1042" }).click();
   await expect(page).toHaveURL(/assignments\/A-1042\/activity/);
   await expect(page.getByRole("tabpanel")).toContainText(
@@ -1804,4 +1819,55 @@ test("Organization is the default entry with scoped workers and independent goal
       () => document.documentElement.scrollWidth <= window.innerWidth,
     ),
   ).toBeTruthy();
+});
+
+test("workstream details preserve scope, routes, focus and conditional handoffs", async ({
+  page,
+}) => {
+  await page.goto("/");
+  await page
+    .getByRole("button", { name: "Explore workstream · WS-01" })
+    .click();
+  await expect(page).toHaveURL(/workstreams\/WS-01/);
+  await expect(
+    page.getByRole("heading", {
+      name: "Payment webhook reliability",
+      exact: true,
+    }),
+  ).toBeFocused();
+  await expect(
+    page.getByRole("region", { name: "Coordination and handoffs" }),
+  ).toContainText("Conditional · no follow-up assignment");
+  await page.getByRole("button", { name: "Inspect evidence · A-1042" }).click();
+  await expect(page).toHaveURL(/assignments\/A-1042\/evidence/);
+  await page.goBack();
+  await expect(
+    page.getByRole("heading", {
+      name: "Payment webhook reliability",
+      exact: true,
+    }),
+  ).toBeFocused();
+  await page.reload();
+  await expect(
+    page.getByRole("region", { name: "Workstream boundaries" }),
+  ).toContainText("different subjects");
+  await page.getByRole("button", { name: "Back to Organization" }).click();
+  await page
+    .getByRole("button", { name: "Explore workstream · WS-02" })
+    .click();
+  await expect(
+    page.getByRole("region", { name: "Workstream assignments and evidence" }),
+  ).toContainText("No evidence records attached");
+  await expect(
+    page.getByRole("region", { name: "Coordination and handoffs" }),
+  ).toContainText("Proposed · no assignment");
+  await page.setViewportSize({ width: 390, height: 844 });
+  expect(
+    await page.evaluate(
+      () => document.documentElement.scrollWidth <= window.innerWidth,
+    ),
+  ).toBeTruthy();
+  await page.goto("/#/workstreams/unknown");
+  await expect(page.getByRole("heading", { level: 1 })).toBeVisible();
+  await expect(page.getByText(/Showing My Work/)).toBeVisible();
 });

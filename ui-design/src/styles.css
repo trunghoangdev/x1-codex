@@ -3122,3 +3122,26 @@ main h3,
 .org-overview-section > p {
   margin: 8px 0 16px;
 }
+
+.workstream-heading {
+  margin-top: 24px;
+}
+.handoff-grid {
+  display: grid;
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+  gap: 16px;
+}
+.handoff-grid .badge {
+  white-space: normal;
+}
+.workstream-actions {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 12px;
+  margin: 16px 0;
+}
+@media (max-width: 1000px) {
+  .handoff-grid {
+    grid-template-columns: 1fr;
+  }
+}

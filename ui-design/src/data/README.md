@@ -27,3 +27,5 @@ No fetch calls, endpoints, authentication, server admission, runtime JSON valida
 This is an incremental boundary, not a finished data layer. Candidate, evidence, requirements and validator observation fixtures now live here. Organization cards, historical activity and some release-preview presentation/policy logic still remain in components. No generic repository abstraction is introduced before the actual application contract is available.
 
 `organizationOverview.ts` is an authored organization model: workers, scoped role bindings and two workstreams. Membership is a proposed design relationship, not a backend contract or inferred dependency. Outcome statements stay unverified independently of local response counts. Other assignments remain visible outside the streams. See `../../ORGANIZATION-MODEL.md`.
+
+`workstreamDetails.ts` describes proposed handoffs and missing outcome evidence for each sample stream. Handoff states are authored context, not events inferred from local responses or a workflow engine.

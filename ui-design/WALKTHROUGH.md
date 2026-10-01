@@ -14,7 +14,7 @@ Demo scenario selectors are collapsed by default under **Demo controls**. Expand
 
 ## Organization first
 
-Start at the root URL. Compare the two workstreams, their goals, coordination and unverified outcomes. Inspect the scoped role bindings: Alex holds several distinct responsibilities. The production release, staging reconciliation and accessibility assessment remain separate related work, without invented dependency links. Open a workstream assignment or select **Open My Work · Alex** for personal responsibilities.
+Start at the root URL. Compare the two workstreams, their goals, coordination and unverified outcomes. Inspect the scoped role bindings: Alex holds several distinct responsibilities. The production release, staging reconciliation and accessibility assessment remain separate related work, without invented dependency links. Select **Explore workstream · WS-01** to inspect the developer/reviewer handoff and conditional revision loop. Open its evidence and use browser Back to return. WS-02 shows clarification followed by proposed, unassigned work. A local response does not advance either pattern or verify its goal. Use **Back to Organization**, then **Open My Work · Alex** for personal responsibilities.
 
 ## 1. Find the next responsibility
 

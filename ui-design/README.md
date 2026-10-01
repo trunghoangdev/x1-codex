@@ -173,3 +173,5 @@ Receipt creation and page composition still live in `main.tsx`; this is an incre
 Two authored workstreams model payment webhook reliability and invitation improvements. Four workers hold seven scoped role bindings. See [the organization model](ORGANIZATION-MODEL.md) for the scenario boundaries and next increment. Existing iteration 35 previews predate this overview.
 
 [Organization overview · iteration 37](previews/21-organization-overview.png)
+
+Workstream cards now open dedicated detail pages with coordination handoffs, current assignments, evidence and outcome gaps. Deep links: `#/workstreams/WS-01` and `#/workstreams/WS-02`. [Payment workstream detail](previews/22-workstream-detail.png).

@@ -13,11 +13,13 @@ export function OrganizationOverview({
   readiness,
   onOpen,
   onMyWork,
+  onWorkstream,
 }: {
   completed: Record<string, string>;
   readiness: Readiness;
   onOpen: (assignment: Assignment, tab?: string) => void;
   onMyWork: () => void;
+  onWorkstream: (id: string) => void;
 }) {
   return (
     <>
@@ -71,6 +73,12 @@ export function OrganizationOverview({
                 {stream.id} · {stream.project}
               </span>
               <h3>{stream.name}</h3>
+              <button
+                className="text-link"
+                onClick={() => onWorkstream(stream.id)}
+              >
+                Explore workstream · {stream.id}
+              </button>
               <p>
                 <strong>Goal</strong>
                 <br />

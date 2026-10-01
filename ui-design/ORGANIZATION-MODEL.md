@@ -18,4 +18,6 @@ A-1041 production authorization, A-1035 staging reconciliation and A-1032 access
 
 The overview links current assignments and evidence, shows coordination needs, and lists scoped bindings. The existing personal attention queue and revision-cycle demonstration remain below it. Counts describe this bounded sample, not full organizational coverage or worker health.
 
-Next increment: a workstream detail view with explicit handoffs and subject-specific evidence, preserving revision loops and parallel work rather than assuming one linear flow. No backend integration or real permission enforcement is introduced here.
+Workstream details are available at `#/workstreams/WS-01` and `#/workstreams/WS-02`. Each shows proposed handoffs, responsible roles, current assignments, attached evidence and missing outcome observations. Conditional revision and unassigned future work are explicit. These are coordination patterns, not execution history; local responses do not advance them. Browser history returns from assignments to the stream, and a direct URL restores the same sample view.
+
+`workstreamDetails.ts` holds the authored handoff descriptions. No backend integration, assignment creation or real permission enforcement is introduced here. A future increment can explore how scoped worker bindings are inspected and how missing responsibility is surfaced.

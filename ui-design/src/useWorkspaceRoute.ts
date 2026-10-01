@@ -1,3 +1,4 @@
+import { workstreams } from "./data/organizationOverview";
 import {
   readWorkFilters,
   writeWorkFilters,
@@ -8,6 +9,7 @@ export type WorkspaceView = "My Work" | "Organization" | "Evidence";
 export type WorkspaceRoute = {
   view: WorkspaceView;
   assignmentId?: string;
+  workstreamId?: string;
   tab: string;
   invalid?: boolean;
   work?: WorkFilters;
@@ -28,6 +30,14 @@ export function useWorkspaceRoute(ids: string[], tabs: string[]) {
       separator < 0 ? "" : raw.slice(separator + 1),
     );
     const path = (separator < 0 ? raw : raw.slice(0, separator)).split("/");
+    if (
+      path.length === 3 &&
+      path[0] === "" &&
+      path[1] === "workstreams" &&
+      workstreams.some((stream) => stream.id === path[2])
+    ) {
+      return { ...fallback, view: "Organization", workstreamId: path[2] };
+    }
     if (path.length === 2 && path[0] === "") {
       const view = (Object.keys(viewPaths) as WorkspaceView[]).find(
         (v) => viewPaths[v] === path[1],
@@ -58,7 +68,9 @@ export function useWorkspaceRoute(ids: string[], tabs: string[]) {
   function navigate(next: WorkspaceRoute, replace = false) {
     const path = next.assignmentId
       ? `#/assignments/${next.assignmentId}/${next.tab.toLowerCase()}`
-      : `#/${viewPaths[next.view]}`;
+      : next.workstreamId
+        ? `#/workstreams/${next.workstreamId}`
+        : `#/${viewPaths[next.view]}`;
     const hash = path + (next.work ? writeWorkFilters(next.work) : "");
     if (location.hash !== hash) {
       if (replace) history.replaceState(null, "", hash);

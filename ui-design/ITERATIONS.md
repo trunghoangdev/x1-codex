@@ -405,3 +405,11 @@ Organization becomes the default root screen and first navigation entry. My Work
 Local response labels update independently of unverified goal outcomes. Existing personal attention and revision-cycle sections remain available below the organization overview. The new model is sample design data, not an SF API contract, org-wide backlog or real permission enforcement. `ORGANIZATION-MODEL.md` records these boundaries and the next workstream-detail increment.
 
 Validation: production build and all 42 browser tests passed. Added default-entry, workstream/evidence navigation, scoped-binding count and mobile-width coverage; extended response coverage to verify the goal remains unverified. A new desktop overview preview supplements the iteration 35 workflow images.
+
+## 38 — Workstream details and coordination
+
+Both overview cards now open dedicated, addressable workstream pages. Details explain the goal, responsible roles, proposed handoffs, current assignment and attached evidence, missing outcome observations and subject boundaries. Payment coordination includes conditional revision/reassessment; invitation coordination explicitly leaves future assignments and bindings unrepresented.
+
+Local responses expose their Activity record without advancing handoffs or claiming a verified outcome. Direct URLs, refresh and browser Back retain the correct stream; screen transitions focus the heading. My Work row focus restoration remains intact. Added the payment detail preview and refreshed the organization overview image.
+
+Validation: production build passed. The full 43-test run passed 41 tests and exposed two inbox-focus regressions caused by the screen-key change. After fixing that key, reran those two tests plus workstream navigation and response-boundary coverage (four passing tests). New coverage includes deep links, refresh/history, evidence navigation, unknown stream fallback, mobile overflow and conditional handoffs remaining unchanged after a local response.
