@@ -29,3 +29,5 @@ This is an incremental boundary, not a finished data layer. Candidate, evidence,
 `organizationOverview.ts` is an authored organization model: workers, scoped role bindings and two workstreams. Membership is a proposed design relationship, not a backend contract or inferred dependency. Outcome statements stay unverified independently of local response counts. Other assignments remain visible outside the streams. See `../../ORGANIZATION-MODEL.md`.
 
 `workstreamDetails.ts` describes proposed handoffs and missing outcome evidence for each sample stream. Handoff states are authored context, not events inferred from local responses or a workflow engine.
+
+`workerDetails.ts` explicitly maps worker/role bindings to sample assignment IDs and describes known invitation responsibility gaps. Empty mappings do not indicate idle workers. These are authored relationships, not production permission checks.

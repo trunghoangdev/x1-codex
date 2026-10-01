@@ -175,3 +175,5 @@ Two authored workstreams model payment webhook reliability and invitation improv
 [Organization overview · iteration 37](previews/21-organization-overview.png)
 
 Workstream cards now open dedicated detail pages with coordination handoffs, current assignments, evidence and outcome gaps. Deep links: `#/workstreams/WS-01` and `#/workstreams/WS-02`. [Payment workstream detail](previews/22-workstream-detail.png).
+
+Select **View worker** on an organization role card to inspect that worker’s scoped bindings and related assignments. **Responsibility gaps** distinguishes missing bindings from work not yet assigned. [Worker detail preview](previews/23-worker-detail.png).

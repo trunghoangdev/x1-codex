@@ -1,5 +1,6 @@
+import { WorkerDetail } from "./WorkerDetail";
 import { WorkstreamDetail } from "./WorkstreamDetail";
-import { workstreams } from "./data/organizationOverview";
+import { workers, workstreams } from "./data/organizationOverview";
 import { OrganizationOverview } from "./OrganizationOverview";
 import { Modal } from "./Modal";
 import { ResponseDialog } from "./ResponseDialog";
@@ -95,6 +96,7 @@ function App() {
     assignmentTabs,
   );
   const view = route.view;
+  const worker = workers.find((w) => w.id === route.workerId);
   const stream = workstreams.find((s) => s.id === route.workstreamId);
   const selected = assignments.find((a) => a.id === route.assignmentId) ?? null;
   const tab = route.tab;
@@ -169,7 +171,7 @@ function App() {
     Record<string, string>
   >({});
   const inboxReturn = useRef<{ id: string; y: number } | null>(null);
-  const screenKey = `${route.view}:${route.assignmentId ?? ""}:${!!route.invalid}:${route.workstreamId ?? ""}`;
+  const screenKey = `${route.view}:${route.assignmentId ?? ""}:${!!route.invalid}:${route.workstreamId ?? ""}:${route.workerId ?? ""}`;
   const previousScreen = useRef(screenKey);
   useEffect(() => {
     if (route.view !== "My Work" || route.assignmentId)
@@ -231,6 +233,7 @@ function App() {
   }, [
     route.view,
     route.workstreamId,
+    route.workerId,
     route.assignmentId,
     route.tab,
     route.invalid,
@@ -1160,13 +1163,29 @@ function App() {
               onBack={() => navigate("Organization")}
             />
           )}
-          {view === "Organization" && !stream && (
+          {view === "Organization" && worker && (
+            <WorkerDetail
+              worker={worker}
+              completed={completed}
+              onOpen={open}
+              onBack={() => navigate("Organization")}
+            />
+          )}
+          {view === "Organization" && !stream && !worker && (
             <>
               <OrganizationOverview
                 completed={completed}
                 readiness={readiness}
                 onOpen={open}
                 onMyWork={() => navigate("My Work")}
+                onWorker={(id) =>
+                  changeRoute({
+                    view: "Organization",
+                    workerId: id,
+                    tab: "Overview",
+                    work: route.work,
+                  })
+                }
                 onWorkstream={(id) =>
                   changeRoute({
                     view: "Organization",

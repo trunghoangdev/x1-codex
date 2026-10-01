@@ -413,3 +413,13 @@ Both overview cards now open dedicated, addressable workstream pages. Details ex
 Local responses expose their Activity record without advancing handoffs or claiming a verified outcome. Direct URLs, refresh and browser Back retain the correct stream; screen transitions focus the heading. My Work row focus restoration remains intact. Added the payment detail preview and refreshed the organization overview image.
 
 Validation: production build passed. The full 43-test run passed 41 tests and exposed two inbox-focus regressions caused by the screen-key change. After fixing that key, reran those two tests plus workstream navigation and response-boundary coverage (four passing tests). New coverage includes deep links, refresh/history, evidence navigation, unknown stream fallback, mobile overflow and conditional handoffs remaining unchanged after a local response.
+
+## 39 — Scoped worker responsibilities
+
+Organization role cards now link to worker details, with direct URLs for all four workers. Each page groups explicit assignment links under that worker's scoped role bindings. Local response labels and Activity links remain distinct from outcome confirmation. Empty lists do not imply idle capacity, live health or absence of work outside the sample.
+
+A Responsibility gaps section distinguishes the unrepresented invitation developer binding from an invitation assessment assignment that has not been allocated despite an existing reviewer binding. Both link to the invitation workstream. All relationships are authored sample data; this slice introduces no assignment creation or permission management.
+
+Added browser coverage for binding isolation, assignment navigation, history and refresh, all three empty worker examples, mobile width, gap navigation and unknown-worker fallback. Updated model documentation and walkthrough, refreshed the overview preview and added a worker-detail preview.
+
+Validation: production build and all 44 browser tests passed. Desktop worker preview was visually inspected; browser coverage also verifies the detail page fits a 390px viewport.

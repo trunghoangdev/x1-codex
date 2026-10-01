@@ -99,3 +99,7 @@ This is a separate authored example, not A-1042 history. Recording Changes reque
 Screen URLs and My Work filters are shareable. Drafts, receipts, completions and scenario choices are session-only; refresh clears them. Activity filters and Evidence searches survive navigation per assignment and reset on refresh. Returning to My Work restores the opened row when it remains in the list. Screenshots show selected moments, not one persistent cross-image database: Organization/Evidence include the captured assessment, while mobile and later previews start fresh sessions.
 
 Prototype v1 is a UI review checkpoint. It includes no authentication, durable storage, governed command admission, real worker runs or deployment. Production integration, broad accessibility testing and customer usability feedback remain separate work.
+
+## Inspect roles and workers
+
+From Organization, choose **View worker · Alex Morgan**. Compare Reviewer, Product owner, Release authority and Operator scopes and their explicitly linked assignments. Open an assignment, then use browser Back to return. Inspect Jamie, Codex or Release runner: no linked sample assignments does not imply idle capacity. Return to Organization and inspect **Responsibility gaps** for the invitation workstream. This view describes sample responsibilities, not runtime health or live authorization.

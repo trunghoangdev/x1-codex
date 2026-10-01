@@ -1871,3 +1871,61 @@ test("workstream details preserve scope, routes, focus and conditional handoffs"
   await expect(page.getByRole("heading", { level: 1 })).toBeVisible();
   await expect(page.getByText(/Showing My Work/)).toBeVisible();
 });
+
+test("worker details keep bindings scoped and expose unassigned responsibility", async ({
+  page,
+}) => {
+  await page.goto("/#/organization");
+  await page
+    .getByRole("button", { name: "View worker · Alex Morgan", exact: true })
+    .first()
+    .click();
+  await expect(page).toHaveURL(/workers\/alex/);
+  await expect(
+    page.getByRole("heading", { name: "Alex Morgan", exact: true }),
+  ).toBeFocused();
+  const bindings = page.getByRole("region", { name: "Worker role bindings" });
+  await expect(bindings.getByRole("article")).toHaveCount(4);
+  const reviewer = bindings.getByRole("article", {
+    name: "Reviewer",
+    exact: true,
+  });
+  await expect(reviewer).toContainText("A-1042");
+  await expect(reviewer).not.toContainText("A-1041");
+  await reviewer.getByRole("button", { name: /A-1042/ }).click();
+  await expect(page).toHaveURL(/assignments\/A-1042\/overview/);
+  await page.goBack();
+  await expect(
+    page.getByRole("heading", { name: "Alex Morgan", exact: true }),
+  ).toBeFocused();
+  await page.reload();
+  await expect(bindings.getByRole("article")).toHaveCount(4);
+  await page.setViewportSize({ width: 390, height: 844 });
+  expect(
+    await page.evaluate(
+      () => document.documentElement.scrollWidth <= innerWidth,
+    ),
+  ).toBeTruthy();
+  for (const id of ["jamie", "codex", "runner"]) {
+    await page.goto(`/#/workers/${id}`);
+    await expect(
+      page.getByText("No linked assignments in this sample.", { exact: false }),
+    ).toBeVisible();
+    await expect(
+      page
+        .getByRole("region", { name: "Worker role bindings" })
+        .getByRole("article"),
+    ).toHaveCount(1);
+  }
+  await page.getByRole("button", { name: "Back to Organization" }).click();
+  const gaps = page.getByRole("region", { name: "Responsibility gaps" });
+  await expect(gaps).toContainText("no invitation assessment assignment");
+  await gaps
+    .getByRole("button", {
+      name: "Inspect workstream · Invitation implementation",
+    })
+    .click();
+  await expect(page).toHaveURL(/workstreams\/WS-02/);
+  await page.goto("/#/workers/unknown");
+  await expect(page.getByText(/Showing My Work/)).toBeVisible();
+});

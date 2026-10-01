@@ -1,3 +1,4 @@
+import { responsibilityGaps } from "./data/workerDetails";
 import { assignments } from "./data/assignments";
 import { evidenceFor } from "./data/evidence";
 import {
@@ -14,12 +15,14 @@ export function OrganizationOverview({
   onOpen,
   onMyWork,
   onWorkstream,
+  onWorker,
 }: {
   completed: Record<string, string>;
   readiness: Readiness;
   onOpen: (assignment: Assignment, tab?: string) => void;
   onMyWork: () => void;
   onWorkstream: (id: string) => void;
+  onWorker: (id: string) => void;
 }) {
   return (
     <>
@@ -181,6 +184,14 @@ export function OrganizationOverview({
                 <span className="badge neutral">{worker.type}</span>
                 <h2>{binding.role}</h2>
                 <strong>{worker.name}</strong>
+                <p>
+                  <button
+                    className="text-link"
+                    onClick={() => onWorker(worker.id)}
+                  >
+                    View worker · {worker.name}
+                  </button>
+                </p>
                 <p>Scope: {binding.scope}</p>
                 <p>{binding.permission}</p>
                 {binding.role === "Reviewer" && (
@@ -197,6 +208,28 @@ export function OrganizationOverview({
             );
           })}
         </div>
+      </section>
+      <section
+        className="panel org-stream org-overview-section"
+        aria-label="Responsibility gaps"
+      >
+        <h2>Responsibility gaps</h2>
+        <p>
+          Known gaps in this authored scenario, not an audit of the whole
+          organization.
+        </p>
+        {responsibilityGaps.map((gap) => (
+          <article className="org-stream-assignment" key={gap.id}>
+            <h3>{gap.title}</h3>
+            <p>{gap.description}</p>
+            <button
+              className="text-link"
+              onClick={() => onWorkstream(gap.workstreamId)}
+            >
+              Inspect workstream · {gap.title}
+            </button>
+          </article>
+        ))}
       </section>
     </>
   );
