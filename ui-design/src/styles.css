@@ -3195,3 +3195,31 @@ main h3,
     max-width: 130px;
   }
 }
+
+.attention-summary-grid {
+  display: grid;
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+  gap: 12px;
+  margin: 16px 0;
+}
+.attention-summary-button {
+  border: 1px solid #dce3d5;
+  background: #f5f7f3;
+  border-radius: 8px;
+  padding: 18px;
+  text-align: left;
+  color: #294331;
+}
+.attention-summary-button strong {
+  display: block;
+  font-size: 25px;
+  margin-bottom: 6px;
+}
+.attention-summary-button span {
+  overflow-wrap: anywhere;
+}
+@media (max-width: 600px) {
+  .attention-summary-grid {
+    grid-template-columns: 1fr;
+  }
+}

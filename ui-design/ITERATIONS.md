@@ -467,3 +467,11 @@ Added focus-moving overview shortcuts for goals, attention and worker bindings w
 `UI-REVIEW.md` records findings and the remaining priorities: compact attention, relocating the personal/demo sections, exact artifact navigation and consistent detail spacing/return paths. Refreshed six organization detail/overview previews.
 
 Validation: production build and eight relevant browser tests passed across overview, workstreams, workers, attention, handoffs, activity and outcomes. New coverage verifies section focus, unchanged hashes, keyboard disclosure toggling, breadcrumb return and mobile width. Mobile outcome layout was visually inspected.
+
+## 45 — Compact attention summary and dedicated list
+
+Replaced the overview's full attention list with three category counts and an all-items entry. The full signal list moves to `#/organization/attention/all`; category links use durable responsibility/response/outcome paths. Filtering, refresh and browser history preserve the selected category. Overview section shortcuts still focus the attention summary, and detail breadcrumbs identify Attention.
+
+Both views use the same signal derivation, preserving response removal and unverified outcome semantics. Updated the attention walkthrough/model, remaining review priorities and capture script; refreshed overview and attention previews.
+
+Validation: production build and five relevant browser tests passed, covering overview, section focus, attention semantics, inbox focus and new category-route behavior. New coverage verifies the compact summary, category counts, filter URL/history/refresh, mobile width and invalid-category fallback. Summary preview was visually inspected.

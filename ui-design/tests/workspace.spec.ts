@@ -1936,7 +1936,7 @@ test("worker details keep bindings scoped and expose unassigned responsibility",
 test("organization attention separates response signals from responsibility and outcomes", async ({
   page,
 }) => {
-  await page.goto("/#/organization");
+  await page.goto("/#/organization/attention/all");
   const attention = page.getByRole("region", {
     name: "Organization attention",
     exact: true,
@@ -1962,6 +1962,9 @@ test("organization attention separates response signals from responsibility and 
     "revoked",
   );
   await page.getByRole("button", { name: "Organization", exact: true }).click();
+  await page
+    .getByRole("button", { name: "View all organization attention" })
+    .click();
   await expect(attention).toContainText(
     "Both decisions are blocked: release authority is no longer valid",
   );
@@ -1979,6 +1982,9 @@ test("organization attention separates response signals from responsibility and 
     .selectOption("Insufficient evidence");
   await page.getByRole("button", { name: "Record assessment" }).click();
   await page.getByRole("button", { name: "Organization", exact: true }).click();
+  await page
+    .getByRole("button", { name: "View all organization attention" })
+    .click();
   await expect(attention.getByRole("status")).toContainText(
     "8 of 8 attention items",
   );
@@ -1999,7 +2005,7 @@ test("organization attention separates response signals from responsibility and 
   ).toBeTruthy();
   await page.reload();
   await expect(attention.getByRole("status")).toContainText(
-    "9 of 9 attention items",
+    "3 of 9 attention items",
   );
 });
 
@@ -2250,4 +2256,40 @@ test("organization sections move focus and secondary disclosures stay compact", 
       () => document.documentElement.scrollWidth <= innerWidth,
     ),
   ).toBeTruthy();
+});
+
+test("compact attention summary opens durable category routes", async ({
+  page,
+}) => {
+  await page.goto("/#/organization");
+  const summary = page.getByRole("region", {
+    name: "Organization attention summary",
+  });
+  await expect(summary.getByRole("article")).toHaveCount(0);
+  await expect(
+    summary.getByRole("button", { name: "2 Responsibility" }),
+  ).toBeVisible();
+  await summary.getByRole("button", { name: "3 Outcome" }).click();
+  await expect(page).toHaveURL(/organization\/attention\/outcome/);
+  await expect(
+    page.getByRole("heading", { name: "What needs coordination?" }),
+  ).toBeFocused();
+  await expect(page.getByLabel("Attention type")).toHaveValue("Outcome");
+  await page.getByLabel("Attention type").selectOption("Responsibility");
+  await expect(page).toHaveURL(/attention\/responsibility/);
+  await page.reload();
+  await expect(page.getByLabel("Attention type")).toHaveValue("Responsibility");
+  await page.getByLabel("Attention type").selectOption("Response");
+  await page.goBack();
+  await expect(page.getByLabel("Attention type")).toHaveValue("Responsibility");
+  await page.setViewportSize({ width: 390, height: 844 });
+  expect(
+    await page.evaluate(
+      () => document.documentElement.scrollWidth <= innerWidth,
+    ),
+  ).toBeTruthy();
+  await page.getByRole("button", { name: "Back to Organization" }).click();
+  await expect(summary).toBeVisible();
+  await page.goto("/#/organization/attention/unknown");
+  await expect(page.getByText(/Showing My Work/)).toBeVisible();
 });

@@ -187,3 +187,5 @@ Select **View organization activity** on Organization to filter records by works
 On each workstream, select **Review outcome evidence** to inspect goal-level evidence requirements, existing context and remaining gaps. [Outcome review preview](previews/27-outcome-review.png).
 
 The overview has section shortcuts for Goals, Attention and Roles & Workers. Additional organization work and gap explanations are expandable. Detail breadcrumbs identify the current subject and return to Organization. See [the layout/navigation review](UI-REVIEW.md) for remaining improvements.
+
+Attention is now a compact three-category summary on the overview. Select a count or **View all organization attention** for the dedicated list. Category URLs preserve the filter across refresh and history.

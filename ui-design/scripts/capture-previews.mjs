@@ -253,6 +253,7 @@ await page.screenshot({
   animations: "disabled",
 });
 await page.goto("http://127.0.0.1:4173/#/organization");
+await page.goto("http://127.0.0.1:4173/#/organization/attention/all");
 await page
   .getByRole("region", { name: "Organization attention", exact: true })
   .screenshot({

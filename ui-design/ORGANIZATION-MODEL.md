@@ -24,9 +24,9 @@ Workstream details are available at `#/workstreams/WS-01` and `#/workstreams/WS-
 
 ## Organization attention
 
-The overview surfaces bounded sample signals across responsibility, response and outcome categories, with filters and links to each source assignment or workstream. `organizationAttention.ts` combines explicit responsibility gaps, pending assignment responses and unverified outcomes. Counts measure signals, not distinct assignments, completion or organization health. The same stream can have both a responsibility gap and an unverified outcome.
+The overview summarizes bounded sample signals in three category counts. The full attention view at `#/organization/attention/all` has filters and links to each source assignment or workstream. `organizationAttention.ts` combines explicit responsibility gaps, pending assignment responses and unverified outcomes. Counts measure signals, not distinct assignments, completion or organization health. The same stream can have both a responsibility gap and an unverified outcome.
 
-Release readiness reuses the existing prerequisite explanations. Recorded responses remove ordinary response signals; release and staging subjects retain unverified-effect signals and link to the local receipt. Neither workstream outcome nor responsibility gaps clear automatically. The planner named on responsibility gaps is the sample coordination contact, not the worker allocated to the missing task. Unknown outcome-review responsibility is stated explicitly. Filters reset on leaving the overview; responses reset on reload. The older Alex attention queue remains a separate personal section.
+Release readiness reuses the existing prerequisite explanations. Recorded responses remove ordinary response signals; release and staging subjects retain unverified-effect signals and link to the local receipt. Neither workstream outcome nor responsibility gaps clear automatically. The planner named on responsibility gaps is the sample coordination contact, not the worker allocated to the missing task. Unknown outcome-review responsibility is stated explicitly. Attention categories use durable URLs ending in `/responsibility`, `/response` or `/outcome`; refresh and browser history restore the filter. Responses reset on reload. The older Alex attention queue remains a separate personal section.
 
 ## Handoff details
 

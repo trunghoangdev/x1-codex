@@ -1,0 +1,53 @@
+import {
+  organizationAttention,
+  type AttentionCategory,
+} from "./data/organizationAttention";
+import type { Readiness } from "./data/models";
+export function AttentionSummary({
+  completed,
+  readiness,
+  onOpen,
+}: {
+  completed: Record<string, string>;
+  readiness: Readiness;
+  onOpen: (category: AttentionCategory | "All") => void;
+}) {
+  const items = organizationAttention(completed, readiness);
+  return (
+    <section
+      className="panel org-stream org-overview-section"
+      aria-label="Organization attention summary"
+    >
+      <h2 id="org-attention" tabIndex={-1}>
+        Organization attention
+      </h2>
+      <p>
+        {items.length} known sample signals across responsibility, pending
+        responses and unverified outcomes.
+      </p>
+      <div className="attention-summary-grid">
+        {(["Responsibility", "Response", "Outcome"] as const).map(
+          (category) => (
+            <button
+              className="attention-summary-button"
+              key={category}
+              onClick={() => onOpen(category)}
+            >
+              <strong>
+                {items.filter((item) => item.category === category).length}
+              </strong>
+              <span>{category}</span>
+            </button>
+          ),
+        )}
+      </div>
+      <p>
+        Counts describe signals, not assignments or progress. A recorded
+        response does not verify a goal.
+      </p>
+      <button className="button secondary" onClick={() => onOpen("All")}>
+        View all organization attention
+      </button>
+    </section>
+  );
+}

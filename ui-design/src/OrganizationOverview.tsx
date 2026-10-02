@@ -1,4 +1,5 @@
-import { OrganizationAttention } from "./OrganizationAttention";
+import { AttentionSummary } from "./AttentionSummary";
+import type { AttentionCategory } from "./data/organizationAttention";
 import { responsibilityGaps } from "./data/workerDetails";
 import { assignments } from "./data/assignments";
 import { evidenceFor } from "./data/evidence";
@@ -18,6 +19,7 @@ export function OrganizationOverview({
   onWorkstream,
   onWorker,
   onActivity,
+  onAttention,
 }: {
   completed: Record<string, string>;
   readiness: Readiness;
@@ -26,6 +28,7 @@ export function OrganizationOverview({
   onWorkstream: (id: string) => void;
   onWorker: (id: string) => void;
   onActivity: () => void;
+  onAttention: (category: AttentionCategory | "All") => void;
 }) {
   return (
     <>
@@ -158,11 +161,10 @@ export function OrganizationOverview({
           ))}
         </div>
       </section>
-      <OrganizationAttention
+      <AttentionSummary
         completed={completed}
         readiness={readiness}
-        onOpen={onOpen}
-        onWorkstream={onWorkstream}
+        onOpen={onAttention}
       />
       <details className="organization-disclosure org-overview-section">
         <summary>Other organization work · 3 assignments</summary>

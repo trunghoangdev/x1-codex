@@ -1,3 +1,5 @@
+import { OrganizationAttention } from "./OrganizationAttention";
+import type { AttentionCategory } from "./data/organizationAttention";
 import { OutcomeReview } from "./OutcomeReview";
 import { outcomes } from "./data/outcomes";
 import { OrganizationActivity } from "./OrganizationActivity";
@@ -179,7 +181,7 @@ function App() {
     Record<string, string>
   >({});
   const inboxReturn = useRef<{ id: string; y: number } | null>(null);
-  const screenKey = `${route.view}:${route.assignmentId ?? ""}:${!!route.invalid}:${route.workstreamId ?? ""}:${route.workerId ?? ""}:${route.handoffId ?? ""}:${!!route.organizationActivity}:${route.outcomeId ?? ""}`;
+  const screenKey = `${route.view}:${route.assignmentId ?? ""}:${!!route.invalid}:${route.workstreamId ?? ""}:${route.workerId ?? ""}:${route.handoffId ?? ""}:${!!route.organizationActivity}:${route.outcomeId ?? ""}:${!!route.attention}`;
   const previousScreen = useRef(screenKey);
   useEffect(() => {
     if (route.view !== "My Work" || route.assignmentId)
@@ -244,11 +246,20 @@ function App() {
     route.workerId,
     route.handoffId,
     route.organizationActivity,
+    route.attention,
     route.outcomeId,
     route.assignmentId,
     route.tab,
     route.invalid,
   ]);
+  function openAttention(attention: AttentionCategory | "All") {
+    changeRoute({
+      view: "Organization",
+      attention,
+      tab: "Overview",
+      work: route.work,
+    });
+  }
   function navigate(next: View) {
     changeRoute({ view: next, tab: "Overview", work: route.work });
   }
@@ -445,7 +456,8 @@ function App() {
               worker ||
               handoff ||
               outcome ||
-              route.organizationActivity) ? (
+              route.organizationActivity ||
+              route.attention) ? (
               <>
                 <button
                   className="breadcrumb-link"
@@ -460,7 +472,9 @@ function App() {
                     handoff?.title ??
                     (outcomeStream
                       ? `Outcome · ${outcomeStream.name}`
-                      : "Activity")}
+                      : route.attention
+                        ? "Attention"
+                        : "Activity")}
                 </strong>
               </>
             ) : (
@@ -1254,6 +1268,24 @@ function App() {
               }
             />
           )}
+          {view === "Organization" && route.attention && (
+            <OrganizationAttention
+              completed={completed}
+              readiness={readiness}
+              category={route.attention}
+              onCategory={openAttention}
+              onBack={() => navigate("Organization")}
+              onOpen={open}
+              onWorkstream={(id) =>
+                changeRoute({
+                  view: "Organization",
+                  workstreamId: id,
+                  tab: "Overview",
+                  work: route.work,
+                })
+              }
+            />
+          )}
           {view === "Organization" && route.organizationActivity && (
             <OrganizationActivity
               receipts={receipts}
@@ -1266,9 +1298,11 @@ function App() {
             !worker &&
             !handoff &&
             !route.organizationActivity &&
-            !outcome && (
+            !outcome &&
+            !route.attention && (
               <>
                 <OrganizationOverview
+                  onAttention={openAttention}
                   completed={completed}
                   readiness={readiness}
                   onOpen={open}

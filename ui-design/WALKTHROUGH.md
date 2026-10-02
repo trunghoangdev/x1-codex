@@ -106,7 +106,7 @@ From Organization, choose **View worker · Alex Morgan**. Compare Reviewer, Prod
 
 ## Review organization attention
 
-On Organization, find **Organization attention** below the workstreams. Filter Responsibility to inspect missing bindings/assignments, Response for pending decisions and clarification, or Outcome for unconfirmed effects and goals. Open A-1042, record an assessment and return: its response signal disappears while the payment outcome remains unverified. Change A-1041 prerequisites to inspect the matching blocked-decision explanation. Filters reset on navigation; refreshing also clears local responses. This bounded signal list does not establish organization health.
+On Organization, find **Organization attention** below the workstreams. Select a category count or **View all organization attention** to open the full list. Filter Responsibility to inspect missing bindings/assignments, Response for pending decisions and clarification, or Outcome for unconfirmed effects and goals. Open A-1042, record an assessment and return: its response signal disappears while the payment outcome remains unverified. Change A-1041 prerequisites to inspect the matching blocked-decision explanation. Category URLs preserve the filter across refresh and browser history; refreshing clears local responses. This bounded signal list does not establish organization health.
 
 ## Inspect a handoff
 

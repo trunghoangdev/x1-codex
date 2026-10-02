@@ -1,4 +1,3 @@
-import { useState } from "react";
 import { assignments } from "./data/assignments";
 import type { Assignment, Readiness } from "./data/models";
 import {
@@ -11,97 +10,113 @@ export function OrganizationAttention({
   readiness,
   onOpen,
   onWorkstream,
+  category,
+  onCategory,
+  onBack,
 }: {
   completed: Record<string, string>;
   readiness: Readiness;
   onOpen: (assignment: Assignment, tab?: string) => void;
   onWorkstream: (id: string) => void;
+  category: AttentionCategory | "All";
+  onCategory: (category: AttentionCategory | "All") => void;
+  onBack: () => void;
 }) {
-  const [category, setCategory] = useState<AttentionCategory | "All">("All");
   const items = organizationAttention(completed, readiness);
   const shown = items.filter(
     (item) => category === "All" || item.category === category,
   );
   return (
-    <section
-      className="panel org-stream org-overview-section"
-      aria-label="Organization attention"
-    >
-      <h2 id="org-attention" tabIndex={-1}>
-        Organization attention
-      </h2>
-      <p>
-        Coordination across the sample organization: responsibility gaps,
-        pending responses and unverified outcomes. These are known signals, not
-        a complete organization backlog.
-      </p>
-      <div className="org-filters">
-        <label>
-          Attention type
-          <select
-            aria-label="Attention type"
-            value={category}
-            onChange={(event) =>
-              setCategory(event.target.value as AttentionCategory | "All")
-            }
-          >
-            <option value="All">All attention types</option>
-            {(["Responsibility", "Response", "Outcome"] as const).map(
-              (value) => (
-                <option key={value} value={value}>
-                  {value} ·{" "}
-                  {items.filter((item) => item.category === value).length}
-                </option>
-              ),
-            )}
-          </select>
-        </label>
+    <>
+      <button className="button secondary" onClick={onBack}>
+        Back to Organization
+      </button>
+      <div className="page-heading workstream-heading">
+        <div>
+          <div className="eyebrow">ORGANIZATION ATTENTION</div>
+          <h1 tabIndex={-1}>What needs coordination?</h1>
+        </div>
       </div>
-      <p role="status">
-        {shown.length} of {items.length} attention items · counts describe
-        signals, not assignments or progress.
-      </p>
-      <div className="org-stream-grid">
-        {shown.map((item) => (
-          <article
-            key={item.id}
-            className="org-stream-assignment"
-            aria-label={item.title}
-          >
-            <span className="badge neutral">{item.category}</span>
-            <h3>{item.title}</h3>
-            <p>
-              <strong>{item.owner}</strong>
-            </p>
-            <p>{item.detail}</p>
-            <button
-              className="text-link"
-              onClick={() => {
-                if (item.target.kind === "workstream")
-                  onWorkstream(item.target.id);
-                else {
-                  const assignment = assignments.find(
-                    (a) => a.id === item.target.id,
-                  );
-                  if (assignment) onOpen(assignment, item.target.tab);
-                }
-              }}
-            >
-              Inspect {item.target.kind} · {item.target.id}
-            </button>
-          </article>
-        ))}
-      </div>
-      {shown.length === 0 && (
+      <section
+        className="panel org-stream org-overview-section"
+        aria-label="Organization attention"
+      >
+        <h2 id="org-attention" tabIndex={-1}>
+          Organization attention
+        </h2>
         <p>
-          No matching attention items in this sample. This does not establish
-          organization health.
+          Coordination across the sample organization: responsibility gaps,
+          pending responses and unverified outcomes. These are known signals,
+          not a complete organization backlog.
         </p>
-      )}
-      <p>
-        Recorded responses clear their response signal. Responsibility gaps and
-        unverified outcomes require separate evidence and remain visible.
-      </p>
-    </section>
+        <div className="org-filters">
+          <label>
+            Attention type
+            <select
+              aria-label="Attention type"
+              value={category}
+              onChange={(event) =>
+                onCategory(event.target.value as AttentionCategory | "All")
+              }
+            >
+              <option value="All">All attention types</option>
+              {(["Responsibility", "Response", "Outcome"] as const).map(
+                (value) => (
+                  <option key={value} value={value}>
+                    {value} ·{" "}
+                    {items.filter((item) => item.category === value).length}
+                  </option>
+                ),
+              )}
+            </select>
+          </label>
+        </div>
+        <p role="status">
+          {shown.length} of {items.length} attention items · counts describe
+          signals, not assignments or progress.
+        </p>
+        <div className="org-stream-grid">
+          {shown.map((item) => (
+            <article
+              key={item.id}
+              className="org-stream-assignment"
+              aria-label={item.title}
+            >
+              <span className="badge neutral">{item.category}</span>
+              <h3>{item.title}</h3>
+              <p>
+                <strong>{item.owner}</strong>
+              </p>
+              <p>{item.detail}</p>
+              <button
+                className="text-link"
+                onClick={() => {
+                  if (item.target.kind === "workstream")
+                    onWorkstream(item.target.id);
+                  else {
+                    const assignment = assignments.find(
+                      (a) => a.id === item.target.id,
+                    );
+                    if (assignment) onOpen(assignment, item.target.tab);
+                  }
+                }}
+              >
+                Inspect {item.target.kind} · {item.target.id}
+              </button>
+            </article>
+          ))}
+        </div>
+        {shown.length === 0 && (
+          <p>
+            No matching attention items in this sample. This does not establish
+            organization health.
+          </p>
+        )}
+        <p>
+          Recorded responses clear their response signal. Responsibility gaps
+          and unverified outcomes require separate evidence and remain visible.
+        </p>
+      </section>
+    </>
   );
 }
