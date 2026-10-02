@@ -440,7 +440,32 @@ function App() {
             </button>
             <span>Workspace</span>
             <ChevronRight size={14} />
-            <strong>{view}</strong>
+            {view === "Organization" &&
+            (stream ||
+              worker ||
+              handoff ||
+              outcome ||
+              route.organizationActivity) ? (
+              <>
+                <button
+                  className="breadcrumb-link"
+                  onClick={() => navigate("Organization")}
+                >
+                  Organization
+                </button>
+                <ChevronRight size={14} />
+                <strong aria-current="page" className="breadcrumb-detail">
+                  {stream?.name ??
+                    worker?.name ??
+                    handoff?.title ??
+                    (outcomeStream
+                      ? `Outcome · ${outcomeStream.name}`
+                      : "Activity")}
+                </strong>
+              </>
+            ) : (
+              <strong>{view}</strong>
+            )}
             {selected && (
               <>
                 <ChevronRight size={14} />

@@ -3145,3 +3145,53 @@ main h3,
     grid-template-columns: 1fr;
   }
 }
+
+.organization-sections {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 10px;
+  margin: 20px 0;
+}
+#org-goals,
+#org-attention,
+#org-workers {
+  scroll-margin-top: 84px;
+}
+.organization-disclosure {
+  border: 1px solid #e0e5df;
+  border-radius: 8px;
+  background: #fff;
+}
+.organization-disclosure > summary {
+  padding: 18px 24px;
+  cursor: pointer;
+  font-weight: 600;
+}
+.organization-disclosure > section {
+  border: 0;
+  margin-bottom: 0;
+}
+.breadcrumb-link {
+  border: 0;
+  padding: 0;
+  background: transparent;
+  color: inherit;
+  cursor: pointer;
+  font: inherit;
+}
+.breadcrumb-link:hover {
+  text-decoration: underline;
+}
+.breadcrumb-detail {
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+.breadcrumb {
+  min-width: 0;
+}
+@media (max-width: 800px) {
+  .breadcrumb-detail {
+    max-width: 130px;
+  }
+}

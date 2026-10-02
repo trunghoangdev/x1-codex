@@ -459,3 +459,11 @@ Each workstream now links to a dedicated outcome review with goal evidence requi
 Local assignment receipts remain inspectable without marking the goal achieved, including a Meets criteria assessment. The view explains subject boundaries and links back to its workstream. Added an outcome preview and refreshed the workstream preview.
 
 Validation: production build and five relevant browser tests passed (outcome review, workstream routing, inbox focus, organization attention and organization activity). New coverage verifies supporting evidence links, response-versus-outcome semantics, history/refresh, missing invitation context, mobile width and unknown-outcome fallback. Desktop preview was visually inspected.
+
+## 44 — Overview navigation and layout review
+
+Added focus-moving overview shortcuts for goals, attention and worker bindings without changing the workspace hash. Secondary other-work and responsibility-gap explanations start collapsed behind native keyboard-accessible disclosure controls; their organization attention signals remain visible. Detail breadcrumbs now identify the current subject and return to Organization, with visually truncated mobile labels retaining full accessible text.
+
+`UI-REVIEW.md` records findings and the remaining priorities: compact attention, relocating the personal/demo sections, exact artifact navigation and consistent detail spacing/return paths. Refreshed six organization detail/overview previews.
+
+Validation: production build and eight relevant browser tests passed across overview, workstreams, workers, attention, handoffs, activity and outcomes. New coverage verifies section focus, unchanged hashes, keyboard disclosure toggling, breadcrumb return and mobile width. Mobile outcome layout was visually inspected.

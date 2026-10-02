@@ -185,3 +185,5 @@ On a workstream, select **Open handoff** to inspect participants, inputs, receiv
 Select **View organization activity** on Organization to filter records by workstream and type. Session responses have recording times; attached evidence has no verified publication history. [Activity preview](previews/26-organization-activity.png).
 
 On each workstream, select **Review outcome evidence** to inspect goal-level evidence requirements, existing context and remaining gaps. [Outcome review preview](previews/27-outcome-review.png).
+
+The overview has section shortcuts for Goals, Attention and Roles & Workers. Additional organization work and gap explanations are expandable. Detail breadcrumbs identify the current subject and return to Organization. See [the layout/navigation review](UI-REVIEW.md) for remaining improvements.

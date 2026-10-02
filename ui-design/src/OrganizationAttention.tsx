@@ -27,7 +27,9 @@ export function OrganizationAttention({
       className="panel org-stream org-overview-section"
       aria-label="Organization attention"
     >
-      <h2>Organization attention</h2>
+      <h2 id="org-attention" tabIndex={-1}>
+        Organization attention
+      </h2>
       <p>
         Coordination across the sample organization: responsibility gaps,
         pending responses and unverified outcomes. These are known signals, not

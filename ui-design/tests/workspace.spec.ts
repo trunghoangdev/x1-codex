@@ -1918,6 +1918,9 @@ test("worker details keep bindings scoped and expose unassigned responsibility",
     ).toHaveCount(1);
   }
   await page.getByRole("button", { name: "Back to Organization" }).click();
+  await page
+    .getByText("Responsibility gaps · 2 known gaps", { exact: true })
+    .click();
   const gaps = page.getByRole("region", { name: "Responsibility gaps" });
   await expect(gaps).toContainText("no invitation assessment assignment");
   await gaps
@@ -2199,4 +2202,52 @@ test("outcome review keeps goal evidence gaps independent from assignment respon
   ).toBeTruthy();
   await page.goto("/#/outcomes/unknown");
   await expect(page.getByText(/Showing My Work/)).toBeVisible();
+});
+
+test("organization sections move focus and secondary disclosures stay compact", async ({
+  page,
+}) => {
+  await page.goto("/#/organization");
+  const sections = page.getByRole("navigation", {
+    name: "Organization sections",
+  });
+  await sections.getByRole("button", { name: "Roles & workers" }).click();
+  await expect(page.locator("#org-workers")).toBeFocused();
+  await expect(page).toHaveURL(/#\/organization$/);
+  await sections
+    .getByRole("button", { name: "Attention", exact: true })
+    .click();
+  await expect(page.locator("#org-attention")).toBeFocused();
+  const summary = page.getByText("Other organization work · 3 assignments", {
+    exact: true,
+  });
+  await expect(summary.locator("..")).not.toHaveAttribute("open", "");
+  await summary.focus();
+  await page.keyboard.press("Enter");
+  await expect(
+    page.getByRole("region", { name: "Other organization work", exact: true }),
+  ).toBeVisible();
+  await page.keyboard.press("Enter");
+  await expect(
+    page.getByRole("region", { name: "Other organization work", exact: true }),
+  ).toBeHidden();
+  await sections.getByRole("button", { name: "Goals & workstreams" }).click();
+  await expect(page.locator("#org-goals")).toBeFocused();
+  await page
+    .getByRole("button", { name: "Explore workstream · WS-01" })
+    .click();
+  const header = page.locator("header.topbar");
+  await expect(header).toContainText("Payment webhook reliability");
+  await header
+    .getByRole("button", { name: "Organization", exact: true })
+    .click();
+  await expect(page.getByRole("heading", { level: 1 })).toBeFocused();
+  await page.setViewportSize({ width: 390, height: 844 });
+  await page.goto("/#/outcomes/WS-01");
+  await expect(header).toContainText("Outcome · Payment webhook reliability");
+  expect(
+    await page.evaluate(
+      () => document.documentElement.scrollWidth <= innerWidth,
+    ),
+  ).toBeTruthy();
 });

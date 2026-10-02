@@ -119,3 +119,7 @@ Select **View organization activity**. Filter to Payment webhook reliability to 
 ## Review an outcome
 
 Open Payment webhook reliability and choose **Review outcome evidence**. Compare recovery and duplicate-processing requirements with the attached source, notes and historical test fixture. Inspect supporting context; recording an assignment assessment leaves the outcome unverified. The invitation outcome has no attached context records and needs criteria, implementation identity and observed behavior. Outcome-review responsibility remains unassigned in both samples.
+
+## Move around the overview
+
+Use Goals & workstreams, Attention or Roles & workers shortcuts to scroll and focus the corresponding heading. Expand Other organization work or Responsibility gaps for secondary explanations. On detail pages, the header shows the current subject; its Organization button returns to the overview. The long subject label truncates visually on mobile.
