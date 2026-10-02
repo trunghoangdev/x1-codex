@@ -271,4 +271,10 @@ await page.screenshot({
   fullPage: true,
   animations: "disabled",
 });
+await page.goto("http://127.0.0.1:4173/#/outcomes/WS-01");
+await page.screenshot({
+  path: "previews/27-outcome-review.png",
+  fullPage: true,
+  animations: "disabled",
+});
 await browser.close();

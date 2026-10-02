@@ -451,3 +451,11 @@ Organization now links to a dedicated activity view at `#/organization/activity`
 Stream membership is explicit; sharing a project does not place release evidence in the payment stream. Empty scopes show the absence of connected records without inferring outcomes. Filters reset on navigation and refresh clears local receipts. Added an activity preview and refreshed the organization overview.
 
 Validation: production build and five relevant browser tests passed: organization activity, assignment routing/history, assignment Activity/evidence scope, screen focus and inbox focus/filter restoration. New coverage includes response recording, scope isolation, empty invitation records, undated evidence explanation, mobile width and refresh reset. Desktop preview was visually inspected.
+
+## 43 — Goal-level outcome review
+
+Each workstream now links to a dedicated outcome review with goal evidence requirements, explicitly linked supporting context, remaining gaps and unassigned reviewer responsibility. Payment recovery and duplicate-processing requirements stay distinct from candidate assessment; invitation behavior needs agreed criteria, implementation identity and observations. No goal-level decision form or automatic verification is introduced.
+
+Local assignment receipts remain inspectable without marking the goal achieved, including a Meets criteria assessment. The view explains subject boundaries and links back to its workstream. Added an outcome preview and refreshed the workstream preview.
+
+Validation: production build and five relevant browser tests passed (outcome review, workstream routing, inbox focus, organization attention and organization activity). New coverage verifies supporting evidence links, response-versus-outcome semantics, history/refresh, missing invitation context, mobile width and unknown-outcome fallback. Desktop preview was visually inspected.

@@ -183,3 +183,5 @@ Select **View worker** on an organization role card to inspect that worker’s s
 On a workstream, select **Open handoff** to inspect participants, inputs, receiving conditions and revision/clarification return paths. [Handoff preview](previews/25-handoff-detail.png).
 
 Select **View organization activity** on Organization to filter records by workstream and type. Session responses have recording times; attached evidence has no verified publication history. [Activity preview](previews/26-organization-activity.png).
+
+On each workstream, select **Review outcome evidence** to inspect goal-level evidence requirements, existing context and remaining gaps. [Outcome review preview](previews/27-outcome-review.png).

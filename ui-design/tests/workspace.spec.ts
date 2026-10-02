@@ -2136,3 +2136,67 @@ test("organization activity scopes evidence and session responses without invent
     page.getByRole("heading", { name: "One team. Clear responsibility." }),
   ).toBeFocused();
 });
+
+test("outcome review keeps goal evidence gaps independent from assignment responses", async ({
+  page,
+}) => {
+  await page.goto("/#/workstreams/WS-01");
+  await page.getByRole("button", { name: "Review outcome evidence" }).click();
+  await expect(page).toHaveURL(/outcomes\/WS-01/);
+  await expect(
+    page.getByRole("heading", {
+      name: "Outcome · Payment webhook reliability",
+    }),
+  ).toBeFocused();
+  const requirements = page.getByRole("region", {
+    name: "Outcome evidence requirements",
+  });
+  await expect(requirements.getByRole("article")).toHaveCount(2);
+  await expect(
+    page.getByText("Outcome reviewer: not assigned", { exact: false }),
+  ).toBeVisible();
+  await requirements
+    .getByRole("button", { name: /Inspect supporting context · AR-775/ })
+    .click();
+  await expect(page).toHaveURL(/assignments\/A-1042\/evidence/);
+  await page
+    .getByRole("button", { name: "Submit assessment", exact: true })
+    .click();
+  await page
+    .getByLabel("Decision rationale")
+    .fill("This assessment does not establish the production outcome.");
+  await page
+    .getByLabel("Assessment conclusion", { exact: true })
+    .selectOption("Meets criteria");
+  await page.getByRole("button", { name: "Record assessment" }).click();
+  await expect(page.getByRole("dialog")).toHaveCount(0);
+  await page.goBack();
+  await expect(
+    page.getByRole("region", { name: "Outcome assignment context" }),
+  ).toContainText("Local response recorded · goal remains unverified");
+  await expect(
+    requirements.getByText("Evidence gap", { exact: true }),
+  ).toHaveCount(2);
+  await page.getByRole("button", { name: "Inspect response · A-1042" }).click();
+  await expect(page).toHaveURL(/assignments\/A-1042\/activity/);
+  await page.goBack();
+  await page.reload();
+  await expect(
+    page.getByRole("heading", { name: "Not verified", exact: true }),
+  ).toBeVisible();
+  await page.getByRole("button", { name: "Back to workstream" }).click();
+  await expect(page).toHaveURL(/workstreams\/WS-01/);
+  await page.goto("/#/outcomes/WS-02");
+  await expect(requirements.getByRole("button")).toHaveCount(0);
+  await expect(requirements).toContainText(
+    "Agreed criteria, an implementation identity",
+  );
+  await page.setViewportSize({ width: 390, height: 844 });
+  expect(
+    await page.evaluate(
+      () => document.documentElement.scrollWidth <= innerWidth,
+    ),
+  ).toBeTruthy();
+  await page.goto("/#/outcomes/unknown");
+  await expect(page.getByText(/Showing My Work/)).toBeVisible();
+});

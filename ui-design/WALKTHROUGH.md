@@ -115,3 +115,7 @@ Open the payment workstream, then **Open handoff · Candidate to reviewer**. Com
 ## Explore organization activity
 
 Select **View organization activity**. Filter to Payment webhook reliability to see its three attached records; Other organization work contains the separate release evidence. The invitation stream has no attached evidence. Record an assessment and return to see its dated local response. Inspect the response through assignment Activity. Refresh clears session receipts while keeping sample evidence.
+
+## Review an outcome
+
+Open Payment webhook reliability and choose **Review outcome evidence**. Compare recovery and duplicate-processing requirements with the attached source, notes and historical test fixture. Inspect supporting context; recording an assignment assessment leaves the outcome unverified. The invitation outcome has no attached context records and needs criteria, implementation identity and observed behavior. Outcome-review responsibility remains unassigned in both samples.

@@ -11,12 +11,14 @@ export function WorkstreamDetail({
   onOpen,
   onBack,
   onHandoff,
+  onOutcome,
 }: {
   stream: Workstream;
   completed: Record<string, string>;
   onOpen: (assignment: Assignment, tab?: string) => void;
   onBack: () => void;
   onHandoff: (id: string) => void;
+  onOutcome: () => void;
 }) {
   const detail = workstreamDetails[stream.id];
   return (
@@ -37,6 +39,9 @@ export function WorkstreamDetail({
         <div>
           <h2>Outcome remains unverified</h2>
           <p>{detail.outcomeEvidence}</p>
+          <button className="button secondary" onClick={onOutcome}>
+            Review outcome evidence
+          </button>
         </div>
       </div>
       <section

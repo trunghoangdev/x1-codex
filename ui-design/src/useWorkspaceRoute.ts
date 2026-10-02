@@ -1,3 +1,4 @@
+import { outcomes } from "./data/outcomes";
 import { handoffs } from "./data/handoffs";
 import { workers, workstreams } from "./data/organizationOverview";
 import {
@@ -14,6 +15,7 @@ export type WorkspaceRoute = {
   workerId?: string;
   handoffId?: string;
   organizationActivity?: boolean;
+  outcomeId?: string;
   tab: string;
   invalid?: boolean;
   work?: WorkFilters;
@@ -64,6 +66,13 @@ export function useWorkspaceRoute(ids: string[], tabs: string[]) {
       path[2] === "activity"
     )
       return { ...fallback, view: "Organization", organizationActivity: true };
+    if (
+      path.length === 3 &&
+      path[0] === "" &&
+      path[1] === "outcomes" &&
+      outcomes.some((o) => o.streamId === path[2])
+    )
+      return { ...fallback, view: "Organization", outcomeId: path[2] };
     if (path.length === 2 && path[0] === "") {
       const view = (Object.keys(viewPaths) as WorkspaceView[]).find(
         (v) => viewPaths[v] === path[1],
@@ -102,7 +111,9 @@ export function useWorkspaceRoute(ids: string[], tabs: string[]) {
             ? `#/handoffs/${next.handoffId}`
             : next.organizationActivity
               ? "#/organization/activity"
-              : `#/${viewPaths[next.view]}`;
+              : next.outcomeId
+                ? `#/outcomes/${next.outcomeId}`
+                : `#/${viewPaths[next.view]}`;
     const hash = path + (next.work ? writeWorkFilters(next.work) : "");
     if (location.hash !== hash) {
       if (replace) history.replaceState(null, "", hash);

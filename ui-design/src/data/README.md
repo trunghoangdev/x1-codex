@@ -35,3 +35,5 @@ This is an incremental boundary, not a finished data layer. Candidate, evidence,
 `organizationAttention.ts` derives bounded attention signals from sample assignments, readiness, explicit responsibility gaps and workstream outcomes. Local responses affect response signals only; unverified effects and goals remain visible. Counts are signals, not completion metrics.
 
 `handoffs.ts` defines two authored exchanges with participant scopes, input expectations, receiving conditions, return paths and explicit assignment links. They describe proposed coordination rather than recorded transfers; response receipts do not advance delivery status.
+
+`outcomes.ts` defines proposed outcome evidence criteria and explicit supporting-context IDs for each stream. These are authored review expectations; assignment responses cannot turn them into verified outcomes.
