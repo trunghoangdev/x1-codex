@@ -1,3 +1,4 @@
+import { handoffs } from "./data/handoffs";
 import { workers, workstreams } from "./data/organizationOverview";
 import {
   readWorkFilters,
@@ -11,6 +12,7 @@ export type WorkspaceRoute = {
   assignmentId?: string;
   workstreamId?: string;
   workerId?: string;
+  handoffId?: string;
   tab: string;
   invalid?: boolean;
   work?: WorkFilters;
@@ -47,6 +49,13 @@ export function useWorkspaceRoute(ids: string[], tabs: string[]) {
     ) {
       return { ...fallback, view: "Organization", workerId: path[2] };
     }
+    if (
+      path.length === 3 &&
+      path[0] === "" &&
+      path[1] === "handoffs" &&
+      handoffs.some((h) => h.id === path[2])
+    )
+      return { ...fallback, view: "Organization", handoffId: path[2] };
     if (path.length === 2 && path[0] === "") {
       const view = (Object.keys(viewPaths) as WorkspaceView[]).find(
         (v) => viewPaths[v] === path[1],
@@ -81,7 +90,9 @@ export function useWorkspaceRoute(ids: string[], tabs: string[]) {
         ? `#/workstreams/${next.workstreamId}`
         : next.workerId
           ? `#/workers/${next.workerId}`
-          : `#/${viewPaths[next.view]}`;
+          : next.handoffId
+            ? `#/handoffs/${next.handoffId}`
+            : `#/${viewPaths[next.view]}`;
     const hash = path + (next.work ? writeWorkFilters(next.work) : "");
     if (location.hash !== hash) {
       if (replace) history.replaceState(null, "", hash);

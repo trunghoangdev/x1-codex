@@ -179,3 +179,5 @@ Workstream cards now open dedicated detail pages with coordination handoffs, cur
 Select **View worker** on an organization role card to inspect that worker’s scoped bindings and related assignments. **Responsibility gaps** distinguishes missing bindings from work not yet assigned. [Worker detail preview](previews/23-worker-detail.png).
 
 **Organization attention** summarizes responsibility gaps, pending responses and unverified outcomes across the sample. Filter by attention type, then inspect the linked assignment or workstream. Counts represent signals, not progress. [Attention preview](previews/24-organization-attention.png).
+
+On a workstream, select **Open handoff** to inspect participants, inputs, receiving conditions and revision/clarification return paths. [Handoff preview](previews/25-handoff-detail.png).

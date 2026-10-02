@@ -433,3 +433,13 @@ Release explanations reuse current prerequisite readiness. Ordinary response sig
 Added browser coverage for category counts, scoped navigation, release authority revocation, response removal without outcome confirmation, mobile width and reload reset. Updated documentation and capture script, refreshed the organization preview and added a dedicated attention image.
 
 Validation: production build and all 45 browser tests passed. The dedicated attention preview was visually inspected.
+
+## 41 — Explicit handoff details
+
+Workstreams now link to two dedicated exchanges: candidate to reviewer and criteria to planner. Each page identifies sender/receiver scopes, expected inputs, proposed receiving conditions, assignment/evidence links and a return path for revision or clarification. Direct URLs and browser history preserve the exchange context; Back to workstream returns to its parent stream.
+
+Local response receipts are inspectable while handoff receipt remains unconfirmed. The invitation exchange explicitly has no planning assignment or evidence attached. This slice describes authored collaboration expectations and does not create assignments or automatically verify transfer/acceptance conditions.
+
+Added browser coverage for participants, exact input navigation, response-versus-delivery semantics, conditional revision, direct routes, history/refresh, missing evidence, mobile width and unknown-handoff fallback. Added a handoff preview and refreshed the workstream preview.
+
+Validation: production build passed. The full suite passed 45 existing tests; the new handoff test initially navigated away during simulated submission. After waiting for the recorded response dialog to close, the handoff test passed on rerun (46 tests covered). The desktop handoff preview was visually inspected.

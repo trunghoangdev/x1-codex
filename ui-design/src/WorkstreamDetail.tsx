@@ -1,3 +1,4 @@
+import { handoffs } from "./data/handoffs";
 import type { Assignment } from "./data/models";
 import type { Workstream } from "./data/organizationOverview";
 import { assignments } from "./data/assignments";
@@ -9,11 +10,13 @@ export function WorkstreamDetail({
   completed,
   onOpen,
   onBack,
+  onHandoff,
 }: {
   stream: Workstream;
   completed: Record<string, string>;
   onOpen: (assignment: Assignment, tab?: string) => void;
   onBack: () => void;
+  onHandoff: (id: string) => void;
 }) {
   const detail = workstreamDetails[stream.id];
   return (
@@ -57,6 +60,23 @@ export function WorkstreamDetail({
             </article>
           ))}
         </div>
+      </section>
+      <section
+        className="panel org-stream org-overview-section"
+        aria-label="Handoff details"
+      >
+        <h2>Inspect an exchange</h2>
+        {handoffs
+          .filter((h) => h.streamId === stream.id)
+          .map((h) => (
+            <button
+              className="button secondary"
+              key={h.id}
+              onClick={() => onHandoff(h.id)}
+            >
+              Open handoff · {h.title}
+            </button>
+          ))}
       </section>
       <section
         className="panel org-stream org-overview-section"

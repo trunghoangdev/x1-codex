@@ -33,3 +33,5 @@ This is an incremental boundary, not a finished data layer. Candidate, evidence,
 `workerDetails.ts` explicitly maps worker/role bindings to sample assignment IDs and describes known invitation responsibility gaps. Empty mappings do not indicate idle workers. These are authored relationships, not production permission checks.
 
 `organizationAttention.ts` derives bounded attention signals from sample assignments, readiness, explicit responsibility gaps and workstream outcomes. Local responses affect response signals only; unverified effects and goals remain visible. Counts are signals, not completion metrics.
+
+`handoffs.ts` defines two authored exchanges with participant scopes, input expectations, receiving conditions, return paths and explicit assignment links. They describe proposed coordination rather than recorded transfers; response receipts do not advance delivery status.

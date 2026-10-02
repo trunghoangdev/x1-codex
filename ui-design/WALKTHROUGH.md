@@ -107,3 +107,7 @@ From Organization, choose **View worker · Alex Morgan**. Compare Reviewer, Prod
 ## Review organization attention
 
 On Organization, find **Organization attention** below the workstreams. Filter Responsibility to inspect missing bindings/assignments, Response for pending decisions and clarification, or Outcome for unconfirmed effects and goals. Open A-1042, record an assessment and return: its response signal disappears while the payment outcome remains unverified. Change A-1041 prerequisites to inspect the matching blocked-decision explanation. Filters reset on navigation; refreshing also clears local responses. This bounded signal list does not establish organization health.
+
+## Inspect a handoff
+
+Open the payment workstream, then **Open handoff · Candidate to reviewer**. Compare sender/receiver scopes, required inputs and receiving conditions. Inspect the candidate or evidence and use browser Back to return. A recorded assessment exposes its receipt while delivery remains unconfirmed. The invitation handoff shows criteria going to the planner and explicitly missing planning assignment/evidence. **Back to workstream** returns to the corresponding stream.

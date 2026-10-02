@@ -1,3 +1,5 @@
+import { HandoffDetail } from "./HandoffDetail";
+import { handoffs } from "./data/handoffs";
 import { WorkerDetail } from "./WorkerDetail";
 import { WorkstreamDetail } from "./WorkstreamDetail";
 import { workers, workstreams } from "./data/organizationOverview";
@@ -97,6 +99,7 @@ function App() {
   );
   const view = route.view;
   const worker = workers.find((w) => w.id === route.workerId);
+  const handoff = handoffs.find((h) => h.id === route.handoffId);
   const stream = workstreams.find((s) => s.id === route.workstreamId);
   const selected = assignments.find((a) => a.id === route.assignmentId) ?? null;
   const tab = route.tab;
@@ -171,7 +174,7 @@ function App() {
     Record<string, string>
   >({});
   const inboxReturn = useRef<{ id: string; y: number } | null>(null);
-  const screenKey = `${route.view}:${route.assignmentId ?? ""}:${!!route.invalid}:${route.workstreamId ?? ""}:${route.workerId ?? ""}`;
+  const screenKey = `${route.view}:${route.assignmentId ?? ""}:${!!route.invalid}:${route.workstreamId ?? ""}:${route.workerId ?? ""}:${route.handoffId ?? ""}`;
   const previousScreen = useRef(screenKey);
   useEffect(() => {
     if (route.view !== "My Work" || route.assignmentId)
@@ -234,6 +237,7 @@ function App() {
     route.view,
     route.workstreamId,
     route.workerId,
+    route.handoffId,
     route.assignmentId,
     route.tab,
     route.invalid,
@@ -1158,6 +1162,14 @@ function App() {
           {view === "Organization" && stream && (
             <WorkstreamDetail
               stream={stream}
+              onHandoff={(id) =>
+                changeRoute({
+                  view: "Organization",
+                  handoffId: id,
+                  tab: "Overview",
+                  work: route.work,
+                })
+              }
               completed={completed}
               onOpen={open}
               onBack={() => navigate("Organization")}
@@ -1171,7 +1183,22 @@ function App() {
               onBack={() => navigate("Organization")}
             />
           )}
-          {view === "Organization" && !stream && !worker && (
+          {view === "Organization" && handoff && (
+            <HandoffDetail
+              handoff={handoff}
+              completed={completed}
+              onOpen={open}
+              onBack={() =>
+                changeRoute({
+                  view: "Organization",
+                  workstreamId: handoff.streamId,
+                  tab: "Overview",
+                  work: route.work,
+                })
+              }
+            />
+          )}
+          {view === "Organization" && !stream && !worker && !handoff && (
             <>
               <OrganizationOverview
                 completed={completed}

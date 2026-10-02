@@ -1999,3 +1999,70 @@ test("organization attention separates response signals from responsibility and 
     "9 of 9 attention items",
   );
 });
+
+test("handoff details retain participants, inputs and unconfirmed delivery", async ({
+  page,
+}) => {
+  await page.goto("/#/workstreams/WS-01");
+  await page
+    .getByRole("button", { name: "Open handoff · Candidate to reviewer" })
+    .click();
+  await expect(page).toHaveURL(/handoffs\/payment-review/);
+  await expect(
+    page.getByRole("heading", { name: "Candidate to reviewer", exact: true }),
+  ).toBeFocused();
+  await expect(
+    page.getByRole("region", { name: "Handoff participants" }),
+  ).toContainText("Codex worker");
+  await expect(
+    page.getByRole("region", { name: "Handoff participants" }),
+  ).toContainText("Alex Morgan");
+  await page.getByRole("button", { name: "Inspect input · A-1042" }).click();
+  await expect(page).toHaveURL(/assignments\/A-1042\/candidate/);
+  await page
+    .getByRole("button", { name: "Submit assessment", exact: true })
+    .click();
+  await page
+    .getByLabel("Decision rationale")
+    .fill("The sample needs more evidence tied to this candidate.");
+  await page
+    .getByLabel("Assessment conclusion", { exact: true })
+    .selectOption("Insufficient evidence");
+  await page.getByRole("button", { name: "Record assessment" }).click();
+  await expect(page.getByRole("dialog")).toHaveCount(0);
+  await page.goBack();
+  await expect(
+    page.getByRole("region", { name: "Handoff records" }),
+  ).toContainText(
+    "Local response recorded · handoff receipt remains unconfirmed",
+  );
+  await expect(
+    page.getByRole("region", { name: "Handoff return path" }),
+  ).toContainText("revised candidate needs its own assessment");
+  await page.getByRole("button", { name: "View response · A-1042" }).click();
+  await expect(page).toHaveURL(/assignments\/A-1042\/activity/);
+  await page.goBack();
+  await page.reload();
+  await expect(
+    page.getByRole("region", { name: "Handoff records" }),
+  ).toContainText("Awaiting assignment response");
+  await page.getByRole("button", { name: "Back to workstream" }).click();
+  await expect(page).toHaveURL(/workstreams\/WS-01/);
+  await page.goto("/#/handoffs/invitation-planning");
+  await expect(
+    page.getByRole("region", { name: "Handoff records" }),
+  ).toContainText("No evidence records attached");
+  await expect(
+    page.getByRole("region", { name: "Handoff return path" }),
+  ).toContainText("no planning assignment");
+  await page.setViewportSize({ width: 390, height: 844 });
+  expect(
+    await page.evaluate(
+      () => document.documentElement.scrollWidth <= innerWidth,
+    ),
+  ).toBeTruthy();
+  await page.getByRole("button", { name: "Inspect input · A-1038" }).click();
+  await expect(page).toHaveURL(/assignments\/A-1038\/overview/);
+  await page.goto("/#/handoffs/unknown");
+  await expect(page.getByText(/Showing My Work/)).toBeVisible();
+});

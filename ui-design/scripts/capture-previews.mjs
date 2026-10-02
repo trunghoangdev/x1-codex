@@ -259,4 +259,10 @@ await page
     path: "previews/24-organization-attention.png",
     animations: "disabled",
   });
+await page.goto("http://127.0.0.1:4173/#/handoffs/payment-review");
+await page.screenshot({
+  path: "previews/25-handoff-detail.png",
+  fullPage: true,
+  animations: "disabled",
+});
 await browser.close();
