@@ -423,3 +423,13 @@ A Responsibility gaps section distinguishes the unrepresented invitation develop
 Added browser coverage for binding isolation, assignment navigation, history and refresh, all three empty worker examples, mobile width, gap navigation and unknown-worker fallback. Updated model documentation and walkthrough, refreshed the overview preview and added a worker-detail preview.
 
 Validation: production build and all 44 browser tests passed. Desktop worker preview was visually inspected; browser coverage also verifies the detail page fits a 390px viewport.
+
+## 40 — Organization attention
+
+The organization overview now shows a filterable attention section below its workstreams. Explicit responsibility gaps, pending responses and unverified effects/goals link to their source assignment or stream. Counts measure bounded sample signals, not unique assignments or completion. The planner is identified as a sample coordination contact; unassigned outcome-review responsibility is explicit.
+
+Release explanations reuse current prerequisite readiness. Ordinary response signals clear when a local receipt is recorded; release/staging unverified effects and both workstream outcomes remain. Responsibility gaps do not disappear merely because criteria were submitted. The separate Alex queue remains available below the organization context.
+
+Added browser coverage for category counts, scoped navigation, release authority revocation, response removal without outcome confirmation, mobile width and reload reset. Updated documentation and capture script, refreshed the organization preview and added a dedicated attention image.
+
+Validation: production build and all 45 browser tests passed. The dedicated attention preview was visually inspected.

@@ -103,3 +103,7 @@ Prototype v1 is a UI review checkpoint. It includes no authentication, durable s
 ## Inspect roles and workers
 
 From Organization, choose **View worker · Alex Morgan**. Compare Reviewer, Product owner, Release authority and Operator scopes and their explicitly linked assignments. Open an assignment, then use browser Back to return. Inspect Jamie, Codex or Release runner: no linked sample assignments does not imply idle capacity. Return to Organization and inspect **Responsibility gaps** for the invitation workstream. This view describes sample responsibilities, not runtime health or live authorization.
+
+## Review organization attention
+
+On Organization, find **Organization attention** below the workstreams. Filter Responsibility to inspect missing bindings/assignments, Response for pending decisions and clarification, or Outcome for unconfirmed effects and goals. Open A-1042, record an assessment and return: its response signal disappears while the payment outcome remains unverified. Change A-1041 prerequisites to inspect the matching blocked-decision explanation. Filters reset on navigation; refreshing also clears local responses. This bounded signal list does not establish organization health.

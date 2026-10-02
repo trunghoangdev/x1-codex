@@ -1929,3 +1929,73 @@ test("worker details keep bindings scoped and expose unassigned responsibility",
   await page.goto("/#/workers/unknown");
   await expect(page.getByText(/Showing My Work/)).toBeVisible();
 });
+
+test("organization attention separates response signals from responsibility and outcomes", async ({
+  page,
+}) => {
+  await page.goto("/#/organization");
+  const attention = page.getByRole("region", {
+    name: "Organization attention",
+    exact: true,
+  });
+  await expect(attention.getByRole("status")).toContainText(
+    "9 of 9 attention items",
+  );
+  await attention.getByLabel("Attention type").selectOption("Responsibility");
+  await expect(attention.getByRole("article")).toHaveCount(2);
+  await attention
+    .getByRole("article", { name: "Invitation implementation", exact: true })
+    .getByRole("button")
+    .click();
+  await expect(page).toHaveURL(/workstreams\/WS-02/);
+  await page.goBack();
+  await attention.getByLabel("Attention type").selectOption("Response");
+  await expect(attention.getByRole("article")).toHaveCount(4);
+  await attention
+    .getByRole("button", { name: "Inspect assignment · A-1041" })
+    .click();
+  await selectScenario(
+    page.getByLabel("Preview release prerequisites"),
+    "revoked",
+  );
+  await page.getByRole("button", { name: "Organization", exact: true }).click();
+  await expect(attention).toContainText(
+    "Both decisions are blocked: release authority is no longer valid",
+  );
+  await attention
+    .getByRole("button", { name: "Inspect assignment · A-1042" })
+    .click();
+  await page
+    .getByRole("button", { name: "Submit assessment", exact: true })
+    .click();
+  await page
+    .getByLabel("Decision rationale")
+    .fill("The sample evidence is insufficient to establish the goal.");
+  await page
+    .getByLabel("Assessment conclusion", { exact: true })
+    .selectOption("Insufficient evidence");
+  await page.getByRole("button", { name: "Record assessment" }).click();
+  await page.getByRole("button", { name: "Organization", exact: true }).click();
+  await expect(attention.getByRole("status")).toContainText(
+    "8 of 8 attention items",
+  );
+  await expect(
+    attention.getByRole("button", { name: "Inspect assignment · A-1042" }),
+  ).toHaveCount(0);
+  await attention.getByLabel("Attention type").selectOption("Outcome");
+  await expect(attention.getByRole("article")).toHaveCount(3);
+  await expect(attention).toContainText(
+    "no production reliability observation",
+  );
+  await expect(attention).toContainText("staging effect is unconfirmed");
+  await page.setViewportSize({ width: 390, height: 844 });
+  expect(
+    await page.evaluate(
+      () => document.documentElement.scrollWidth <= innerWidth,
+    ),
+  ).toBeTruthy();
+  await page.reload();
+  await expect(attention.getByRole("status")).toContainText(
+    "9 of 9 attention items",
+  );
+});

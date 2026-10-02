@@ -31,3 +31,5 @@ This is an incremental boundary, not a finished data layer. Candidate, evidence,
 `workstreamDetails.ts` describes proposed handoffs and missing outcome evidence for each sample stream. Handoff states are authored context, not events inferred from local responses or a workflow engine.
 
 `workerDetails.ts` explicitly maps worker/role bindings to sample assignment IDs and describes known invitation responsibility gaps. Empty mappings do not indicate idle workers. These are authored relationships, not production permission checks.
+
+`organizationAttention.ts` derives bounded attention signals from sample assignments, readiness, explicit responsibility gaps and workstream outcomes. Local responses affect response signals only; unverified effects and goals remain visible. Counts are signals, not completion metrics.

@@ -1,3 +1,4 @@
+import { OrganizationAttention } from "./OrganizationAttention";
 import { responsibilityGaps } from "./data/workerDetails";
 import { assignments } from "./data/assignments";
 import { evidenceFor } from "./data/evidence";
@@ -129,6 +130,12 @@ export function OrganizationOverview({
           ))}
         </div>
       </section>
+      <OrganizationAttention
+        completed={completed}
+        readiness={readiness}
+        onOpen={onOpen}
+        onWorkstream={onWorkstream}
+      />
       <section
         className="panel org-stream org-overview-section"
         aria-label="Other organization work"
