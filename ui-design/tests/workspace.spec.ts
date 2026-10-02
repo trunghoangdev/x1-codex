@@ -2066,3 +2066,73 @@ test("handoff details retain participants, inputs and unconfirmed delivery", asy
   await page.goto("/#/handoffs/unknown");
   await expect(page.getByText(/Showing My Work/)).toBeVisible();
 });
+
+test("organization activity scopes evidence and session responses without inventing chronology", async ({
+  page,
+}) => {
+  await page.goto("/#/organization");
+  await page
+    .getByRole("button", { name: "View organization activity" })
+    .click();
+  await expect(page).toHaveURL(/organization\/activity/);
+  await expect(
+    page.getByRole("heading", { name: "Records across the organization" }),
+  ).toBeFocused();
+  const records = page.getByRole("region", {
+    name: "Organization activity records",
+  });
+  await expect(records.getByRole("status")).toContainText("4 matching records");
+  await records.getByLabel("Activity scope").selectOption("other");
+  await expect(records).toContainText("AR-801");
+  await expect(records).not.toContainText("AR-771");
+  await records.getByLabel("Activity scope").selectOption("WS-02");
+  await expect(records.getByRole("status")).toContainText("0 matching records");
+  await expect(records).toContainText(
+    "absence of records does not establish an outcome",
+  );
+  await records.getByLabel("Activity scope").selectOption("WS-01");
+  await records
+    .getByRole("button", { name: "Inspect record · AR-771" })
+    .click();
+  await expect(page).toHaveURL(/assignments\/A-1042\/activity/);
+  await page
+    .getByRole("button", { name: "Submit assessment", exact: true })
+    .click();
+  await page
+    .getByLabel("Decision rationale")
+    .fill("Review recorded for the organization activity example.");
+  await page
+    .getByLabel("Assessment conclusion", { exact: true })
+    .selectOption("Insufficient evidence");
+  await page.getByRole("button", { name: "Record assessment" }).click();
+  await expect(page.getByRole("dialog")).toHaveCount(0);
+  await page.goBack();
+  await records
+    .getByLabel("Organization activity type")
+    .selectOption("responses");
+  await expect(records.getByRole("status")).toContainText("1 matching records");
+  await expect(records).toContainText("Insufficient evidence");
+  await records
+    .getByRole("button", { name: "Inspect response · A-1042" })
+    .click();
+  await expect(page.getByRole("tabpanel")).toContainText(
+    "Review recorded for the organization activity example",
+  );
+  await page.goBack();
+  await records.getByRole("button", { name: "Reset activity filters" }).click();
+  await expect(records.getByRole("status")).toContainText("5 matching records");
+  await expect(records).toContainText("Publication times are unavailable");
+  await page.setViewportSize({ width: 390, height: 844 });
+  expect(
+    await page.evaluate(
+      () => document.documentElement.scrollWidth <= innerWidth,
+    ),
+  ).toBeTruthy();
+  await page.reload();
+  await expect(records.getByRole("status")).toContainText("4 matching records");
+  await expect(records).toContainText("No local responses in this scope");
+  await page.getByRole("button", { name: "Back to Organization" }).click();
+  await expect(
+    page.getByRole("heading", { name: "One team. Clear responsibility." }),
+  ).toBeFocused();
+});

@@ -443,3 +443,11 @@ Local response receipts are inspectable while handoff receipt remains unconfirme
 Added browser coverage for participants, exact input navigation, response-versus-delivery semantics, conditional revision, direct routes, history/refresh, missing evidence, mobile width and unknown-handoff fallback. Added a handoff preview and refreshed the workstream preview.
 
 Validation: production build passed. The full suite passed 45 existing tests; the new handoff test initially navigated away during simulated submission. After waiting for the recorded response dialog to close, the handoff test passed on rerun (46 tests covered). The desktop handoff preview was visually inspected.
+
+## 42 — Organization activity
+
+Organization now links to a dedicated activity view at `#/organization/activity`. Filters select modeled workstreams, other organization work and record type. Local response receipts are ordered newest first, with actor, subject, rationale and recording time. Attached sample evidence is listed separately because publication times are unavailable. Links open assignment Activity for receipt/artifact inspection.
+
+Stream membership is explicit; sharing a project does not place release evidence in the payment stream. Empty scopes show the absence of connected records without inferring outcomes. Filters reset on navigation and refresh clears local receipts. Added an activity preview and refreshed the organization overview.
+
+Validation: production build and five relevant browser tests passed: organization activity, assignment routing/history, assignment Activity/evidence scope, screen focus and inbox focus/filter restoration. New coverage includes response recording, scope isolation, empty invitation records, undated evidence explanation, mobile width and refresh reset. Desktop preview was visually inspected.

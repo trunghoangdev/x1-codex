@@ -111,3 +111,7 @@ On Organization, find **Organization attention** below the workstreams. Filter R
 ## Inspect a handoff
 
 Open the payment workstream, then **Open handoff · Candidate to reviewer**. Compare sender/receiver scopes, required inputs and receiving conditions. Inspect the candidate or evidence and use browser Back to return. A recorded assessment exposes its receipt while delivery remains unconfirmed. The invitation handoff shows criteria going to the planner and explicitly missing planning assignment/evidence. **Back to workstream** returns to the corresponding stream.
+
+## Explore organization activity
+
+Select **View organization activity**. Filter to Payment webhook reliability to see its three attached records; Other organization work contains the separate release evidence. The invitation stream has no attached evidence. Record an assessment and return to see its dated local response. Inspect the response through assignment Activity. Refresh clears session receipts while keeping sample evidence.

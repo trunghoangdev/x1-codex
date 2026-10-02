@@ -31,3 +31,7 @@ Release readiness reuses the existing prerequisite explanations. Recorded respon
 ## Handoff details
 
 Two explicit sample exchanges are defined in `handoffs.ts`: candidate to reviewer and criteria to planner. They link from the corresponding workstream to `#/handoffs/payment-review` and `#/handoffs/invitation-planning`. Each describes sender/receiver scopes, inputs, proposed receiving conditions, return paths and existing assignment/evidence. Local receipts are inspectable without confirming transfer or acceptance. These pages do not create follow-up assignments or automatically evaluate receiving conditions.
+
+## Organization activity
+
+`#/organization/activity` combines session response receipts and attached sample evidence across modeled workstreams. The Other organization work filter covers assignments with no authored stream membership. Responses are ordered by recording time; undated evidence is presented separately and has no inferred publication sequence. Filters reset when leaving the page; refresh clears local responses. Source links open assignment Activity for full receipt or artifact inspection.

@@ -181,3 +181,5 @@ Select **View worker** on an organization role card to inspect that worker’s s
 **Organization attention** summarizes responsibility gaps, pending responses and unverified outcomes across the sample. Filter by attention type, then inspect the linked assignment or workstream. Counts represent signals, not progress. [Attention preview](previews/24-organization-attention.png).
 
 On a workstream, select **Open handoff** to inspect participants, inputs, receiving conditions and revision/clarification return paths. [Handoff preview](previews/25-handoff-detail.png).
+
+Select **View organization activity** on Organization to filter records by workstream and type. Session responses have recording times; attached evidence has no verified publication history. [Activity preview](previews/26-organization-activity.png).

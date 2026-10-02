@@ -17,6 +17,7 @@ export function OrganizationOverview({
   onMyWork,
   onWorkstream,
   onWorker,
+  onActivity,
 }: {
   completed: Record<string, string>;
   readiness: Readiness;
@@ -24,6 +25,7 @@ export function OrganizationOverview({
   onMyWork: () => void;
   onWorkstream: (id: string) => void;
   onWorker: (id: string) => void;
+  onActivity: () => void;
 }) {
   return (
     <>
@@ -57,6 +59,11 @@ export function OrganizationOverview({
           </p>
         </div>
       </div>
+      <p className="org-overview-section">
+        <button className="button secondary" onClick={onActivity}>
+          View organization activity
+        </button>
+      </p>
       <section
         aria-label="Organization workstreams"
         className="org-overview-section"

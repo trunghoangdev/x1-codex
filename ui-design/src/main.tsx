@@ -1,3 +1,4 @@
+import { OrganizationActivity } from "./OrganizationActivity";
 import { HandoffDetail } from "./HandoffDetail";
 import { handoffs } from "./data/handoffs";
 import { WorkerDetail } from "./WorkerDetail";
@@ -174,7 +175,7 @@ function App() {
     Record<string, string>
   >({});
   const inboxReturn = useRef<{ id: string; y: number } | null>(null);
-  const screenKey = `${route.view}:${route.assignmentId ?? ""}:${!!route.invalid}:${route.workstreamId ?? ""}:${route.workerId ?? ""}:${route.handoffId ?? ""}`;
+  const screenKey = `${route.view}:${route.assignmentId ?? ""}:${!!route.invalid}:${route.workstreamId ?? ""}:${route.workerId ?? ""}:${route.handoffId ?? ""}:${!!route.organizationActivity}`;
   const previousScreen = useRef(screenKey);
   useEffect(() => {
     if (route.view !== "My Work" || route.assignmentId)
@@ -238,6 +239,7 @@ function App() {
     route.workstreamId,
     route.workerId,
     route.handoffId,
+    route.organizationActivity,
     route.assignmentId,
     route.tab,
     route.invalid,
@@ -1198,38 +1200,57 @@ function App() {
               }
             />
           )}
-          {view === "Organization" && !stream && !worker && !handoff && (
-            <>
-              <OrganizationOverview
-                completed={completed}
-                readiness={readiness}
-                onOpen={open}
-                onMyWork={() => navigate("My Work")}
-                onWorker={(id) =>
-                  changeRoute({
-                    view: "Organization",
-                    workerId: id,
-                    tab: "Overview",
-                    work: route.work,
-                  })
-                }
-                onWorkstream={(id) =>
-                  changeRoute({
-                    view: "Organization",
-                    workstreamId: id,
-                    tab: "Overview",
-                    work: route.work,
-                  })
-                }
-              />
-              <OrganizationWork
-                completed={completed}
-                readiness={readiness}
-                onOpen={open}
-              />
-              <RevisionCycle />
-            </>
+          {view === "Organization" && route.organizationActivity && (
+            <OrganizationActivity
+              receipts={receipts}
+              onOpen={open}
+              onBack={() => navigate("Organization")}
+            />
           )}
+          {view === "Organization" &&
+            !stream &&
+            !worker &&
+            !handoff &&
+            !route.organizationActivity && (
+              <>
+                <OrganizationOverview
+                  completed={completed}
+                  readiness={readiness}
+                  onOpen={open}
+                  onMyWork={() => navigate("My Work")}
+                  onActivity={() =>
+                    changeRoute({
+                      view: "Organization",
+                      organizationActivity: true,
+                      tab: "Overview",
+                      work: route.work,
+                    })
+                  }
+                  onWorker={(id) =>
+                    changeRoute({
+                      view: "Organization",
+                      workerId: id,
+                      tab: "Overview",
+                      work: route.work,
+                    })
+                  }
+                  onWorkstream={(id) =>
+                    changeRoute({
+                      view: "Organization",
+                      workstreamId: id,
+                      tab: "Overview",
+                      work: route.work,
+                    })
+                  }
+                />
+                <OrganizationWork
+                  completed={completed}
+                  readiness={readiness}
+                  onOpen={open}
+                />
+                <RevisionCycle />
+              </>
+            )}
           {view === "Evidence" && (
             <>
               <div className="page-heading">
