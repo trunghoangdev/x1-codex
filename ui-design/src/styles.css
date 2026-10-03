@@ -3388,3 +3388,7 @@ main h3,
     flex-basis: 100%;
   }
 }
+
+.worker-directory-gaps {
+  margin-top: 24px;
+}

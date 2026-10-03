@@ -1,4 +1,9 @@
 import {
+  defaultWorkerFilters,
+  directoryRoles,
+  type WorkerFilters,
+} from "./data/workerDirectory";
+import {
   defaultStreamFilters,
   type StreamFilters,
 } from "./data/workstreamDirectory";
@@ -21,6 +26,7 @@ export type WorkspaceRoute = {
   handoffId?: string;
   organizationActivity?: boolean;
   streamDirectory?: StreamFilters;
+  workerDirectory?: WorkerFilters;
   outcomeId?: string;
   attention?: AttentionCategory | "All";
   personalQueue?: boolean;
@@ -46,6 +52,31 @@ export function useWorkspaceRoute(ids: string[], tabs: string[]) {
       separator < 0 ? "" : raw.slice(separator + 1),
     );
     const path = (separator < 0 ? raw : raw.slice(0, separator)).split("/");
+    if (path.join("/") === "/organization/workers") {
+      const params = new URLSearchParams(
+        separator < 0 ? "" : raw.slice(separator + 1),
+      );
+      const type = params.get("type") ?? "all";
+      const role = params.get("role") ?? "All";
+      const links = params.get("links") ?? "all";
+      if (
+        !["all", "human", "ai", "deterministic"].includes(type) ||
+        !["All", ...directoryRoles].includes(role) ||
+        !["all", "linked", "none"].includes(links)
+      )
+        return { ...fallback, invalid: true };
+      return {
+        view: "Organization",
+        tab: "Overview",
+        workerDirectory: {
+          ...defaultWorkerFilters,
+          query: params.get("q") ?? "",
+          type: type as WorkerFilters["type"],
+          role,
+          assignments: links as WorkerFilters["assignments"],
+        },
+      };
+    }
     if (path.join("/") === "/organization/workstreams") {
       const params = new URLSearchParams(
         separator < 0 ? "" : raw.slice(separator + 1),
@@ -158,27 +189,29 @@ export function useWorkspaceRoute(ids: string[], tabs: string[]) {
     };
   }, []);
   function navigate(next: WorkspaceRoute, replace = false) {
-    const path = next.streamDirectory
-      ? "#/organization/workstreams"
-      : next.assignmentId
-        ? `#/assignments/${next.assignmentId}/${next.tab.toLowerCase()}`
-        : next.workstreamId
-          ? `#/workstreams/${next.workstreamId}`
-          : next.workerId
-            ? `#/workers/${next.workerId}`
-            : next.handoffId
-              ? `#/handoffs/${next.handoffId}`
-              : next.organizationActivity
-                ? "#/organization/activity"
-                : next.outcomeId
-                  ? `#/outcomes/${next.outcomeId}`
-                  : next.attention
-                    ? `#/organization/attention/${next.attention.toLowerCase()}`
-                    : next.personalQueue
-                      ? "#/work/attention"
-                      : next.largeOrganization
-                        ? "#/demos/organization"
-                        : `#/${viewPaths[next.view]}`;
+    const path = next.workerDirectory
+      ? "#/organization/workers"
+      : next.streamDirectory
+        ? "#/organization/workstreams"
+        : next.assignmentId
+          ? `#/assignments/${next.assignmentId}/${next.tab.toLowerCase()}`
+          : next.workstreamId
+            ? `#/workstreams/${next.workstreamId}`
+            : next.workerId
+              ? `#/workers/${next.workerId}`
+              : next.handoffId
+                ? `#/handoffs/${next.handoffId}`
+                : next.organizationActivity
+                  ? "#/organization/activity"
+                  : next.outcomeId
+                    ? `#/outcomes/${next.outcomeId}`
+                    : next.attention
+                      ? `#/organization/attention/${next.attention.toLowerCase()}`
+                      : next.personalQueue
+                        ? "#/work/attention"
+                        : next.largeOrganization
+                          ? "#/demos/organization"
+                          : `#/${viewPaths[next.view]}`;
     const params = new URLSearchParams();
     if (next.streamDirectory) {
       if (next.streamDirectory.query)
@@ -188,9 +221,19 @@ export function useWorkspaceRoute(ids: string[], tabs: string[]) {
       if (next.streamDirectory.signal !== "all")
         params.set("signal", next.streamDirectory.signal);
     }
+    if (next.workerDirectory) {
+      if (next.workerDirectory.query)
+        params.set("q", next.workerDirectory.query);
+      if (next.workerDirectory.type !== "all")
+        params.set("type", next.workerDirectory.type);
+      if (next.workerDirectory.role !== "All")
+        params.set("role", next.workerDirectory.role);
+      if (next.workerDirectory.assignments !== "all")
+        params.set("links", next.workerDirectory.assignments);
+    }
     const hash =
       path +
-      (next.streamDirectory
+      (next.streamDirectory || next.workerDirectory
         ? params.size
           ? `?${params}`
           : ""

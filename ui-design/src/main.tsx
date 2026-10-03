@@ -1,3 +1,5 @@
+import { WorkersDirectory } from "./WorkersDirectory";
+import { defaultWorkerFilters } from "./data/workerDirectory";
 import { WorkstreamsDirectory } from "./WorkstreamsDirectory";
 import { defaultStreamFilters } from "./data/workstreamDirectory";
 import { CustomerTour, customerTourSteps } from "./CustomerTour";
@@ -207,6 +209,7 @@ function App() {
     role: "All",
     status: "all",
   });
+  const workerDirectorySources = useRef<Record<string, WorkspaceRoute>>({});
   const directorySources = useRef<Record<string, WorkspaceRoute>>({});
   const assignmentSources = useRef<
     Record<
@@ -222,7 +225,7 @@ function App() {
   >({});
   const source = selected ? assignmentSources.current[selected.id] : undefined;
   const inboxReturn = useRef<{ id: string; y: number } | null>(null);
-  const screenKey = `${route.view}:${route.assignmentId ?? ""}:${!!route.invalid}:${route.workstreamId ?? ""}:${route.workerId ?? ""}:${route.handoffId ?? ""}:${!!route.organizationActivity}:${route.outcomeId ?? ""}:${!!route.attention}:${!!route.personalQueue}:${!!route.largeOrganization}:${!!route.streamDirectory}`;
+  const screenKey = `${route.view}:${route.assignmentId ?? ""}:${!!route.invalid}:${route.workstreamId ?? ""}:${route.workerId ?? ""}:${route.handoffId ?? ""}:${!!route.organizationActivity}:${route.outcomeId ?? ""}:${!!route.attention}:${!!route.personalQueue}:${!!route.largeOrganization}:${!!route.streamDirectory}:${!!route.workerDirectory}`;
   const previousScreen = useRef(screenKey);
   useEffect(() => {
     if (route.view !== "My Work" || route.assignmentId)
@@ -314,6 +317,7 @@ function App() {
     route.personalQueue,
     route.largeOrganization,
     !!route.streamDirectory,
+    !!route.workerDirectory,
     route.assignmentId,
     route.tab,
     route.invalid,
@@ -328,6 +332,7 @@ function App() {
   }
   function navigate(next: View) {
     directorySources.current = {};
+    workerDirectorySources.current = {};
     setOrganizationActivityView({ scope: "all", type: "all" });
     setQueueView({ project: "All", role: "All", status: "all" });
     changeRoute({ view: next, tab: "Overview", work: route.work });
@@ -550,6 +555,7 @@ function App() {
               worker ||
               handoff ||
               outcome ||
+              route.workerDirectory ||
               route.streamDirectory ||
               route.organizationActivity ||
               route.attention) ? (
@@ -567,11 +573,13 @@ function App() {
                     handoff?.title ??
                     (outcomeStream
                       ? `Outcome · ${outcomeStream.name}`
-                      : route.streamDirectory
-                        ? "Workstreams"
-                        : route.attention
-                          ? "Attention"
-                          : "Activity")}
+                      : route.workerDirectory
+                        ? "Workers"
+                        : route.streamDirectory
+                          ? "Workstreams"
+                          : route.attention
+                            ? "Attention"
+                            : "Activity")}
                 </strong>
               </>
             ) : (
@@ -1375,9 +1383,18 @@ function App() {
           {view === "Organization" && worker && (
             <WorkerDetail
               worker={worker}
+              backLabel={
+                workerDirectorySources.current[worker.id]
+                  ? "Back to Workers"
+                  : undefined
+              }
               completed={completed}
               onOpen={open}
-              onBack={() => navigate("Organization")}
+              onBack={() =>
+                workerDirectorySources.current[worker.id]
+                  ? changeRoute(workerDirectorySources.current[worker.id])
+                  : navigate("Organization")
+              }
             />
           )}
           {view === "Organization" && handoff && (
@@ -1443,6 +1460,31 @@ function App() {
               onBack={() => navigate("Organization")}
             />
           )}
+          {view === "Organization" && route.workerDirectory && (
+            <WorkersDirectory
+              filters={route.workerDirectory}
+              onFilters={(filters) =>
+                changeRoute(
+                  {
+                    view: "Organization",
+                    tab: "Overview",
+                    workerDirectory: filters,
+                  },
+                  true,
+                )
+              }
+              onBack={() => navigate("Organization")}
+              onAttention={() => openAttention("Responsibility")}
+              onOpen={(id) => {
+                workerDirectorySources.current[id] = route;
+                changeRoute({
+                  view: "Organization",
+                  tab: "Overview",
+                  workerId: id,
+                });
+              }}
+            />
+          )}
           {view === "Organization" && route.streamDirectory && (
             <WorkstreamsDirectory
               filters={route.streamDirectory}
@@ -1468,6 +1510,7 @@ function App() {
             />
           )}
           {view === "Organization" &&
+            !route.workerDirectory &&
             !route.streamDirectory &&
             !stream &&
             !worker &&
@@ -1477,6 +1520,13 @@ function App() {
             !route.attention && (
               <>
                 <OrganizationOverview
+                  onWorkersDirectory={() =>
+                    changeRoute({
+                      view: "Organization",
+                      tab: "Overview",
+                      workerDirectory: defaultWorkerFilters,
+                    })
+                  }
                   onDirectory={() =>
                     changeRoute({
                       view: "Organization",
@@ -1499,14 +1549,15 @@ function App() {
                       work: route.work,
                     })
                   }
-                  onWorker={(id) =>
+                  onWorker={(id) => {
+                    delete workerDirectorySources.current[id];
                     changeRoute({
                       view: "Organization",
                       workerId: id,
                       tab: "Overview",
                       work: route.work,
-                    })
-                  }
+                    });
+                  }}
                   onWorkstream={(id) =>
                     changeRoute({
                       view: "Organization",

@@ -205,3 +205,5 @@ Responsibility gaps now offer **Propose responsibility**. Choose a sample worker
 Customer presentation: Demos → Start customer walkthrough. The eight-step guide connects existing screens and explains the change from invitation coordination to payment evidence. See [CUSTOMER-WALKTHROUGH.md](CUSTOMER-WALKTHROUGH.md).
 
 Organization Overview → Browse workstreams opens a searchable directory with project and responsibility/outcome filters stored in the URL. See [WORKSTREAMS-DIRECTORY.md](WORKSTREAMS-DIRECTORY.md).
+
+Organization Overview → Browse workers opens a searchable directory with type, role and explicit assignment-link filters stored in the URL. See [WORKERS-DIRECTORY.md](WORKERS-DIRECTORY.md).

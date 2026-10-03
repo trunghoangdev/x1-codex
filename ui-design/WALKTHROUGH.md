@@ -147,3 +147,7 @@ Demos → Start customer walkthrough opens an eight-step guide over the main wor
 ## Workstreams directory
 
 From Organization, choose Browse workstreams. Filter by Missing responsibility to find invitation's two gaps, or Unverified outcome to inspect both streams. Combine project and search, open a workstream, then use Back to Workstreams to retain the directory URL. A proposal or assessment does not remove these signals. Refreshing a detail restores the normal Organization fallback.
+
+## Workers directory
+
+From Organization, choose Browse workers. Alex has four scoped bindings and five linked assignments; the other three workers have bindings but no assignment links in this sample. Filter type, role or assignment links, then open a worker to inspect scoped responsibilities. Back to Workers retains the filter URL during the session. The organization gap panel stays independent of worker filters and opens Responsibility attention.

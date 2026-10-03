@@ -43,3 +43,5 @@ This is an incremental boundary, not a finished data layer. Candidate, evidence,
 `responsibilityProposals.ts` defines local proposal receipts and authored worker options for the two invitation gaps. Recording proposals does not mutate assignments, role bindings or gap signals. Role/scope are fixed by the gap; worker capability and capacity are unverified.
 
 `workstreamDirectory.ts` defines URL filter defaults for the main organization directory. Entries reuse `organizationOverview`, explicit `workerDetails` gaps and `outcomes` evidence requirements; no receipt or proposal resolves these signals.
+
+`workerDirectory.ts` defines URL filter defaults, explicit worker type classification and directory entries built from scoped bindings and distinct `workerAssignments` links. Counts are sample relationship counts, not capacity or availability measurements.

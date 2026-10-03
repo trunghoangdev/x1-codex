@@ -344,4 +344,10 @@ await page.screenshot({
   fullPage: true,
   animations: "disabled",
 });
+await page.goto("http://127.0.0.1:4173/#/organization/workers");
+await page.screenshot({
+  path: "previews/35-workers-directory.png",
+  fullPage: true,
+  animations: "disabled",
+});
 await browser.close();

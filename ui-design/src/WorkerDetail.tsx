@@ -8,11 +8,13 @@ export function WorkerDetail({
   worker,
   completed,
   onOpen,
+  backLabel = "Back to Organization",
   onBack,
 }: {
   worker: Worker;
   completed: Record<string, string>;
   onOpen: (assignment: Assignment, tab?: string) => void;
+  backLabel?: string;
   onBack: () => void;
 }) {
   const bindings = roleBindings.filter(
@@ -20,7 +22,7 @@ export function WorkerDetail({
   );
   return (
     <div className="detail-page">
-      <DetailBackButton onClick={onBack}>Back to Organization</DetailBackButton>
+      <DetailBackButton onClick={onBack}>{backLabel}</DetailBackButton>
       <div className="page-heading workstream-heading">
         <div>
           <div className="eyebrow">WORKER DETAIL · {worker.type}</div>
