@@ -350,4 +350,15 @@ await page.screenshot({
   fullPage: true,
   animations: "disabled",
 });
+await page.goto("http://127.0.0.1:4173/#/workstreams/WS-01");
+await page
+  .getByRole("region", { name: "Coordination and handoffs" })
+  .screenshot({ path: "previews/36-payment-flow.png", animations: "disabled" });
+await page.goto("http://127.0.0.1:4173/#/workstreams/WS-02");
+await page
+  .getByRole("region", { name: "Coordination and handoffs" })
+  .screenshot({
+    path: "previews/37-invitation-flow.png",
+    animations: "disabled",
+  });
 await browser.close();

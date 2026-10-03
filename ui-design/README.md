@@ -207,3 +207,5 @@ Customer presentation: Demos → Start customer walkthrough. The eight-step guid
 Organization Overview → Browse workstreams opens a searchable directory with project and responsibility/outcome filters stored in the URL. See [WORKSTREAMS-DIRECTORY.md](WORKSTREAMS-DIRECTORY.md).
 
 Organization Overview → Browse workers opens a searchable directory with type, role and explicit assignment-link filters stored in the URL. See [WORKERS-DIRECTORY.md](WORKERS-DIRECTORY.md).
+
+Workstream detail now shows an ordered collaboration flow with explicit assignment, evidence, exchange and missing-responsibility links. Numbering is proposed coordination rather than execution history. See [WORKSTREAM-FLOW.md](WORKSTREAM-FLOW.md).

@@ -151,3 +151,7 @@ From Organization, choose Browse workstreams. Filter by Missing responsibility t
 ## Workers directory
 
 From Organization, choose Browse workers. Alex has four scoped bindings and five linked assignments; the other three workers have bindings but no assignment links in this sample. Filter type, role or assignment links, then open a worker to inspect scoped responsibilities. Back to Workers retains the filter URL during the session. The organization gap panel stays independent of worker filters and opens Responsibility attention.
+
+## Workstream flow
+
+Open either workstream and read Coordination & handoffs from top to bottom. Payment includes a conditional revision loop; invitation separates implementation and assessment gaps. Use the step links to inspect assignment, sample records, exchange or responsibility attention. Recording an assessment changes its local receipt display but does not advance the flow or verify its final outcome.

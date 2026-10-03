@@ -1348,6 +1348,7 @@ function App() {
           )}
           {view === "Organization" && stream && (
             <WorkstreamDetail
+              onGaps={() => openAttention("Responsibility")}
               onInspect={setArtifact}
               stream={stream}
               backLabel={

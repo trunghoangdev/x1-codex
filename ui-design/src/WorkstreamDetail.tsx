@@ -1,3 +1,4 @@
+import { WorkstreamFlow } from "./WorkstreamFlow";
 import { DetailBackButton, DetailEmptyState } from "./DetailPresentation";
 import type { EvidenceArtifact } from "./data/evidence";
 import { handoffs } from "./data/handoffs";
@@ -15,6 +16,7 @@ export function WorkstreamDetail({
   backLabel = "Back to Organization",
   onBack,
   onHandoff,
+  onGaps,
   onOutcome,
 }: {
   stream: Workstream;
@@ -24,6 +26,7 @@ export function WorkstreamDetail({
   backLabel?: string;
   onBack: () => void;
   onHandoff: (id: string) => void;
+  onGaps: () => void;
   onOutcome: () => void;
 }) {
   const detail = workstreamDetails[stream.id];
@@ -48,28 +51,15 @@ export function WorkstreamDetail({
           </button>
         </div>
       </div>
-      <section
-        className="org-overview-section"
-        aria-label="Coordination and handoffs"
-      >
-        <h2>Coordination & handoffs</h2>
-        <p>
-          Authored collaboration pattern, not execution history. Conditional
-          steps do not advance when a local response is recorded.
-        </p>
-        <div className="handoff-grid">
-          {detail.handoffs.map((handoff) => (
-            <article className="panel org-stream" key={handoff.title}>
-              <span className="badge neutral">{handoff.state}</span>
-              <h3>{handoff.title}</h3>
-              <p>
-                <strong>{handoff.responsibility}</strong>
-              </p>
-              <p>{handoff.exchange}</p>
-            </article>
-          ))}
-        </div>
-      </section>
+      <WorkstreamFlow
+        streamId={stream.id}
+        completed={completed}
+        onOpen={onOpen}
+        onInspect={onInspect}
+        onHandoff={onHandoff}
+        onGaps={onGaps}
+        onOutcome={onOutcome}
+      />
       <section
         className="panel org-stream org-overview-section"
         aria-label="Handoff details"

@@ -3,6 +3,10 @@ export type Handoff = {
   responsibility: string;
   state: string;
   exchange: string;
+  assignmentId?: string;
+  evidenceIds?: string[];
+  handoffId?: string;
+  gapIds?: string[];
 };
 export type WorkstreamDetail = {
   handoffs: Handoff[];
@@ -15,6 +19,8 @@ export const workstreamDetails: Record<string, WorkstreamDetail> = {
     handoffs: [
       {
         title: "Prepare a contribution",
+        evidenceIds: ["AR-771", "AR-776"],
+        handoffId: "payment-review",
         responsibility: "Developer · Codex worker",
         state: "Sample candidate available",
         exchange:
@@ -22,6 +28,8 @@ export const workstreamDetails: Record<string, WorkstreamDetail> = {
       },
       {
         title: "Assess the exact candidate",
+        assignmentId: "A-1042",
+        evidenceIds: ["AR-775"],
         responsibility: "Reviewer · Alex Morgan",
         state: "Current assignment · A-1042",
         exchange:
@@ -44,6 +52,8 @@ export const workstreamDetails: Record<string, WorkstreamDetail> = {
     handoffs: [
       {
         title: "Clarify acceptance criteria",
+        assignmentId: "A-1038",
+        handoffId: "invitation-planning",
         responsibility: "Product owner · Alex Morgan",
         state: "Current assignment · A-1038",
         exchange:
@@ -57,11 +67,21 @@ export const workstreamDetails: Record<string, WorkstreamDetail> = {
           "Use the clarified criteria to propose scoped assignments and identify responsible workers. This prototype does not create those assignments.",
       },
       {
-        title: "Implement and assess",
-        responsibility: "Developer and Reviewer · future bindings to confirm",
-        state: "Not represented",
+        title: "Implement invitation behavior",
+        responsibility: "Developer · no scoped worker binding represented",
+        state: "Missing responsibility · no assignment",
+        gapIds: ["invitation-implementation"],
         exchange:
-          "Exchange a candidate, checks and an independent assessment. Open questions may return to the product owner; this is not an automatically advancing sequence.",
+          "Needs agreed criteria and a scoped developer allocation. Produce an identifiable candidate and checks; no implementation candidate is represented.",
+      },
+      {
+        title: "Assess invitation behavior",
+        responsibility:
+          "Reviewer · Alex has a Team Workspace binding; no invitation assignment",
+        state: "Missing responsibility · no assignment",
+        gapIds: ["invitation-assessment"],
+        exchange:
+          "Needs an implemented candidate, criteria and a separately allocated assessment. A reviewer binding does not create the assignment. Questions can return to the product owner; requested changes can return to the developer.",
       },
     ],
     outcomeEvidence:

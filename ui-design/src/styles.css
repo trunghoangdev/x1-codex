@@ -3392,3 +3392,36 @@ main h3,
 .worker-directory-gaps {
   margin-top: 24px;
 }
+
+.workstream-flow {
+  list-style: none;
+  padding: 0;
+  display: grid;
+  gap: 16px;
+  margin: 24px 0;
+}
+.flow-step {
+  display: grid;
+  grid-template-columns: 36px minmax(0, 1fr);
+  gap: 16px;
+}
+.flow-step-number {
+  width: 32px;
+  height: 32px;
+  display: grid;
+  place-items: center;
+  border-radius: 50%;
+  background: #eaf0df;
+  color: #355440;
+  font-weight: 700;
+}
+@media (max-width: 600px) {
+  .flow-step {
+    grid-template-columns: minmax(0, 1fr);
+    gap: 8px;
+  }
+  .flow-step .badge {
+    white-space: normal;
+    line-height: 1.5;
+  }
+}
