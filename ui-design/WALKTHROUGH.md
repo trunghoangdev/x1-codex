@@ -155,3 +155,7 @@ From Organization, choose Browse workers. Alex has four scoped bindings and five
 ## Workstream flow
 
 Open either workstream and read Coordination & handoffs from top to bottom. Payment includes a conditional revision loop; invitation separates implementation and assessment gaps. Use the step links to inspect assignment, sample records, exchange or responsibility attention. Recording an assessment changes its local receipt display but does not advance the flow or verify its final outcome.
+
+## Review a proposed allocation
+
+Record an invitation proposal, then select Review allocation plan. Inspect worker, scope, binding plan and assignment prerequisites. Accept or reject with a decision reason. The receipt can be reopened; accepted plans still await allocation and responsibility gaps remain visible. Removing the proposal removes its decision; refresh clears both.

@@ -47,3 +47,5 @@ This is an incremental boundary, not a finished data layer. Candidate, evidence,
 `workerDirectory.ts` defines URL filter defaults, explicit worker type classification and directory entries built from scoped bindings and distinct `workerAssignments` links. Counts are sample relationship counts, not capacity or availability measurements.
 
 `workstreamDetails.ts` includes explicit flow-step assignment, evidence, handoff and gap references. Attached flow evidence is restricted to the workstream's authored assignment membership. Missing/conditional steps are not dynamically allocated or advanced by session responses.
+
+`responsibilityProposals.ts` now also holds session allocation-decision receipts and the authored binding/assignment preview. Acceptance means plan accepted, allocation pending; no canonical relationship or assignment is created.

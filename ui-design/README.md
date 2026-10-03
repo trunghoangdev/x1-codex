@@ -209,3 +209,5 @@ Organization Overview → Browse workstreams opens a searchable directory with p
 Organization Overview → Browse workers opens a searchable directory with type, role and explicit assignment-link filters stored in the URL. See [WORKERS-DIRECTORY.md](WORKERS-DIRECTORY.md).
 
 Workstream detail now shows an ordered collaboration flow with explicit assignment, evidence, exchange and missing-responsibility links. Numbering is proposed coordination rather than execution history. See [WORKSTREAM-FLOW.md](WORKSTREAM-FLOW.md).
+
+Responsibility proposal → Review allocation plan previews proposed binding/assignment changes and records a local accept/reject decision with rationale. Accepted plans remain pending allocation. See [ALLOCATION-REVIEW.md](ALLOCATION-REVIEW.md).

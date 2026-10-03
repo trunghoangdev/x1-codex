@@ -7,3 +7,5 @@ The implementation gap proposes a Developer for Team invitation improvements. Th
 A proposal is coordination intent awaiting allocation. It does not modify bindings, permission, assignment ownership or attention counts; both gaps remain open. The role and scope are fixed to the selected gap, and rationale is required. No external request is sent. The flow illustrates a step toward a future allocation decision rather than implementing that decision.
 
 The shared modal contains keyboard focus, closes with Escape and returns focus to its entry. After recording, focus moves to the receipt heading. Canceled forms are discarded; there is no draft persistence for this small flow.
+
+A recorded proposal now offers Review allocation plan. Inspect the proposed binding/assignment and prerequisites, then accept or reject locally with a reason. Acceptance remains allocation pending and leaves the gap open. See [ALLOCATION-REVIEW.md](ALLOCATION-REVIEW.md) for reviewer identity, decision receipts and boundaries.

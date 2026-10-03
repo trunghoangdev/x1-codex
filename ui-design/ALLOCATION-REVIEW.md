@@ -1,0 +1,9 @@
+# Allocation review demo
+
+Record a responsibility proposal from Organization attention or the overview's gap list, then choose Review allocation plan. The preview identifies worker, fixed role/scope, binding to create or reuse, assignment to create and prerequisites. For Alex's invitation assessment, reuse of the existing Team Workspace Reviewer binding is proposed. Other candidates require a new scoped binding. Effective permissions and worker suitability remain unverified.
+
+The authored reviewer is Jamie Chen in a Planner role for this demo. This label is not a verified allocation grant and does not switch the signed-in Alex identity. Choose Accept plan locally or Reject plan locally and give a required decision reason. Cancel review discards the decision draft. A recorded decision is immutable until the entire local proposal/decision is removed; the original proposal rationale and time remain visible.
+
+Acceptance records an accepted plan with allocation pending. It creates no binding or assignment, reserves no assignment ID, grants no permission and leaves the responsibility gap open. Rejection records that no allocation creation is planned. The preview remains visible as the plan that was reviewed. Criteria clarification is needed before implementation starts; criteria, candidate identity and checks are needed before assessment starts.
+
+Decisions are stored on the proposal in app memory for this browser session. Reopening from either proposal entry preserves the receipt. Refresh clears proposal and decision together. No external request or SF mutation occurs, and main worker/workstream directories, attention counts, assignments and outcome state remain unchanged. Executing an accepted plan would require a separate validated allocation operation against a real provider.

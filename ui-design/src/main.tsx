@@ -1822,6 +1822,13 @@ function App() {
             onRecord={(proposal) =>
               setProposals((old) => ({ ...old, [proposal.gapId]: proposal }))
             }
+            onDecide={(decision) =>
+              setProposals((old) => {
+                const current = old[proposalGap];
+                if (!current || current.decision) return old;
+                return { ...old, [proposalGap]: { ...current, decision } };
+              })
+            }
             onRemove={() => {
               setProposals((old) => {
                 const next = { ...old };

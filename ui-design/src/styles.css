@@ -3425,3 +3425,15 @@ main h3,
     line-height: 1.5;
   }
 }
+
+.proposal-content p {
+  margin: 12px 0;
+  line-height: 1.6;
+}
+.proposal-content h3,
+.proposal-content h4 {
+  margin: 16px 0 12px;
+}
+.proposal-content > section > button:last-child {
+  margin-top: 16px;
+}

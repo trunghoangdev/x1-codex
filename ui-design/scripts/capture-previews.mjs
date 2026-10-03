@@ -361,4 +361,29 @@ await page
     path: "previews/37-invitation-flow.png",
     animations: "disabled",
   });
+await page.goto(
+  "http://127.0.0.1:4173/#/organization/attention/responsibility",
+);
+await page
+  .getByRole("button", {
+    name: /^(Propose responsibility|View proposal) · Invitation implementation$/,
+    exact: true,
+  })
+  .click();
+if (await page.getByLabel("Proposed worker").count()) {
+  await page.getByLabel("Proposed worker").selectOption("codex");
+  await page
+    .getByLabel("Reason for proposal")
+    .fill("Propose scoped invitation implementation for allocation review.");
+  await page
+    .getByRole("button", { name: "Record local proposal", exact: true })
+    .click();
+}
+await page
+  .getByRole("button", { name: "Review allocation plan", exact: true })
+  .click();
+await page.getByRole("dialog").screenshot({
+  path: "previews/38-allocation-review.png",
+  animations: "disabled",
+});
 await browser.close();
