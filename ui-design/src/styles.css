@@ -3296,3 +3296,17 @@ main h3,
     max-width: none;
   }
 }
+.scenario-stream {
+  text-align: left;
+  color: inherit;
+  font: inherit;
+}
+.scenario-stream strong,
+.scenario-stream > span {
+  display: block;
+  margin: 8px 0;
+}
+.scenario-stream[aria-pressed="true"] {
+  outline: 2px solid #355440;
+  outline-offset: -2px;
+}

@@ -131,3 +131,7 @@ Artifact IDs in Workstream, Handoff and Organization activity also open their ex
 ## Return to the source
 
 Filter Organization activity to Other organization work, open Assignment activity for A-1041, then use **Back to Organization activity**. Its scope/type filters remain. From a workstream, handoff, outcome or worker, opening an assignment gives a correspondingly named Back button; switching assignment tabs retains this return context. The personal queue preserves its project/role/status filters. Source scroll/focus restoration lasts for the browser session; refreshing an assignment resets its return destination to My Work.
+
+## Explore a larger organization
+
+Open Demos → Explore larger organization. Select workstreams to inspect responsibilities, then filter the directory by Codex worker and Revision requested to find the onboarding loop. Reset and select Unassigned to inspect the invitation assessment gap. Compare the nine workers' scoped bindings. This independent scenario leaves My Work's five sample assignments intact; no response or outcome is recorded here.

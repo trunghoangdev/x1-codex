@@ -1,3 +1,4 @@
+import { LargeOrganizationDemo } from "./LargeOrganizationDemo";
 import type { WorkspaceRoute } from "./useWorkspaceRoute";
 import { OrganizationAttention } from "./OrganizationAttention";
 import type { AttentionCategory } from "./data/organizationAttention";
@@ -204,7 +205,7 @@ function App() {
   >({});
   const source = selected ? assignmentSources.current[selected.id] : undefined;
   const inboxReturn = useRef<{ id: string; y: number } | null>(null);
-  const screenKey = `${route.view}:${route.assignmentId ?? ""}:${!!route.invalid}:${route.workstreamId ?? ""}:${route.workerId ?? ""}:${route.handoffId ?? ""}:${!!route.organizationActivity}:${route.outcomeId ?? ""}:${!!route.attention}:${!!route.personalQueue}`;
+  const screenKey = `${route.view}:${route.assignmentId ?? ""}:${!!route.invalid}:${route.workstreamId ?? ""}:${route.workerId ?? ""}:${route.handoffId ?? ""}:${!!route.organizationActivity}:${route.outcomeId ?? ""}:${!!route.attention}:${!!route.personalQueue}:${!!route.largeOrganization}`;
   const previousScreen = useRef(screenKey);
   useEffect(() => {
     if (route.view !== "My Work" || route.assignmentId)
@@ -289,6 +290,7 @@ function App() {
     route.attention,
     route.outcomeId,
     route.personalQueue,
+    route.largeOrganization,
     route.assignmentId,
     route.tab,
     route.invalid,
@@ -1458,7 +1460,10 @@ function App() {
               />
             </>
           )}
-          {view === "Demos" && (
+          {view === "Demos" && route.largeOrganization && (
+            <LargeOrganizationDemo onBack={() => navigate("Demos")} />
+          )}
+          {view === "Demos" && !route.largeOrganization && (
             <>
               <div className="page-heading">
                 <div>
@@ -1469,6 +1474,26 @@ function App() {
                   </p>
                 </div>
               </div>
+              <section className="panel org-stream org-overview-section">
+                <h2>Larger organization scenario</h2>
+                <p>
+                  Explore six workstreams, multiple assignees and scoped
+                  workers.
+                </p>
+                <button
+                  className="button secondary"
+                  onClick={() =>
+                    changeRoute({
+                      view: "Demos",
+                      largeOrganization: true,
+                      tab: "Overview",
+                      work: route.work,
+                    })
+                  }
+                >
+                  Explore larger organization
+                </button>
+              </section>
               <RevisionCycle />
             </>
           )}

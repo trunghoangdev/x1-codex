@@ -507,3 +507,11 @@ Six organization detail views now share a back-button control with an arrow and 
 Data, responses and contextual return behavior remain unchanged. The layout/navigation review list is now complete. Refreshed five detail previews and visually inspected the empty worker state on mobile.
 
 Validation: production build and seven relevant browser tests passed for detail routes, empty states, evidence/response semantics, mobile overflow and source-return focus/scroll. After the final mobile breadcrumb adjustment, three mobile-bearing worker/activity/outcome tests passed again.
+
+## 50 — Larger organization design scenario
+
+Demos now links to an independent organization scenario with six parallel streams, nine workers, nineteen scoped bindings and eighteen assignments. Multiple human reviewers/authorities and two AI contributors share scoped responsibilities; an invitation assessment is unassigned and onboarding includes a revision loop. Stream selection and a searchable worker/state-filtered directory expose these relationships without altering the main five-assignment inbox.
+
+`ORGANIZATION-SCALE-REVIEW.md` records findings and limits. Six stream cards fit desktop/mobile, but the full assignment/worker directory creates a long page; separate directories or paging are the next layout opportunity. This scenario is not an interchangeable provider for the main organization views and has no response, health or outcome verification actions.
+
+Validation: production build passed. Four relevant existing navigation/demo tests passed, and two new 390px/1440px scenario tests passed after fixing a stream-focus selector and ambiguous test locators. Coverage includes compound filters, unassigned and revision contexts, stream focus, empty results, re-entry and unchanged My Work assignments. Mobile preview was visually inspected; a full desktop scenario capture was added.

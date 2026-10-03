@@ -197,3 +197,5 @@ Cited artifact links now open the exact record in the inspector from workstreams
 Assignment Back buttons now identify their source page and restore its session filters, scroll and link focus. Direct assignment links after refresh use My Work as the return destination.
 
 Organization detail pages share back-button, spacing and empty-state styles. On mobile, filters and action groups expand to the available width and text-link targets are larger.
+
+**Demos → Explore larger organization** offers an independent six-stream, nine-worker scenario with multiple assignees and search/worker/state filters. See [the scale review](ORGANIZATION-SCALE-REVIEW.md) for findings and boundaries.

@@ -306,4 +306,10 @@ await page.screenshot({
   fullPage: true,
   animations: "disabled",
 });
+await page.goto("http://127.0.0.1:4173/#/demos/organization");
+await page.screenshot({
+  path: "previews/31-larger-organization.png",
+  fullPage: true,
+  animations: "disabled",
+});
 await browser.close();

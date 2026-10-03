@@ -19,6 +19,7 @@ export type WorkspaceRoute = {
   outcomeId?: string;
   attention?: AttentionCategory | "All";
   personalQueue?: boolean;
+  largeOrganization?: boolean;
   tab: string;
   invalid?: boolean;
   work?: WorkFilters;
@@ -95,6 +96,13 @@ export function useWorkspaceRoute(ids: string[], tabs: string[]) {
       path[2] === "attention"
     )
       return { ...fallback, personalQueue: true };
+    if (
+      path.length === 3 &&
+      path[0] === "" &&
+      path[1] === "demos" &&
+      path[2] === "organization"
+    )
+      return { ...fallback, view: "Demos", largeOrganization: true };
     if (path.length === 2 && path[0] === "") {
       const view = (Object.keys(viewPaths) as WorkspaceView[]).find(
         (v) => viewPaths[v] === path[1],
@@ -139,7 +147,9 @@ export function useWorkspaceRoute(ids: string[], tabs: string[]) {
                   ? `#/organization/attention/${next.attention.toLowerCase()}`
                   : next.personalQueue
                     ? "#/work/attention"
-                    : `#/${viewPaths[next.view]}`;
+                    : next.largeOrganization
+                      ? "#/demos/organization"
+                      : `#/${viewPaths[next.view]}`;
     const hash = path + (next.work ? writeWorkFilters(next.work) : "");
     if (location.hash !== hash) {
       if (replace) history.replaceState(null, "", hash);
