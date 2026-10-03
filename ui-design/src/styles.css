@@ -3437,3 +3437,34 @@ main h3,
 .proposal-content > section > button:last-child {
   margin-top: 16px;
 }
+
+.workspace-guide {
+  padding: 20px;
+  margin: 24px 0;
+}
+.workspace-guide summary,
+.proposal-original summary {
+  cursor: pointer;
+  font-weight: 600;
+  min-height: 44px;
+  display: list-item;
+}
+.workspace-guide p,
+.workspace-guide dd {
+  line-height: 1.6;
+  margin: 12px 0;
+}
+.workspace-guide dt {
+  margin-top: 16px;
+  font-weight: 700;
+}
+.workspace-guide dd {
+  margin-left: 0;
+}
+.proposal-original {
+  margin: 16px 0;
+}
+.detail-empty > p > button {
+  display: block;
+  margin-top: 16px;
+}

@@ -112,6 +112,19 @@ export function WorkstreamsDirectory({
         <DetailEmptyState>
           No matching workstreams. Change your search or clear the filters to
           see the sample workstreams.
+          <button
+            className="button secondary"
+            onClick={() => {
+              onFilters(defaultStreamFilters);
+              requestAnimationFrame(() =>
+                document
+                  .querySelector<HTMLElement>('input[type="search"]')
+                  ?.focus(),
+              );
+            }}
+          >
+            Show all workstreams
+          </button>
         </DetailEmptyState>
       ) : (
         <div className="org-stream-grid">

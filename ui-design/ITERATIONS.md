@@ -563,3 +563,11 @@ Recorded responsibility proposals now offer a local allocation-plan review. The 
 Accept/reject requires a decision rationale and records an immutable session receipt attached to the proposal. Acceptance remains allocation pending; rejection plans no creation. Neither action creates bindings/assignments, grants permissions, reserves IDs or closes gaps. Cancel discards the decision draft; removing the proposal removes its receipt; refresh clears both. Added review documentation and preview/capture step, and improved proposal paragraph spacing.
 
 Validation: production build and seven relevant browser tests passed for allocation review, proposal lifecycle, workstream flows and customer tours. After final cancel-draft reset, both new desktop/mobile allocation tests and the build passed again. Coverage includes required rationale, new-versus-reused binding preview, acceptance/rejection, receipt focus, reopening, cancellation, removal, refresh and unchanged open responsibility signals. Desktop and mobile previews were visually inspected.
+
+## 57 — Customer experience review
+
+Added a collapsed plain-language workspace guide on Organization covering entry points and core organization terms. Allocation review now omits repeated introductory context and keeps original proposal reason/time in an accessible disclosure during review or decision inspection. Pending proposal receipts retain their original presentation. Empty worker/workstream searches now offer Show all actions that clear URL filters, restore results and focus search.
+
+`CUSTOMER-EXPERIENCE-REVIEW.md` records changes, reviewed semantics and practical limits. This is a prototype review, not a customer study or live-provider validation. The agreed five-item improvement list is complete. Added a guide preview/capture and refreshed allocation review preview.
+
+Validation: production build and eleven related desktop/mobile browser tests passed for terminology disclosure, empty recovery, both directories, proposal/allocation and customer tour. Three further allocation/keyboard tests passed after adding original-proposal disclosure assertions. Coverage includes native keyboard toggling, reset URL/search focus, retained proposal rationale, modal containment and existing session boundaries. Desktop guide and mobile allocation form previews were visually inspected.

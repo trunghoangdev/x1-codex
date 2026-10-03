@@ -386,4 +386,12 @@ await page.getByRole("dialog").screenshot({
   path: "previews/38-allocation-review.png",
   animations: "disabled",
 });
+await page.goto("http://127.0.0.1:4173/#/organization");
+await page.locator("details.workspace-guide summary").click();
+await page
+  .locator("details.workspace-guide")
+  .screenshot({
+    path: "previews/39-workspace-guide.png",
+    animations: "disabled",
+  });
 await browser.close();

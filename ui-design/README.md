@@ -211,3 +211,5 @@ Organization Overview → Browse workers opens a searchable directory with type,
 Workstream detail now shows an ordered collaboration flow with explicit assignment, evidence, exchange and missing-responsibility links. Numbering is proposed coordination rather than execution history. See [WORKSTREAM-FLOW.md](WORKSTREAM-FLOW.md).
 
 Responsibility proposal → Review allocation plan previews proposed binding/assignment changes and records a local accept/reject decision with rationale. Accepted plans remain pending allocation. See [ALLOCATION-REVIEW.md](ALLOCATION-REVIEW.md).
+
+Organization includes an expandable plain-language workspace guide. Directory empty states offer Show all recovery, and allocation review keeps the original proposal behind a disclosure. See [CUSTOMER-EXPERIENCE-REVIEW.md](CUSTOMER-EXPERIENCE-REVIEW.md).

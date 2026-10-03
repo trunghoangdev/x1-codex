@@ -159,3 +159,7 @@ Open either workstream and read Coordination & handoffs from top to bottom. Paym
 ## Review a proposed allocation
 
 Record an invitation proposal, then select Review allocation plan. Inspect worker, scope, binding plan and assignment prerequisites. Accept or reject with a decision reason. The receipt can be reopened; accepted plans still await allocation and responsibility gaps remain visible. Removing the proposal removes its decision; refresh clears both.
+
+## Help for new users
+
+Expand Understand this workspace on Organization for the main terms and entry points. If a directory has no matches, Show all workers/workstreams clears filters and returns focus to search. During allocation review, expand Original proposal reason and time when you need the request context.

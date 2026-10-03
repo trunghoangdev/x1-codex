@@ -41,13 +41,17 @@ export function ResponsibilityProposal({
     <div className="proposal-content">
       <div className="modal-kicker">LOCAL COORDINATION PROPOSAL</div>
       <h3>{gap.title}</h3>
-      <p>{requirement.note}</p>
-      <dl className="artifact-properties">
-        <dt>Role</dt>
-        <dd>{requirement.role}</dd>
-        <dt>Scope</dt>
-        <dd>{requirement.scope}</dd>
-      </dl>
+      {!reviewing && !proposal?.decision && (
+        <>
+          <p>{requirement.note}</p>
+          <dl className="artifact-properties">
+            <dt>Role</dt>
+            <dd>{requirement.role}</dd>
+            <dt>Scope</dt>
+            <dd>{requirement.scope}</dd>
+          </dl>
+        </>
+      )}
       {proposal ? (
         <section aria-label="Recorded responsibility proposal">
           <h3 ref={receiptHeading} tabIndex={-1}>
@@ -59,13 +63,29 @@ export function ResponsibilityProposal({
             {workers.find((w) => w.id === proposal.workerId)?.name} ·{" "}
             {proposal.role}
           </p>
-          <p>{proposal.scope}</p>
-          <p>{proposal.rationale}</p>
-          <p>
-            <time dateTime={proposal.recordedAt}>
-              {new Date(proposal.recordedAt).toLocaleString()}
-            </time>
-          </p>
+          {reviewing || proposal.decision ? (
+            <details className="proposal-original">
+              <summary>Original proposal reason and time</summary>{" "}
+              <p>{proposal.scope}</p>
+              <p>{proposal.rationale}</p>
+              <p>
+                <time dateTime={proposal.recordedAt}>
+                  {new Date(proposal.recordedAt).toLocaleString()}
+                </time>
+              </p>
+            </details>
+          ) : (
+            <>
+              {" "}
+              <p>{proposal.scope}</p>
+              <p>{proposal.rationale}</p>
+              <p>
+                <time dateTime={proposal.recordedAt}>
+                  {new Date(proposal.recordedAt).toLocaleString()}
+                </time>
+              </p>
+            </>
+          )}
           <p>
             No worker binding, assignment or permission was changed. The
             responsibility gap remains open.

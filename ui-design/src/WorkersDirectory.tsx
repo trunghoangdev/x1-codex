@@ -123,6 +123,19 @@ export function WorkersDirectory({
       {visible.length === 0 ? (
         <DetailEmptyState>
           No matching workers. Change your search or clear the filters.
+          <button
+            className="button secondary"
+            onClick={() => {
+              onFilters(defaultWorkerFilters);
+              requestAnimationFrame(() =>
+                document
+                  .querySelector<HTMLElement>('input[type="search"]')
+                  ?.focus(),
+              );
+            }}
+          >
+            Show all workers
+          </button>
         </DetailEmptyState>
       ) : (
         <div className="org-stream-grid">

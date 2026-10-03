@@ -58,6 +58,14 @@ for (const width of [1440, 390]) {
     await expect(
       page.getByRole("region", { name: "Allocation decision receipt" }),
     ).toContainText("worker has not been allocated");
+    const original = page.locator("details.proposal-original");
+    await expect(original).not.toHaveAttribute("open", "");
+    await original.locator("summary").click();
+    await expect(original).toHaveAttribute("open", "");
+    await expect(original).toContainText(
+      "Propose a bounded invitation implementation.",
+    );
+    await original.locator("summary").click();
     await expect(
       page.getByRole("button", {
         name: "Record allocation decision",

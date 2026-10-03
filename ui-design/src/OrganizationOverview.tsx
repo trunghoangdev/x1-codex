@@ -1,3 +1,4 @@
+import { WorkspaceGuide } from "./WorkspaceGuide";
 import type { ResponsibilityProposal } from "./data/responsibilityProposals";
 import { AttentionSummary } from "./AttentionSummary";
 import type { AttentionCategory } from "./data/organizationAttention";
@@ -71,6 +72,7 @@ export function OrganizationOverview({
           </p>
         </div>
       </div>
+      <WorkspaceGuide />
       <nav className="organization-sections" aria-label="Organization sections">
         {[
           ["org-goals", "Goals & workstreams"],
