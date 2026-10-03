@@ -4,7 +4,6 @@ import { AttentionSummary } from "./AttentionSummary";
 import type { AttentionCategory } from "./data/organizationAttention";
 import { responsibilityGaps } from "./data/workerDetails";
 import { assignments } from "./data/assignments";
-import { evidenceFor } from "./data/evidence";
 import {
   roleBindings,
   workers,
@@ -62,8 +61,8 @@ export function OrganizationOverview({
           </span>
           <h2>Build software with accountable collaboration.</h2>
           <p>
-            2 workstreams · {workers.length} workers · {roleBindings.length}{" "}
-            scoped role bindings
+            {workstreams.length} workstreams · {workers.length} workers ·{" "}
+            {roleBindings.length} scoped role bindings
           </p>
           <p>
             Authored design scenario. Workstream membership and role scopes
@@ -72,7 +71,11 @@ export function OrganizationOverview({
           </p>
         </div>
       </div>
-      <WorkspaceGuide />
+      <AttentionSummary
+        completed={completed}
+        readiness={readiness}
+        onOpen={onAttention}
+      />
       <nav className="organization-sections" aria-label="Organization sections">
         {[
           ["org-goals", "Goals & workstreams"],
@@ -93,12 +96,6 @@ export function OrganizationOverview({
         ))}
       </nav>
       <p className="org-overview-section">
-        <button className="button secondary" onClick={onWorkersDirectory}>
-          Browse workers
-        </button>{" "}
-        <button className="button secondary" onClick={onDirectory}>
-          Browse workstreams
-        </button>{" "}
         <button className="button secondary" onClick={onActivity}>
           View organization activity
         </button>
@@ -137,38 +134,9 @@ export function OrganizationOverview({
                 {stream.goal}
               </p>
               <p>
-                <strong>Coordination</strong>
-                <br />
-                {stream.coordination}
+                {stream.assignmentIds.length} linked assignment · inspect
+                details in the workstream
               </p>
-              <h4>Current assignments</h4>
-              {stream.assignmentIds.map((id) => {
-                const assignment = assignments.find((a) => a.id === id);
-                if (!assignment) return null;
-                const evidenceCount = evidenceFor(id).length;
-                return (
-                  <div className="org-stream-assignment" key={id}>
-                    <button
-                      className="text-link"
-                      onClick={() => onOpen(assignment)}
-                    >
-                      {id} · {assignment.title}
-                    </button>
-                    <p>
-                      {assignment.owner} · {assignment.role} ·{" "}
-                      {completed[id]
-                        ? "Local response recorded"
-                        : "Awaiting response"}
-                    </p>
-                    <button
-                      className="text-link"
-                      onClick={() => onOpen(assignment, "Evidence")}
-                    >
-                      {evidenceCount} attached evidence records · inspect
-                    </button>
-                  </div>
-                );
-              })}
               <p className="org-outcome">
                 <strong>Outcome</strong>
                 <br />
@@ -177,12 +145,12 @@ export function OrganizationOverview({
             </article>
           ))}
         </div>
+        <p>
+          <button className="button secondary" onClick={onDirectory}>
+            Browse workstreams
+          </button>
+        </p>
       </section>
-      <AttentionSummary
-        completed={completed}
-        readiness={readiness}
-        onOpen={onAttention}
-      />
       <details className="organization-disclosure org-overview-section">
         <summary>Other organization work · 3 assignments</summary>
         <section
@@ -232,41 +200,38 @@ export function OrganizationOverview({
           contribution, assessment and authorization remain distinct
           responsibilities.
         </p>
-        <div className="role-grid">
-          {roleBindings.map((binding) => {
-            const worker = workers.find((w) => w.id === binding.workerId)!;
-            return (
-              <article
-                className="panel role-card"
-                key={`${binding.workerId}-${binding.role}`}
-              >
-                <span className="badge neutral">{worker.type}</span>
-                <h2>{binding.role}</h2>
-                <strong>{worker.name}</strong>
-                <p>
-                  <button
-                    className="text-link"
-                    onClick={() => onWorker(worker.id)}
-                  >
-                    View worker · {worker.name}
-                  </button>
-                </p>
-                <p>Scope: {binding.scope}</p>
-                <p>{binding.permission}</p>
-                {binding.role === "Reviewer" && (
-                  <span className="role-count">
-                    {
-                      assignments.filter(
-                        (a) => a.kind === "Assessment" && !completed[a.id],
-                      ).length
-                    }{" "}
-                    awaiting review · sample
-                  </span>
-                )}
-              </article>
-            );
-          })}
+        <p>
+          {workers.length} workers · {roleBindings.length} scoped bindings.
+          Inspect roles, scopes and assignment links in Workers.
+        </p>
+        <div className="org-stream-grid overview-workers">
+          {workers.map((worker) => (
+            <article
+              className="panel org-stream"
+              key={worker.id}
+              aria-label={worker.name}
+            >
+              <span className="section-label">{worker.type}</span>
+              <h3>{worker.name}</h3>
+              <p>
+                {
+                  roleBindings.filter(
+                    (binding) => binding.workerId === worker.id,
+                  ).length
+                }{" "}
+                scoped bindings
+              </p>
+              <button className="text-link" onClick={() => onWorker(worker.id)}>
+                View worker · {worker.name}
+              </button>
+            </article>
+          ))}
         </div>
+        <p>
+          <button className="button secondary" onClick={onWorkersDirectory}>
+            Browse workers
+          </button>
+        </p>
       </section>
       <details className="organization-disclosure org-overview-section">
         <summary>Responsibility gaps · 2 known gaps</summary>
@@ -304,6 +269,7 @@ export function OrganizationOverview({
           ))}
         </section>
       </details>
+      <WorkspaceGuide />
     </>
   );
 }

@@ -2,7 +2,7 @@
 
 ## Product promise
 
-Know what needs you, understand the evidence, and act within your authority.
+Understand the organization, find what needs coordination, and enter personal work with clear responsibility and evidence.
 
 The primary persona is a human contributor or decision maker working alongside AI and deterministic workers. The prototype's Alex persona holds reviewer and release-authority roles on different assignments to demonstrate both experiences.
 
@@ -14,18 +14,29 @@ The primary persona is a human contributor or decision maker working alongside A
 | Assignment / Overview | What am I responsible for, with which inputs and permissions? | Submit a scoped response |
 | Assignment / Evidence | What supports this work? | Inspect an artifact |
 | Assignment / Activity | What was recorded and why? | Read the response history |
-| Organization | Who is bound to each role? | Inspect the illustrative responsibility structure |
+| Organization | What needs coordination across shared goals? | Inspect attention or open a workstream/worker |
+| Workstreams directory | Which goals need responsibility or outcome evidence? | Filter and open a workstream |
+| Workers directory | Who holds which scoped responsibilities? | Filter workers and inspect bindings/assignment links |
+| Workstream detail | How should responsibilities exchange work? | Inspect flow, assignment, handoff or outcome |
+| Organization attention/activity | What needs follow-up, and which records exist? | Inspect a signal or record |
+| Demos | How does collaboration work? | Start the guided walkthrough or independent scenarios |
 | Evidence | How do contribution, assessment, authority, and effect connect? | Inspect a record or open the release decision |
 
 ## First-use path
 
 ```mermaid
 flowchart LR
-  Inbox[My Work] --> Assignment[Assignment context]
-  Assignment --> Evidence[Inspect exact inputs and evidence]
-  Evidence --> Response[Response with required rationale]
-  Response --> Local[Demo record]
-  Local --> History[Activity and completed work]
+  Org[Organization overview] --> Attention[Coordination attention]
+  Org --> Streams[Workstream goals and directory]
+  Org --> Workers[Workers and scoped responsibility]
+  Org --> Inbox[My Work]
+  Attention --> Context[Assignment or workstream context]
+  Streams --> Context
+  Inbox --> Context
+  Context --> Evidence[Inspect inputs and evidence]
+  Evidence --> Response[Scoped response with rationale]
+  Response --> Local[Local receipt]
+  Local --> Outcome[Separate outcome evidence review]
 ```
 
 The production path must replace the demo step with a command to the Go application API, server-side identity and permission checks, governed admission, and an authoritative receipt. A pending command must not appear as an admitted decision. Approval must remain distinct from execution and confirmed external effects.
@@ -55,10 +66,14 @@ The production path must replace the demo step with a command to the Go applicat
 | Type | Local system sans-serif; restrained headings and compact supporting text |
 | Icons | Lucide line icons; icons supplement text labels |
 
-The desktop composition reserves the left edge for navigation, the main area for work, and a narrow right column for a highlighted decision and organization activity. Assignment detail uses the same right column for permission scope and response actions. On smaller screens it becomes a single-column reading order.
+Organization Overview prioritizes the attention summary immediately after shared purpose. Concise workstream cards expose goals/outcomes and link to detail. Worker summaries expose identity/type and scoped binding counts; full roles/scopes and assignment lists live in their directories/details. Native disclosures retain secondary other-work/gap context and the workspace glossary. Section shortcuts remain keyboard accessible.
+
+The desktop composition reserves the left edge for navigation and the main area for organization coordination. My Work uses a narrow right column for personal context. Assignment detail uses the same right column for permission scope and response actions. On smaller screens it becomes a single-column reading order.
 
 ## Deliberate limits and follow-up design
 
-This exploration covers the core human work loop. Production design still needs admission-pending and rejection states, revoked authority, changed inputs, missing or invalid evidence, concurrent decisions, interrupted sessions, and loss of connectivity. A real deployment also needs identity selection, role administration, audit search, and persistent accessible notifications. Those screens are not represented by inert navigation items here.
+This exploration covers an organization-first sample workspace and the human work loop. It includes bounded response-delivery/readiness previews, local proposals and allocation-plan decisions. Accepted plans await allocation: they create no assignment, binding or permission. Organization activity currently lists responses/evidence, not proposal/plan-decision events.
 
-Do not infer completed deployment, verified provenance, or server authorization from this prototype. Organization cards and older activity entries are fixed illustrations. User-submitted demo responses are the only mutable records.
+Production design still needs validated identity and effective authority, durable admission/receipts, concurrent changes, real runtime/worker data and verified external effects. A larger organization scenario remains independent rather than exercising the main workspace through a shared provider. Role administration, broader audit search and organization/persona switching need explicit data and interaction contracts.
+
+Do not infer completed deployment, verified provenance or server authorization from this prototype. Responses, proposals and plan decisions are mutable session records; refresh clears them. Main organization relationships and evidence fixtures are authored examples. The current prototype demonstrates Software Factory; general virtual organization fit needs a second domain using the same screens.

@@ -78,3 +78,9 @@ No code behavior was changed for this review. Existing tests were not rerun for 
 5. Exercise the same workspace with a non-software organization and a second personal persona.
 
 Keep runtime monitoring, live allocation, real capacity estimates and SF integration outside these frontend slices until their data contracts are available.
+
+## Follow-up: overview slice completed
+
+The overview now places attention immediately after organization purpose, replaces assignment/evidence detail in workstream cards with linked-assignment counts, and replaces seven binding cards with four worker identity summaries. Directory entries sit with their corresponding sections; the glossary moves below secondary content. Keyboard section shortcuts, other-work/gap disclosures and proposal entries remain.
+
+At the same 390px/1000px viewport, the revised overview measured 3,917px versus 5,312px before this slice (about 26% shorter), with attention now preceding goals. This remains a scrollable page, not a demonstrated large-organization solution. Shared scenarios, organization decision history and role-centered inspection remain separate follow-ups.

@@ -571,3 +571,11 @@ Added a collapsed plain-language workspace guide on Organization covering entry 
 `CUSTOMER-EXPERIENCE-REVIEW.md` records changes, reviewed semantics and practical limits. This is a prototype review, not a customer study or live-provider validation. The agreed five-item improvement list is complete. Added a guide preview/capture and refreshed allocation review preview.
 
 Validation: production build and eleven related desktop/mobile browser tests passed for terminology disclosure, empty recovery, both directories, proposal/allocation and customer tour. Three further allocation/keyboard tests passed after adding original-proposal disclosure assertions. Coverage includes native keyboard toggling, reset URL/search focus, retained proposal rationale, modal containment and existing session boundaries. Desktop guide and mobile allocation form previews were visually inspected.
+
+## 58 — Compact organization overview
+
+Attention now appears immediately after shared purpose, ahead of goal cards. Workstream summaries retain goals/outcomes and assignment counts while moving assignment/evidence inspection into existing detail views. Four worker summaries replace seven full binding cards; directory entries sit with their matching sections. Activity and keyboard section shortcuts remain, and the glossary moves below secondary disclosures. Other-work/gap details and proposal entry points remain available.
+
+Updated DESIGN.md to organization-first navigation, current screen inventory and session/production boundaries. The same 390px/1000px browser viewport measured 3,917px document height versus 5,312px in the preceding review, with no horizontal overflow. Desktop measured 2,283px. This is reduced density, not evidence of usability at live organization scale.
+
+Validation: production build and nine related browser tests passed for default entry, worker details, section focus/disclosures, attention routes, proposals, customer guide and desktop/mobile customer tours. Default-entry coverage was adapted to worker summaries/workstream navigation and adds attention-before-goals ordering assertions. Revised mobile preview was visually inspected and the overview capture refreshed.

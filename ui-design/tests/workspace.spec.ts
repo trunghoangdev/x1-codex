@@ -1824,20 +1824,33 @@ test("Organization is the default entry with scoped workers and independent goal
     name: "Organization workstreams",
   });
   await expect(streams.getByRole("article")).toHaveCount(2);
+  expect(
+    await page.evaluate(() => {
+      const attention = document.getElementById("org-attention")!;
+      const goals = document.getElementById("org-goals")!;
+      return Boolean(
+        attention.compareDocumentPosition(goals) &
+        Node.DOCUMENT_POSITION_FOLLOWING,
+      );
+    }),
+  ).toBe(true);
+  await expect(
+    streams.getByText("Current assignments", { exact: true }),
+  ).toHaveCount(0);
   await expect(
     page
       .getByRole("region", { name: "Roles and worker bindings" })
       .getByRole("article"),
-  ).toHaveCount(7);
+  ).toHaveCount(4);
   const payment = page.getByRole("article", {
     name: "Payment webhook reliability",
     exact: true,
   });
   await expect(payment).toContainText("Not verified");
   await payment
-    .getByRole("button", { name: "3 attached evidence records · inspect" })
+    .getByRole("button", { name: "Explore workstream · WS-01" })
     .click();
-  await expect(page).toHaveURL(/assignments\/A-1042\/evidence/);
+  await expect(page).toHaveURL(/workstreams\/WS-01/);
   await page.goBack();
   await expect(streams).toBeVisible();
   await page.getByRole("button", { name: "Open My Work · Alex" }).click();

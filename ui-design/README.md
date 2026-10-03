@@ -215,3 +215,5 @@ Responsibility proposal → Review allocation plan previews proposed binding/ass
 Organization includes an expandable plain-language workspace guide. Directory empty states offer Show all recovery, and allocation review keeps the original proposal behind a disclosure. See [CUSTOMER-EXPERIENCE-REVIEW.md](CUSTOMER-EXPERIENCE-REVIEW.md).
 
 Current organization design assessment and next priorities: [VIRTUAL-ORGANIZATION-REVIEW.md](VIRTUAL-ORGANIZATION-REVIEW.md). The shared organization model is coherent; overview density, coordination history and a common scenario provider are the next gaps.
+
+Organization Overview now places coordination attention directly after shared purpose. Workstream cards summarize goals/outcomes; worker cards summarize identity/type/binding counts. Use the existing directories/details for assignment and scoped binding inspection. Section shortcuts and secondary disclosures remain available.
