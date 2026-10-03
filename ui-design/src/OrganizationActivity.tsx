@@ -1,3 +1,4 @@
+import { DetailBackButton, DetailEmptyState } from "./DetailPresentation";
 import type { EvidenceArtifact } from "./data/evidence";
 import { assignments } from "./data/assignments";
 import { evidenceArtifacts } from "./data/evidence";
@@ -45,10 +46,8 @@ export function OrganizationActivity({
     return `${id} · ${stream?.name ?? "Other organization work"}`;
   }
   return (
-    <>
-      <button className="button secondary" onClick={onBack}>
-        Back to Organization
-      </button>
+    <div className="detail-page">
+      <DetailBackButton onClick={onBack}>Back to Organization</DetailBackButton>
       <div className="page-heading workstream-heading">
         <div>
           <div className="eyebrow">ORGANIZATION ACTIVITY</div>
@@ -137,7 +136,11 @@ export function OrganizationActivity({
                 </button>
               </article>
             ))}
-            {responses.length === 0 && <p>No local responses in this scope.</p>}
+            {responses.length === 0 && (
+              <DetailEmptyState>
+                No local responses in this scope.
+              </DetailEmptyState>
+            )}
           </section>
         )}
         {type !== "responses" && (
@@ -172,17 +175,19 @@ export function OrganizationActivity({
               </article>
             ))}
             {evidence.length === 0 && (
-              <p>No attached evidence in this scope.</p>
+              <DetailEmptyState>
+                No attached evidence in this scope.
+              </DetailEmptyState>
             )}
           </section>
         )}
         {count === 0 && (
-          <p>
+          <DetailEmptyState>
             No matching records. The absence of records does not establish an
             outcome.
-          </p>
+          </DetailEmptyState>
         )}
       </section>
-    </>
+    </div>
   );
 }

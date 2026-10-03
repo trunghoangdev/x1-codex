@@ -1,3 +1,4 @@
+import { DetailBackButton } from "./DetailPresentation";
 import type { EvidenceArtifact } from "./data/evidence";
 import { assignments } from "./data/assignments";
 import { evidenceArtifacts } from "./data/evidence";
@@ -21,10 +22,8 @@ export function OutcomeReview({
   onBack: () => void;
 }) {
   return (
-    <>
-      <button className="button secondary" onClick={onBack}>
-        Back to workstream
-      </button>
+    <div className="detail-page">
+      <DetailBackButton onClick={onBack}>Back to workstream</DetailBackButton>
       <div className="page-heading workstream-heading">
         <div>
           <div className="eyebrow">{stream.id} · SAMPLE OUTCOME REVIEW</div>
@@ -148,6 +147,6 @@ export function OutcomeReview({
           outcome requirements.
         </p>
       </section>
-    </>
+    </div>
   );
 }

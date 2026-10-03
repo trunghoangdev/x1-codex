@@ -10,13 +10,12 @@ Implemented:
 - Other organization work and responsibility-gap explanations start collapsed and remain accessible through native summary controls. Their signals remain visible in Organization attention.
 - Detail-page breadcrumbs identify the current subject and provide an Organization return action. Long mobile labels truncate visually while retaining their full accessible text.
 
-Remaining opportunities, in priority order:
+Completed follow-up improvements:
 
-Completed next increment: the overview now shows three attention counts linked to a dedicated list, with durable category URLs.
-Completed: the Alex queue now lives under My Work and the standalone revision cycle has a Demos entry.
-Completed: cited artifact links in workstreams, handoffs, outcomes and organization activity open the exact record in the inspector while preserving their source page.
-1. Review shared spacing, empty states and contextual return paths across all detail pages.
+- Compact attention summary with a dedicated list and durable category URLs.
+- Personal queue under My Work and an independent Demos entry.
+- Exact cited artifact inspection on its source page.
+- Contextual assignment return with session filters, scroll and link focus.
+- Shared detail-page back controls, spacing and empty-state presentation, with larger mobile targets and full-width filters/actions.
 
-This increment keeps the authored sample model and existing response semantics. The review does not establish production API compatibility.
-
-Contextual assignment return is now implemented: the primary Back button names the source page and restores session filters, scroll and source focus. Direct assignment links after refresh fall back to My Work.
+The current review list is complete. The prototype still uses authored sample data; these changes do not establish production API compatibility. A later review can evaluate larger organization scenarios before adding new administrative features.

@@ -1,3 +1,4 @@
+import { DetailBackButton, DetailEmptyState } from "./DetailPresentation";
 import { assignments } from "./data/assignments";
 import type { Assignment, Readiness } from "./data/models";
 import {
@@ -27,10 +28,8 @@ export function OrganizationAttention({
     (item) => category === "All" || item.category === category,
   );
   return (
-    <>
-      <button className="button secondary" onClick={onBack}>
-        Back to Organization
-      </button>
+    <div className="detail-page">
+      <DetailBackButton onClick={onBack}>Back to Organization</DetailBackButton>
       <div className="page-heading workstream-heading">
         <div>
           <div className="eyebrow">ORGANIZATION ATTENTION</div>
@@ -107,16 +106,16 @@ export function OrganizationAttention({
           ))}
         </div>
         {shown.length === 0 && (
-          <p>
+          <DetailEmptyState>
             No matching attention items in this sample. This does not establish
             organization health.
-          </p>
+          </DetailEmptyState>
         )}
         <p>
           Recorded responses clear their response signal. Responsibility gaps
           and unverified outcomes require separate evidence and remain visible.
         </p>
       </section>
-    </>
+    </div>
   );
 }

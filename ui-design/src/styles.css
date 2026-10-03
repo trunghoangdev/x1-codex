@@ -3223,3 +3223,76 @@ main h3,
     grid-template-columns: 1fr;
   }
 }
+
+.detail-page {
+  min-width: 0;
+}
+.detail-page .page-heading {
+  margin: 24px 0;
+}
+.detail-page .org-overview-section,
+.detail-page .org-banner {
+  margin-bottom: 24px;
+}
+.detail-page .org-stream > h2 {
+  margin-bottom: 12px;
+}
+.detail-page .org-stream p {
+  margin: 10px 0;
+  line-height: 1.65;
+}
+.detail-page .org-stream li {
+  line-height: 1.65;
+  margin: 6px 0;
+}
+.detail-page .org-stream > section + section {
+  margin-top: 28px;
+  padding-top: 24px;
+  border-top: 1px solid #e0e5df;
+}
+.detail-back {
+  min-height: 44px;
+}
+.detail-empty {
+  padding: 16px;
+  margin: 16px 0;
+  background: #f5f7f3;
+  border: 1px dashed #dce3d5;
+  border-radius: 8px;
+}
+.detail-page .detail-empty p {
+  margin: 0;
+}
+.detail-page .text-link {
+  min-height: 32px;
+  text-align: left;
+  white-space: normal;
+}
+@media (max-width: 600px) {
+  .detail-page .org-stream {
+    padding: 18px;
+  }
+  .detail-page .text-link {
+    min-height: 44px;
+  }
+  .detail-page .org-filters {
+    align-items: stretch;
+  }
+  .detail-page .org-filters label {
+    width: 100%;
+  }
+  .detail-page .org-filters select {
+    width: 100%;
+  }
+  .detail-page .workstream-actions > button {
+    width: 100%;
+  }
+}
+@media (max-width: 600px) {
+  .main-shell:has(.detail-page) .top-right {
+    display: none;
+  }
+  .main-shell:has(.detail-page) .breadcrumb-detail {
+    max-width: none;
+  }
+}

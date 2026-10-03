@@ -1,3 +1,4 @@
+import { DetailBackButton, DetailEmptyState } from "./DetailPresentation";
 import type { Assignment } from "./data/models";
 import { assignments } from "./data/assignments";
 import { roleBindings, type Worker } from "./data/organizationOverview";
@@ -18,10 +19,8 @@ export function WorkerDetail({
     (binding) => binding.workerId === worker.id,
   );
   return (
-    <>
-      <button className="button secondary" onClick={onBack}>
-        Back to Organization
-      </button>
+    <div className="detail-page">
+      <DetailBackButton onClick={onBack}>Back to Organization</DetailBackButton>
       <div className="page-heading workstream-heading">
         <div>
           <div className="eyebrow">WORKER DETAIL · {worker.type}</div>
@@ -70,10 +69,10 @@ export function WorkerDetail({
                 </p>
                 <h4>Related assignments · {ids.length}</h4>
                 {ids.length === 0 && (
-                  <p>
+                  <DetailEmptyState>
                     No linked assignments in this sample. This does not mean the
                     worker is idle or available.
-                  </p>
+                  </DetailEmptyState>
                 )}
                 {ids.map((id) => {
                   const assignment = assignments.find((a) => a.id === id);
@@ -109,6 +108,6 @@ export function WorkerDetail({
           })}
         </div>
       </section>
-    </>
+    </div>
   );
 }

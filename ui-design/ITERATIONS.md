@@ -499,3 +499,11 @@ Assignment Back buttons now name the source page: workstream, handoff, outcome r
 Organization activity and queue filters move to app-owned state so they survive assignment return. Main navigation resets those filters. Inbox row restoration remains separate. A refreshed/directly loaded assignment has no session source and returns to My Work. Added the assignment-source preview and capture step, and documented the session boundary.
 
 Validation: production build passed. Eight relevant browser tests passed across the initial and focused reruns. Two expectations were updated for the intended source-link focus and explicit refresh boundary. New coverage verifies all source types, retained filters, tab changes, source scroll/focus, attention category and direct-link fallback; existing inbox/filter, queue and activity behavior passed. Preview was visually inspected.
+
+## 49 — Consistent detail presentation
+
+Six organization detail views now share a back-button control with an arrow and a common empty-state frame. Scoped detail styles unify heading/section spacing, paragraph/list rhythm and activity-section separation. Mobile filters and action groups use the available width, text links have larger targets, and detail breadcrumbs gain space by hiding the redundant demo badge on narrow screens.
+
+Data, responses and contextual return behavior remain unchanged. The layout/navigation review list is now complete. Refreshed five detail previews and visually inspected the empty worker state on mobile.
+
+Validation: production build and seven relevant browser tests passed for detail routes, empty states, evidence/response semantics, mobile overflow and source-return focus/scroll. After the final mobile breadcrumb adjustment, three mobile-bearing worker/activity/outcome tests passed again.

@@ -1,3 +1,4 @@
+import { DetailBackButton, DetailEmptyState } from "./DetailPresentation";
 import type { EvidenceArtifact } from "./data/evidence";
 import { handoffs } from "./data/handoffs";
 import type { Assignment } from "./data/models";
@@ -25,10 +26,8 @@ export function WorkstreamDetail({
 }) {
   const detail = workstreamDetails[stream.id];
   return (
-    <>
-      <button className="button secondary" onClick={onBack}>
-        Back to Organization
-      </button>
+    <div className="detail-page">
+      <DetailBackButton onClick={onBack}>Back to Organization</DetailBackButton>
       <div className="page-heading workstream-heading">
         <div>
           <div className="eyebrow">
@@ -150,10 +149,10 @@ export function WorkstreamDetail({
                   </button>
                 </>
               ) : (
-                <p>
+                <DetailEmptyState>
                   No evidence records attached. A missing record is not a failed
                   check or a verified outcome.
-                </p>
+                </DetailEmptyState>
               )}
             </article>
           );
@@ -167,6 +166,6 @@ export function WorkstreamDetail({
           does not establish a dependency.
         </p>
       </section>
-    </>
+    </div>
   );
 }

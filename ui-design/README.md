@@ -195,3 +195,5 @@ Attention is now a compact three-category summary on the overview. Select a coun
 Cited artifact links now open the exact record in the inspector from workstreams, handoffs, outcome review and organization activity. Closing preserves the current route and filters and restores keyboard focus. [Exact artifact preview](previews/29-outcome-artifact-inspector.png).
 
 Assignment Back buttons now identify their source page and restore its session filters, scroll and link focus. Direct assignment links after refresh use My Work as the return destination.
+
+Organization detail pages share back-button, spacing and empty-state styles. On mobile, filters and action groups expand to the available width and text-link targets are larger.

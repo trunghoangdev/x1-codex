@@ -1,3 +1,4 @@
+import { DetailBackButton, DetailEmptyState } from "./DetailPresentation";
 import type { EvidenceArtifact } from "./data/evidence";
 import type { Assignment } from "./data/models";
 import { assignments } from "./data/assignments";
@@ -20,10 +21,8 @@ export function HandoffDetail({
   const assignment = assignments.find((a) => a.id === handoff.assignmentId);
   const records = evidenceFor(handoff.assignmentId);
   return (
-    <>
-      <button className="button secondary" onClick={onBack}>
-        Back to workstream
-      </button>
+    <div className="detail-page">
+      <DetailBackButton onClick={onBack}>Back to workstream</DetailBackButton>
       <div className="page-heading workstream-heading">
         <div>
           <div className="eyebrow">{handoff.streamId} · SAMPLE HANDOFF</div>
@@ -126,7 +125,9 @@ export function HandoffDetail({
             )}
           </>
         ) : (
-          <p>No evidence records attached to this assignment in the sample.</p>
+          <DetailEmptyState>
+            No evidence records attached to this assignment in the sample.
+          </DetailEmptyState>
         )}
       </section>
       <section className="panel org-stream" aria-label="Handoff return path">
@@ -138,6 +139,6 @@ export function HandoffDetail({
           workstream goal.
         </p>
       </section>
-    </>
+    </div>
   );
 }
