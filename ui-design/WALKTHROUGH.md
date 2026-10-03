@@ -135,3 +135,7 @@ Filter Organization activity to Other organization work, open Assignment activit
 ## Explore a larger organization
 
 Open Demos → Explore larger organization. Select workstreams to inspect responsibilities, then filter the directory by Codex worker and Revision requested to find the onboarding loop. Reset and select Unassigned to inspect the invitation assessment gap. Compare the nine workers' scoped bindings. This independent scenario leaves My Work's five sample assignments intact; no response or outcome is recorded here.
+
+## Propose responsibility
+
+Open Organization attention → Responsibility and propose a worker for Invitation implementation. Inspect its fixed Developer role and invitation scope; record a reason. The receipt remains awaiting allocation and the two gaps stay visible. Close, then reopen from the overview's Responsibility gaps. Try the assessment gap: an existing reviewer binding still needs an assignment and candidate. Refresh clears these local proposals.

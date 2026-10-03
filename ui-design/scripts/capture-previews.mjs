@@ -312,4 +312,24 @@ await page.screenshot({
   fullPage: true,
   animations: "disabled",
 });
+await page.goto(
+  "http://127.0.0.1:4173/#/organization/attention/responsibility",
+);
+await page
+  .getByRole("button", {
+    name: "Propose responsibility · Invitation implementation",
+    exact: true,
+  })
+  .click();
+await page.getByLabel("Proposed worker").selectOption("codex");
+await page
+  .getByLabel("Reason for proposal")
+  .fill(
+    "Propose scoped invitation implementation work for review by the planner.",
+  );
+await page.getByRole("button", { name: "Record local proposal" }).click();
+await page.screenshot({
+  path: "previews/32-responsibility-proposal.png",
+  animations: "disabled",
+});
 await browser.close();

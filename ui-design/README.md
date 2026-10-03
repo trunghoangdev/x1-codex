@@ -199,3 +199,5 @@ Assignment Back buttons now identify their source page and restore its session f
 Organization detail pages share back-button, spacing and empty-state styles. On mobile, filters and action groups expand to the available width and text-link targets are larger.
 
 **Demos → Explore larger organization** offers an independent six-stream, nine-worker scenario with multiple assignees and search/worker/state filters. See [the scale review](ORGANIZATION-SCALE-REVIEW.md) for findings and boundaries.
+
+Responsibility gaps now offer **Propose responsibility**. Choose a sample worker and rationale, then reopen or remove the local proposal. Gaps stay open until a separate allocation decision. See [the proposal demo](RESPONSIBILITY-PROPOSALS.md).

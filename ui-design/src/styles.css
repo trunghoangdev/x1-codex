@@ -3310,3 +3310,21 @@ main h3,
   outline: 2px solid #355440;
   outline-offset: -2px;
 }
+.proposal-field {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+  margin: 20px 0;
+  font-weight: 600;
+}
+.proposal-field select,
+.proposal-field textarea {
+  width: 100%;
+  padding: 12px;
+  border: 1px solid #dce3d5;
+  border-radius: 6px;
+  font: inherit;
+}
+.proposal-field textarea {
+  resize: vertical;
+}

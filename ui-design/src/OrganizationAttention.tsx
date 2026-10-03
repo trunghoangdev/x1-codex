@@ -1,3 +1,4 @@
+import type { ResponsibilityProposal } from "./data/responsibilityProposals";
 import { DetailBackButton, DetailEmptyState } from "./DetailPresentation";
 import { assignments } from "./data/assignments";
 import type { Assignment, Readiness } from "./data/models";
@@ -11,6 +12,8 @@ export function OrganizationAttention({
   readiness,
   onOpen,
   onWorkstream,
+  proposals,
+  onPropose,
   category,
   onCategory,
   onBack,
@@ -19,6 +22,8 @@ export function OrganizationAttention({
   readiness: Readiness;
   onOpen: (assignment: Assignment, tab?: string) => void;
   onWorkstream: (id: string) => void;
+  proposals: Record<string, ResponsibilityProposal>;
+  onPropose: (gapId: string) => void;
   category: AttentionCategory | "All";
   onCategory: (category: AttentionCategory | "All") => void;
   onBack: () => void;
@@ -102,6 +107,19 @@ export function OrganizationAttention({
               >
                 Inspect {item.target.kind} · {item.target.id}
               </button>
+              {item.category === "Responsibility" && (
+                <p>
+                  <button
+                    className="button secondary"
+                    onClick={() => onPropose(item.id)}
+                  >
+                    {proposals[item.id]
+                      ? "View proposal"
+                      : "Propose responsibility"}{" "}
+                    · {item.title}
+                  </button>
+                </p>
+              )}
             </article>
           ))}
         </div>

@@ -39,3 +39,5 @@ This is an incremental boundary, not a finished data layer. Candidate, evidence,
 `outcomes.ts` defines proposed outcome evidence criteria and explicit supporting-context IDs for each stream. These are authored review expectations; assignment responses cannot turn them into verified outcomes.
 
 `largeOrganization.ts` is an independent Demos scenario: six streams, nine workers, nineteen bindings and eighteen assignments. It does not extend the current personal inbox or supply live worker states. Relationships and state labels are authored examples; no response actions or verification are attached.
+
+`responsibilityProposals.ts` defines local proposal receipts and authored worker options for the two invitation gaps. Recording proposals does not mutate assignments, role bindings or gap signals. Role/scope are fixed by the gap; worker capability and capacity are unverified.

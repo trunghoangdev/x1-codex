@@ -515,3 +515,11 @@ Demos now links to an independent organization scenario with six parallel stream
 `ORGANIZATION-SCALE-REVIEW.md` records findings and limits. Six stream cards fit desktop/mobile, but the full assignment/worker directory creates a long page; separate directories or paging are the next layout opportunity. This scenario is not an interchangeable provider for the main organization views and has no response, health or outcome verification actions.
 
 Validation: production build passed. Four relevant existing navigation/demo tests passed, and two new 390px/1440px scenario tests passed after fixing a stream-focus selector and ambiguous test locators. Coverage includes compound filters, unassigned and revision contexts, stream focus, empty results, re-entry and unchanged My Work assignments. Mobile preview was visually inspected; a full desktop scenario capture was added.
+
+## 51 — Responsibility proposal flow
+
+Organization Overview and Responsibility attention now offer a proposal for each invitation responsibility gap. A shared modal fixes the required role and scope, lets the user choose an authored sample worker and requires a rationale. Recording creates a session receipt that can be reopened from either entry or removed. Refresh clears proposals; canceled drafts are discarded.
+
+Proposals await allocation and do not change worker bindings, assignments, permissions or attention counts. Candidate choices do not imply verified capability or availability. Documented these boundaries and added a receipt preview and capture step.
+
+Validation: production build and five relevant browser tests passed, covering modal focus containment, worker/gap navigation, attention semantics, category routes and the new proposal lifecycle. The existing attention test needed an exact workstream-button locator after adding the proposal entry. New coverage includes required rationale, receipt focus, cross-entry reopening, removal, refresh reset and mobile width. The desktop receipt preview was visually inspected.

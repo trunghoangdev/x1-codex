@@ -1,3 +1,4 @@
+import type { ResponsibilityProposal } from "./data/responsibilityProposals";
 import { AttentionSummary } from "./AttentionSummary";
 import type { AttentionCategory } from "./data/organizationAttention";
 import { responsibilityGaps } from "./data/workerDetails";
@@ -17,6 +18,8 @@ export function OrganizationOverview({
   onOpen,
   onMyWork,
   onWorkstream,
+  proposals,
+  onPropose,
   onWorker,
   onActivity,
   onAttention,
@@ -26,6 +29,8 @@ export function OrganizationOverview({
   onOpen: (assignment: Assignment, tab?: string) => void;
   onMyWork: () => void;
   onWorkstream: (id: string) => void;
+  proposals: Record<string, ResponsibilityProposal>;
+  onPropose: (gapId: string) => void;
   onWorker: (id: string) => void;
   onActivity: () => void;
   onAttention: (category: AttentionCategory | "All") => void;
@@ -272,6 +277,17 @@ export function OrganizationOverview({
               >
                 Inspect workstream · {gap.title}
               </button>
+              <p>
+                <button
+                  className="button secondary"
+                  onClick={() => onPropose(gap.id)}
+                >
+                  {proposals[gap.id]
+                    ? "View proposal"
+                    : "Propose responsibility"}{" "}
+                  · {gap.title}
+                </button>
+              </p>
             </article>
           ))}
         </section>

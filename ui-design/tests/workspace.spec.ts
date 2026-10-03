@@ -1977,7 +1977,7 @@ test("organization attention separates response signals from responsibility and 
   await expect(attention.getByRole("article")).toHaveCount(2);
   await attention
     .getByRole("article", { name: "Invitation implementation", exact: true })
-    .getByRole("button")
+    .getByRole("button", { name: "Inspect workstream · WS-02", exact: true })
     .click();
   await expect(page).toHaveURL(/workstreams\/WS-02/);
   await page.goBack();
@@ -2474,5 +2474,89 @@ test("assignment return restores source pages scroll focus and filters", async (
   await page.reload();
   await expect(
     page.getByRole("button", { name: "Back to My Work", exact: true }),
+  ).toBeVisible();
+});
+
+test("responsibility proposals record scoped intent without resolving gaps", async ({
+  page,
+}) => {
+  await page.goto("/#/organization/attention/responsibility");
+  const trigger = page.getByRole("button", {
+    name: "Propose responsibility · Invitation implementation",
+    exact: true,
+  });
+  await trigger.click();
+  const dialog = page.getByRole("dialog");
+  await expect(dialog.getByLabel("Proposed worker")).toBeFocused();
+  await expect(
+    dialog.getByRole("button", { name: "Record local proposal" }),
+  ).toBeDisabled();
+  await dialog.getByLabel("Proposed worker").selectOption("codex");
+  await dialog
+    .getByLabel("Reason for proposal")
+    .fill(
+      "Provide a scoped invitation implementation assignment for this worker.",
+    );
+  await dialog.getByRole("button", { name: "Record local proposal" }).click();
+  await expect(
+    dialog.getByRole("heading", {
+      name: "Proposal recorded · awaiting allocation",
+    }),
+  ).toBeFocused();
+  await expect(dialog).toContainText("Developer");
+  await expect(dialog).toContainText("Team invitation improvements");
+  await page.keyboard.press("Escape");
+  await expect(
+    page.getByRole("button", {
+      name: "View proposal · Invitation implementation",
+    }),
+  ).toBeFocused();
+  await expect(page.getByRole("status")).toContainText(
+    "2 of 9 attention items",
+  );
+  await page.getByRole("button", { name: "Back to Organization" }).click();
+  await page
+    .getByText("Responsibility gaps · 2 known gaps", { exact: true })
+    .click();
+  await page
+    .getByRole("button", { name: "View proposal · Invitation implementation" })
+    .click();
+  await expect(dialog).toContainText(
+    "Provide a scoped invitation implementation assignment",
+  );
+  await dialog.getByRole("button", { name: "Remove local proposal" }).click();
+  await expect(dialog).toHaveCount(0);
+  await page
+    .getByRole("button", {
+      name: "Propose responsibility · Invitation assessment assignment",
+    })
+    .click();
+  await expect(dialog).toContainText("no assignment or candidate");
+  await dialog.getByLabel("Proposed worker").selectOption("alex");
+  await dialog
+    .getByLabel("Reason for proposal")
+    .fill("Allocate an invitation assessment subject and assignment for Alex.");
+  await page.setViewportSize({ width: 390, height: 844 });
+  expect(
+    await page.evaluate(
+      () => document.documentElement.scrollWidth <= innerWidth,
+    ),
+  ).toBeTruthy();
+  await dialog.getByRole("button", { name: "Record local proposal" }).click();
+  await expect(dialog).toContainText("Reviewer");
+  await page.keyboard.press("Escape");
+  await page.reload();
+  await page
+    .getByText("Responsibility gaps · 2 known gaps", { exact: true })
+    .click();
+  await expect(
+    page.getByRole("button", {
+      name: "View proposal · Invitation assessment assignment",
+    }),
+  ).toHaveCount(0);
+  await expect(
+    page.getByRole("button", {
+      name: "Propose responsibility · Invitation assessment assignment",
+    }),
   ).toBeVisible();
 });

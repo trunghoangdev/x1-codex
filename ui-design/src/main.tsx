@@ -1,3 +1,5 @@
+import { ResponsibilityProposal } from "./ResponsibilityProposal";
+import type { ResponsibilityProposal as Proposal } from "./data/responsibilityProposals";
 import { LargeOrganizationDemo } from "./LargeOrganizationDemo";
 import type { WorkspaceRoute } from "./useWorkspaceRoute";
 import { OrganizationAttention } from "./OrganizationAttention";
@@ -172,6 +174,8 @@ function App() {
     clearDrafts,
   } = responseDraft;
   const [notice, setNotice] = useState("");
+  const [proposals, setProposals] = useState<Record<string, Proposal>>({});
+  const [proposalGap, setProposalGap] = useState<string | null>(null);
   const [artifact, setArtifact] = useState<EvidenceArtifact | null>(null);
   const [mobile, setMobile] = useState(false);
   const [receipts, setReceipts] = useState<ResponseRecord[]>([]);
@@ -280,6 +284,7 @@ function App() {
   useEffect(() => {
     setDecision(null);
     setArtifact(null);
+    setProposalGap(null);
     setMobile(false);
   }, [
     route.view,
@@ -1369,6 +1374,8 @@ function App() {
           )}
           {view === "Organization" && route.attention && (
             <OrganizationAttention
+              proposals={proposals}
+              onPropose={setProposalGap}
               completed={completed}
               readiness={readiness}
               category={route.attention}
@@ -1404,6 +1411,8 @@ function App() {
             !route.attention && (
               <>
                 <OrganizationOverview
+                  proposals={proposals}
+                  onPropose={setProposalGap}
                   onAttention={openAttention}
                   completed={completed}
                   readiness={readiness}
@@ -1658,6 +1667,29 @@ function App() {
           setReadiness={setReadiness}
           submission={submission}
         />
+      )}
+      {proposalGap && (
+        <Modal
+          title="Responsibility proposal"
+          onClose={() => setProposalGap(null)}
+        >
+          <ResponsibilityProposal
+            key={proposalGap}
+            gapId={proposalGap}
+            proposal={proposals[proposalGap]}
+            onRecord={(proposal) =>
+              setProposals((old) => ({ ...old, [proposal.gapId]: proposal }))
+            }
+            onRemove={() => {
+              setProposals((old) => {
+                const next = { ...old };
+                delete next[proposalGap];
+                return next;
+              });
+              setProposalGap(null);
+            }}
+          />
+        </Modal>
       )}
       {artifact && (
         <Modal title="Artifact inspector" onClose={() => setArtifact(null)}>
