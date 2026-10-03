@@ -284,4 +284,16 @@ await page.screenshot({
   fullPage: true,
   animations: "disabled",
 });
+await page.goto("http://127.0.0.1:4173/#/outcomes/WS-01");
+await page
+  .getByRole("button", {
+    name: "Inspect supporting context · AR-775 · Test results",
+    exact: true,
+  })
+  .click();
+await page.screenshot({
+  path: "previews/29-outcome-artifact-inspector.png",
+  fullPage: true,
+  animations: "disabled",
+});
 await browser.close();

@@ -1,3 +1,4 @@
+import type { EvidenceArtifact } from "./data/evidence";
 import type { Assignment } from "./data/models";
 import { assignments } from "./data/assignments";
 import { evidenceFor } from "./data/evidence";
@@ -7,11 +8,13 @@ export function HandoffDetail({
   handoff,
   completed,
   onOpen,
+  onInspect,
   onBack,
 }: {
   handoff: Handoff;
   completed: Record<string, string>;
   onOpen: (assignment: Assignment, tab?: string) => void;
+  onInspect: (artifact: EvidenceArtifact) => void;
   onBack: () => void;
 }) {
   const assignment = assignments.find((a) => a.id === handoff.assignmentId);
@@ -104,7 +107,12 @@ export function HandoffDetail({
             <ul>
               {records.map((record) => (
                 <li key={record.id}>
-                  {record.id} · {record.title}
+                  <button
+                    className="text-link"
+                    onClick={() => onInspect(record)}
+                  >
+                    Inspect {record.id} · {record.title}
+                  </button>
                 </li>
               ))}
             </ul>

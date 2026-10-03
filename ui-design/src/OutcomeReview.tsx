@@ -1,3 +1,4 @@
+import type { EvidenceArtifact } from "./data/evidence";
 import { assignments } from "./data/assignments";
 import { evidenceArtifacts } from "./data/evidence";
 import type { Assignment } from "./data/models";
@@ -9,12 +10,14 @@ export function OutcomeReview({
   outcome,
   completed,
   onOpen,
+  onInspect,
   onBack,
 }: {
   stream: Workstream;
   outcome: Outcome;
   completed: Record<string, string>;
   onOpen: (assignment: Assignment, tab?: string) => void;
+  onInspect: (artifact: EvidenceArtifact) => void;
   onBack: () => void;
 }) {
   return (
@@ -80,7 +83,7 @@ export function OutcomeReview({
                   <p key={id}>
                     <button
                       className="text-link"
-                      onClick={() => onOpen(assignment, "Evidence")}
+                      onClick={() => onInspect(record)}
                     >
                       Inspect supporting context · {id} · {record.title}
                     </button>

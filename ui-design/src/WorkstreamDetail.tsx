@@ -1,3 +1,4 @@
+import type { EvidenceArtifact } from "./data/evidence";
 import { handoffs } from "./data/handoffs";
 import type { Assignment } from "./data/models";
 import type { Workstream } from "./data/organizationOverview";
@@ -9,6 +10,7 @@ export function WorkstreamDetail({
   stream,
   completed,
   onOpen,
+  onInspect,
   onBack,
   onHandoff,
   onOutcome,
@@ -16,6 +18,7 @@ export function WorkstreamDetail({
   stream: Workstream;
   completed: Record<string, string>;
   onOpen: (assignment: Assignment, tab?: string) => void;
+  onInspect: (artifact: EvidenceArtifact) => void;
   onBack: () => void;
   onHandoff: (id: string) => void;
   onOutcome: () => void;
@@ -130,7 +133,12 @@ export function WorkstreamDetail({
                   <ul>
                     {evidence.map((record) => (
                       <li key={record.id}>
-                        {record.id} · {record.title}
+                        <button
+                          className="text-link"
+                          onClick={() => onInspect(record)}
+                        >
+                          Inspect {record.id} · {record.title}
+                        </button>
                       </li>
                     ))}
                   </ul>

@@ -118,10 +118,12 @@ Select **View organization activity**. Filter to Payment webhook reliability to 
 
 ## Review an outcome
 
-Open Payment webhook reliability and choose **Review outcome evidence**. Compare recovery and duplicate-processing requirements with the attached source, notes and historical test fixture. Inspect supporting context; recording an assignment assessment leaves the outcome unverified. The invitation outcome has no attached context records and needs criteria, implementation identity and observed behavior. Outcome-review responsibility remains unassigned in both samples.
+Open Payment webhook reliability and choose **Review outcome evidence**. Compare recovery and duplicate-processing requirements with the attached source, notes and historical test fixture. Inspect supporting context to open that exact artifact without leaving Outcome review. Close the inspector to return to the source link. Recording an assignment assessment leaves the outcome unverified. The invitation outcome has no attached context records and needs criteria, implementation identity and observed behavior. Outcome-review responsibility remains unassigned in both samples.
 
 ## Move around the overview
 
 Use Goals & workstreams, Attention or Roles & workers shortcuts to scroll and focus the corresponding heading. Expand Other organization work or Responsibility gaps for secondary explanations. On detail pages, the header shows the current subject; its Organization button returns to the overview. The long subject label truncates visually on mobile.
 
 The standalone revision cycle is now reached through **Demos** (`#/demos`). Organization Overview focuses on goals, scoped workers and coordination. The grouped personal queue is reached from My Work at `#/work/attention`.
+
+Artifact IDs in Workstream, Handoff and Organization activity also open their exact records directly. Collection links and assignment links still open the relevant assignment tab.

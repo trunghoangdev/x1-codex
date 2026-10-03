@@ -2134,6 +2134,12 @@ test("organization activity scopes evidence and session responses without invent
   await records
     .getByRole("button", { name: "Inspect record · AR-771" })
     .click();
+  await expect(page.getByRole("dialog")).toContainText("AR-771");
+  await page.keyboard.press("Escape");
+  await records
+    .getByRole("button", { name: "Assignment activity · A-1042" })
+    .first()
+    .click();
   await expect(page).toHaveURL(/assignments\/A-1042\/activity/);
   await page
     .getByRole("button", { name: "Submit assessment", exact: true })
@@ -2198,7 +2204,12 @@ test("outcome review keeps goal evidence gaps independent from assignment respon
   await requirements
     .getByRole("button", { name: /Inspect supporting context · AR-775/ })
     .click();
-  await expect(page).toHaveURL(/assignments\/A-1042\/evidence/);
+  await expect(page.getByRole("dialog")).toContainText("AR-775");
+  await page.keyboard.press("Escape");
+  await page
+    .getByRole("button", { name: "Inspect assignment · A-1042" })
+    .click();
+  await expect(page).toHaveURL(/assignments\/A-1042\/overview/);
   await page
     .getByRole("button", { name: "Submit assessment", exact: true })
     .click();
@@ -2365,4 +2376,41 @@ test("overview separates personal queue and standalone demos", async ({
       () => document.documentElement.scrollWidth <= innerWidth,
     ),
   ).toBeTruthy();
+});
+
+test("exact artifact links preserve source routes filters and keyboard focus", async ({
+  page,
+}) => {
+  for (const [route, button, id] of [
+    ["/#/workstreams/WS-01", "Inspect AR-776 · Worker contribution", "AR-776"],
+    ["/#/handoffs/payment-review", "Inspect AR-771 · Source change", "AR-771"],
+    [
+      "/#/outcomes/WS-01",
+      "Inspect supporting context · AR-775 · Test results",
+      "AR-775",
+    ],
+  ]) {
+    await page.goto(route);
+    const trigger = page.getByRole("button", { name: button, exact: true });
+    await trigger.focus();
+    await page.keyboard.press("Enter");
+    await expect(page.getByRole("dialog")).toContainText(id);
+    await expect(page.getByRole("dialog")).toContainText("A-1042");
+    await expect(page).toHaveURL(route);
+    await page.keyboard.press("Escape");
+    await expect(trigger).toBeFocused();
+  }
+  await page.goto("/#/organization/activity");
+  await page.getByLabel("Activity scope").selectOption("other");
+  await page.getByRole("button", { name: "Inspect record · AR-801" }).click();
+  await expect(page.getByRole("dialog")).toContainText("AR-801");
+  await expect(page.getByRole("dialog")).toContainText("A-1041");
+  await page.setViewportSize({ width: 390, height: 844 });
+  expect(
+    await page.evaluate(
+      () => document.documentElement.scrollWidth <= innerWidth,
+    ),
+  ).toBeTruthy();
+  await page.keyboard.press("Escape");
+  await expect(page.getByLabel("Activity scope")).toHaveValue("other");
 });

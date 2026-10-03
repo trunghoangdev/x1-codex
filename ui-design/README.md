@@ -191,3 +191,5 @@ The overview has section shortcuts for Goals, Attention and Roles & Workers. Add
 Attention is now a compact three-category summary on the overview. Select a count or **View all organization attention** for the dedicated list. Category URLs preserve the filter across refresh and history.
 
 **My Work → View response queue · Alex** opens the personal assignments grouped by response state. **Demos** opens the independent revision-cycle example. Both are now outside Organization Overview.
+
+Cited artifact links now open the exact record in the inspector from workstreams, handoffs, outcome review and organization activity. Closing preserves the current route and filters and restores keyboard focus. [Exact artifact preview](previews/29-outcome-artifact-inspector.png).

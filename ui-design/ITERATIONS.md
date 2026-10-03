@@ -483,3 +483,11 @@ Moved Alex's grouped response queue to `#/work/attention`, reached from My Work.
 Organization Overview no longer embeds either section. Its organization attention summary and role/workstream links remain the coordination entry. Queue navigation preserves work-filter context and avoids treating queue-origin assignments as opened inbox rows. Added route/focus/mobile coverage and migrated queue/revision/large-fixture tests to their new locations. Updated the model, walkthrough, review priorities and capture script; refreshed inbox/overview previews and added a queue preview.
 
 Validation: production build and all 51 browser tests passed, including large fixture layouts, personal response-state filters, receipt navigation, revision identity/focus, independent demo reset and the new entry/route separation. Refreshed organization preview was visually inspected.
+
+## 47 — Exact cited artifact inspection
+
+Cited record links in Outcome review and Organization activity now open their exact artifact in the shared inspector on the source page. Workstream and Handoff record lists also expose exact inspection links. Assignment Activity remains available from organization evidence entries for broader context, and collection-level evidence links retain their existing tab navigation.
+
+Inspection preserves the source route and filters; Escape/close restores the originating link's focus. Existing sample identity/provenance explanations remain in the inspector. Updated review priorities, walkthrough/model and capture script, refreshed four detail previews and added a direct outcome-artifact preview.
+
+Validation: production build and six relevant browser tests passed, covering exact records/assignment scope, source URL preservation, filter retention, keyboard focus, mobile overflow, response/outcome distinction and existing modal containment. The exact-artifact preview was visually inspected.

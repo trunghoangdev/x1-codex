@@ -1,3 +1,4 @@
+import type { EvidenceArtifact } from "./data/evidence";
 import { useState } from "react";
 import { assignments } from "./data/assignments";
 import { evidenceArtifacts } from "./data/evidence";
@@ -7,10 +8,12 @@ import type { Assignment, ResponseRecord } from "./data/models";
 export function OrganizationActivity({
   receipts,
   onOpen,
+  onInspect,
   onBack,
 }: {
   receipts: ResponseRecord[];
   onOpen: (assignment: Assignment, tab?: string) => void;
+  onInspect: (artifact: EvidenceArtifact) => void;
   onBack: () => void;
 }) {
   const [scope, setScope] = useState("all");
@@ -152,12 +155,17 @@ export function OrganizationActivity({
                 </h3>
                 <p>{record.detail}</p>
                 <p>Producer: {record.producer}</p>
-                <button
-                  className="text-link"
-                  onClick={() => open(record.assignmentId)}
-                >
+                <button className="text-link" onClick={() => onInspect(record)}>
                   Inspect record · {record.id}
                 </button>
+                <p>
+                  <button
+                    className="text-link"
+                    onClick={() => open(record.assignmentId)}
+                  >
+                    Assignment activity · {record.assignmentId}
+                  </button>
+                </p>
               </article>
             ))}
             {evidence.length === 0 && (

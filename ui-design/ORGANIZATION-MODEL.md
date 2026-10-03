@@ -34,8 +34,10 @@ Two explicit sample exchanges are defined in `handoffs.ts`: candidate to reviewe
 
 ## Organization activity
 
-`#/organization/activity` combines session response receipts and attached sample evidence across modeled workstreams. The Other organization work filter covers assignments with no authored stream membership. Responses are ordered by recording time; undated evidence is presented separately and has no inferred publication sequence. Filters reset when leaving the page; refresh clears local responses. Source links open assignment Activity for full receipt or artifact inspection.
+`#/organization/activity` combines session response receipts and attached sample evidence across modeled workstreams. The Other organization work filter covers assignments with no authored stream membership. Responses are ordered by recording time; undated evidence is presented separately and has no inferred publication sequence. Filters reset when leaving the page; refresh clears local responses. Receipt links open assignment Activity. Artifact links open the exact record in the shared inspector, preserving the activity scope and source route.
 
 ## Outcome review
 
 `#/outcomes/WS-01` and `#/outcomes/WS-02` show proposed goal-level evidence requirements, available context, missing observations and unassigned outcome-review responsibility. `outcomes.ts` explicitly links context records to criteria within the corresponding stream. Existing assignment assessments do not verify these requirements, even when their conclusion is Meets criteria. The view is read-only: no goal decision or automatic completion calculation is introduced.
+
+Exact cited artifact links in workstream, handoff and outcome views open the shared inspector on the current page. Closing restores focus to the originating link. Assignment-level evidence links still open the containing tab when the link refers to a collection rather than one record. No artifact inspection confirms its provenance or outcome.

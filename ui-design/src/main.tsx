@@ -1231,6 +1231,7 @@ function App() {
           )}
           {view === "Organization" && stream && (
             <WorkstreamDetail
+              onInspect={setArtifact}
               stream={stream}
               onOutcome={() =>
                 changeRoute({
@@ -1263,6 +1264,7 @@ function App() {
           )}
           {view === "Organization" && handoff && (
             <HandoffDetail
+              onInspect={setArtifact}
               handoff={handoff}
               completed={completed}
               onOpen={open}
@@ -1278,6 +1280,7 @@ function App() {
           )}
           {view === "Organization" && outcome && outcomeStream && (
             <OutcomeReview
+              onInspect={setArtifact}
               stream={outcomeStream}
               outcome={outcome}
               completed={completed}
@@ -1312,6 +1315,7 @@ function App() {
           )}
           {view === "Organization" && route.organizationActivity && (
             <OrganizationActivity
+              onInspect={setArtifact}
               receipts={receipts}
               onOpen={open}
               onBack={() => navigate("Organization")}
