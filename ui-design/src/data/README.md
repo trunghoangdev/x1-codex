@@ -41,3 +41,5 @@ This is an incremental boundary, not a finished data layer. Candidate, evidence,
 `largeOrganization.ts` is an independent Demos scenario: six streams, nine workers, nineteen bindings and eighteen assignments. It does not extend the current personal inbox or supply live worker states. Relationships and state labels are authored examples; no response actions or verification are attached.
 
 `responsibilityProposals.ts` defines local proposal receipts and authored worker options for the two invitation gaps. Recording proposals does not mutate assignments, role bindings or gap signals. Role/scope are fixed by the gap; worker capability and capacity are unverified.
+
+`workstreamDirectory.ts` defines URL filter defaults for the main organization directory. Entries reuse `organizationOverview`, explicit `workerDetails` gaps and `outcomes` evidence requirements; no receipt or proposal resolves these signals.

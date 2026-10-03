@@ -338,4 +338,10 @@ await page.screenshot({
   path: "previews/33-customer-walkthrough.png",
   animations: "disabled",
 });
+await page.goto("http://127.0.0.1:4173/#/organization/workstreams");
+await page.screenshot({
+  path: "previews/34-workstreams-directory.png",
+  fullPage: true,
+  animations: "disabled",
+});
 await browser.close();

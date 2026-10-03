@@ -12,6 +12,7 @@ export function WorkstreamDetail({
   completed,
   onOpen,
   onInspect,
+  backLabel = "Back to Organization",
   onBack,
   onHandoff,
   onOutcome,
@@ -20,6 +21,7 @@ export function WorkstreamDetail({
   completed: Record<string, string>;
   onOpen: (assignment: Assignment, tab?: string) => void;
   onInspect: (artifact: EvidenceArtifact) => void;
+  backLabel?: string;
   onBack: () => void;
   onHandoff: (id: string) => void;
   onOutcome: () => void;
@@ -27,7 +29,7 @@ export function WorkstreamDetail({
   const detail = workstreamDetails[stream.id];
   return (
     <div className="detail-page">
-      <DetailBackButton onClick={onBack}>Back to Organization</DetailBackButton>
+      <DetailBackButton onClick={onBack}>{backLabel}</DetailBackButton>
       <div className="page-heading workstream-heading">
         <div>
           <div className="eyebrow">

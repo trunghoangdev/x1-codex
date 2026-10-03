@@ -1,3 +1,5 @@
+import { WorkstreamsDirectory } from "./WorkstreamsDirectory";
+import { defaultStreamFilters } from "./data/workstreamDirectory";
 import { CustomerTour, customerTourSteps } from "./CustomerTour";
 import { ResponsibilityProposal } from "./ResponsibilityProposal";
 import type { ResponsibilityProposal as Proposal } from "./data/responsibilityProposals";
@@ -205,6 +207,7 @@ function App() {
     role: "All",
     status: "all",
   });
+  const directorySources = useRef<Record<string, WorkspaceRoute>>({});
   const assignmentSources = useRef<
     Record<
       string,
@@ -219,7 +222,7 @@ function App() {
   >({});
   const source = selected ? assignmentSources.current[selected.id] : undefined;
   const inboxReturn = useRef<{ id: string; y: number } | null>(null);
-  const screenKey = `${route.view}:${route.assignmentId ?? ""}:${!!route.invalid}:${route.workstreamId ?? ""}:${route.workerId ?? ""}:${route.handoffId ?? ""}:${!!route.organizationActivity}:${route.outcomeId ?? ""}:${!!route.attention}:${!!route.personalQueue}:${!!route.largeOrganization}`;
+  const screenKey = `${route.view}:${route.assignmentId ?? ""}:${!!route.invalid}:${route.workstreamId ?? ""}:${route.workerId ?? ""}:${route.handoffId ?? ""}:${!!route.organizationActivity}:${route.outcomeId ?? ""}:${!!route.attention}:${!!route.personalQueue}:${!!route.largeOrganization}:${!!route.streamDirectory}`;
   const previousScreen = useRef(screenKey);
   useEffect(() => {
     if (route.view !== "My Work" || route.assignmentId)
@@ -310,6 +313,7 @@ function App() {
     route.outcomeId,
     route.personalQueue,
     route.largeOrganization,
+    !!route.streamDirectory,
     route.assignmentId,
     route.tab,
     route.invalid,
@@ -323,6 +327,7 @@ function App() {
     });
   }
   function navigate(next: View) {
+    directorySources.current = {};
     setOrganizationActivityView({ scope: "all", type: "all" });
     setQueueView({ project: "All", role: "All", status: "all" });
     changeRoute({ view: next, tab: "Overview", work: route.work });
@@ -545,6 +550,7 @@ function App() {
               worker ||
               handoff ||
               outcome ||
+              route.streamDirectory ||
               route.organizationActivity ||
               route.attention) ? (
               <>
@@ -561,9 +567,11 @@ function App() {
                     handoff?.title ??
                     (outcomeStream
                       ? `Outcome · ${outcomeStream.name}`
-                      : route.attention
-                        ? "Attention"
-                        : "Activity")}
+                      : route.streamDirectory
+                        ? "Workstreams"
+                        : route.attention
+                          ? "Attention"
+                          : "Activity")}
                 </strong>
               </>
             ) : (
@@ -1334,6 +1342,11 @@ function App() {
             <WorkstreamDetail
               onInspect={setArtifact}
               stream={stream}
+              backLabel={
+                directorySources.current[stream.id]
+                  ? "Back to Workstreams"
+                  : undefined
+              }
               onOutcome={() =>
                 changeRoute({
                   view: "Organization",
@@ -1352,7 +1365,11 @@ function App() {
               }
               completed={completed}
               onOpen={open}
-              onBack={() => navigate("Organization")}
+              onBack={() =>
+                directorySources.current[stream.id]
+                  ? changeRoute(directorySources.current[stream.id])
+                  : navigate("Organization")
+              }
             />
           )}
           {view === "Organization" && worker && (
@@ -1426,7 +1443,32 @@ function App() {
               onBack={() => navigate("Organization")}
             />
           )}
+          {view === "Organization" && route.streamDirectory && (
+            <WorkstreamsDirectory
+              filters={route.streamDirectory}
+              onFilters={(filters) =>
+                changeRoute(
+                  {
+                    view: "Organization",
+                    tab: "Overview",
+                    streamDirectory: filters,
+                  },
+                  true,
+                )
+              }
+              onBack={() => navigate("Organization")}
+              onOpen={(id) => {
+                directorySources.current[id] = route;
+                changeRoute({
+                  view: "Organization",
+                  tab: "Overview",
+                  workstreamId: id,
+                });
+              }}
+            />
+          )}
           {view === "Organization" &&
+            !route.streamDirectory &&
             !stream &&
             !worker &&
             !handoff &&
@@ -1435,6 +1477,13 @@ function App() {
             !route.attention && (
               <>
                 <OrganizationOverview
+                  onDirectory={() =>
+                    changeRoute({
+                      view: "Organization",
+                      tab: "Overview",
+                      streamDirectory: defaultStreamFilters,
+                    })
+                  }
                   proposals={proposals}
                   onPropose={setProposalGap}
                   onAttention={openAttention}

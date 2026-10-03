@@ -1,3 +1,7 @@
+import {
+  defaultStreamFilters,
+  type StreamFilters,
+} from "./data/workstreamDirectory";
 import type { AttentionCategory } from "./data/organizationAttention";
 import { outcomes } from "./data/outcomes";
 import { handoffs } from "./data/handoffs";
@@ -16,6 +20,7 @@ export type WorkspaceRoute = {
   workerId?: string;
   handoffId?: string;
   organizationActivity?: boolean;
+  streamDirectory?: StreamFilters;
   outcomeId?: string;
   attention?: AttentionCategory | "All";
   personalQueue?: boolean;
@@ -41,6 +46,28 @@ export function useWorkspaceRoute(ids: string[], tabs: string[]) {
       separator < 0 ? "" : raw.slice(separator + 1),
     );
     const path = (separator < 0 ? raw : raw.slice(0, separator)).split("/");
+    if (path.join("/") === "/organization/workstreams") {
+      const params = new URLSearchParams(
+        separator < 0 ? "" : raw.slice(separator + 1),
+      );
+      const project = params.get("project") ?? "All";
+      const signal = params.get("signal") ?? "all";
+      if (
+        !["All", ...workstreams.map((s) => s.project)].includes(project) ||
+        !["all", "responsibility", "outcome"].includes(signal)
+      )
+        return { ...fallback, invalid: true };
+      return {
+        view: "Organization",
+        tab: "Overview",
+        streamDirectory: {
+          ...defaultStreamFilters,
+          query: params.get("q") ?? "",
+          project,
+          signal: signal as StreamFilters["signal"],
+        },
+      };
+    }
     if (
       path.length === 3 &&
       path[0] === "" &&
@@ -131,26 +158,45 @@ export function useWorkspaceRoute(ids: string[], tabs: string[]) {
     };
   }, []);
   function navigate(next: WorkspaceRoute, replace = false) {
-    const path = next.assignmentId
-      ? `#/assignments/${next.assignmentId}/${next.tab.toLowerCase()}`
-      : next.workstreamId
-        ? `#/workstreams/${next.workstreamId}`
-        : next.workerId
-          ? `#/workers/${next.workerId}`
-          : next.handoffId
-            ? `#/handoffs/${next.handoffId}`
-            : next.organizationActivity
-              ? "#/organization/activity"
-              : next.outcomeId
-                ? `#/outcomes/${next.outcomeId}`
-                : next.attention
-                  ? `#/organization/attention/${next.attention.toLowerCase()}`
-                  : next.personalQueue
-                    ? "#/work/attention"
-                    : next.largeOrganization
-                      ? "#/demos/organization"
-                      : `#/${viewPaths[next.view]}`;
-    const hash = path + (next.work ? writeWorkFilters(next.work) : "");
+    const path = next.streamDirectory
+      ? "#/organization/workstreams"
+      : next.assignmentId
+        ? `#/assignments/${next.assignmentId}/${next.tab.toLowerCase()}`
+        : next.workstreamId
+          ? `#/workstreams/${next.workstreamId}`
+          : next.workerId
+            ? `#/workers/${next.workerId}`
+            : next.handoffId
+              ? `#/handoffs/${next.handoffId}`
+              : next.organizationActivity
+                ? "#/organization/activity"
+                : next.outcomeId
+                  ? `#/outcomes/${next.outcomeId}`
+                  : next.attention
+                    ? `#/organization/attention/${next.attention.toLowerCase()}`
+                    : next.personalQueue
+                      ? "#/work/attention"
+                      : next.largeOrganization
+                        ? "#/demos/organization"
+                        : `#/${viewPaths[next.view]}`;
+    const params = new URLSearchParams();
+    if (next.streamDirectory) {
+      if (next.streamDirectory.query)
+        params.set("q", next.streamDirectory.query);
+      if (next.streamDirectory.project !== "All")
+        params.set("project", next.streamDirectory.project);
+      if (next.streamDirectory.signal !== "all")
+        params.set("signal", next.streamDirectory.signal);
+    }
+    const hash =
+      path +
+      (next.streamDirectory
+        ? params.size
+          ? `?${params}`
+          : ""
+        : next.work
+          ? writeWorkFilters(next.work)
+          : "");
     if (location.hash !== hash) {
       if (replace) history.replaceState(null, "", hash);
       else history.pushState(null, "", hash);

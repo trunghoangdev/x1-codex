@@ -203,3 +203,5 @@ Organization detail pages share back-button, spacing and empty-state styles. On 
 Responsibility gaps now offer **Propose responsibility**. Choose a sample worker and rationale, then reopen or remove the local proposal. Gaps stay open until a separate allocation decision. See [the proposal demo](RESPONSIBILITY-PROPOSALS.md).
 
 Customer presentation: Demos → Start customer walkthrough. The eight-step guide connects existing screens and explains the change from invitation coordination to payment evidence. See [CUSTOMER-WALKTHROUGH.md](CUSTOMER-WALKTHROUGH.md).
+
+Organization Overview → Browse workstreams opens a searchable directory with project and responsibility/outcome filters stored in the URL. See [WORKSTREAMS-DIRECTORY.md](WORKSTREAMS-DIRECTORY.md).

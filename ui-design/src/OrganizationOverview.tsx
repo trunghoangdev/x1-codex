@@ -21,6 +21,7 @@ export function OrganizationOverview({
   proposals,
   onPropose,
   onWorker,
+  onDirectory,
   onActivity,
   onAttention,
 }: {
@@ -32,6 +33,7 @@ export function OrganizationOverview({
   proposals: Record<string, ResponsibilityProposal>;
   onPropose: (gapId: string) => void;
   onWorker: (id: string) => void;
+  onDirectory: () => void;
   onActivity: () => void;
   onAttention: (category: AttentionCategory | "All") => void;
 }) {
@@ -87,6 +89,9 @@ export function OrganizationOverview({
         ))}
       </nav>
       <p className="org-overview-section">
+        <button className="button secondary" onClick={onDirectory}>
+          Browse workstreams
+        </button>{" "}
         <button className="button secondary" onClick={onActivity}>
           View organization activity
         </button>

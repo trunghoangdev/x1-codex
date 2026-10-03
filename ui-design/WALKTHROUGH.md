@@ -143,3 +143,7 @@ Open Organization attention → Responsibility and propose a worker for Invitati
 ## Guided customer presentation
 
 Demos → Start customer walkthrough opens an eight-step guide over the main workspace. It connects organization goals, invitation coordination and responsibility proposals with Alex's personal work, then switches explicitly to payment evidence and outcome review. Use Open this step after exploring another link. Advancing tracks navigation, not task completion. See [CUSTOMER-WALKTHROUGH.md](CUSTOMER-WALKTHROUGH.md) for the presentation narrative and sample boundaries.
+
+## Workstreams directory
+
+From Organization, choose Browse workstreams. Filter by Missing responsibility to find invitation's two gaps, or Unverified outcome to inspect both streams. Combine project and search, open a workstream, then use Back to Workstreams to retain the directory URL. A proposal or assessment does not remove these signals. Refreshing a detail restores the normal Organization fallback.
