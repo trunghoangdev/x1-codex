@@ -201,3 +201,5 @@ Organization detail pages share back-button, spacing and empty-state styles. On 
 **Demos → Explore larger organization** offers an independent six-stream, nine-worker scenario with multiple assignees and search/worker/state filters. See [the scale review](ORGANIZATION-SCALE-REVIEW.md) for findings and boundaries.
 
 Responsibility gaps now offer **Propose responsibility**. Choose a sample worker and rationale, then reopen or remove the local proposal. Gaps stay open until a separate allocation decision. See [the proposal demo](RESPONSIBILITY-PROPOSALS.md).
+
+Customer presentation: Demos → Start customer walkthrough. The eight-step guide connects existing screens and explains the change from invitation coordination to payment evidence. See [CUSTOMER-WALKTHROUGH.md](CUSTOMER-WALKTHROUGH.md).

@@ -1,3 +1,4 @@
+import { CustomerTour, customerTourSteps } from "./CustomerTour";
 import { ResponsibilityProposal } from "./ResponsibilityProposal";
 import type { ResponsibilityProposal as Proposal } from "./data/responsibilityProposals";
 import { LargeOrganizationDemo } from "./LargeOrganizationDemo";
@@ -174,6 +175,15 @@ function App() {
     clearDrafts,
   } = responseDraft;
   const [notice, setNotice] = useState("");
+  const [tourStep, setTourStep] = useState<number | null>(null);
+  function openTourStep(step: number) {
+    setTourStep(step);
+    changeRoute(customerTourSteps[step].route);
+    requestAnimationFrame(() => {
+      document.querySelector<HTMLElement>(".customer-tour h2")?.focus();
+      window.scrollTo(0, 0);
+    });
+  }
   const [proposals, setProposals] = useState<Record<string, Proposal>>({});
   const [proposalGap, setProposalGap] = useState<string | null>(null);
   const [artifact, setArtifact] = useState<EvidenceArtifact | null>(null);
@@ -253,7 +263,11 @@ function App() {
           return;
         }
       }
-      document.querySelector<HTMLElement>("main h1")?.focus();
+      document
+        .querySelector<HTMLElement>(
+          tourStep === null ? "main h1" : ".customer-tour h2",
+        )
+        ?.focus();
     });
     return () => cancelAnimationFrame(frame);
   }, [screenKey, route.view, route.assignmentId]);
@@ -575,6 +589,16 @@ function App() {
           </div>
         </header>
         <main id="main-content" tabIndex={-1}>
+          {tourStep !== null && (
+            <CustomerTour
+              step={tourStep}
+              onStep={openTourStep}
+              onEnd={() => {
+                setTourStep(null);
+                navigate("Demos");
+              }}
+            />
+          )}
           {route.invalid && (
             <div className="route-warning" role="alert">
               <strong>This link does not match an available screen.</strong>
@@ -1483,6 +1507,23 @@ function App() {
                   </p>
                 </div>
               </div>
+              <section className="panel org-stream org-overview-section">
+                <h2>Customer walkthrough</h2>
+                <p>
+                  Explore goals, scoped workers, responsibility proposals,
+                  personal work and evidence across eight guided steps.
+                </p>
+                <p>
+                  This tour uses the main sample workspace. It does not reset
+                  existing local responses or proposals.
+                </p>
+                <button
+                  className="button primary"
+                  onClick={() => openTourStep(0)}
+                >
+                  Start customer walkthrough
+                </button>
+              </section>
               <section className="panel org-stream org-overview-section">
                 <h2>Larger organization scenario</h2>
                 <p>

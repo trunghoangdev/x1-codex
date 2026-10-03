@@ -139,3 +139,7 @@ Open Demos → Explore larger organization. Select workstreams to inspect respon
 ## Propose responsibility
 
 Open Organization attention → Responsibility and propose a worker for Invitation implementation. Inspect its fixed Developer role and invitation scope; record a reason. The receipt remains awaiting allocation and the two gaps stay visible. Close, then reopen from the overview's Responsibility gaps. Try the assessment gap: an existing reviewer binding still needs an assignment and candidate. Refresh clears these local proposals.
+
+## Guided customer presentation
+
+Demos → Start customer walkthrough opens an eight-step guide over the main workspace. It connects organization goals, invitation coordination and responsibility proposals with Alex's personal work, then switches explicitly to payment evidence and outcome review. Use Open this step after exploring another link. Advancing tracks navigation, not task completion. See [CUSTOMER-WALKTHROUGH.md](CUSTOMER-WALKTHROUGH.md) for the presentation narrative and sample boundaries.

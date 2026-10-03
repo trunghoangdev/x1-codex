@@ -523,3 +523,11 @@ Organization Overview and Responsibility attention now offer a proposal for each
 Proposals await allocation and do not change worker bindings, assignments, permissions or attention counts. Candidate choices do not imply verified capability or availability. Documented these boundaries and added a receipt preview and capture step.
 
 Validation: production build and five relevant browser tests passed, covering modal focus containment, worker/gap navigation, attention semantics, category routes and the new proposal lifecycle. The existing attention test needed an exact workstream-button locator after adding the proposal entry. New coverage includes required rationale, receipt focus, cross-entry reopening, removal, refresh reset and mobile width. The desktop receipt preview was visually inspected.
+
+## 52 — Guided customer walkthrough
+
+Demos now starts an eight-step customer guide over existing main-workspace screens: organization goals, invitation workstream, scoped worker roles, responsibility attention, optional proposal, personal work, payment evidence and outcome review. Previous/Next and Open this step navigate authored destinations; Exit/Finish returns to Demos. The guide persists while exploring links/history, but refresh ends it. It preserves existing session proposals and receipts.
+
+The narrative explicitly switches from invitation coordination to payment evidence because invitation implementation records are missing. Advancing does not assert task completion, allocate work or verify outcomes. Added the customer presentation document, walkthrough entry and screenshot capture. Guide navigation focuses its heading; ordinary workspace navigation retains its existing focus behavior.
+
+Validation: production build and all 58 browser tests passed. After a final guide-heading focus correction, four targeted customer-tour and keyboard/focus tests passed again, followed by a production build. New 390px/1440px tests cover all eight destinations, optional proposal recording, previous/open/next controls, history, finish/exit, restart, refresh boundaries, keyboard focus and width. Desktop preview was visually inspected.

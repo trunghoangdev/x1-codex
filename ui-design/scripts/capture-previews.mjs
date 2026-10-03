@@ -332,4 +332,10 @@ await page.screenshot({
   path: "previews/32-responsibility-proposal.png",
   animations: "disabled",
 });
+await page.goto("http://127.0.0.1:4173/#/demos");
+await page.getByRole("button", { name: "Start customer walkthrough" }).click();
+await page.screenshot({
+  path: "previews/33-customer-walkthrough.png",
+  animations: "disabled",
+});
 await browser.close();
