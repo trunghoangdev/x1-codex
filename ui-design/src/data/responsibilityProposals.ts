@@ -5,6 +5,7 @@ export type ResponsibilityProposal = {
   role: string;
   scope: string;
   rationale: string;
+  proposer: string;
   recordedAt: string;
   decision?: {
     outcome: "Accepted" | "Rejected";

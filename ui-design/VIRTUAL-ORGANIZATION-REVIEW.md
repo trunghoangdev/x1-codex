@@ -84,3 +84,7 @@ Keep runtime monitoring, live allocation, real capacity estimates and SF integra
 The overview now places attention immediately after organization purpose, replaces assignment/evidence detail in workstream cards with linked-assignment counts, and replaces seven binding cards with four worker identity summaries. Directory entries sit with their corresponding sections; the glossary moves below secondary content. Keyboard section shortcuts, other-work/gap disclosures and proposal entries remain.
 
 At the same 390px/1000px viewport, the revised overview measured 3,917px versus 5,312px before this slice (about 26% shorter), with attention now preceding goals. This remains a scrollable page, not a demonstrated large-organization solution. Shared scenarios, organization decision history and role-centered inspection remain separate follow-ups.
+
+## Follow-up: coordination activity slice completed
+
+Organization activity now includes session proposals and allocation-plan decisions, with explicit workstream scope, demo actor, proposed worker/role, rationale, time and receipt inspection. Accepted plans remain allocation pending; neither record type implies a created assignment or binding. Removing a local proposal removes its derived activity records, so the UI explicitly avoids claiming permanent audit history. A real allocation-created event and durable audit behavior remain future provider work.

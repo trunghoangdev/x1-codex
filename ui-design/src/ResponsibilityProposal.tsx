@@ -22,7 +22,9 @@ export function ResponsibilityProposal({
 }) {
   const receiptHeading = useRef<HTMLHeadingElement>(null);
   useEffect(() => {
-    if (proposal) receiptHeading.current?.focus();
+    if (!proposal) return;
+    const frame = requestAnimationFrame(() => receiptHeading.current?.focus());
+    return () => cancelAnimationFrame(frame);
   }, [proposal]);
   const gap = responsibilityGaps.find((gap) => gap.id === gapId)!;
   const requirement = proposalRequirements[gapId];
@@ -227,6 +229,7 @@ export function ResponsibilityProposal({
               role: requirement.role,
               scope: requirement.scope,
               rationale: rationale.trim(),
+              proposer: "Alex Morgan (demo proposer)",
               recordedAt: new Date().toISOString(),
             });
           }}

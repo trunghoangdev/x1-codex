@@ -1,3 +1,6 @@
+import { coordinationActivity } from "./data/coordinationActivity";
+import type { ResponsibilityProposal } from "./data/responsibilityProposals";
+import { workers } from "./data/organizationOverview";
 import { DetailBackButton, DetailEmptyState } from "./DetailPresentation";
 import type { EvidenceArtifact } from "./data/evidence";
 import { assignments } from "./data/assignments";
@@ -6,6 +9,8 @@ import { workstreams } from "./data/organizationOverview";
 import type { Assignment, ResponseRecord } from "./data/models";
 
 export function OrganizationActivity({
+  proposals,
+  onProposal,
   receipts,
   onOpen,
   onInspect,
@@ -13,6 +18,8 @@ export function OrganizationActivity({
   filters,
   onFilters,
 }: {
+  proposals: Record<string, ResponsibilityProposal>;
+  onProposal: (gapId: string) => void;
   receipts: ResponseRecord[];
   onOpen: (assignment: Assignment, tab?: string) => void;
   onInspect: (artifact: EvidenceArtifact) => void;
@@ -34,9 +41,15 @@ export function OrganizationActivity({
   const evidence = evidenceArtifacts.filter((record) =>
     matches(record.assignmentId),
   );
+  const coordination = coordinationActivity(proposals).filter(
+    (record) =>
+      (scope === "all" || record.streamId === scope) &&
+      (type === "all" || type === record.kind),
+  );
   const count =
-    (type !== "evidence" ? responses.length : 0) +
-    (type !== "responses" ? evidence.length : 0);
+    (["all", "responses"].includes(type) ? responses.length : 0) +
+    (["all", "evidence"].includes(type) ? evidence.length : 0) +
+    coordination.length;
   function open(id: string) {
     const assignment = assignments.find((a) => a.id === id);
     if (assignment) onOpen(assignment, "Activity");
@@ -53,8 +66,8 @@ export function OrganizationActivity({
           <div className="eyebrow">ORGANIZATION ACTIVITY</div>
           <h1 tabIndex={-1}>Records across the organization</h1>
           <p>
-            Local responses and attached sample evidence, connected to their
-            assignment and modeled workstream.
+            Proposals, allocation-plan decisions, responses and sample evidence,
+            connected to their subjects and modeled workstreams.
           </p>
         </div>
       </div>
@@ -89,6 +102,8 @@ export function OrganizationActivity({
               <option value="all">All records</option>
               <option value="responses">Local responses</option>
               <option value="evidence">Sample evidence</option>
+              <option value="proposals">Responsibility proposals</option>
+              <option value="decisions">Allocation-plan decisions</option>
             </select>
           </label>
           <button
@@ -101,7 +116,61 @@ export function OrganizationActivity({
           </button>
         </div>
         <p role="status">{count} matching records</p>
-        {type !== "evidence" && (
+        {["all", "proposals", "decisions"].includes(type) && (
+          <section aria-label="Organization coordination records">
+            <h2>Local coordination · newest first</h2>
+            <p>
+              Current-session proposal and plan-decision records. Accepting a
+              plan does not create an allocation. Removing a proposal removes
+              its local records; refresh clears them. This is not a permanent
+              audit log.
+            </p>
+            {coordination.map((record) => (
+              <article
+                className="org-stream-assignment"
+                key={record.id}
+                aria-label={record.title}
+              >
+                <span className="section-label">
+                  {record.streamId} · {record.scope}
+                </span>
+                <h3>{record.title}</h3>
+                <p>
+                  {record.actor} ·{" "}
+                  <time dateTime={record.recordedAt}>
+                    {new Date(record.recordedAt).toLocaleString()}
+                  </time>
+                </p>
+                <p>
+                  Proposed worker:{" "}
+                  {
+                    workers.find((worker) => worker.id === record.workerId)
+                      ?.name
+                  }{" "}
+                  · {record.role}
+                </p>
+                <p>{record.rationale}</p>
+                <p>{record.boundary}</p>
+                <button
+                  className="text-link"
+                  onClick={() => onProposal(record.gapId)}
+                >
+                  Inspect coordination receipt · {record.title}
+                </button>
+              </article>
+            ))}
+            {coordination.length === 0 && (
+              <DetailEmptyState>
+                No local coordination records in this scope and type.
+              </DetailEmptyState>
+            )}
+            <p>
+              Each dated section is ordered independently. Undated sample
+              evidence is not part of this chronology.
+            </p>
+          </section>
+        )}
+        {["all", "responses"].includes(type) && (
           <section aria-label="Organization local responses">
             <h2>Local responses · newest first</h2>
             <p>
@@ -143,7 +212,7 @@ export function OrganizationActivity({
             )}
           </section>
         )}
-        {type !== "responses" && (
+        {["all", "evidence"].includes(type) && (
           <section aria-label="Organization attached evidence">
             <h2>Attached sample evidence</h2>
             <p>

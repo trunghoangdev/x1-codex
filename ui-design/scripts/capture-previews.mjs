@@ -388,10 +388,47 @@ await page.getByRole("dialog").screenshot({
 });
 await page.goto("http://127.0.0.1:4173/#/organization");
 await page.locator("details.workspace-guide summary").click();
+await page.locator("details.workspace-guide").screenshot({
+  path: "previews/39-workspace-guide.png",
+  animations: "disabled",
+});
+await page.goto(
+  "http://127.0.0.1:4173/#/organization/attention/responsibility",
+);
 await page
-  .locator("details.workspace-guide")
-  .screenshot({
-    path: "previews/39-workspace-guide.png",
-    animations: "disabled",
-  });
+  .getByRole("button", {
+    name: "Propose responsibility · Invitation implementation",
+    exact: true,
+  })
+  .click();
+await page.getByLabel("Proposed worker").selectOption("codex");
+await page
+  .getByLabel("Reason for proposal")
+  .fill("Coordinate a scoped invitation implementation.");
+await page
+  .getByRole("button", { name: "Record local proposal", exact: true })
+  .click();
+await page
+  .getByRole("button", { name: "Review allocation plan", exact: true })
+  .click();
+await page
+  .getByLabel("Decision reason", { exact: true })
+  .fill("Accept the plan for later validation; allocation remains pending.");
+await page
+  .getByRole("button", { name: "Record allocation decision", exact: true })
+  .click();
+await page.keyboard.press("Escape");
+await page
+  .getByRole("button", { name: "Back to Organization", exact: true })
+  .click();
+await page
+  .getByRole("button", { name: "View organization activity", exact: true })
+  .click();
+await page.getByLabel("Activity scope").selectOption("WS-02");
+await page.setViewportSize({ width: 1440, height: 1000 });
+await page.screenshot({
+  path: "previews/40-coordination-activity.png",
+  fullPage: true,
+  animations: "disabled",
+});
 await browser.close();

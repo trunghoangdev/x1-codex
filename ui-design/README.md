@@ -217,3 +217,5 @@ Organization includes an expandable plain-language workspace guide. Directory em
 Current organization design assessment and next priorities: [VIRTUAL-ORGANIZATION-REVIEW.md](VIRTUAL-ORGANIZATION-REVIEW.md). The shared organization model is coherent; overview density, coordination history and a common scenario provider are the next gaps.
 
 Organization Overview now places coordination attention directly after shared purpose. Workstream cards summarize goals/outcomes; worker cards summarize identity/type/binding counts. Use the existing directories/details for assignment and scoped binding inspection. Section shortcuts and secondary disclosures remain available.
+
+Organization activity includes proposal and allocation-plan decision records with scoped filters and receipt inspection. Accepted plans remain pending allocation. See [COORDINATION-ACTIVITY.md](COORDINATION-ACTIVITY.md).

@@ -163,3 +163,7 @@ Record an invitation proposal, then select Review allocation plan. Inspect worke
 ## Help for new users
 
 Expand Understand this workspace on Organization for the main terms and entry points. If a directory has no matches, Show all workers/workstreams clears filters and returns focus to search. During allocation review, expand Original proposal reason and time when you need the request context.
+
+## Coordination history
+
+Record a responsibility proposal and accept or reject its allocation plan. Open Organization → View organization activity and select the invitation scope. Filter Responsibility proposals or Allocation-plan decisions, then Inspect coordination receipt to view the original proposal/decision without leaving Activity. Removing the local proposal removes both derived records; this is session history rather than a permanent audit log.

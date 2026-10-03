@@ -49,3 +49,5 @@ This is an incremental boundary, not a finished data layer. Candidate, evidence,
 `workstreamDetails.ts` includes explicit flow-step assignment, evidence, handoff and gap references. Attached flow evidence is restricted to the workstream's authored assignment membership. Missing/conditional steps are not dynamically allocated or advanced by session responses.
 
 `responsibilityProposals.ts` now also holds session allocation-decision receipts and the authored binding/assignment preview. Acceptance means plan accepted, allocation pending; no canonical relationship or assignment is created.
+
+`coordinationActivity.ts` projects current session proposals and their decisions into dated coordination records. Each record uses the explicit gap-to-workstream relationship and includes demo actor, proposed worker, role/scope and rationale. Removing a proposal removes its projected records; no immutable audit or allocation-created event is claimed.

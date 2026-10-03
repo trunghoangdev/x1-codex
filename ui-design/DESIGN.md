@@ -72,7 +72,7 @@ The desktop composition reserves the left edge for navigation and the main area 
 
 ## Deliberate limits and follow-up design
 
-This exploration covers an organization-first sample workspace and the human work loop. It includes bounded response-delivery/readiness previews, local proposals and allocation-plan decisions. Accepted plans await allocation: they create no assignment, binding or permission. Organization activity currently lists responses/evidence, not proposal/plan-decision events.
+This exploration covers an organization-first sample workspace and the human work loop. It includes bounded response-delivery/readiness previews, local proposals and allocation-plan decisions. Accepted plans await allocation: they create no assignment, binding or permission. Organization activity lists proposal/plan-decision records alongside responses and evidence. Each dated section is independently ordered; local coordination records disappear when their proposal is removed and are not a permanent audit log.
 
 Production design still needs validated identity and effective authority, durable admission/receipts, concurrent changes, real runtime/worker data and verified external effects. A larger organization scenario remains independent rather than exercising the main workspace through a shared provider. Role administration, broader audit search and organization/persona switching need explicit data and interaction contracts.
 

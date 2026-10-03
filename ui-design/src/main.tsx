@@ -1453,6 +1453,8 @@ function App() {
           )}
           {view === "Organization" && route.organizationActivity && (
             <OrganizationActivity
+              proposals={proposals}
+              onProposal={setProposalGap}
               filters={organizationActivityView}
               onFilters={setOrganizationActivityView}
               onInspect={setArtifact}
@@ -1836,6 +1838,10 @@ function App() {
                 return next;
               });
               setProposalGap(null);
+              if (route.organizationActivity)
+                requestAnimationFrame(() =>
+                  document.querySelector<HTMLElement>("main h1")?.focus(),
+                );
             }}
           />
         </Modal>
