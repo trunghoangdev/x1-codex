@@ -16,7 +16,7 @@ The authored scenario distinguishes:
 
 A-1041 production authorization, A-1035 staging reconciliation and A-1032 accessibility assessment are displayed separately. Sharing a project does not prove a dependency, artifact identity or workstream membership. Neither workstream has verified outcome evidence. A local response changes only the response label; it cannot mark the goal achieved.
 
-The overview links current assignments and evidence, shows coordination needs, and lists scoped bindings. The existing personal attention queue and revision-cycle demonstration remain below it. Counts describe this bounded sample, not full organizational coverage or worker health.
+The overview links current assignments and evidence, shows coordination needs, and lists scoped bindings. The personal response queue is available from My Work at `#/work/attention`; the standalone revision cycle lives in Demos at `#/demos`. Counts describe this bounded sample, not full organizational coverage or worker health.
 
 Workstream details are available at `#/workstreams/WS-01` and `#/workstreams/WS-02`. Each shows proposed handoffs, responsible roles, current assignments, attached evidence and missing outcome observations. Conditional revision and unassigned future work are explicit. These are coordination patterns, not execution history; local responses do not advance them. Browser history returns from assignments to the stream, and a direct URL restores the same sample view.
 
@@ -26,7 +26,7 @@ Workstream details are available at `#/workstreams/WS-01` and `#/workstreams/WS-
 
 The overview summarizes bounded sample signals in three category counts. The full attention view at `#/organization/attention/all` has filters and links to each source assignment or workstream. `organizationAttention.ts` combines explicit responsibility gaps, pending assignment responses and unverified outcomes. Counts measure signals, not distinct assignments, completion or organization health. The same stream can have both a responsibility gap and an unverified outcome.
 
-Release readiness reuses the existing prerequisite explanations. Recorded responses remove ordinary response signals; release and staging subjects retain unverified-effect signals and link to the local receipt. Neither workstream outcome nor responsibility gaps clear automatically. The planner named on responsibility gaps is the sample coordination contact, not the worker allocated to the missing task. Unknown outcome-review responsibility is stated explicitly. Attention categories use durable URLs ending in `/responsibility`, `/response` or `/outcome`; refresh and browser history restore the filter. Responses reset on reload. The older Alex attention queue remains a separate personal section.
+Release readiness reuses the existing prerequisite explanations. Recorded responses remove ordinary response signals; release and staging subjects retain unverified-effect signals and link to the local receipt. Neither workstream outcome nor responsibility gaps clear automatically. The planner named on responsibility gaps is the sample coordination contact, not the worker allocated to the missing task. Unknown outcome-review responsibility is stated explicitly. Attention categories use durable URLs ending in `/responsibility`, `/response` or `/outcome`; refresh and browser history restore the filter. Responses reset on reload. The Alex response queue lives under My Work, outside the organization overview.
 
 ## Handoff details
 

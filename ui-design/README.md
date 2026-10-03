@@ -22,7 +22,7 @@ Follow the [complete demo walkthrough](WALKTHROUGH.md) for review, draft, eviden
 - **Information hierarchy:** organization goals and coordination first; personal responsibilities then connect to input, evidence, authority and responses.
 - **Visual language:** deep green navigation, warm neutral surfaces, restrained amber for authority, slate blue for assessments, and lavender for reconciliation. Text labels accompany color.
 - **Typography:** system sans-serif; no remote font dependency.
-- **Navigation:** Organization (default), My Work, Evidence. More administrative screens should be designed around demonstrated operational needs.
+- **Navigation:** Organization (default), My Work, Evidence, Demos. More administrative screens should be designed around demonstrated operational needs.
 - **Layout:** persistent desktop navigation; responsive cards and assignment rows; a navigation toggle on narrow screens. Assignment authority stays visible beside its context on large screens and follows it on small screens.
 - **Interaction:** search, responsibility filters, completed work, assignment tabs, artifact inspection, rationale validation, local decision records, keyboard-focus containment and Escape dismissal for dialogs.
 
@@ -189,3 +189,5 @@ On each workstream, select **Review outcome evidence** to inspect goal-level evi
 The overview has section shortcuts for Goals, Attention and Roles & Workers. Additional organization work and gap explanations are expandable. Detail breadcrumbs identify the current subject and return to Organization. See [the layout/navigation review](UI-REVIEW.md) for remaining improvements.
 
 Attention is now a compact three-category summary on the overview. Select a count or **View all organization attention** for the dedicated list. Category URLs preserve the filter across refresh and history.
+
+**My Work → View response queue · Alex** opens the personal assignments grouped by response state. **Demos** opens the independent revision-cycle example. Both are now outside Organization Overview.

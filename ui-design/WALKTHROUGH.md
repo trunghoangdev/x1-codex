@@ -60,7 +60,7 @@ Use **Preview release prerequisites** to inspect missing evidence, refused asses
 
 ## 5. Return to the organization
 
-Open **Organization**. **Needs your attention** identifies the responsible person, waiting reason and next step for each sample assignment. Use Project, Role and Status to narrow the Awaiting response, Blocked and Responded groups. Reset the filters to restore all sample assignments. Recorded responses have links to Activity; remaining release blockers follow the current scenario. The queue covers Alex's five sample assignments, not the full organization backlog.
+Open **My Work → View response queue · Alex**. **Needs your attention** identifies the responsible person, waiting reason and next step for each sample assignment. Use Project, Role and Status to narrow the Awaiting response, Blocked and Responded groups. Reset the filters to restore all sample assignments. Recorded responses have links to Activity; remaining release blockers follow the current scenario. The queue covers Alex's five sample assignments, not the full organization backlog.
 
 Open workspace **Evidence**. Search within each assignment group independently. A-1042 evidence stays separate from A-1041. The release chain keeps unconnected evidence and unestablished effects explicit.
 
@@ -123,3 +123,5 @@ Open Payment webhook reliability and choose **Review outcome evidence**. Compare
 ## Move around the overview
 
 Use Goals & workstreams, Attention or Roles & workers shortcuts to scroll and focus the corresponding heading. Expand Other organization work or Responsibility gaps for secondary explanations. On detail pages, the header shows the current subject; its Organization button returns to the overview. The long subject label truncates visually on mobile.
+
+The standalone revision cycle is now reached through **Demos** (`#/demos`). Organization Overview focuses on goals, scoped workers and coordination. The grouped personal queue is reached from My Work at `#/work/attention`.

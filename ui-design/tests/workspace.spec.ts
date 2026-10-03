@@ -1006,7 +1006,7 @@ test("My Work distinguishes load failure, loading, empty data and filtered resul
 test("Organization connects responsibilities, release blockers and local responses", async ({
   page,
 }) => {
-  await page.goto("/#/organization");
+  await page.goto("/#/work/attention");
   const work = page.getByRole("region", { name: "Needs your attention" });
   await expect(work).toContainText("5 open assignments");
   await expect(work).toContainText("Approval is blocked");
@@ -1017,7 +1017,13 @@ test("Organization connects responsibilities, release blockers and local respons
     page.getByLabel("Preview release prerequisites"),
     "revoked",
   );
-  await page.getByRole("button", { name: "Organization", exact: true }).click();
+  await page
+    .getByRole("button", { name: /My Work/ })
+    .first()
+    .click();
+  await page
+    .getByRole("button", { name: "View response queue · Alex" })
+    .click();
   await expect(work).toContainText(
     "Both decisions are blocked: release authority",
   );
@@ -1032,8 +1038,16 @@ test("Organization connects responsibilities, release blockers and local respons
     .getByLabel("Assessment conclusion", { exact: true })
     .selectOption("Insufficient evidence");
   await page.getByRole("button", { name: "Record assessment" }).click();
-  await page.getByRole("button", { name: "Organization", exact: true }).click();
+  await page
+    .getByRole("button", { name: /My Work/ })
+    .first()
+    .click();
+  await page
+    .getByRole("button", { name: "View response queue · Alex" })
+    .click();
   await expect(work).toContainText("4 open assignments");
+  await expect(work).toContainText("Downstream outcome is not established");
+  await page.getByRole("button", { name: "Organization", exact: true }).click();
   await expect(
     page.getByRole("article", {
       name: "Payment webhook reliability",
@@ -1046,7 +1060,6 @@ test("Organization connects responsibilities, release blockers and local respons
       exact: true,
     }),
   ).toContainText("Not verified");
-  await expect(work).toContainText("Downstream outcome is not established");
   await expect(
     page.locator(".role-card").filter({
       has: page.getByRole("heading", { name: "Reviewer", exact: true }),
@@ -1067,6 +1080,13 @@ test("Organization connects responsibilities, release blockers and local respons
     page.getByRole("region", { name: "Coordination and handoffs" }),
   ).toContainText("Conditional · no follow-up assignment");
   await page.getByRole("button", { name: "Back to Organization" }).click();
+  await page
+    .getByRole("button", { name: /My Work/ })
+    .first()
+    .click();
+  await page
+    .getByRole("button", { name: "View response queue · Alex" })
+    .click();
   await work.getByRole("button", { name: "View response · A-1042" }).click();
   await expect(page).toHaveURL(/assignments\/A-1042\/activity/);
   await expect(page.getByRole("tabpanel")).toContainText(
@@ -1219,7 +1239,7 @@ test("demo controls start collapsed and retain selected scenarios when toggled",
 test("Organization groups work by response state and combines project/role filters", async ({
   page,
 }) => {
-  await page.goto("/#/organization");
+  await page.goto("/#/work/attention");
   const waiting = page.getByRole("region", {
     name: "Awaiting response",
     exact: true,
@@ -1232,17 +1252,15 @@ test("Organization groups work by response state and combines project/role filte
   await expect(waiting.locator(".org-work-item")).toHaveCount(4);
   await expect(blocked.locator(".org-work-item")).toHaveCount(1);
   await expect(responded.locator(".org-work-item")).toHaveCount(0);
-  await page.getByLabel("Organization project").selectOption("Team Workspace");
-  await page.getByLabel("Organization role").selectOption("Reviewer");
+  await page.getByLabel("Queue project").selectOption("Team Workspace");
+  await page.getByLabel("Queue role").selectOption("Reviewer");
   await expect(waiting.locator(".org-work-item")).toHaveCount(1);
   await expect(waiting).toContainText("A-1032");
-  await page.getByLabel("Organization status").selectOption("blocked");
+  await page.getByLabel("Queue status").selectOption("blocked");
   await expect(
     page.getByRole("heading", { name: "No assignments match these filters" }),
   ).toBeVisible();
-  await page
-    .getByRole("button", { name: "Show all organization work" })
-    .click();
+  await page.getByRole("button", { name: "Show all personal work" }).click();
   await blocked
     .getByRole("button", { name: "Open assignment · A-1041" })
     .click();
@@ -1250,7 +1268,13 @@ test("Organization groups work by response state and combines project/role filte
     page.getByLabel("Preview release prerequisites"),
     "ready",
   );
-  await page.getByRole("button", { name: "Organization", exact: true }).click();
+  await page
+    .getByRole("button", { name: /My Work/ })
+    .first()
+    .click();
+  await page
+    .getByRole("button", { name: "View response queue · Alex" })
+    .click();
   await expect(waiting.locator(".org-work-item")).toHaveCount(5);
   await expect(blocked.locator(".org-work-item")).toHaveCount(0);
   await waiting
@@ -1266,7 +1290,13 @@ test("Organization groups work by response state and combines project/role filte
     .getByLabel("Assessment conclusion", { exact: true })
     .selectOption("Insufficient evidence");
   await page.getByRole("button", { name: "Record assessment" }).click();
-  await page.getByRole("button", { name: "Organization", exact: true }).click();
+  await page
+    .getByRole("button", { name: /My Work/ })
+    .first()
+    .click();
+  await page
+    .getByRole("button", { name: "View response queue · Alex" })
+    .click();
   await expect(responded.locator(".org-work-item")).toHaveCount(1);
   await expect(waiting.locator(".org-work-item")).toHaveCount(4);
   await expect(
@@ -1677,7 +1707,7 @@ test("criterion assessments preserve draft details and snapshot independent evid
 test("revision cycle links exact subjects without inheriting prior decisions", async ({
   page,
 }) => {
-  await page.goto("/#/organization");
+  await page.goto("/#/demos");
   const cycle = page.getByRole("region", {
     name: "Revision cycle · standalone sample",
   });
@@ -1726,6 +1756,7 @@ test("revision cycle links exact subjects without inheriting prior decisions", a
   ).toBe(true);
   await page.reload();
   await expect(record).toContainText("Initial retry implementation");
+  await page.goto("/#/work/attention");
   await expect(
     page.getByRole("region", { name: "Needs your attention" }),
   ).toContainText("5 open assignments");
@@ -2292,4 +2323,46 @@ test("compact attention summary opens durable category routes", async ({
   await expect(summary).toBeVisible();
   await page.goto("/#/organization/attention/unknown");
   await expect(page.getByText(/Showing My Work/)).toBeVisible();
+});
+
+test("overview separates personal queue and standalone demos", async ({
+  page,
+}) => {
+  await page.goto("/#/organization");
+  await expect(
+    page.getByRole("region", { name: "Needs your attention" }),
+  ).toHaveCount(0);
+  await expect(
+    page.getByRole("region", { name: "Revision cycle · standalone sample" }),
+  ).toHaveCount(0);
+  await page.getByRole("button", { name: "Open My Work · Alex" }).click();
+  await page
+    .getByRole("button", { name: "View response queue · Alex" })
+    .click();
+  await expect(page).toHaveURL(/work\/attention/);
+  await expect(
+    page.getByRole("heading", { name: "Response queue", exact: true }),
+  ).toBeFocused();
+  await expect(
+    page.getByRole("region", { name: "Needs your attention" }),
+  ).toContainText("5 open assignments");
+  await page.reload();
+  await expect(
+    page.getByRole("heading", { name: "Response queue", exact: true }),
+  ).toBeVisible();
+  await page.getByRole("button", { name: "Back to My Work" }).click();
+  await page.getByRole("button", { name: "Demos", exact: true }).click();
+  await expect(page).toHaveURL(/#\/demos/);
+  await expect(
+    page.getByRole("heading", { name: "Collaboration demos" }),
+  ).toBeFocused();
+  await expect(
+    page.getByRole("region", { name: "Revision cycle · standalone sample" }),
+  ).toBeVisible();
+  await page.setViewportSize({ width: 390, height: 844 });
+  expect(
+    await page.evaluate(
+      () => document.documentElement.scrollWidth <= innerWidth,
+    ),
+  ).toBeTruthy();
 });

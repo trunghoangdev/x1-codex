@@ -44,8 +44,8 @@ export function OrganizationWork({
     <section className="panel org-work" aria-labelledby="org-work-title">
       <h2 id="org-work-title">Needs your attention</h2>
       <p>
-        {pending.length} open assignments assigned to Alex Morgan · sample
-        scope, not an organization-wide backlog.
+        {pending.length} open assignments assigned to Alex Morgan · personal
+        sample scope.
       </p>
       <p>
         Roles below describe responsibility. These records show the next review
@@ -55,7 +55,7 @@ export function OrganizationWork({
         <label>
           Project
           <select
-            aria-label="Organization project"
+            aria-label="Queue project"
             value={project}
             onChange={(e) => setProject(e.target.value)}
           >
@@ -68,7 +68,7 @@ export function OrganizationWork({
         <label>
           Role
           <select
-            aria-label="Organization role"
+            aria-label="Queue role"
             value={role}
             onChange={(e) => setRole(e.target.value)}
           >
@@ -81,7 +81,7 @@ export function OrganizationWork({
         <label>
           Status
           <select
-            aria-label="Organization status"
+            aria-label="Queue status"
             value={status}
             onChange={(e) => setStatus(e.target.value)}
           >
@@ -94,7 +94,7 @@ export function OrganizationWork({
           </select>
         </label>
         <button className="button secondary" onClick={reset}>
-          Reset organization filters
+          Reset queue filters
         </button>
       </div>
       <p role="status">
@@ -174,7 +174,7 @@ export function OrganizationWork({
         <div className="empty-state">
           <h3>No assignments match these filters</h3>
           <button className="button secondary" onClick={reset}>
-            Show all organization work
+            Show all personal work
           </button>
         </div>
       )}

@@ -84,7 +84,7 @@ const assignmentTabs = [
   "Activity",
 ];
 
-type View = "My Work" | "Organization" | "Evidence";
+type View = "My Work" | "Organization" | "Evidence" | "Demos";
 const kindLabels: Record<Kind, string> = {
   Work: "Needs my work",
   Assessment: "Needs my assessment",
@@ -181,7 +181,7 @@ function App() {
     Record<string, string>
   >({});
   const inboxReturn = useRef<{ id: string; y: number } | null>(null);
-  const screenKey = `${route.view}:${route.assignmentId ?? ""}:${!!route.invalid}:${route.workstreamId ?? ""}:${route.workerId ?? ""}:${route.handoffId ?? ""}:${!!route.organizationActivity}:${route.outcomeId ?? ""}:${!!route.attention}`;
+  const screenKey = `${route.view}:${route.assignmentId ?? ""}:${!!route.invalid}:${route.workstreamId ?? ""}:${route.workerId ?? ""}:${route.handoffId ?? ""}:${!!route.organizationActivity}:${route.outcomeId ?? ""}:${!!route.attention}:${!!route.personalQueue}`;
   const previousScreen = useRef(screenKey);
   useEffect(() => {
     if (route.view !== "My Work" || route.assignmentId)
@@ -195,6 +195,7 @@ function App() {
       if (
         route.view === "My Work" &&
         !route.assignmentId &&
+        !route.personalQueue &&
         saved &&
         previous.startsWith(`My Work:${saved.id}:`)
       ) {
@@ -248,6 +249,7 @@ function App() {
     route.organizationActivity,
     route.attention,
     route.outcomeId,
+    route.personalQueue,
     route.assignmentId,
     route.tab,
     route.invalid,
@@ -264,7 +266,7 @@ function App() {
     changeRoute({ view: next, tab: "Overview", work: route.work });
   }
   function open(a: Assignment, nextTab = "Overview") {
-    if (view === "My Work" && !selected)
+    if (view === "My Work" && !selected && !route.personalQueue)
       inboxReturn.current = { id: a.id, y: window.scrollY };
     changeRoute({
       view: "My Work",
@@ -377,6 +379,7 @@ function App() {
               ["Organization", Users],
               ["My Work", Inbox],
               ["Evidence", Layers3],
+              ["Demos", Blocks],
             ] as const
           ).map(([name, Icon]) => (
             <button
@@ -480,6 +483,12 @@ function App() {
             ) : (
               <strong>{view}</strong>
             )}
+            {route.personalQueue && (
+              <>
+                <ChevronRight size={14} />
+                <span>Response queue</span>
+              </>
+            )}
             {selected && (
               <>
                 <ChevronRight size={14} />
@@ -509,7 +518,7 @@ function App() {
               </button>
             </div>
           )}
-          {view === "My Work" && !selected && (
+          {view === "My Work" && !selected && !route.personalQueue && (
             <WorkDataPreview state={workDataState} setState={setWorkDataState}>
               <div className="page-heading">
                 <div>
@@ -527,6 +536,21 @@ function App() {
                   <span>Demo day</span>
                 </div>
               </div>
+              <p className="org-overview-section">
+                <button
+                  className="button secondary"
+                  onClick={() =>
+                    changeRoute({
+                      view: "My Work",
+                      personalQueue: true,
+                      tab: "Overview",
+                      work: route.work,
+                    })
+                  }
+                >
+                  View response queue · Alex
+                </button>
+              </p>
               <div className="stat-grid">
                 {(
                   [
@@ -1332,14 +1356,44 @@ function App() {
                     })
                   }
                 />
-                <OrganizationWork
-                  completed={completed}
-                  readiness={readiness}
-                  onOpen={open}
-                />
-                <RevisionCycle />
               </>
             )}
+          {view === "My Work" && route.personalQueue && (
+            <>
+              <button
+                className="button secondary"
+                onClick={() => navigate("My Work")}
+              >
+                Back to My Work
+              </button>
+              <div className="page-heading workstream-heading">
+                <div>
+                  <div className="eyebrow">MY WORK · ALEX MORGAN</div>
+                  <h1 tabIndex={-1}>Response queue</h1>
+                  <p>Your sample assignments grouped by response state.</p>
+                </div>
+              </div>
+              <OrganizationWork
+                completed={completed}
+                readiness={readiness}
+                onOpen={open}
+              />
+            </>
+          )}
+          {view === "Demos" && (
+            <>
+              <div className="page-heading">
+                <div>
+                  <div className="eyebrow">DESIGN DEMONSTRATIONS</div>
+                  <h1 tabIndex={-1}>Collaboration demos</h1>
+                  <p>
+                    Explore a standalone revision cycle with fictional records.
+                  </p>
+                </div>
+              </div>
+              <RevisionCycle />
+            </>
+          )}
           {view === "Evidence" && (
             <>
               <div className="page-heading">

@@ -8,7 +8,7 @@ import {
   type WorkFilters,
 } from "./workFilters";
 import { useEffect, useState } from "react";
-export type WorkspaceView = "My Work" | "Organization" | "Evidence";
+export type WorkspaceView = "My Work" | "Organization" | "Evidence" | "Demos";
 export type WorkspaceRoute = {
   view: WorkspaceView;
   assignmentId?: string;
@@ -18,6 +18,7 @@ export type WorkspaceRoute = {
   organizationActivity?: boolean;
   outcomeId?: string;
   attention?: AttentionCategory | "All";
+  personalQueue?: boolean;
   tab: string;
   invalid?: boolean;
   work?: WorkFilters;
@@ -26,6 +27,7 @@ const viewPaths: Record<WorkspaceView, string> = {
   "My Work": "work",
   Organization: "organization",
   Evidence: "evidence",
+  Demos: "demos",
 };
 export function useWorkspaceRoute(ids: string[], tabs: string[]) {
   function read(): WorkspaceRoute {
@@ -86,6 +88,13 @@ export function useWorkspaceRoute(ids: string[], tabs: string[]) {
       ).find((value) => value.toLowerCase() === (path[3] ?? "all"));
       if (attention) return { ...fallback, view: "Organization", attention };
     }
+    if (
+      path.length === 3 &&
+      path[0] === "" &&
+      path[1] === "work" &&
+      path[2] === "attention"
+    )
+      return { ...fallback, personalQueue: true };
     if (path.length === 2 && path[0] === "") {
       const view = (Object.keys(viewPaths) as WorkspaceView[]).find(
         (v) => viewPaths[v] === path[1],
@@ -128,7 +137,9 @@ export function useWorkspaceRoute(ids: string[], tabs: string[]) {
                 ? `#/outcomes/${next.outcomeId}`
                 : next.attention
                   ? `#/organization/attention/${next.attention.toLowerCase()}`
-                  : `#/${viewPaths[next.view]}`;
+                  : next.personalQueue
+                    ? "#/work/attention"
+                    : `#/${viewPaths[next.view]}`;
     const hash = path + (next.work ? writeWorkFilters(next.work) : "");
     if (location.hash !== hash) {
       if (replace) history.replaceState(null, "", hash);

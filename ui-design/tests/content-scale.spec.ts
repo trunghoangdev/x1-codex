@@ -66,7 +66,7 @@ for (const width of [390, 1440]) {
       rationale.trim(),
     );
     await fits();
-    await page.goto("/#/organization");
+    await page.goto("/#/work/attention");
     await expect(page.locator(".org-work-item")).toHaveCount(50);
     await fits();
   });

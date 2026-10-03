@@ -223,7 +223,7 @@ await page.screenshot({
   animations: "disabled",
   fullPage: true,
 });
-await page.goto("http://127.0.0.1:4173/#/organization");
+await page.goto("http://127.0.0.1:4173/#/demos");
 await page
   .getByRole("button", { name: "DEMO-A2 · Reassessment", exact: true })
   .click();
@@ -275,6 +275,12 @@ await page.screenshot({
 await page.goto("http://127.0.0.1:4173/#/outcomes/WS-01");
 await page.screenshot({
   path: "previews/27-outcome-review.png",
+  fullPage: true,
+  animations: "disabled",
+});
+await page.goto("http://127.0.0.1:4173/#/work/attention");
+await page.screenshot({
+  path: "previews/28-personal-response-queue.png",
   fullPage: true,
   animations: "disabled",
 });

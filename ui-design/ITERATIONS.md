@@ -475,3 +475,11 @@ Replaced the overview's full attention list with three category counts and an al
 Both views use the same signal derivation, preserving response removal and unverified outcome semantics. Updated the attention walkthrough/model, remaining review priorities and capture script; refreshed overview and attention previews.
 
 Validation: production build and five relevant browser tests passed, covering overview, section focus, attention semantics, inbox focus and new category-route behavior. New coverage verifies the compact summary, category counts, filter URL/history/refresh, mobile width and invalid-category fallback. Summary preview was visually inspected.
+
+## 46 — Personal queue and demos outside the overview
+
+Moved Alex's grouped response queue to `#/work/attention`, reached from My Work. The queue retains project/role/status filters, prerequisite explanations and local receipt links, with labels reflecting its personal scope. The independent revision cycle moves to the Demos navigation entry at `#/demos`.
+
+Organization Overview no longer embeds either section. Its organization attention summary and role/workstream links remain the coordination entry. Queue navigation preserves work-filter context and avoids treating queue-origin assignments as opened inbox rows. Added route/focus/mobile coverage and migrated queue/revision/large-fixture tests to their new locations. Updated the model, walkthrough, review priorities and capture script; refreshed inbox/overview previews and added a queue preview.
+
+Validation: production build and all 51 browser tests passed, including large fixture layouts, personal response-state filters, receipt navigation, revision identity/focus, independent demo reset and the new entry/route separation. Refreshed organization preview was visually inspected.

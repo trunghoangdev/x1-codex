@@ -82,7 +82,7 @@ export function RevisionCycle() {
       </article>
       <p className="demo-note">
         Read-only scenario explorer. No worker run, new assignment, source edit
-        or server record is created. Selection resets when leaving Organization.
+        or server record is created. Selection resets when leaving Demos.
       </p>
     </section>
   );
