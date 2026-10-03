@@ -127,3 +127,7 @@ Use Goals & workstreams, Attention or Roles & workers shortcuts to scroll and fo
 The standalone revision cycle is now reached through **Demos** (`#/demos`). Organization Overview focuses on goals, scoped workers and coordination. The grouped personal queue is reached from My Work at `#/work/attention`.
 
 Artifact IDs in Workstream, Handoff and Organization activity also open their exact records directly. Collection links and assignment links still open the relevant assignment tab.
+
+## Return to the source
+
+Filter Organization activity to Other organization work, open Assignment activity for A-1041, then use **Back to Organization activity**. Its scope/type filters remain. From a workstream, handoff, outcome or worker, opening an assignment gives a correspondingly named Back button; switching assignment tabs retains this return context. The personal queue preserves its project/role/status filters. Source scroll/focus restoration lasts for the browser session; refreshing an assignment resets its return destination to My Work.

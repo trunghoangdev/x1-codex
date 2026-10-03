@@ -1,4 +1,3 @@
-import { useState } from "react";
 import { assignments } from "./data/assignments";
 import type { Assignment, Readiness } from "./data/models";
 import { organizationWork, releaseWait } from "./data/organization";
@@ -7,14 +6,23 @@ export function OrganizationWork({
   completed,
   readiness,
   onOpen,
+  filters,
+  onFilters,
 }: {
   completed: Record<string, string>;
   readiness: Readiness;
   onOpen: (assignment: Assignment, tab?: string) => void;
+  filters: { project: string; role: string; status: string };
+  onFilters: (filters: {
+    project: string;
+    role: string;
+    status: string;
+  }) => void;
 }) {
-  const [project, setProject] = useState("All");
-  const [role, setRole] = useState("All");
-  const [status, setStatus] = useState("all");
+  const { project, role, status } = filters;
+  const setProject = (project: string) => onFilters({ ...filters, project });
+  const setRole = (role: string) => onFilters({ ...filters, role });
+  const setStatus = (status: string) => onFilters({ ...filters, status });
   const groups = [
     { id: "waiting", title: "Awaiting response" },
     { id: "blocked", title: "Blocked" },
@@ -35,9 +43,7 @@ export function OrganizationWork({
     (a) => status === "all" || stateFor(a) === status,
   );
   const reset = () => {
-    setProject("All");
-    setRole("All");
-    setStatus("all");
+    onFilters({ project: "All", role: "All", status: "all" });
   };
   const pending = assignments.filter((a) => !completed[a.id]);
   return (

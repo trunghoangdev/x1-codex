@@ -41,3 +41,7 @@ Two explicit sample exchanges are defined in `handoffs.ts`: candidate to reviewe
 `#/outcomes/WS-01` and `#/outcomes/WS-02` show proposed goal-level evidence requirements, available context, missing observations and unassigned outcome-review responsibility. `outcomes.ts` explicitly links context records to criteria within the corresponding stream. Existing assignment assessments do not verify these requirements, even when their conclusion is Meets criteria. The view is read-only: no goal decision or automatic completion calculation is introduced.
 
 Exact cited artifact links in workstream, handoff and outcome views open the shared inspector on the current page. Closing restores focus to the originating link. Assignment-level evidence links still open the containing tab when the link refers to a collection rather than one record. No artifact inspection confirms its provenance or outcome.
+
+## Assignment return context
+
+Opening an assignment remembers its source route, scroll position and initiating link in this browser session. Assignment tabs preserve this context. The primary Back button returns to Workstream, Handoff, Outcome review, Worker, Organization activity/attention or the personal queue as appropriate. Activity and queue filters are app-owned and survive assignment return; entering through the main navigation resets those filters. Browser Back to the recorded source restores scroll/focus too. Source context is not persisted across refresh, so a directly loaded assignment returns to My Work.

@@ -1,5 +1,4 @@
 import type { EvidenceArtifact } from "./data/evidence";
-import { useState } from "react";
 import { assignments } from "./data/assignments";
 import { evidenceArtifacts } from "./data/evidence";
 import { workstreams } from "./data/organizationOverview";
@@ -10,14 +9,19 @@ export function OrganizationActivity({
   onOpen,
   onInspect,
   onBack,
+  filters,
+  onFilters,
 }: {
   receipts: ResponseRecord[];
   onOpen: (assignment: Assignment, tab?: string) => void;
   onInspect: (artifact: EvidenceArtifact) => void;
   onBack: () => void;
+  filters: { scope: string; type: string };
+  onFilters: (filters: { scope: string; type: string }) => void;
 }) {
-  const [scope, setScope] = useState("all");
-  const [type, setType] = useState("all");
+  const { scope, type } = filters;
+  const setScope = (scope: string) => onFilters({ ...filters, scope });
+  const setType = (type: string) => onFilters({ ...filters, type });
   const scopeFor = (id: string) =>
     workstreams.find((stream) => stream.assignmentIds.includes(id))?.id ??
     "other";
@@ -91,8 +95,7 @@ export function OrganizationActivity({
           <button
             className="button secondary"
             onClick={() => {
-              setScope("all");
-              setType("all");
+              onFilters({ scope: "all", type: "all" });
             }}
           >
             Reset activity filters

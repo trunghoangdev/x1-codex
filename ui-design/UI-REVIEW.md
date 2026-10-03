@@ -18,3 +18,5 @@ Completed: cited artifact links in workstreams, handoffs, outcomes and organizat
 1. Review shared spacing, empty states and contextual return paths across all detail pages.
 
 This increment keeps the authored sample model and existing response semantics. The review does not establish production API compatibility.
+
+Contextual assignment return is now implemented: the primary Back button names the source page and restores session filters, scroll and source focus. Direct assignment links after refresh fall back to My Work.

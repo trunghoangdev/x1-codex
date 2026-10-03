@@ -296,4 +296,14 @@ await page.screenshot({
   fullPage: true,
   animations: "disabled",
 });
+await page.keyboard.press("Escape");
+await page.goto("http://127.0.0.1:4173/#/workstreams/WS-01");
+await page
+  .getByRole("button", { name: "Open assignment · A-1042", exact: true })
+  .click();
+await page.screenshot({
+  path: "previews/30-assignment-source-return.png",
+  fullPage: true,
+  animations: "disabled",
+});
 await browser.close();

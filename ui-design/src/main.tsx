@@ -1,3 +1,4 @@
+import type { WorkspaceRoute } from "./useWorkspaceRoute";
 import { OrganizationAttention } from "./OrganizationAttention";
 import type { AttentionCategory } from "./data/organizationAttention";
 import { OutcomeReview } from "./OutcomeReview";
@@ -180,6 +181,28 @@ function App() {
   const [activityFilters, setActivityFilters] = useState<
     Record<string, string>
   >({});
+  const [organizationActivityView, setOrganizationActivityView] = useState({
+    scope: "all",
+    type: "all",
+  });
+  const [queueView, setQueueView] = useState({
+    project: "All",
+    role: "All",
+    status: "all",
+  });
+  const assignmentSources = useRef<
+    Record<
+      string,
+      {
+        route: WorkspaceRoute;
+        key: string;
+        label: string;
+        y: number;
+        button: string;
+      }
+    >
+  >({});
+  const source = selected ? assignmentSources.current[selected.id] : undefined;
   const inboxReturn = useRef<{ id: string; y: number } | null>(null);
   const screenKey = `${route.view}:${route.assignmentId ?? ""}:${!!route.invalid}:${route.workstreamId ?? ""}:${route.workerId ?? ""}:${route.handoffId ?? ""}:${!!route.organizationActivity}:${route.outcomeId ?? ""}:${!!route.attention}:${!!route.personalQueue}`;
   const previousScreen = useRef(screenKey);
@@ -191,6 +214,22 @@ function App() {
     previousScreen.current = screenKey;
     // Run after route-driven dialogs have closed and restored their opener.
     const frame = requestAnimationFrame(() => {
+      const origin = Object.entries(assignmentSources.current).find(
+        ([id, saved]) =>
+          previous.startsWith(`My Work:${id}:`) &&
+          !route.assignmentId &&
+          saved.key === screenKey,
+      )?.[1];
+      if (origin) {
+        const button = Array.from(
+          document.querySelectorAll<HTMLButtonElement>("main button"),
+        ).find((button) => button.textContent?.trim() === origin.button);
+        (button ?? document.querySelector<HTMLElement>("main h1"))?.focus({
+          preventScroll: true,
+        });
+        window.scrollTo(0, origin.y);
+        return;
+      }
       const saved = inboxReturn.current;
       if (
         route.view === "My Work" &&
@@ -263,9 +302,35 @@ function App() {
     });
   }
   function navigate(next: View) {
+    setOrganizationActivityView({ scope: "all", type: "all" });
+    setQueueView({ project: "All", role: "All", status: "all" });
     changeRoute({ view: next, tab: "Overview", work: route.work });
   }
   function open(a: Assignment, nextTab = "Overview") {
+    if (!selected && (view !== "My Work" || route.personalQueue)) {
+      const label = route.personalQueue
+        ? "Response queue"
+        : stream
+          ? "Workstream"
+          : handoff
+            ? "Handoff"
+            : outcome
+              ? "Outcome review"
+              : worker
+                ? "Worker"
+                : route.organizationActivity
+                  ? "Organization activity"
+                  : route.attention
+                    ? "Organization attention"
+                    : view;
+      assignmentSources.current[a.id] = {
+        route: { ...route },
+        key: screenKey,
+        label,
+        y: window.scrollY,
+        button: document.activeElement?.textContent?.trim() ?? "",
+      };
+    } else if (!selected) delete assignmentSources.current[a.id];
     if (view === "My Work" && !selected && !route.personalQueue)
       inboxReturn.current = { id: a.id, y: window.scrollY };
     changeRoute({
@@ -843,9 +908,14 @@ function App() {
           )}
           {view === "My Work" && selected && (
             <>
-              <button className="back-link" onClick={() => navigate("My Work")}>
+              <button
+                className="back-link"
+                onClick={() =>
+                  source ? changeRoute(source.route) : navigate("My Work")
+                }
+              >
                 <ArrowLeft size={16} />
-                Back to My Work
+                Back to {source?.label ?? "My Work"}
               </button>
               <div className="detail-heading">
                 <div className="assignment-meta">
@@ -1315,6 +1385,8 @@ function App() {
           )}
           {view === "Organization" && route.organizationActivity && (
             <OrganizationActivity
+              filters={organizationActivityView}
+              onFilters={setOrganizationActivityView}
               onInspect={setArtifact}
               receipts={receipts}
               onOpen={open}
@@ -1378,6 +1450,8 @@ function App() {
                 </div>
               </div>
               <OrganizationWork
+                filters={queueView}
+                onFilters={setQueueView}
                 completed={completed}
                 readiness={readiness}
                 onOpen={open}

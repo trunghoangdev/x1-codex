@@ -193,3 +193,5 @@ Attention is now a compact three-category summary on the overview. Select a coun
 **My Work → View response queue · Alex** opens the personal assignments grouped by response state. **Demos** opens the independent revision-cycle example. Both are now outside Organization Overview.
 
 Cited artifact links now open the exact record in the inspector from workstreams, handoffs, outcome review and organization activity. Closing preserves the current route and filters and restores keyboard focus. [Exact artifact preview](previews/29-outcome-artifact-inspector.png).
+
+Assignment Back buttons now identify their source page and restore its session filters, scroll and link focus. Direct assignment links after refresh use My Work as the return destination.

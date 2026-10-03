@@ -491,3 +491,11 @@ Cited record links in Outcome review and Organization activity now open their ex
 Inspection preserves the source route and filters; Escape/close restores the originating link's focus. Existing sample identity/provenance explanations remain in the inspector. Updated review priorities, walkthrough/model and capture script, refreshed four detail previews and added a direct outcome-artifact preview.
 
 Validation: production build and six relevant browser tests passed, covering exact records/assignment scope, source URL preservation, filter retention, keyboard focus, mobile overflow, response/outcome distinction and existing modal containment. The exact-artifact preview was visually inspected.
+
+## 48 — Contextual assignment return
+
+Assignment Back buttons now name the source page: workstream, handoff, outcome review, worker, organization activity/attention or personal queue. The app remembers the source route, scroll and initiating link per assignment in the browser session; switching assignment tabs keeps that context. Returning via the button or browser history restores source scroll/focus, with a heading fallback when the originating link no longer exists.
+
+Organization activity and queue filters move to app-owned state so they survive assignment return. Main navigation resets those filters. Inbox row restoration remains separate. A refreshed/directly loaded assignment has no session source and returns to My Work. Added the assignment-source preview and capture step, and documented the session boundary.
+
+Validation: production build passed. Eight relevant browser tests passed across the initial and focused reruns. Two expectations were updated for the intended source-link focus and explicit refresh boundary. New coverage verifies all source types, retained filters, tab changes, source scroll/focus, attention category and direct-link fallback; existing inbox/filter, queue and activity behavior passed. Preview was visually inspected.

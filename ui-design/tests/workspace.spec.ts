@@ -1873,8 +1873,8 @@ test("workstream details preserve scope, routes, focus and conditional handoffs"
   await expect(page).toHaveURL(/assignments\/A-1042\/evidence/);
   await page.goBack();
   await expect(
-    page.getByRole("heading", {
-      name: "Payment webhook reliability",
+    page.getByRole("button", {
+      name: "Inspect evidence · A-1042",
       exact: true,
     }),
   ).toBeFocused();
@@ -1926,9 +1926,7 @@ test("worker details keep bindings scoped and expose unassigned responsibility",
   await reviewer.getByRole("button", { name: /A-1042/ }).click();
   await expect(page).toHaveURL(/assignments\/A-1042\/overview/);
   await page.goBack();
-  await expect(
-    page.getByRole("heading", { name: "Alex Morgan", exact: true }),
-  ).toBeFocused();
+  await expect(reviewer.getByRole("button", { name: /A-1042/ })).toBeFocused();
   await page.reload();
   await expect(bindings.getByRole("article")).toHaveCount(4);
   await page.setViewportSize({ width: 390, height: 844 });
@@ -2413,4 +2411,68 @@ test("exact artifact links preserve source routes filters and keyboard focus", a
   ).toBeTruthy();
   await page.keyboard.press("Escape");
   await expect(page.getByLabel("Activity scope")).toHaveValue("other");
+});
+
+test("assignment return restores source pages scroll focus and filters", async ({
+  page,
+}) => {
+  for (const [route, button, back] of [
+    ["/#/workstreams/WS-01", "Open assignment · A-1042", "Back to Workstream"],
+    ["/#/handoffs/payment-review", "Inspect input · A-1042", "Back to Handoff"],
+    [
+      "/#/outcomes/WS-01",
+      "Inspect assignment · A-1042",
+      "Back to Outcome review",
+    ],
+    [
+      "/#/workers/alex",
+      "A-1042 · Review retry handling for payment webhooks",
+      "Back to Worker",
+    ],
+  ]) {
+    await page.goto(route);
+    const trigger = page.getByRole("button", { name: button, exact: true });
+    await trigger.scrollIntoViewIfNeeded();
+    await trigger.focus();
+    const y = await page.evaluate(() => scrollY);
+    await trigger.click();
+    await page.getByRole("tab", { name: "Checks", exact: true }).click();
+    await page.getByRole("button", { name: back, exact: true }).click();
+    await expect(page).toHaveURL(route);
+    await expect(trigger).toBeFocused();
+    expect(Math.abs((await page.evaluate(() => scrollY)) - y)).toBeLessThan(5);
+  }
+  await page.goto("/#/organization/activity");
+  await page.getByLabel("Activity scope").selectOption("other");
+  await page.getByLabel("Organization activity type").selectOption("evidence");
+  await page
+    .getByRole("button", { name: "Assignment activity · A-1041" })
+    .click();
+  await page
+    .getByRole("button", { name: "Back to Organization activity" })
+    .click();
+  await expect(page.getByLabel("Activity scope")).toHaveValue("other");
+  await expect(page.getByLabel("Organization activity type")).toHaveValue(
+    "evidence",
+  );
+  await page.goto("/#/work/attention");
+  await page.getByLabel("Queue project").selectOption("Team Workspace");
+  await page.getByLabel("Queue role").selectOption("Reviewer");
+  await page.getByRole("button", { name: "Open assignment · A-1032" }).click();
+  await page.getByRole("button", { name: "Back to Response queue" }).click();
+  await expect(page.getByLabel("Queue project")).toHaveValue("Team Workspace");
+  await expect(page.getByLabel("Queue role")).toHaveValue("Reviewer");
+  await page.goto("/#/organization/attention/response");
+  await page
+    .getByRole("button", { name: "Inspect assignment · A-1042" })
+    .click();
+  await page
+    .getByRole("button", { name: "Back to Organization attention" })
+    .click();
+  await expect(page.getByLabel("Attention type")).toHaveValue("Response");
+  await page.goto("/#/assignments/A-1042/overview");
+  await page.reload();
+  await expect(
+    page.getByRole("button", { name: "Back to My Work", exact: true }),
+  ).toBeVisible();
 });
