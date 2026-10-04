@@ -1,4 +1,4 @@
-// Independent authored scenario. Not SF records, live workloads or inbox assignments.
+// Independent authored scenario. Not SF records, live workloads. Personal inboxes project only these explicit allocations.
 export const scenarioWorkers = [
   { id: "alex", name: "Alex Morgan", type: "Human" },
   { id: "jamie", name: "Jamie Chen", type: "Human" },
@@ -54,6 +54,8 @@ export type ScenarioAssignment = {
   title: string;
   role: string;
   workerId?: string;
+  responseNeeded: boolean;
+  waitingForInput?: boolean;
   state:
     | "In progress"
     | "Awaiting assessment"
@@ -70,6 +72,7 @@ export const scenarioAssignments: ScenarioAssignment[] =
       role: "Developer",
       workerId: index % 2 ? "claude" : "codex",
       state: index === 2 ? "Revision requested" : "In progress",
+      responseNeeded: index === 2,
     },
     {
       id: `${stream.id}-R`,
@@ -78,6 +81,7 @@ export const scenarioAssignments: ScenarioAssignment[] =
       role: "Reviewer",
       workerId: index === 1 ? undefined : ["alex", "priya", "sam"][index % 3],
       state: index === 1 ? "Unassigned" : "Awaiting assessment",
+      responseNeeded: index !== 1,
     },
     {
       id: `${stream.id}-A`,
@@ -86,6 +90,7 @@ export const scenarioAssignments: ScenarioAssignment[] =
       role: "Authority",
       workerId: index % 2 ? "morgan" : "noor",
       state: "Awaiting authorization",
+      responseNeeded: true,
     },
   ]);
 export const scenarioBindings = [

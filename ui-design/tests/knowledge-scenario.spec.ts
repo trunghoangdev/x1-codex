@@ -48,7 +48,7 @@ test("knowledge scenario uses explicit references and personal allocations", () 
   );
   for (const path of [
     "/organizations/knowledge/work?persona=alex",
-    "/organizations/large/work",
+    "/organizations/large/work?persona=maya",
     "/organizations/knowledge/assignments/A-1042",
     "/organizations/unknown",
   ])
@@ -95,7 +95,7 @@ for (const width of [390, 1440])
     await expect(
       page.getByRole("heading", { name: "My Work · Maya Patel", exact: true }),
     ).toBeVisible();
-    await expect(page.getByRole("status")).toHaveText(
+    await expect(page.locator(".org-overview-section[role=status]")).toHaveText(
       "2 assignments · 1 awaiting your response · 1 waiting for input",
     );
     await expect(
@@ -131,7 +131,7 @@ for (const width of [390, 1440])
     await expect(
       page.getByRole("heading", { name: "My Work · Leo Rivera", exact: true }),
     ).toBeFocused();
-    await expect(page.getByRole("status")).toHaveText(
+    await expect(page.locator(".org-overview-section[role=status]")).toHaveText(
       "2 assignments · 2 awaiting your response · 0 waiting for input",
     );
     await expect(

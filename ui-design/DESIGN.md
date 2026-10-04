@@ -89,3 +89,7 @@ Scenario identity includes domain and shared purpose. Knowledge Operations uses 
 ## Explicit coordination inputs
 
 Workstream and assignment views now expose declared provider → required input → receiver relationships, independent of expected flow order. Knowledge My Work links Maya’s waiting outline review to Leo’s workshop brief. Organization attention adds Input as a separate category; unassigned responsibility remains distinct. One main software handoff uses the same component, with an attached sample candidate and unconfirmed delivery/receipt. Local responses do not change input availability or advance dependencies. Parallel research/editorial criteria and conditional clarification/revision expectations are explicitly authored. See [COORDINATION-INPUTS.md](COORDINATION-INPUTS.md).
+
+## Shared personal queue controls
+
+Read-only knowledge and larger software personas use the same My Work queue with search and assignment-role/workstream/attention filters. URL filters persist through inspection, browser history and refresh; changing persona resets personal filters. Response-needed and waiting-input groups can overlap and are not summed. A person with no explicit allocations gets a responsibility link; a filtered queue with no matches gets Show all recovery. Larger personas Sam and Jamie remain inside their scenario rather than using Alex’s main inbox. Main interactive response workflows remain unchanged.

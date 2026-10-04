@@ -3501,3 +3501,12 @@ main h3,
     grid-template-columns: 1fr;
   }
 }
+
+.personal-queue-note {
+  color: var(--muted);
+  line-height: 1.6;
+  margin: 12px 0 20px;
+}
+.personal-queue-results {
+  margin: 20px 0;
+}

@@ -53,3 +53,7 @@ These slices can be completed with authored frontend fixtures. Live integration,
 ## Item 1 completed — iteration 64
 
 Added explicit input/parallel-work records, shared coordination inspection, a missing-input attention category and provider links from knowledge personal work. The initial slice covers the workshop brief, one existing software candidate handoff and parallel welcome-guide research/editorial criteria. Receipt and availability remain independent of local responses, and nested provider/receiver return unwinds by persona. No live delivery, allocation or workflow advancement is implemented. See [COORDINATION-INPUTS.md](COORDINATION-INPUTS.md). Items 2–5 remain proposed; the next recommended item is consistent personal work across personas.
+
+## Item 2 completed — iteration 65
+
+Added a shared read-only personal queue projection, search and role/stream/attention filter URLs for knowledge and larger software personas. The larger scenario now has Sam’s explicitly allocated Reviewer inbox and Jamie’s Planner-with-no-assignment empty inbox. Search/history/refresh and detail return preserve filters; changing persona resets personal filters. Overlapping response/input flags are documented and tested; no task or readiness is inferred from a binding or missing records. Main Alex specialized response actions remain unchanged. See [PERSONAL-WORK.md](PERSONAL-WORK.md). Items 3–5 remain proposed; the next recommended item is role coverage by scope.

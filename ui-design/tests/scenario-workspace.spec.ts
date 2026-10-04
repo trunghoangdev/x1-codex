@@ -118,7 +118,9 @@ for (const width of [1440, 390]) {
       .getByRole("region", { name: "Organization attention summary" })
       .getByRole("button", { name: /Responsibility/ })
       .click();
-    await expect(page).toHaveURL(/attention\?category=responsibility$/);
+    await expect(page).toHaveURL(
+      /attention\?category=responsibility&persona=sam$/,
+    );
     await expect(
       page.getByRole("heading", { name: /Responsibility ·/ }),
     ).toHaveCount(1);
@@ -149,7 +151,9 @@ for (const width of [1440, 390]) {
     await page
       .getByRole("button", { name: "Open workstream · L-02", exact: true })
       .click();
-    await expect(page).toHaveURL(/#\/organizations\/large\/workstreams\/L-02$/);
+    await expect(page).toHaveURL(
+      /#\/organizations\/large\/workstreams\/L-02\?persona=sam$/,
+    );
     await page
       .getByRole("button", {
         name: "Inspect scenario assignment · L-02-R",

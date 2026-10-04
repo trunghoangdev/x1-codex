@@ -1,3 +1,7 @@
+import {
+  readScenarioWorkFilters,
+  validScenarioWorkFilters,
+} from "./data/scenarioWork";
 import { CoordinationInputs } from "./CoordinationInputs";
 import { RolesDirectory } from "./RolesDirectory";
 import { roleCoverage, type RoleFilters } from "./data/roleDirectory";
@@ -40,6 +44,7 @@ export function validScenarioPath(raw: string) {
   )
     return false;
   return (
+    (suffix !== "/work" || validScenarioWorkFilters(scenario, params)) &&
     (!params.has("persona") ||
       !!scenario.personas?.some((p) => p.workerId === params.get("persona"))) &&
     (!params.has("coverage") ||
@@ -57,9 +62,12 @@ export function validScenarioPath(raw: string) {
     (!params.has("type") ||
       ["all", "human", "ai", "deterministic"].includes(params.get("type")!)) &&
     (!params.has("role") ||
-      ["All", ...scenario.bindings.map((b) => b.role)].includes(
-        params.get("role")!,
-      )) &&
+      [
+        "All",
+        ...(suffix === "/work"
+          ? scenario.roles.map((r) => r.name)
+          : scenario.bindings.map((b) => b.role)),
+      ].includes(params.get("role")!)) &&
     (!params.has("links") ||
       ["all", "linked", "none"].includes(params.get("links")!))
   );
@@ -171,6 +179,9 @@ export function ScenarioWorkspace({
               onChange={(e) => {
                 const p = new URLSearchParams(query);
                 p.set("persona", e.target.value);
+                if (suffix === "/work")
+                  for (const key of ["q", "role", "stream", "status"])
+                    p.delete(key);
                 onRoute(`${pathname}?${p}`);
               }}
             >
@@ -199,6 +210,15 @@ export function ScenarioWorkspace({
         <ScenarioMyWork
           scenario={scenario}
           workerId={persona!.workerId}
+          filters={readScenarioWorkFilters(params)}
+          onFilters={(f) =>
+            filter("work", {
+              q: f.query,
+              role: f.role,
+              stream: f.stream,
+              status: f.status,
+            })
+          }
           onWorker={(id) => open(`/workers/${id}`)}
           onAssignment={(id) => open(`/assignments/${id}`)}
           onStream={(id) => open(`/workstreams/${id}`)}

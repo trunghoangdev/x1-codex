@@ -17,3 +17,7 @@ Previews: `45-knowledge-organization.png`, `46-maya-personal-inbox.png`, `47-leo
 ## Workshop input relationship
 
 The missing brief now has an explicit dependency ID linking Leo’s K-02-C to Maya’s K-02-E. The inbox, assignment and shared stream expose supplying-assignment/provider-worker inspection and unchanged persona context. Input attention isolates the missing brief from the Facilitator allocation gap. K-01-D research and K-01-E editorial criteria are a declared parallel-work group. See [COORDINATION-INPUTS.md](COORDINATION-INPUTS.md).
+
+## Personal queue filters
+
+Knowledge My Work now shares search, role, workstream and response/input filters with the larger software sample. Personal URLs retain filters through detail return and refresh; switching between Maya and Leo resets personal filters. Zero matched results offer Show all recovery, and attention counts explicitly allow overlap. See [PERSONAL-WORK.md](PERSONAL-WORK.md).

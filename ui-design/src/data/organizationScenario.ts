@@ -144,6 +144,10 @@ export const mainOrganization: OrganizationScenario = {
 };
 export const largeOrganization: OrganizationScenario = {
   id: "large",
+  personas: [
+    { workerId: "sam", label: "Sam · Reviewer" },
+    { workerId: "jamie", label: "Jamie · Planner" },
+  ],
   domain: "Software Factory",
   purpose: "Build software with accountable collaboration.",
   name: "Larger sample organization",

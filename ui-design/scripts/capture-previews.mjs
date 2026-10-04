@@ -519,4 +519,60 @@ await page.screenshot({
   fullPage: true,
   animations: "disabled",
 });
+await page.setViewportSize({ width: 1440, height: 1000 });
+await page.goto(
+  "http://127.0.0.1:4173/#/organizations/knowledge/work?persona=maya&stream=K-02&status=waiting",
+);
+await page
+  .getByRole("heading", { name: "My Work · Maya Patel", exact: true })
+  .waitFor();
+await page.evaluate(async () => {
+  document.activeElement?.blur();
+  window.scrollTo(0, 0);
+  await new Promise((resolve) =>
+    requestAnimationFrame(() => requestAnimationFrame(resolve)),
+  );
+});
+await page.screenshot({
+  path: "previews/51-maya-filtered-work.png",
+  fullPage: true,
+  animations: "disabled",
+});
+await page.goto(
+  "http://127.0.0.1:4173/#/organizations/large/work?persona=sam&status=response",
+);
+await page
+  .getByRole("heading", { name: "My Work · Sam Rivera", exact: true })
+  .waitFor();
+await page.evaluate(async () => {
+  document.activeElement?.blur();
+  window.scrollTo(0, 0);
+  await new Promise((resolve) =>
+    requestAnimationFrame(() => requestAnimationFrame(resolve)),
+  );
+});
+await page.screenshot({
+  path: "previews/52-sam-personal-work.png",
+  fullPage: true,
+  animations: "disabled",
+});
+await page.setViewportSize({ width: 390, height: 1000 });
+await page.goto(
+  "http://127.0.0.1:4173/#/organizations/large/work?persona=jamie",
+);
+await page
+  .getByRole("heading", { name: "My Work · Jamie Chen", exact: true })
+  .waitFor();
+await page.evaluate(async () => {
+  document.activeElement?.blur();
+  window.scrollTo(0, 0);
+  await new Promise((resolve) =>
+    requestAnimationFrame(() => requestAnimationFrame(resolve)),
+  );
+});
+await page.screenshot({
+  path: "previews/53-jamie-empty-work-mobile.png",
+  fullPage: true,
+  animations: "disabled",
+});
 await browser.close();
