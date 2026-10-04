@@ -2,6 +2,7 @@ import { roleBindings, workers } from "./organizationOverview";
 import { workerAssignments } from "./workerDetails";
 
 export type WorkerFilters = {
+  page?: number;
   query: string;
   type: "all" | "human" | "ai" | "deterministic";
   role: string;
@@ -31,3 +32,11 @@ export const workerDirectory = workers.map((worker) => ({
     ...new Set(Object.values(workerAssignments[worker.id] ?? {}).flat()),
   ],
 }));
+
+export const workerPageSize = 6;
+export function validDirectoryPage(value: string | null) {
+  return (
+    value === null ||
+    (/^[1-9]\d*$/.test(value) && Number.isSafeInteger(Number(value)))
+  );
+}

@@ -18,6 +18,7 @@ import {
 } from "./data/workstreamDirectory";
 import {
   defaultWorkerFilters,
+  validDirectoryPage,
   type WorkerFilters,
 } from "./data/workerDirectory";
 import { DetailBackButton } from "./DetailPresentation";
@@ -45,6 +46,8 @@ export function validScenarioPath(raw: string) {
     return false;
   return (
     (suffix !== "/work" || validScenarioWorkFilters(scenario, params)) &&
+    (!params.has("page") ||
+      (suffix === "/workers" && validDirectoryPage(params.get("page")))) &&
     (!params.has("persona") ||
       !!scenario.personas?.some((p) => p.workerId === params.get("persona"))) &&
     (!params.has("view") || params.get("view") === "scope") &&
@@ -281,6 +284,7 @@ export function ScenarioWorkspace({
           scenario={scenario}
           filters={{
             ...defaultWorkerFilters,
+            page: params.has("page") ? Number(params.get("page")) : undefined,
             query: params.get("q") ?? "",
             role: params.get("role") ?? "All",
             type: (params.get("type") ?? "all") as WorkerFilters["type"],
@@ -293,6 +297,7 @@ export function ScenarioWorkspace({
               role: f.role,
               type: f.type,
               links: f.assignments,
+              page: (f.page ?? 1) > 1 ? String(f.page) : "",
             })
           }
           onOpen={(id) => open(`/workers/${id}`)}

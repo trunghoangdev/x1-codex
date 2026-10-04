@@ -3,6 +3,7 @@ import { roleCoverage, type RoleFilters } from "./data/roleDirectory";
 import { validScenarioPath } from "./ScenarioWorkspace";
 import {
   defaultWorkerFilters,
+  validDirectoryPage,
   directoryRoles,
   type WorkerFilters,
 } from "./data/workerDirectory";
@@ -106,7 +107,8 @@ export function useWorkspaceRoute(ids: string[], tabs: string[]) {
       if (
         !["all", "human", "ai", "deterministic"].includes(type) ||
         !["All", ...directoryRoles].includes(role) ||
-        !["all", "linked", "none"].includes(links)
+        !["all", "linked", "none"].includes(links) ||
+        !validDirectoryPage(params.get("page"))
       )
         return { ...fallback, invalid: true };
       return {
@@ -118,6 +120,7 @@ export function useWorkspaceRoute(ids: string[], tabs: string[]) {
           type: type as WorkerFilters["type"],
           role,
           assignments: links as WorkerFilters["assignments"],
+          page: params.has("page") ? Number(params.get("page")) : undefined,
         },
       };
     }
@@ -278,6 +281,8 @@ export function useWorkspaceRoute(ids: string[], tabs: string[]) {
         params.set("signal", next.streamDirectory.signal);
     }
     if (next.workerDirectory) {
+      if ((next.workerDirectory.page ?? 1) > 1)
+        params.set("page", String(next.workerDirectory.page));
       if (next.workerDirectory.query)
         params.set("q", next.workerDirectory.query);
       if (next.workerDirectory.type !== "all")

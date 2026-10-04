@@ -231,3 +231,5 @@ Explicit input dependencies are available in workstream/assignment detail and th
 Shared read-only My Work supports search and role/workstream/attention filters. Try `#/organizations/knowledge/work?persona=maya&status=waiting`, `#/organizations/large/work?persona=sam` or `#/organizations/large/work?persona=jamie`. Sam has two allocated Reviewer assignments; Jamie’s Planner binding has no represented assignments. See [PERSONAL-WORK.md](PERSONAL-WORK.md).
 
 Organization → Browse roles → **Coverage by workstream** shows declared bindings, scoped assignments, known gaps and unknown relationships. The optional role × workstream matrix preserves unmodeled cells as unknown. Try `#/organization/roles?view=scope&scope=scope-WS-02`. See [ROLE-SCOPE-COVERAGE.md](ROLE-SCOPE-COVERAGE.md).
+
+Workers has compact summaries, expandable scope references and URL-preserved pages of six records. See [compact directory behavior and remaining scope](COMPACT-DIRECTORIES.md).

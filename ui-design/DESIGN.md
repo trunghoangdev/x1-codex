@@ -97,3 +97,7 @@ Read-only knowledge and larger software personas use the same My Work queue with
 ## Workstream role coverage
 
 Roles now offers Coverage by workstream beside the original catalog. Stable binding IDs and typed scope references keep workstream/project/environment/subject/organization records distinct. The view separates explicit binding relationships, scoped assignments, known gaps, unknown relationships and unmodeled role cells. An authored broad-scope binding can be explicitly referenced by a workstream requirement without granting effective permission. The matrix and scope detail filters preserve URL/navigation context. See [ROLE-SCOPE-COVERAGE.md](ROLE-SCOPE-COVERAGE.md).
+
+## Current directory density — iteration 67
+
+Workers is the first compact/bounded directory: six summaries per page, full filtered totals, native scope/assignment disclosure and page/filter/persona URLs. Page changes focus result status; filters reset paging. Organization gap context remains independent. See [COMPACT-DIRECTORIES.md](COMPACT-DIRECTORIES.md) for return limitations and remaining Workstreams/Role/nested-list slices.

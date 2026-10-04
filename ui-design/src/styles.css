@@ -3541,3 +3541,24 @@ main h3,
 .scope-matrix button {
   text-align: left;
 }
+
+.directory-pagination {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  justify-content: center;
+  gap: 12px;
+  margin: 20px 0;
+}
+#worker-results:focus {
+  outline: 2px solid var(--accent, #6578db);
+  outline-offset: 4px;
+}
+
+.worker-record-details {
+  margin: 8px 0;
+}
+.worker-record-details > summary {
+  padding: 10px 0;
+  cursor: pointer;
+}

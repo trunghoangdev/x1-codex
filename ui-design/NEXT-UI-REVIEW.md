@@ -61,3 +61,7 @@ Added a shared read-only personal queue projection, search and role/stream/atten
 ## Item 3 completed — iteration 66
 
 Added structured scope catalogs, stable binding IDs and explicit assignment/requirement links for all three samples. Roles now offers workstream coverage filters, an optional role × workstream matrix and separate inspection of broader subject/environment/project/organization scopes. Main invitation gaps remain despite the broader Reviewer binding; release and staging subjects remain outside the payment stream. Knowledge distinguishes unbound publication/facilitation from the unresolved Distributor-to-guide relationship. Unknown and unmodeled relationships do not become coverage claims. See [ROLE-SCOPE-COVERAGE.md](ROLE-SCOPE-COVERAGE.md). Items 4–5 remain proposed; next is compact directories and bounded lists.
+
+## Item 4 started — iteration 67
+
+Delivered the first proposed directory slice: Workers now shows six compact summaries per page, with native expandable bindings/assignment IDs. Full filtered totals, displayed ranges, URL page/filter/persona context, page-change focus, detail return and empty recovery are explicit. The existing nine-worker fixture exercises two pages on desktop/mobile. See [COMPACT-DIRECTORIES.md](COMPACT-DIRECTORIES.md). Item 4 remains in progress: next apply bounded presentation to Workstreams and Roles, including nested assignment/binding lists. Item 5 remains proposed.

@@ -624,4 +624,26 @@ await page
     path: "previews/56-large-role-scope-matrix.png",
     animations: "disabled",
   });
+for (const [width, filename] of [
+  [1440, "57-compact-workers.png"],
+  [390, "58-worker-page-mobile.png"],
+]) {
+  await page.setViewportSize({ width, height: 1000 });
+  await page.goto(
+    `http://127.0.0.1:4173/#/organizations/large/workers?persona=sam${width === 390 ? "&page=2" : ""}`,
+  );
+  await page.getByRole("heading", { name: "Workers", exact: true }).waitFor();
+  await page.evaluate(async () => {
+    document.activeElement?.blur();
+    window.scrollTo(0, 0);
+    await new Promise((resolve) =>
+      requestAnimationFrame(() => requestAnimationFrame(resolve)),
+    );
+  });
+  await page.screenshot({
+    path: `previews/${filename}`,
+    fullPage: true,
+    animations: "disabled",
+  });
+}
 await browser.close();
