@@ -1,3 +1,4 @@
+import { RoleScopeCoverage } from "./RoleScopeCoverage";
 import {
   mainOrganization,
   type OrganizationScenario,
@@ -61,135 +62,177 @@ export function RolesDirectory({
         scope gaps are separate records. A binding does not establish authority,
         capacity or an assignment.
       </p>
-      <section
-        className="panel stream-directory-filters"
-        aria-label="Role filters"
-      >
-        <label>
-          Search roles
-          <input
-            type="search"
-            value={filters.query}
-            placeholder="Role, worker, scope or assignment"
-            onChange={(e) => onFilters({ ...filters, query: e.target.value })}
-          />
-        </label>
-        <label>
-          Responsibility coverage
-          <select
-            value={filters.coverage}
-            onChange={(e) =>
-              onFilters({
-                ...filters,
-                coverage: e.target.value as RoleFilters["coverage"],
-              })
-            }
-          >
-            <option value="all">All roles</option>
-            <option value="unbound">No bindings represented</option>
-            <option value="no-assignments">
-              Bindings without role assignments
-            </option>
-            <option value="gaps">Known scope gaps</option>
-          </select>
-        </label>
-        <button className="button secondary" onClick={reset}>
-          Clear filters
+      <nav className="organization-sections" aria-label="Role views">
+        <button
+          className="button secondary"
+          aria-pressed={filters.view !== "scope"}
+          onClick={() => onFilters(defaultRoleFilters)}
+        >
+          Role catalog
         </button>
-      </section>
-      <p role="status">
-        {visible.length} of {rows.length} roles
-      </p>
-      {visible.length === 0 ? (
-        <DetailEmptyState>
-          No matching roles. No result does not establish complete coverage.
-          <button className="button secondary" onClick={reset}>
-            Show all roles
-          </button>
-        </DetailEmptyState>
+        <button
+          className="button secondary"
+          aria-pressed={filters.view === "scope"}
+          onClick={() =>
+            onFilters({
+              query: "",
+              coverage: "all",
+              view: "scope",
+              scope:
+                scenario.scopes.find((s) => s.kind === "workstream")?.id ??
+                "All",
+            })
+          }
+        >
+          Coverage by workstream
+        </button>
+      </nav>
+      {filters.view === "scope" ? (
+        <RoleScopeCoverage
+          scenario={scenario}
+          filters={filters}
+          onFilters={onFilters}
+          onAssignment={onAssignment}
+          onStream={onStream}
+          onWorker={onWorker}
+          completed={completed}
+        />
       ) : (
-        <div className="org-stream-grid">
-          {visible.map((row) => (
-            <article
-              className="panel org-stream"
-              aria-label={row.name}
-              key={row.name}
-            >
-              <h2>{row.name}</h2>
-              <p>{row.purpose}</p>
-              <h3>Scoped bindings · {row.bindings.length}</h3>
-              {row.bindings.length ? (
-                <ul>
-                  {row.bindings.map((b) => (
-                    <li key={`${b.workerId}:${b.scope}`}>
-                      <button
-                        className="text-link"
-                        onClick={() => onWorker(b.workerId)}
-                      >
-                        {
-                          scenario.workers.find((w) => w.id === b.workerId)
-                            ?.name
-                        }
-                      </button>{" "}
-                      · {b.scope}
-                    </li>
-                  ))}
-                </ul>
-              ) : (
-                <p>No binding represented for this catalog role.</p>
-              )}
-              <h3>Role assignments · {row.assignments.length}</h3>
-              <p>
-                Explicit role membership; assignment-to-binding scope matching
-                is not verified here.
-              </p>
-              {row.assignments.length ? (
-                row.assignments.map((a) => (
-                  <div className="org-stream-assignment" key={a.id}>
-                    <button
-                      className="text-link"
-                      onClick={() => onAssignment(a.id)}
-                    >
-                      {a.id} · {a.title}
-                    </button>
+        <>
+          <section
+            className="panel stream-directory-filters"
+            aria-label="Role filters"
+          >
+            <label>
+              Search roles
+              <input
+                type="search"
+                value={filters.query}
+                placeholder="Role, worker, scope or assignment"
+                onChange={(e) =>
+                  onFilters({ ...filters, query: e.target.value })
+                }
+              />
+            </label>
+            <label>
+              Responsibility coverage
+              <select
+                value={filters.coverage}
+                onChange={(e) =>
+                  onFilters({
+                    ...filters,
+                    coverage: e.target.value as RoleFilters["coverage"],
+                  })
+                }
+              >
+                <option value="all">All roles</option>
+                <option value="unbound">No bindings represented</option>
+                <option value="no-assignments">
+                  Bindings without role assignments
+                </option>
+                <option value="gaps">Known scope gaps</option>
+              </select>
+            </label>
+            <button className="button secondary" onClick={reset}>
+              Clear filters
+            </button>
+          </section>
+          <p role="status">
+            {visible.length} of {rows.length} roles
+          </p>
+          {visible.length === 0 ? (
+            <DetailEmptyState>
+              No matching roles. No result does not establish complete coverage.
+              <button className="button secondary" onClick={reset}>
+                Show all roles
+              </button>
+            </DetailEmptyState>
+          ) : (
+            <div className="org-stream-grid">
+              {visible.map((row) => (
+                <article
+                  className="panel org-stream"
+                  aria-label={row.name}
+                  key={row.name}
+                >
+                  <h2>{row.name}</h2>
+                  <p>{row.purpose}</p>
+                  <h3>Scoped bindings · {row.bindings.length}</h3>
+                  {row.bindings.length ? (
+                    <ul>
+                      {row.bindings.map((b) => (
+                        <li key={`${b.workerId}:${b.scope}`}>
+                          <button
+                            className="text-link"
+                            onClick={() => onWorker(b.workerId)}
+                          >
+                            {
+                              scenario.workers.find((w) => w.id === b.workerId)
+                                ?.name
+                            }
+                          </button>{" "}
+                          · {b.scope}
+                        </li>
+                      ))}
+                    </ul>
+                  ) : (
+                    <p>No binding represented for this catalog role.</p>
+                  )}
+                  <h3>Role assignments · {row.assignments.length}</h3>
+                  <p>
+                    Explicit role membership; assignment-to-binding scope
+                    matching is not verified here.
+                  </p>
+                  {row.assignments.length ? (
+                    row.assignments.map((a) => (
+                      <div className="org-stream-assignment" key={a.id}>
+                        <button
+                          className="text-link"
+                          onClick={() => onAssignment(a.id)}
+                        >
+                          {a.id} · {a.title}
+                        </button>
+                        <p>
+                          {scenario.workers.find((w) => w.id === a.workerId)
+                            ?.name ?? "Unassigned"}{" "}
+                          ·{" "}
+                          {completed[a.id]
+                            ? "Local response recorded · outcome unverified"
+                            : a.state}
+                        </p>
+                      </div>
+                    ))
+                  ) : (
                     <p>
-                      {scenario.workers.find((w) => w.id === a.workerId)
-                        ?.name ?? "Unassigned"}{" "}
-                      ·{" "}
-                      {completed[a.id]
-                        ? "Local response recorded · outcome unverified"
-                        : a.state}
+                      No role assignments represented. This does not mean the
+                      bound workers are idle.
                     </p>
-                  </div>
-                ))
-              ) : (
-                <p>
-                  No role assignments represented. This does not mean the bound
-                  workers are idle.
-                </p>
-              )}
-              <h3>Known scope gaps · {row.gaps.length}</h3>
-              {row.gaps.length ? (
-                row.gaps.map((g) => (
-                  <div className="org-stream-assignment" key={g.id}>
-                    <strong>{g.title}</strong>
-                    <p>{g.description}</p>
-                    <button
-                      className="text-link"
-                      onClick={() => onStream(g.workstreamId)}
-                    >
-                      Inspect gap workstream · {g.title}
-                    </button>
-                  </div>
-                ))
-              ) : (
-                <p>
-                  No explicit gap linked to this role; coverage is not audited.
-                </p>
-              )}
-            </article>
-          ))}
-        </div>
+                  )}
+                  <h3>Known scope gaps · {row.gaps.length}</h3>
+                  {row.gaps.length ? (
+                    row.gaps.map((g) => (
+                      <div className="org-stream-assignment" key={g.id}>
+                        <strong>{g.title}</strong>
+                        <p>{g.description}</p>
+                        <button
+                          className="text-link"
+                          onClick={() => onStream(g.workstreamId)}
+                        >
+                          Inspect gap workstream · {g.title}
+                        </button>
+                      </div>
+                    ))
+                  ) : (
+                    <p>
+                      No explicit gap linked to this role; coverage is not
+                      audited.
+                    </p>
+                  )}
+                </article>
+              ))}
+            </div>
+          )}
+        </>
       )}
     </div>
   );

@@ -47,8 +47,18 @@ export function validScenarioPath(raw: string) {
     (suffix !== "/work" || validScenarioWorkFilters(scenario, params)) &&
     (!params.has("persona") ||
       !!scenario.personas?.some((p) => p.workerId === params.get("persona"))) &&
+    (!params.has("view") || params.get("view") === "scope") &&
+    (!params.has("scope") ||
+      [
+        "All",
+        ...scenario.scopes
+          .filter((s) => s.kind === "workstream")
+          .map((s) => s.id),
+      ].includes(params.get("scope")!)) &&
     (!params.has("coverage") ||
-      roleCoverage.includes(params.get("coverage")!)) &&
+      (roleCoverage.includes(params.get("coverage")!) &&
+        (params.get("coverage") !== "unknown" ||
+          params.get("view") === "scope"))) &&
     (!params.has("category") ||
       ["all", "responsibility", "response", "input", "outcome"].includes(
         params.get("category")!,
@@ -229,11 +239,18 @@ export function ScenarioWorkspace({
           scenario={scenario}
           filters={{
             query: params.get("q") ?? "",
+            view: params.get("view") === "scope" ? "scope" : undefined,
+            scope: params.get("scope") ?? undefined,
             coverage: (params.get("coverage") ??
               "all") as RoleFilters["coverage"],
           }}
           onFilters={(f) =>
-            filter("roles", { q: f.query, coverage: f.coverage })
+            filter("roles", {
+              q: f.query,
+              coverage: f.coverage,
+              view: f.view ?? "",
+              scope: f.scope ?? "",
+            })
           }
           onWorker={(id) => open(`/workers/${id}`)}
           onStream={(id) => open(`/workstreams/${id}`)}

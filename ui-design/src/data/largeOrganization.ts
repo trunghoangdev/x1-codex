@@ -97,12 +97,22 @@ export const scenarioBindings = [
   ...scenarioAssignments
     .filter((a) => a.workerId)
     .map((a) => ({
+      id: `lb-${a.id}`,
+      scopeId: `scope-${a.streamId}`,
       workerId: a.workerId!,
       role: a.role,
       streamId: a.streamId,
     })),
-  { workerId: "jamie", role: "Planner", streamId: "All streams" },
   {
+    id: "lb-planner",
+    scopeId: "large-org",
+    workerId: "jamie",
+    role: "Planner",
+    streamId: "All streams",
+  },
+  {
+    id: "lb-executor",
+    scopeId: "large-authorized",
     workerId: "runner",
     role: "Executor",
     streamId: "Authorized subjects only",

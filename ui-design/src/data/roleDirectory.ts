@@ -1,10 +1,18 @@
 import type { OrganizationScenario } from "./organizationScenario";
 export type RoleFilters = {
   query: string;
-  coverage: "all" | "unbound" | "no-assignments" | "gaps";
+  view?: "scope";
+  scope?: string;
+  coverage: "all" | "unbound" | "no-assignments" | "gaps" | "unknown";
 };
 export const defaultRoleFilters: RoleFilters = { query: "", coverage: "all" };
-export const roleCoverage = ["all", "unbound", "no-assignments", "gaps"];
+export const roleCoverage = [
+  "all",
+  "unbound",
+  "no-assignments",
+  "gaps",
+  "unknown",
+];
 export function scenarioRoleRows(scenario: OrganizationScenario) {
   return scenario.roles.map((role) => ({
     ...role,

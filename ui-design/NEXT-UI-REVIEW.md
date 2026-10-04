@@ -57,3 +57,7 @@ Added explicit input/parallel-work records, shared coordination inspection, a mi
 ## Item 2 completed — iteration 65
 
 Added a shared read-only personal queue projection, search and role/stream/attention filter URLs for knowledge and larger software personas. The larger scenario now has Sam’s explicitly allocated Reviewer inbox and Jamie’s Planner-with-no-assignment empty inbox. Search/history/refresh and detail return preserve filters; changing persona resets personal filters. Overlapping response/input flags are documented and tested; no task or readiness is inferred from a binding or missing records. Main Alex specialized response actions remain unchanged. See [PERSONAL-WORK.md](PERSONAL-WORK.md). Items 3–5 remain proposed; the next recommended item is role coverage by scope.
+
+## Item 3 completed — iteration 66
+
+Added structured scope catalogs, stable binding IDs and explicit assignment/requirement links for all three samples. Roles now offers workstream coverage filters, an optional role × workstream matrix and separate inspection of broader subject/environment/project/organization scopes. Main invitation gaps remain despite the broader Reviewer binding; release and staging subjects remain outside the payment stream. Knowledge distinguishes unbound publication/facilitation from the unresolved Distributor-to-guide relationship. Unknown and unmodeled relationships do not become coverage claims. See [ROLE-SCOPE-COVERAGE.md](ROLE-SCOPE-COVERAGE.md). Items 4–5 remain proposed; next is compact directories and bounded lists.

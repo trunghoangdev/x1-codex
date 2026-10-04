@@ -31,3 +31,7 @@ The scenario contract now contains explicit `dependencies` and `parallelWork` ar
 ## Shared personal queue
 
 Knowledge and larger software now share `scenarioPersonalWork` and ScenarioMyWork filters for search, assignment role, stream and explicit response/input-wait flags. Sam has two larger-sample Reviewer assignments; Jamie holds Planner responsibility with no allocated work. Personal filter URLs survive detail return, history and refresh; switching persona resets the inbox filters. Both-status semantics are explicit and non-additive. Missing larger assignment input/response details are stated as unrepresented. Main Alex response forms remain specialized. See [PERSONAL-WORK.md](PERSONAL-WORK.md).
+
+## Structured role scope references
+
+All adapters now decorate bindings with stable IDs/scope IDs and author scope catalogs, assignment-scope links and scoped role requirements. These records are consumed by RoleScopeCoverage, while existing catalog/worker views and allocations remain intact. Scope relationships are explicit references; no label parsing or automatic broad-scope inheritance is implemented. Main release/staging/onboarding remain separate from the modeled workstreams. Knowledge Distributor is explicitly unresolved for the guide, and larger unassigned assessment stays unbound. See [ROLE-SCOPE-COVERAGE.md](ROLE-SCOPE-COVERAGE.md).

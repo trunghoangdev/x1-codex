@@ -1,3 +1,4 @@
+import { mainScopes } from "./data/roleScopes";
 import { roleCoverage, type RoleFilters } from "./data/roleDirectory";
 import { validScenarioPath } from "./ScenarioWorkspace";
 import {
@@ -71,13 +72,26 @@ export function useWorkspaceRoute(ids: string[], tabs: string[]) {
         separator < 0 ? "" : raw.slice(separator + 1),
       );
       const coverage = params.get("coverage") ?? "all";
-      if (!roleCoverage.includes(coverage))
+      if (
+        !roleCoverage.includes(coverage) ||
+        (coverage === "unknown" && params.get("view") !== "scope") ||
+        (params.has("view") && params.get("view") !== "scope") ||
+        (params.has("scope") &&
+          ![
+            "All",
+            ...mainScopes
+              .filter((s) => s.kind === "workstream")
+              .map((s) => s.id),
+          ].includes(params.get("scope")!))
+      )
         return { ...fallback, invalid: true };
       return {
         view: "Organization",
         tab: "Overview",
         roleDirectory: {
           query: params.get("q") ?? "",
+          view: params.get("view") === "scope" ? "scope" : undefined,
+          scope: params.get("scope") ?? undefined,
           coverage: coverage as RoleFilters["coverage"],
         },
       };
@@ -248,6 +262,9 @@ export function useWorkspaceRoute(ids: string[], tabs: string[]) {
                               : `#/${viewPaths[next.view]}`;
     const params = new URLSearchParams();
     if (next.roleDirectory) {
+      if (next.roleDirectory.view) params.set("view", next.roleDirectory.view);
+      if (next.roleDirectory.scope && next.roleDirectory.scope !== "All")
+        params.set("scope", next.roleDirectory.scope);
       if (next.roleDirectory.query) params.set("q", next.roleDirectory.query);
       if (next.roleDirectory.coverage !== "all")
         params.set("coverage", next.roleDirectory.coverage);

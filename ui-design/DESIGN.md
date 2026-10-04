@@ -93,3 +93,7 @@ Workstream and assignment views now expose declared provider → required input 
 ## Shared personal queue controls
 
 Read-only knowledge and larger software personas use the same My Work queue with search and assignment-role/workstream/attention filters. URL filters persist through inspection, browser history and refresh; changing persona resets personal filters. Response-needed and waiting-input groups can overlap and are not summed. A person with no explicit allocations gets a responsibility link; a filtered queue with no matches gets Show all recovery. Larger personas Sam and Jamie remain inside their scenario rather than using Alex’s main inbox. Main interactive response workflows remain unchanged.
+
+## Workstream role coverage
+
+Roles now offers Coverage by workstream beside the original catalog. Stable binding IDs and typed scope references keep workstream/project/environment/subject/organization records distinct. The view separates explicit binding relationships, scoped assignments, known gaps, unknown relationships and unmodeled role cells. An authored broad-scope binding can be explicitly referenced by a workstream requirement without granting effective permission. The matrix and scope detail filters preserve URL/navigation context. See [ROLE-SCOPE-COVERAGE.md](ROLE-SCOPE-COVERAGE.md).

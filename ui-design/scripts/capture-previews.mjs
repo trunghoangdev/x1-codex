@@ -575,4 +575,53 @@ await page.screenshot({
   fullPage: true,
   animations: "disabled",
 });
+await page.setViewportSize({ width: 1440, height: 1000 });
+await page.goto(
+  "http://127.0.0.1:4173/#/organization/roles?view=scope&scope=scope-WS-02&coverage=gaps",
+);
+await page
+  .getByRole("combobox", { name: "Coverage workstream", exact: true })
+  .waitFor();
+await page.evaluate(async () => {
+  document.activeElement?.blur();
+  window.scrollTo(0, 0);
+  await new Promise((resolve) =>
+    requestAnimationFrame(() => requestAnimationFrame(resolve)),
+  );
+});
+await page.screenshot({
+  path: "previews/54-invitation-role-coverage.png",
+  fullPage: true,
+  animations: "disabled",
+});
+await page.setViewportSize({ width: 390, height: 1000 });
+await page.goto(
+  "http://127.0.0.1:4173/#/organizations/knowledge/roles?view=scope&scope=scope-K-01&coverage=unknown&persona=maya",
+);
+await page
+  .getByRole("combobox", { name: "Coverage workstream", exact: true })
+  .waitFor();
+await page.evaluate(async () => {
+  document.activeElement?.blur();
+  window.scrollTo(0, 0);
+  await new Promise((resolve) =>
+    requestAnimationFrame(() => requestAnimationFrame(resolve)),
+  );
+});
+await page.screenshot({
+  path: "previews/55-knowledge-scope-unknown-mobile.png",
+  fullPage: true,
+  animations: "disabled",
+});
+await page.setViewportSize({ width: 1440, height: 1000 });
+await page.goto(
+  "http://127.0.0.1:4173/#/organizations/large/roles?view=scope&scope=scope-L-02&persona=sam",
+);
+await page.getByText("Role × workstream overview", { exact: true }).click();
+await page
+  .getByRole("region", { name: "Role scope matrix", exact: true })
+  .screenshot({
+    path: "previews/56-large-role-scope-matrix.png",
+    animations: "disabled",
+  });
 await browser.close();

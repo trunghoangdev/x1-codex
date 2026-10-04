@@ -3510,3 +3510,34 @@ main h3,
 .personal-queue-results {
   margin: 20px 0;
 }
+
+.scope-matrix-scroll {
+  max-width: 100%;
+  overflow-x: auto;
+  margin: 16px 0;
+}
+.scope-matrix {
+  width: 100%;
+  border-collapse: collapse;
+  font-size: 13px;
+}
+.scope-matrix caption {
+  text-align: left;
+  line-height: 1.6;
+  margin-bottom: 12px;
+}
+.scope-matrix th,
+.scope-matrix td {
+  min-width: 150px;
+  border: 1px solid #dce3d5;
+  padding: 12px;
+  text-align: left;
+  vertical-align: top;
+  line-height: 1.6;
+}
+.scope-matrix th {
+  background: #f5f7f3;
+}
+.scope-matrix button {
+  text-align: left;
+}

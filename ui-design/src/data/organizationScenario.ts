@@ -1,4 +1,13 @@
 import {
+  mainScopes,
+  mainBindingRefs,
+  mainAssignmentScopes,
+  mainScopeRequirements,
+  type OrganizationScope,
+  type ScopeRequirement,
+  type AssignmentScopeLink,
+} from "./roleScopes";
+import {
   softwareDependencies,
   type InputDependency,
   type ParallelWork,
@@ -32,7 +41,10 @@ export type OrganizationScenario = {
   workers: (Worker & { category: "human" | "ai" | "deterministic" })[];
   roles: { name: string; purpose: string }[];
   roleGaps: { role: string; gapId: string }[];
-  bindings: RoleBinding[];
+  bindings: (RoleBinding & { id: string; scopeIds: string[] })[];
+  scopes: OrganizationScope[];
+  scopeRequirements: ScopeRequirement[];
+  assignmentScopes: AssignmentScopeLink[];
   streams: Workstream[];
   assignments: {
     id: string;
@@ -114,7 +126,10 @@ export const mainOrganization: OrganizationScenario = {
     { role: "Developer", gapId: "invitation-implementation" },
     { role: "Reviewer", gapId: "invitation-assessment" },
   ],
-  bindings: roleBindings,
+  bindings: roleBindings.map((b, i) => ({ ...b, ...mainBindingRefs[i] })),
+  scopes: mainScopes,
+  scopeRequirements: mainScopeRequirements,
+  assignmentScopes: mainAssignmentScopes,
   streams: workstreams,
   assignments: assignments.map((assignment) => ({
     id: assignment.id,
@@ -174,6 +189,8 @@ export const largeOrganization: OrganizationScenario = {
   ],
   roleGaps: [{ role: "Reviewer", gapId: "gap-L-02-R" }],
   bindings: scenarioBindings.map((binding) => ({
+    id: binding.id,
+    scopeIds: [binding.scopeId],
     workerId: binding.workerId,
     role: binding.role,
     scope:
@@ -181,6 +198,50 @@ export const largeOrganization: OrganizationScenario = {
       binding.streamId,
     permission:
       "Authored responsibility only · effective permission not verified",
+  })),
+  scopes: [
+    ...scenarioStreams.map((s) => ({
+      id: `scope-${s.id}`,
+      kind: "workstream" as const,
+      streamId: s.id,
+      label: s.name,
+    })),
+    {
+      id: "large-org",
+      kind: "organization",
+      label: "All larger-sample workstreams",
+    },
+    {
+      id: "large-authorized",
+      kind: "subject",
+      subjectId: "authorized-subjects",
+      label: "Authorized subjects only",
+    },
+  ],
+  scopeRequirements: scenarioStreams.flatMap((stream) => [
+    {
+      id: `${stream.id}-planner-scope`,
+      scopeId: `scope-${stream.id}`,
+      role: "Planner",
+      bindingState: "declared" as const,
+      bindingIds: ["lb-planner"],
+      gapIds: [],
+    },
+    ...scenarioAssignments
+      .filter((a) => a.streamId === stream.id)
+      .map((a) => ({
+        id: `${a.id}-scope`,
+        scopeId: `scope-${stream.id}`,
+        role: a.role,
+        bindingState: a.workerId ? ("declared" as const) : ("none" as const),
+        bindingIds: a.workerId ? [`lb-${a.id}`] : [],
+        gapIds: a.workerId ? [] : [`gap-${a.id}`],
+      })),
+  ]),
+  assignmentScopes: scenarioAssignments.map((a) => ({
+    assignmentId: a.id,
+    scopeId: `scope-${a.streamId}`,
+    bindingId: a.workerId ? `lb-${a.id}` : undefined,
   })),
   streams: scenarioStreams.map((stream) => ({
     ...stream,
