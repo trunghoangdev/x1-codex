@@ -1,0 +1,59 @@
+{
+  "observations": [
+    {
+      "scenario": "main",
+      "width": 1440,
+      "height": 2408,
+      "overflow": false,
+      "streamCards": 2,
+      "workerCards": 4,
+      "heading": "One team. Clear responsibility."
+    },
+    {
+      "scenario": "knowledge",
+      "width": 1440,
+      "height": 2666,
+      "overflow": false,
+      "streamCards": 2,
+      "workerCards": 4,
+      "heading": "One team. Clear responsibility."
+    },
+    {
+      "scenario": "large",
+      "width": 1440,
+      "height": 4003,
+      "overflow": false,
+      "streamCards": 6,
+      "workerCards": 9,
+      "heading": "One team. Clear responsibility."
+    },
+    {
+      "scenario": "main",
+      "width": 390,
+      "height": 4268,
+      "overflow": false,
+      "streamCards": 2,
+      "workerCards": 4,
+      "heading": "One team. Clear responsibility."
+    },
+    {
+      "scenario": "knowledge",
+      "width": 390,
+      "height": 4627,
+      "overflow": false,
+      "streamCards": 2,
+      "workerCards": 4,
+      "heading": "One team. Clear responsibility."
+    },
+    {
+      "scenario": "large",
+      "width": 390,
+      "height": 7254,
+      "overflow": false,
+      "streamCards": 6,
+      "workerCards": 9,
+      "heading": "One team. Clear responsibility."
+    }
+  ],
+  "errors": []
+}
