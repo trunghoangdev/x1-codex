@@ -13,3 +13,7 @@ Main organization actions and records remain app-owned and survive navigation to
 Reference checks validate worker, stream, assignment, gap, flow and evidence membership in both adapters. Browser checks cover common screen counts, scoped IDs, filtered URL/history/refresh, keyboard search, read-only boundaries, proposal isolation and unchanged personal work at desktop/mobile widths.
 
 Remaining provider work includes supplying authoritative commands/receipts and full assignment inputs for other scenarios. Paging and a role-centered view are separate design improvements. The contract is a frontend sample model, not a Forge/SF API schema.
+
+## Role catalogs
+
+Each adapter now authors role definitions and gap-to-role references independently of its bindings. RolesDirectory uses the same contract in both scenarios. Catalog entries with no bindings remain representable; current sample fixtures contain no globally unbound catalog role. The invitation Developer scope gap in the main sample and unassigned L-02-R in the larger sample illustrate missing scoped responsibility despite bindings elsewhere. No extra outcome role or runtime allocation is invented.

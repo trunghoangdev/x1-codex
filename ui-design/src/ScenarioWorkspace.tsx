@@ -1,3 +1,5 @@
+import { RolesDirectory } from "./RolesDirectory";
+import { roleCoverage, type RoleFilters } from "./data/roleDirectory";
 import { OrganizationOverview } from "./OrganizationOverview";
 import { scenarioAttention } from "./data/scenarioAttention";
 import { useRef } from "react";
@@ -23,6 +25,7 @@ export function validScenarioPath(raw: string) {
       "",
       "/workstreams",
       "/workers",
+      "/roles",
       "/attention",
       "/activity",
       ...scenario.streams.map((s) => `/workstreams/${s.id}`),
@@ -32,6 +35,8 @@ export function validScenarioPath(raw: string) {
   )
     return false;
   return (
+    (!params.has("coverage") ||
+      roleCoverage.includes(params.get("coverage")!)) &&
     (!params.has("category") ||
       ["all", "responsibility", "response", "outcome"].includes(
         params.get("category")!,
@@ -125,7 +130,23 @@ export function ScenarioWorkspace({
           Return to main organization
         </button>
       </section>
-      {suffix === "/workstreams" ? (
+      {suffix === "/roles" ? (
+        <RolesDirectory
+          scenario={scenario}
+          filters={{
+            query: params.get("q") ?? "",
+            coverage: (params.get("coverage") ??
+              "all") as RoleFilters["coverage"],
+          }}
+          onFilters={(f) =>
+            filter("roles", { q: f.query, coverage: f.coverage })
+          }
+          onWorker={(id) => open(`/workers/${id}`)}
+          onStream={(id) => open(`/workstreams/${id}`)}
+          onAssignment={(id) => open(`/assignments/${id}`)}
+          onBack={() => onRoute(base)}
+        />
+      ) : suffix === "/workstreams" ? (
         <WorkstreamsDirectory
           scenario={scenario}
           filters={{
@@ -329,6 +350,7 @@ export function ScenarioWorkspace({
               onWorker={(id) => open(`/workers/${id}`)}
               onDirectory={() => onRoute(base + "/workstreams")}
               onWorkersDirectory={() => onRoute(base + "/workers")}
+              onRolesDirectory={() => onRoute(base + "/roles")}
               onActivity={() => onRoute(base + "/activity")}
               onAttention={(category) =>
                 onRoute(

@@ -23,6 +23,7 @@ export function OrganizationOverview({
   onPropose,
   onWorker,
   onWorkersDirectory,
+  onRolesDirectory,
   onDirectory,
   onActivity,
   onAttention,
@@ -37,6 +38,7 @@ export function OrganizationOverview({
   onPropose: (gapId: string) => void;
   onWorker: (id: string) => void;
   onWorkersDirectory: () => void;
+  onRolesDirectory: () => void;
   onDirectory: () => void;
   onActivity: () => void;
   onAttention: (category: AttentionCategory | "All") => void;
@@ -243,6 +245,9 @@ export function OrganizationOverview({
         <p>
           <button className="button secondary" onClick={onWorkersDirectory}>
             Browse workers
+          </button>{" "}
+          <button className="button secondary" onClick={onRolesDirectory}>
+            Browse roles
           </button>
         </p>
       </section>

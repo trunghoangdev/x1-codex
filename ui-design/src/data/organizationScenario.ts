@@ -22,6 +22,8 @@ export type OrganizationScenario = {
   name: string;
   readOnly: boolean;
   workers: (Worker & { category: "human" | "ai" | "deterministic" })[];
+  roles: { name: string; purpose: string }[];
+  roleGaps: { role: string; gapId: string }[];
   bindings: RoleBinding[];
   streams: Workstream[];
   assignments: {
@@ -65,6 +67,37 @@ export const mainOrganization: OrganizationScenario = {
     ...worker,
     category: categories[worker.id],
   })),
+  roles: [
+    {
+      name: "Planner",
+      purpose: "Coordinate work and clarify responsibilities.",
+    },
+    { name: "Developer", purpose: "Prepare contributions for assessment." },
+    {
+      name: "Reviewer",
+      purpose: "Assess identified contributions against requirements.",
+    },
+    {
+      name: "Product owner",
+      purpose: "Clarify product requirements and acceptance criteria.",
+    },
+    {
+      name: "Release authority",
+      purpose: "Decide authorization for a specific release subject.",
+    },
+    {
+      name: "Operator",
+      purpose: "Inspect and reconcile effects in a named environment.",
+    },
+    {
+      name: "Executor",
+      purpose: "Execute authorized operations within their subject scope.",
+    },
+  ],
+  roleGaps: [
+    { role: "Developer", gapId: "invitation-implementation" },
+    { role: "Reviewer", gapId: "invitation-assessment" },
+  ],
   bindings: roleBindings,
   streams: workstreams,
   assignments: assignments.map((assignment) => ({
@@ -99,6 +132,23 @@ export const largeOrganization: OrganizationScenario = {
     ...worker,
     category: categories[worker.id],
   })),
+  roles: [
+    {
+      name: "Planner",
+      purpose: "Coordinate work and clarify responsibilities.",
+    },
+    { name: "Developer", purpose: "Prepare contributions for assessment." },
+    {
+      name: "Reviewer",
+      purpose: "Assess identified contributions against requirements.",
+    },
+    { name: "Authority", purpose: "Decide subject-specific authorization." },
+    {
+      name: "Executor",
+      purpose: "Execute authorized operations within their subject scope.",
+    },
+  ],
+  roleGaps: [{ role: "Reviewer", gapId: "gap-L-02-R" }],
   bindings: scenarioBindings.map((binding) => ({
     workerId: binding.workerId,
     role: binding.role,

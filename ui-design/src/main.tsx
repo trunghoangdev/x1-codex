@@ -1,3 +1,5 @@
+import { RolesDirectory } from "./RolesDirectory";
+import { defaultRoleFilters } from "./data/roleDirectory";
 import { ScenarioWorkspace } from "./ScenarioWorkspace";
 import { WorkersDirectory } from "./WorkersDirectory";
 import { defaultWorkerFilters } from "./data/workerDirectory";
@@ -226,7 +228,7 @@ function App() {
   >({});
   const source = selected ? assignmentSources.current[selected.id] : undefined;
   const inboxReturn = useRef<{ id: string; y: number } | null>(null);
-  const screenKey = `${route.view}:${route.assignmentId ?? ""}:${!!route.invalid}:${route.workstreamId ?? ""}:${route.workerId ?? ""}:${route.handoffId ?? ""}:${!!route.organizationActivity}:${route.outcomeId ?? ""}:${!!route.attention}:${!!route.personalQueue}:${!!route.largeOrganization}:${!!route.streamDirectory}:${!!route.workerDirectory}:${route.scenarioPath?.split("?")[0] ?? ""}`;
+  const screenKey = `${route.view}:${route.assignmentId ?? ""}:${!!route.invalid}:${route.workstreamId ?? ""}:${route.workerId ?? ""}:${route.handoffId ?? ""}:${!!route.organizationActivity}:${route.outcomeId ?? ""}:${!!route.attention}:${!!route.personalQueue}:${!!route.largeOrganization}:${!!route.streamDirectory}:${!!route.workerDirectory}:${!!route.roleDirectory}:${route.scenarioPath?.split("?")[0] ?? ""}`;
   const previousScreen = useRef(screenKey);
   useEffect(() => {
     if (route.view !== "My Work" || route.assignmentId)
@@ -319,6 +321,7 @@ function App() {
     route.largeOrganization,
     !!route.streamDirectory,
     !!route.workerDirectory,
+    !!route.roleDirectory,
     route.scenarioPath,
     route.assignmentId,
     route.tab,
@@ -343,19 +346,21 @@ function App() {
     if (!selected && (view !== "My Work" || route.personalQueue)) {
       const label = route.personalQueue
         ? "Response queue"
-        : stream
-          ? "Workstream"
-          : handoff
-            ? "Handoff"
-            : outcome
-              ? "Outcome review"
-              : worker
-                ? "Worker"
-                : route.organizationActivity
-                  ? "Organization activity"
-                  : route.attention
-                    ? "Organization attention"
-                    : view;
+        : route.roleDirectory
+          ? "Roles"
+          : stream
+            ? "Workstream"
+            : handoff
+              ? "Handoff"
+              : outcome
+                ? "Outcome review"
+                : worker
+                  ? "Worker"
+                  : route.organizationActivity
+                    ? "Organization activity"
+                    : route.attention
+                      ? "Organization attention"
+                      : view;
       assignmentSources.current[a.id] = {
         route: { ...route },
         key: screenKey,
@@ -1367,7 +1372,9 @@ function App() {
               stream={stream}
               backLabel={
                 directorySources.current[stream.id]
-                  ? "Back to Workstreams"
+                  ? directorySources.current[stream.id].roleDirectory
+                    ? "Back to Roles"
+                    : "Back to Workstreams"
                   : undefined
               }
               onOutcome={() =>
@@ -1400,7 +1407,9 @@ function App() {
               worker={worker}
               backLabel={
                 workerDirectorySources.current[worker.id]
-                  ? "Back to Workers"
+                  ? workerDirectorySources.current[worker.id].roleDirectory
+                    ? "Back to Roles"
+                    : "Back to Workers"
                   : undefined
               }
               completed={completed}
@@ -1477,6 +1486,43 @@ function App() {
               onBack={() => navigate("Organization")}
             />
           )}
+          {view === "Organization" && route.roleDirectory && (
+            <RolesDirectory
+              filters={route.roleDirectory}
+              completed={completed}
+              onFilters={(filters) =>
+                changeRoute(
+                  {
+                    view: "Organization",
+                    tab: "Overview",
+                    roleDirectory: filters,
+                  },
+                  true,
+                )
+              }
+              onBack={() => navigate("Organization")}
+              onWorker={(id) => {
+                workerDirectorySources.current[id] = route;
+                changeRoute({
+                  view: "Organization",
+                  tab: "Overview",
+                  workerId: id,
+                });
+              }}
+              onStream={(id) => {
+                directorySources.current[id] = route;
+                changeRoute({
+                  view: "Organization",
+                  tab: "Overview",
+                  workstreamId: id,
+                });
+              }}
+              onAssignment={(id) => {
+                const a = assignments.find((a) => a.id === id);
+                if (a) open(a);
+              }}
+            />
+          )}
           {view === "Organization" && route.workerDirectory && (
             <WorkersDirectory
               filters={route.workerDirectory}
@@ -1541,6 +1587,7 @@ function App() {
           )}
           {view === "Organization" &&
             !route.scenarioPath &&
+            !route.roleDirectory &&
             !route.workerDirectory &&
             !route.streamDirectory &&
             !stream &&
@@ -1551,6 +1598,13 @@ function App() {
             !route.attention && (
               <>
                 <OrganizationOverview
+                  onRolesDirectory={() =>
+                    changeRoute({
+                      view: "Organization",
+                      tab: "Overview",
+                      roleDirectory: defaultRoleFilters,
+                    })
+                  }
                   onWorkersDirectory={() =>
                     changeRoute({
                       view: "Organization",

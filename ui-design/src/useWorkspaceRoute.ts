@@ -1,3 +1,4 @@
+import { roleCoverage, type RoleFilters } from "./data/roleDirectory";
 import { validScenarioPath } from "./ScenarioWorkspace";
 import {
   defaultWorkerFilters,
@@ -29,6 +30,7 @@ export type WorkspaceRoute = {
   organizationActivity?: boolean;
   streamDirectory?: StreamFilters;
   workerDirectory?: WorkerFilters;
+  roleDirectory?: RoleFilters;
   outcomeId?: string;
   attention?: AttentionCategory | "All";
   personalQueue?: boolean;
@@ -58,6 +60,22 @@ export function useWorkspaceRoute(ids: string[], tabs: string[]) {
       separator < 0 ? "" : raw.slice(separator + 1),
     );
     const path = (separator < 0 ? raw : raw.slice(0, separator)).split("/");
+    if (path.join("/") === "/organization/roles") {
+      const params = new URLSearchParams(
+        separator < 0 ? "" : raw.slice(separator + 1),
+      );
+      const coverage = params.get("coverage") ?? "all";
+      if (!roleCoverage.includes(coverage))
+        return { ...fallback, invalid: true };
+      return {
+        view: "Organization",
+        tab: "Overview",
+        roleDirectory: {
+          query: params.get("q") ?? "",
+          coverage: coverage as RoleFilters["coverage"],
+        },
+      };
+    }
     if (path.join("/") === "/organization/workers") {
       const params = new URLSearchParams(
         separator < 0 ? "" : raw.slice(separator + 1),
@@ -197,30 +215,37 @@ export function useWorkspaceRoute(ids: string[], tabs: string[]) {
   function navigate(next: WorkspaceRoute, replace = false) {
     const path = next.scenarioPath
       ? `#${next.scenarioPath}`
-      : next.workerDirectory
-        ? "#/organization/workers"
-        : next.streamDirectory
-          ? "#/organization/workstreams"
-          : next.assignmentId
-            ? `#/assignments/${next.assignmentId}/${next.tab.toLowerCase()}`
-            : next.workstreamId
-              ? `#/workstreams/${next.workstreamId}`
-              : next.workerId
-                ? `#/workers/${next.workerId}`
-                : next.handoffId
-                  ? `#/handoffs/${next.handoffId}`
-                  : next.organizationActivity
-                    ? "#/organization/activity"
-                    : next.outcomeId
-                      ? `#/outcomes/${next.outcomeId}`
-                      : next.attention
-                        ? `#/organization/attention/${next.attention.toLowerCase()}`
-                        : next.personalQueue
-                          ? "#/work/attention"
-                          : next.largeOrganization
-                            ? "#/demos/organization"
-                            : `#/${viewPaths[next.view]}`;
+      : next.roleDirectory
+        ? "#/organization/roles"
+        : next.workerDirectory
+          ? "#/organization/workers"
+          : next.streamDirectory
+            ? "#/organization/workstreams"
+            : next.assignmentId
+              ? `#/assignments/${next.assignmentId}/${next.tab.toLowerCase()}`
+              : next.workstreamId
+                ? `#/workstreams/${next.workstreamId}`
+                : next.workerId
+                  ? `#/workers/${next.workerId}`
+                  : next.handoffId
+                    ? `#/handoffs/${next.handoffId}`
+                    : next.organizationActivity
+                      ? "#/organization/activity"
+                      : next.outcomeId
+                        ? `#/outcomes/${next.outcomeId}`
+                        : next.attention
+                          ? `#/organization/attention/${next.attention.toLowerCase()}`
+                          : next.personalQueue
+                            ? "#/work/attention"
+                            : next.largeOrganization
+                              ? "#/demos/organization"
+                              : `#/${viewPaths[next.view]}`;
     const params = new URLSearchParams();
+    if (next.roleDirectory) {
+      if (next.roleDirectory.query) params.set("q", next.roleDirectory.query);
+      if (next.roleDirectory.coverage !== "all")
+        params.set("coverage", next.roleDirectory.coverage);
+    }
     if (next.streamDirectory) {
       if (next.streamDirectory.query)
         params.set("q", next.streamDirectory.query);
@@ -241,7 +266,7 @@ export function useWorkspaceRoute(ids: string[], tabs: string[]) {
     }
     const hash =
       path +
-      (next.streamDirectory || next.workerDirectory
+      (next.roleDirectory || next.streamDirectory || next.workerDirectory
         ? params.size
           ? `?${params}`
           : ""

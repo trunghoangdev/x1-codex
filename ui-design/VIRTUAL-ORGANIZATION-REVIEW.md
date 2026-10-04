@@ -92,3 +92,7 @@ Organization activity now includes session proposals and allocation-plan decisio
 ## Follow-up: shared scenario foundation completed
 
 Both samples now have a common organization contract. The main overview/directories use its main adapter, and Demos opens the larger sample through the same overview/directory components. Scenario-qualified read-only details expose its assignments, flow responsibilities and unverified outcome requirements. Main records remain isolated; specialized interactive assignment inputs/actions are not invented for the larger sample. This validates shared organization navigation at the larger fixture scale, while full provider-backed assignment workflows remain future work.
+
+## Item 4 completed — role-centered responsibility inspection
+
+Both organization overviews now link to Roles. Explicit catalogs drive role cards rather than deriving roles from occupied bindings. Each card separates scoped holders, role assignments with authored/session response state, and known gaps linked by explicit role/gap IDs. Search and coverage filters support no bindings, bindings without role assignments and known scope gaps; main and larger routes preserve filters across refresh and contextual inspection. Current fixtures have no globally unbound role; catalog independence is checked with an additional unbound definition in a data test. No binding-scope match, effective authority, worker availability or complete coverage is claimed. Item 5, another organization domain and persona, remains.
