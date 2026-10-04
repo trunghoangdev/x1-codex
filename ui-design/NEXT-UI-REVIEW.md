@@ -49,3 +49,7 @@ Acceptance example: while viewing Knowledge Operations as Leo, opening Evidence 
 Recommended order is 1 → 2 → 3 → 4 → 5, delivered as separate reviewable units. Item 1 directly strengthens the organization-wide coordination model. Items 2 and 3 strengthen personal responsibility and scoped coverage; items 4 and 5 improve scale and navigation consistency.
 
 These slices can be completed with authored frontend fixtures. Live integration, actual assignment creation, publishing/execution, verified capacity, durable audit and authenticated identity remain separate work requiring authoritative contracts. A cross-domain response simulation could be considered after the shared input/queue model, but would need explicit local receipt semantics and must not imply publication or confirmed handoff.
+
+## Item 1 completed — iteration 64
+
+Added explicit input/parallel-work records, shared coordination inspection, a missing-input attention category and provider links from knowledge personal work. The initial slice covers the workshop brief, one existing software candidate handoff and parallel welcome-guide research/editorial criteria. Receipt and availability remain independent of local responses, and nested provider/receiver return unwinds by persona. No live delivery, allocation or workflow advancement is implemented. See [COORDINATION-INPUTS.md](COORDINATION-INPUTS.md). Items 2–5 remain proposed; the next recommended item is consistent personal work across personas.

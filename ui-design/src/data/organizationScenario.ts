@@ -1,4 +1,9 @@
 import {
+  softwareDependencies,
+  type InputDependency,
+  type ParallelWork,
+} from "./coordination";
+import {
   workers,
   roleBindings,
   workstreams,
@@ -41,6 +46,8 @@ export type OrganizationScenario = {
     input?: string;
     expectedResponse?: string;
   }[];
+  dependencies: InputDependency[];
+  parallelWork: ParallelWork[];
   gaps: typeof responsibilityGaps;
   outcomes: OutcomeReview[];
   evidence: EvidenceArtifact[];
@@ -123,6 +130,8 @@ export const mainOrganization: OrganizationScenario = {
         .includes(assignment.id),
     )?.id,
   })),
+  dependencies: softwareDependencies,
+  parallelWork: [],
   gaps: responsibilityGaps,
   outcomes,
   evidence: evidenceArtifacts,
@@ -179,6 +188,8 @@ export const largeOrganization: OrganizationScenario = {
     outcome: "Not verified · no outcome observations represented",
   })),
   assignments: scenarioAssignments,
+  dependencies: [],
+  parallelWork: [],
   gaps: scenarioAssignments
     .filter((a) => !a.workerId)
     .map((a) => ({

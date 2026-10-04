@@ -1,9 +1,11 @@
+import { inputAttention } from "./coordination";
 import type { OrganizationScenario } from "./organizationScenario";
 import type { AttentionItem } from "./organizationAttention";
 export function scenarioAttention(
   scenario: OrganizationScenario,
 ): AttentionItem[] {
   return [
+    ...inputAttention(scenario),
     ...scenario.gaps.map((gap) => ({
       id: gap.id,
       category: "Responsibility" as const,

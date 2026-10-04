@@ -1,3 +1,5 @@
+import { CoordinationInputs } from "./CoordinationInputs";
+import { mainOrganization } from "./data/organizationScenario";
 import { resolveScenario, scenarioPersona } from "./data/scenarioRegistry";
 import { RolesDirectory } from "./RolesDirectory";
 import { defaultRoleFilters } from "./data/roleDirectory";
@@ -392,6 +394,10 @@ function App() {
       tab: nextTab,
       work: route.work,
     });
+  }
+  function inspectCoordinationWorker(id: string) {
+    workerDirectorySources.current[id] = route;
+    changeRoute({ view: "Organization", tab: "Overview", workerId: id });
   }
   function navigateRelated(next: RelatedTab) {
     setTab(next);
@@ -1134,6 +1140,16 @@ function App() {
                         <div className="section-label">THE RESPONSIBILITY</div>
                         <h2>A clear next step, with the full context.</h2>
                         <p className="summary">{selected.summary}</p>
+                        <CoordinationInputs
+                          scenario={mainOrganization}
+                          assignmentId={selected.id}
+                          completed={completed}
+                          onWorker={inspectCoordinationWorker}
+                          onAssignment={(id) => {
+                            const a = assignments.find((a) => a.id === id);
+                            if (a && a.id !== selected.id) open(a);
+                          }}
+                        />
                         {selected.id === "A-1035" ? (
                           <ReconciliationReview />
                         ) : (
@@ -1403,6 +1419,7 @@ function App() {
           )}
           {view === "Organization" && stream && (
             <WorkstreamDetail
+              onWorker={inspectCoordinationWorker}
               onGaps={() => openAttention("Responsibility")}
               onInspect={setArtifact}
               stream={stream}
@@ -1443,9 +1460,13 @@ function App() {
               worker={worker}
               backLabel={
                 workerDirectorySources.current[worker.id]
-                  ? workerDirectorySources.current[worker.id].roleDirectory
-                    ? "Back to Roles"
-                    : "Back to Workers"
+                  ? workerDirectorySources.current[worker.id].assignmentId
+                    ? "Back to Assignment"
+                    : workerDirectorySources.current[worker.id].workstreamId
+                      ? "Back to Workstream"
+                      : workerDirectorySources.current[worker.id].roleDirectory
+                        ? "Back to Roles"
+                        : "Back to Workers"
                   : undefined
               }
               completed={completed}

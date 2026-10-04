@@ -1,3 +1,4 @@
+import { CoordinationInputs } from "./CoordinationInputs";
 import type { OrganizationScenario } from "./data/organizationScenario";
 import { DetailBackButton } from "./DetailPresentation";
 export function ScenarioMyWork({
@@ -6,12 +7,14 @@ export function ScenarioMyWork({
   onAssignment,
   onStream,
   onOrganization,
+  onWorker,
 }: {
   scenario: OrganizationScenario;
   workerId: string;
   onAssignment: (id: string) => void;
   onStream: (id: string) => void;
   onOrganization: () => void;
+  onWorker: (id: string) => void;
 }) {
   const worker = scenario.workers.find((w) => w.id === workerId)!;
   const mine = scenario.assignments.filter((a) => a.workerId === workerId);
@@ -51,6 +54,12 @@ export function ScenarioMyWork({
             <p>
               <strong>Expected response:</strong> {a.expectedResponse}
             </p>
+            <CoordinationInputs
+              scenario={scenario}
+              assignmentId={a.id}
+              onAssignment={onAssignment}
+              onWorker={onWorker}
+            />
             <button
               className="button secondary"
               onClick={() => onAssignment(a.id)}

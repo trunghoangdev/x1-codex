@@ -173,7 +173,7 @@ export function useWorkspaceRoute(ids: string[], tabs: string[]) {
       (path.length === 3 || path.length === 4)
     ) {
       const attention = (
-        ["All", "Responsibility", "Response", "Outcome"] as const
+        ["All", "Responsibility", "Response", "Input", "Outcome"] as const
       ).find((value) => value.toLowerCase() === (path[3] ?? "all"));
       if (attention) return { ...fallback, view: "Organization", attention };
     }

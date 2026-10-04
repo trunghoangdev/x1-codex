@@ -483,4 +483,40 @@ await page.screenshot({
   fullPage: true,
   animations: "disabled",
 });
+await page.setViewportSize({ width: 1440, height: 1000 });
+await page.goto(
+  "http://127.0.0.1:4173/#/organizations/knowledge/workstreams/K-02?persona=maya",
+);
+await page
+  .getByRole("region", { name: "Coordination inputs", exact: true })
+  .screenshot({
+    path: "previews/48-workshop-input-dependency.png",
+    animations: "disabled",
+  });
+await page.goto("http://127.0.0.1:4173/#/workstreams/WS-01");
+await page
+  .getByRole("region", { name: "Coordination inputs", exact: true })
+  .screenshot({
+    path: "previews/49-software-input-exchange.png",
+    animations: "disabled",
+  });
+await page.setViewportSize({ width: 390, height: 1000 });
+await page.goto(
+  "http://127.0.0.1:4173/#/organizations/knowledge/assignments/K-02-E?persona=maya",
+);
+await page
+  .getByRole("heading", { name: "Review workshop outline", exact: true })
+  .waitFor();
+await page.evaluate(async () => {
+  document.activeElement?.blur();
+  window.scrollTo(0, 0);
+  await new Promise((resolve) =>
+    requestAnimationFrame(() => requestAnimationFrame(resolve)),
+  );
+});
+await page.screenshot({
+  path: "previews/50-workshop-input-mobile.png",
+  fullPage: true,
+  animations: "disabled",
+});
 await browser.close();

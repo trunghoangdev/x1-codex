@@ -1,3 +1,5 @@
+import { CoordinationInputs } from "./CoordinationInputs";
+import { mainOrganization } from "./data/organizationScenario";
 import { WorkstreamFlow } from "./WorkstreamFlow";
 import { DetailBackButton, DetailEmptyState } from "./DetailPresentation";
 import type { EvidenceArtifact } from "./data/evidence";
@@ -18,6 +20,7 @@ export function WorkstreamDetail({
   onHandoff,
   onGaps,
   onOutcome,
+  onWorker,
 }: {
   stream: Workstream;
   completed: Record<string, string>;
@@ -28,6 +31,7 @@ export function WorkstreamDetail({
   onHandoff: (id: string) => void;
   onGaps: () => void;
   onOutcome: () => void;
+  onWorker: (id: string) => void;
 }) {
   const detail = workstreamDetails[stream.id];
   return (
@@ -59,6 +63,16 @@ export function WorkstreamDetail({
         onHandoff={onHandoff}
         onGaps={onGaps}
         onOutcome={onOutcome}
+      />
+      <CoordinationInputs
+        scenario={mainOrganization}
+        streamId={stream.id}
+        completed={completed}
+        onAssignment={(id) => {
+          const a = assignments.find((a) => a.id === id);
+          if (a) onOpen(a);
+        }}
+        onWorker={onWorker}
       />
       <section
         className="panel org-stream org-overview-section"

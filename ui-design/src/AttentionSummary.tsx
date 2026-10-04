@@ -26,10 +26,10 @@ export function AttentionSummary({
       </h2>
       <p>
         {items.length} known sample signals across responsibility, pending
-        responses and unverified outcomes.
+        responses, missing inputs and unverified outcomes.
       </p>
       <div className="attention-summary-grid">
-        {(["Responsibility", "Response", "Outcome"] as const).map(
+        {(["Responsibility", "Response", "Input", "Outcome"] as const).map(
           (category) => (
             <button
               className="attention-summary-button"

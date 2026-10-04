@@ -85,3 +85,7 @@ Organization provides Browse roles alongside Workers. All three scenarios share 
 ## Different organization domains and personal entry
 
 Scenario identity includes domain and shared purpose. Knowledge Operations uses the common organization views for a welcome guide and workshop, with human, AI and deterministic workers. A sample persona selector previews Maya's Editor inbox and Leo's Coordinator inbox. Organization retains shared goals, roles, flows and missing responsibility; My Work shows explicit allocations to the selected worker, authored inputs and expected response. Persona identity persists in scenario-qualified URLs. The new scenario is read-only, with no publishing, distribution or scheduling actions. Main software response workflows remain separate.
+
+## Explicit coordination inputs
+
+Workstream and assignment views now expose declared provider → required input → receiver relationships, independent of expected flow order. Knowledge My Work links Maya’s waiting outline review to Leo’s workshop brief. Organization attention adds Input as a separate category; unassigned responsibility remains distinct. One main software handoff uses the same component, with an attached sample candidate and unconfirmed delivery/receipt. Local responses do not change input availability or advance dependencies. Parallel research/editorial criteria and conditional clarification/revision expectations are explicitly authored. See [COORDINATION-INPUTS.md](COORDINATION-INPUTS.md).

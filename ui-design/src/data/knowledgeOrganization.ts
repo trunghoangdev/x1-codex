@@ -192,6 +192,30 @@ export const knowledgeOrganization: OrganizationScenario = {
     { role: "Publication reviewer", gapId: "knowledge-publication" },
     { role: "Facilitator", gapId: "knowledge-facilitation" },
   ],
+  dependencies: [
+    {
+      id: "workshop-brief-input",
+      streamId: "K-02",
+      input: "Workshop coordinator brief",
+      provider: { assignmentId: "K-02-C" },
+      receiverAssignmentId: "K-02-E",
+      availability: "missing",
+      receipt: "unconfirmed",
+      description:
+        "Maya's outline review requires Leo's brief with audience, schedule options and outstanding inputs. The brief is not represented in this sample.",
+      returnPath:
+        "Ambiguous audience or scheduling constraints return to the coordinator for clarification. No confirmed exchange or follow-up assignment is represented.",
+    },
+  ],
+  parallelWork: [
+    {
+      id: "guide-research-and-criteria",
+      streamId: "K-01",
+      assignmentIds: ["K-01-D", "K-01-E"],
+      description:
+        "Research and editorial criteria may progress in parallel. This does not imply that a draft has been assessed or publication approved.",
+    },
+  ],
   assignments,
   streams,
   outcomes: streams.map((s) => ({

@@ -225,3 +225,5 @@ Demos → Open larger scenario workspace uses shared Overview and directory comp
 Roles can be explored from Organization → Browse roles, at `#/organization/roles` or `#/organizations/large/roles`. Search and responsibility coverage filters persist in the URL. Role catalogs, bindings, assignments and known scope gaps remain separate sample records.
 
 Demos → **Open knowledge scenario workspace** explores a non-software organization. Select Maya (Editor) or Leo (Coordinator), then open My Work to inspect their different assignments. Direct links: `#/organizations/knowledge?persona=maya`, `#/organizations/knowledge/work?persona=maya` and `#/organizations/knowledge/work?persona=leo`. See [KNOWLEDGE-SCENARIO.md](KNOWLEDGE-SCENARIO.md). This is a read-only persona preview with sample data.
+
+Explicit input dependencies are available in workstream/assignment detail and the knowledge inbox. Try `#/organizations/knowledge/assignments/K-02-E?persona=maya` or `#/workstreams/WS-01`; Organization attention → Input shows missing-input signals. See [COORDINATION-INPUTS.md](COORDINATION-INPUTS.md).

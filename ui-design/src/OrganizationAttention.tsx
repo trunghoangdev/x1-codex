@@ -50,8 +50,8 @@ export function OrganizationAttention({
         </h2>
         <p>
           Coordination across the sample organization: responsibility gaps,
-          pending responses and unverified outcomes. These are known signals,
-          not a complete organization backlog.
+          pending responses, missing inputs and unverified outcomes. These are
+          known signals, not a complete organization backlog.
         </p>
         <div className="org-filters">
           <label>
@@ -64,14 +64,14 @@ export function OrganizationAttention({
               }
             >
               <option value="All">All attention types</option>
-              {(["Responsibility", "Response", "Outcome"] as const).map(
-                (value) => (
-                  <option key={value} value={value}>
-                    {value} ·{" "}
-                    {items.filter((item) => item.category === value).length}
-                  </option>
-                ),
-              )}
+              {(
+                ["Responsibility", "Response", "Input", "Outcome"] as const
+              ).map((value) => (
+                <option key={value} value={value}>
+                  {value} ·{" "}
+                  {items.filter((item) => item.category === value).length}
+                </option>
+              ))}
             </select>
           </label>
         </div>

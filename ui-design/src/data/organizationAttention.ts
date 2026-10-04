@@ -4,7 +4,8 @@ import { organizationWork, releaseWait } from "./organization";
 import { workstreams } from "./organizationOverview";
 import { responsibilityGaps } from "./workerDetails";
 
-export type AttentionCategory = "Responsibility" | "Response" | "Outcome";
+export type AttentionCategory =
+  "Responsibility" | "Response" | "Input" | "Outcome";
 export type AttentionItem = {
   id: string;
   category: AttentionCategory;

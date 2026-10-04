@@ -1,3 +1,4 @@
+import { CoordinationInputs } from "./CoordinationInputs";
 import { RolesDirectory } from "./RolesDirectory";
 import { roleCoverage, type RoleFilters } from "./data/roleDirectory";
 import { OrganizationOverview } from "./OrganizationOverview";
@@ -44,7 +45,7 @@ export function validScenarioPath(raw: string) {
     (!params.has("coverage") ||
       roleCoverage.includes(params.get("coverage")!)) &&
     (!params.has("category") ||
-      ["all", "responsibility", "response", "outcome"].includes(
+      ["all", "responsibility", "response", "input", "outcome"].includes(
         params.get("category")!,
       )) &&
     (!params.has("project") ||
@@ -74,7 +75,9 @@ export function ScenarioWorkspace({
   onMain: () => void;
   onMyWork: () => void;
 }) {
-  const origins = useRef<Record<string, string>>({});
+  const origins = useRef<
+    Record<string, { destination: string; source: string }[]>
+  >({});
   const scenario = resolveScenario(path)!;
   const base = `/organizations/${scenario.id}`;
   const persona = scenarioPersona(path);
@@ -89,14 +92,20 @@ export function ScenarioWorkspace({
   const suffix = pathname.slice(base.length);
   const params = new URLSearchParams(query);
   const open = (next: string) => {
-    origins.current[`${persona?.workerId ?? ""}:${base + next.split("?")[0]}`] =
-      path;
+    const destination = base + next.split("?")[0];
+    if (destination === pathname) return;
+    const key = persona?.workerId ?? "";
+    (origins.current[key] ??= []).push({ destination, source: path });
     onRoute(qualify(next));
   };
-  const back = () =>
-    onRoute(
-      origins.current[`${persona?.workerId ?? ""}:${pathname}`] ?? qualify(""),
-    );
+  const back = () => {
+    const trail = origins.current[persona?.workerId ?? ""] ?? [];
+    let index = trail.length - 1;
+    while (index >= 0 && trail[index].destination !== pathname) index--;
+    const source = index >= 0 ? trail[index].source : qualify("");
+    if (index >= 0) trail.splice(index);
+    onRoute(source);
+  };
   const filter = (kind: string, values: Record<string, string>) => {
     const p = new URLSearchParams();
     Object.entries(values).forEach(([k, v]) => {
@@ -190,6 +199,7 @@ export function ScenarioWorkspace({
         <ScenarioMyWork
           scenario={scenario}
           workerId={persona!.workerId}
+          onWorker={(id) => open(`/workers/${id}`)}
           onAssignment={(id) => open(`/assignments/${id}`)}
           onStream={(id) => open(`/workstreams/${id}`)}
           onOrganization={() => onRoute(qualify(""))}
@@ -296,6 +306,12 @@ export function ScenarioWorkspace({
                   ))}
                 </ol>
                 {links(stream.assignmentIds)}
+                <CoordinationInputs
+                  scenario={scenario}
+                  streamId={stream.id}
+                  onAssignment={(id) => open(`/assignments/${id}`)}
+                  onWorker={(id) => open(`/workers/${id}`)}
+                />
                 <h2>Outcome evidence requirements</h2>
                 {scenario.outcomes
                   .find((o) => o.streamId === stream.id)
@@ -340,6 +356,12 @@ export function ScenarioWorkspace({
                 {scenario.workers.find((w) => w.id === assignment.workerId)
                   ?.name ?? "Unassigned"}
               </p>
+              <CoordinationInputs
+                scenario={scenario}
+                assignmentId={assignment.id}
+                onAssignment={(id) => open(`/assignments/${id}`)}
+                onWorker={(id) => open(`/workers/${id}`)}
+              />
               {assignment.input && (
                 <>
                   <h2>Input & expected response</h2>

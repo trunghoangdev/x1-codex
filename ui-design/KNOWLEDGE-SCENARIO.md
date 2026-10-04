@@ -13,3 +13,7 @@ The sample provides expected coordination, not confirmed transfers. Editorial cr
 Return to main organization explicitly restores the existing Alex/software sample. Larger software scenario exploration still uses its existing read-only behavior. No new backend, authorization model, tenant support or real SF integration is implemented.
 
 Previews: `45-knowledge-organization.png`, `46-maya-personal-inbox.png`, `47-leo-personal-inbox-mobile.png` in `previews/`. Together they demonstrate the shared organizational model outside software and personal entry points with different responsibilities. They do not establish usability for arbitrary organizations or production identity management.
+
+## Workshop input relationship
+
+The missing brief now has an explicit dependency ID linking Leo’s K-02-C to Maya’s K-02-E. The inbox, assignment and shared stream expose supplying-assignment/provider-worker inspection and unchanged persona context. Input attention isolates the missing brief from the Facilitator allocation gap. K-01-D research and K-01-E editorial criteria are a declared parallel-work group. See [COORDINATION-INPUTS.md](COORDINATION-INPUTS.md).

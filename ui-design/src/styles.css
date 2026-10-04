@@ -3198,7 +3198,7 @@ main h3,
 
 .attention-summary-grid {
   display: grid;
-  grid-template-columns: repeat(3, minmax(0, 1fr));
+  grid-template-columns: repeat(4, minmax(0, 1fr));
   gap: 12px;
   margin: 16px 0;
 }
@@ -3473,4 +3473,31 @@ main h3,
   margin-top: 24px;
   color: var(--muted);
   line-height: 1.6;
+}
+
+.coordination-exchange {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 20px;
+  margin: 16px 0;
+}
+.coordination-exchange h4 {
+  margin-bottom: 8px;
+}
+.coordination-inputs {
+  margin: 20px 0;
+}
+.coordination-inputs > p {
+  line-height: 1.6;
+  margin: 12px 0;
+}
+.coordination-response {
+  background: #eef3e9;
+  padding: 12px;
+  border-radius: 6px;
+}
+@media (max-width: 640px) {
+  .coordination-exchange {
+    grid-template-columns: 1fr;
+  }
 }
