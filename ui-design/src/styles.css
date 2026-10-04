@@ -3688,3 +3688,8 @@ main h3,
 .compact-worker-summary .org-stream .text-link {
   min-height: 44px;
 }
+
+.outcome-evidence-content {
+  white-space: pre-wrap;
+  overflow-wrap: anywhere;
+}

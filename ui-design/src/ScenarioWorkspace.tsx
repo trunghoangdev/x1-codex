@@ -1,3 +1,4 @@
+import { OutcomeReview } from "./OutcomeReview";
 import { CoordinationOverview } from "./CoordinationOverview";
 import {
   defaultCoordinationFilters,
@@ -51,6 +52,7 @@ export function validScenarioPath(raw: string) {
       "/activity",
       "/evidence",
       ...scenario.streams.map((s) => `/workstreams/${s.id}`),
+      ...scenario.outcomes.map((o) => `/outcomes/${o.streamId}`),
       ...scenario.workers.map((w) => `/workers/${w.id}`),
       ...scenario.assignments.map((a) => `/assignments/${a.id}`),
     ].includes(suffix)
@@ -189,13 +191,18 @@ export function ScenarioWorkspace({
     const assignment = scenario.assignments.find(
       (a) => suffix === `/assignments/${a.id}`,
     );
-    const fallback = assignment?.streamId
-      ? `/workstreams/${assignment.streamId}`
-      : suffix.startsWith("/workers/")
-        ? "/workers"
-        : suffix.startsWith("/workstreams/")
-          ? "/workstreams"
-          : "";
+    const outcomeStream = scenario.streams.find(
+      (s) => suffix === `/outcomes/${s.id}`,
+    );
+    const fallback = outcomeStream
+      ? `/workstreams/${outcomeStream.id}`
+      : assignment?.streamId
+        ? `/workstreams/${assignment.streamId}`
+        : suffix.startsWith("/workers/")
+          ? "/workers"
+          : suffix.startsWith("/workstreams/")
+            ? "/workstreams"
+            : "";
     const source = index >= 0 ? trail[index].source : qualify(fallback);
     if (index >= 0) trail.splice(index);
     saveTrail();
@@ -251,7 +258,19 @@ export function ScenarioWorkspace({
           verified outcomes. Main software records remain separate.
         </p>
       </details>
-      {suffix === "/work" ? (
+      {suffix.startsWith("/outcomes/") ? (
+        <OutcomeReview
+          scenario={scenario}
+          stream={scenario.streams.find((s) => suffix === `/outcomes/${s.id}`)!}
+          outcome={scenario.outcomes.find(
+            (o) => suffix === `/outcomes/${o.streamId}`,
+          )!}
+          completed={{}}
+          backLabel="Back to scenario context"
+          onBack={back}
+          onOpen={(id) => open(`/assignments/${id}`)}
+        />
+      ) : suffix === "/work" ? (
         <ScenarioMyWork
           scenario={scenario}
           workerId={persona!.workerId}
@@ -469,6 +488,12 @@ export function ScenarioWorkspace({
                   onWorker={(id) => open(`/workers/${id}`)}
                 />
                 <h2>Outcome evidence requirements</h2>
+                <button
+                  className="button secondary"
+                  onClick={() => open(`/outcomes/${stream.id}`)}
+                >
+                  Review outcome evidence
+                </button>
                 {scenario.outcomes
                   .find((o) => o.streamId === stream.id)
                   ?.criteria.map((c) => (
@@ -618,6 +643,7 @@ export function ScenarioWorkspace({
                   }
                   onAssignment={(id) => open(`/assignments/${id}`)}
                   onStream={(id) => open(`/workstreams/${id}`)}
+                  onOutcome={(id) => open(`/outcomes/${id}`)}
                   onDirectory={() => onRoute(qualify("/workstreams"))}
                 />
               }

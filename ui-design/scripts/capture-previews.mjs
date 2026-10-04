@@ -780,4 +780,30 @@ for (const [width, filename, route] of [
     animations: "disabled",
   });
 }
+for (const [width, filename, route] of [
+  [
+    1440,
+    "74-shared-outcome-knowledge-K-01-1440.png",
+    "/organizations/knowledge/outcomes/K-01",
+  ],
+  [
+    390,
+    "74-shared-outcome-knowledge-K-02-390.png",
+    "/organizations/knowledge/outcomes/K-02",
+  ],
+  [
+    1440,
+    "74-shared-outcome-large-L-01-1440.png",
+    "/organizations/large/outcomes/L-01",
+  ],
+]) {
+  await page.setViewportSize({ width, height: 1000 });
+  await page.goto(`http://127.0.0.1:4173/#${route}`);
+  await page.getByRole("heading", { name: /^Outcome ·/ }).waitFor();
+  await page.screenshot({
+    path: `previews/${filename}`,
+    fullPage: true,
+    animations: "disabled",
+  });
+}
 await browser.close();

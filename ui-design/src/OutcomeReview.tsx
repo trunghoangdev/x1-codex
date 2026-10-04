@@ -1,12 +1,16 @@
 import { DetailBackButton } from "./DetailPresentation";
 import type { EvidenceArtifact } from "./data/evidence";
-import { assignments } from "./data/assignments";
-import { evidenceArtifacts } from "./data/evidence";
-import type { Assignment } from "./data/models";
+import {
+  mainOrganization,
+  type OrganizationScenario,
+} from "./data/organizationScenario";
+import { outcomeContextEvidence } from "./data/outcomeContext";
 import type { Workstream } from "./data/organizationOverview";
 import type { OutcomeReview as Outcome } from "./data/outcomes";
 
 export function OutcomeReview({
+  scenario = mainOrganization,
+  backLabel = "Back to workstream",
   stream,
   outcome,
   completed,
@@ -14,16 +18,18 @@ export function OutcomeReview({
   onInspect,
   onBack,
 }: {
+  scenario?: OrganizationScenario;
+  backLabel?: string;
   stream: Workstream;
   outcome: Outcome;
   completed: Record<string, string>;
-  onOpen: (assignment: Assignment, tab?: string) => void;
-  onInspect: (artifact: EvidenceArtifact) => void;
+  onOpen: (id: string, tab?: string) => void;
+  onInspect?: (artifact: EvidenceArtifact) => void;
   onBack: () => void;
 }) {
   return (
     <div className="detail-page">
-      <DetailBackButton onClick={onBack}>Back to workstream</DetailBackButton>
+      <DetailBackButton onClick={onBack}>{backLabel}</DetailBackButton>
       <div className="page-heading workstream-heading">
         <div>
           <div className="eyebrow">{stream.id} · SAMPLE OUTCOME REVIEW</div>
@@ -34,6 +40,7 @@ export function OutcomeReview({
       <div className="org-banner">
         <div>
           <h2>Not verified</h2>
+          <p>Goal-level review result: not represented.</p>
           <p>{stream.outcome}</p>
           <p>
             Outcome reviewer: not assigned in this sample. Worker role bindings
@@ -57,8 +64,13 @@ export function OutcomeReview({
               key={criterion.id}
               aria-label={criterion.title}
             >
-              <span className="badge neutral">Evidence gap</span>
+              <span className="badge neutral">
+                {criterion.gap.trim()
+                  ? "Evidence gap"
+                  : "Review not represented"}
+              </span>
               <h3>{criterion.title}</h3>
+              <p>Criterion · {criterion.id}</p>
               <p>
                 <strong>Needed</strong>
                 <br />
@@ -69,24 +81,35 @@ export function OutcomeReview({
                 <br />
                 {criterion.available}
               </p>
+              {criterion.evidenceIds.length === 0 && (
+                <p>No linked evidence records represented.</p>
+              )}
               {criterion.evidenceIds.map((id) => {
-                const record = evidenceArtifacts.find(
-                  (e) =>
-                    e.id === id &&
-                    stream.assignmentIds.includes(e.assignmentId),
-                );
-                const assignment = assignments.find(
-                  (a) => a.id === record?.assignmentId,
-                );
-                return record && assignment ? (
-                  <p key={id}>
-                    <button
-                      className="text-link"
-                      onClick={() => onInspect(record)}
-                    >
-                      Inspect supporting context · {id} · {record.title}
-                    </button>
-                  </p>
+                const record = outcomeContextEvidence(scenario, stream, id);
+                return record ? (
+                  onInspect ? (
+                    <p key={id}>
+                      <button
+                        className="text-link"
+                        onClick={() => onInspect(record)}
+                      >
+                        Inspect supporting context · {id} · {record.title}
+                      </button>
+                    </p>
+                  ) : (
+                    <details key={id} className="directory-record-details">
+                      <summary>
+                        Inspect supporting context · {id} · {record.title}
+                      </summary>
+                      <p>
+                        {record.detail} · {record.producer} · Assignment{" "}
+                        {record.assignmentId}
+                      </p>
+                      <pre className="outcome-evidence-content">
+                        {record.content}
+                      </pre>
+                    </details>
+                  )
                 ) : (
                   <p key={id}>{id} · Context unavailable</p>
                 );
@@ -94,7 +117,8 @@ export function OutcomeReview({
               <p className="org-outcome">
                 <strong>Still missing</strong>
                 <br />
-                {criterion.gap}
+                {criterion.gap ||
+                  "No gap stated; verification remains unestablished."}
               </p>
             </article>
           ))}
@@ -106,7 +130,7 @@ export function OutcomeReview({
       >
         <h2>Assignment context</h2>
         {stream.assignmentIds.map((id) => {
-          const assignment = assignments.find((a) => a.id === id);
+          const assignment = scenario.assignments.find((a) => a.id === id);
           return (
             assignment && (
               <article className="org-stream-assignment" key={id}>
@@ -116,12 +140,17 @@ export function OutcomeReview({
                 <p>
                   {completed[id]
                     ? "Local response recorded · goal remains unverified"
-                    : "Awaiting assignment response"}
+                    : scenario.readOnly
+                      ? `Authored assignment state · ${assignment.state}`
+                      : "Awaiting assignment response"}
                 </p>
                 <button
                   className="text-link"
                   onClick={() =>
-                    onOpen(assignment, completed[id] ? "Activity" : "Overview")
+                    onOpen(
+                      assignment.id,
+                      completed[id] ? "Activity" : "Overview",
+                    )
                   }
                 >
                   Inspect {completed[id] ? "response" : "assignment"} · {id}
@@ -138,8 +167,8 @@ export function OutcomeReview({
         <h2>Scope & responsibility</h2>
         <p>{outcome.boundary}</p>
         <p>
-          Next coordination step: identify the outcome reviewer and gather
-          evidence tied to the implemented subject and observed environment.
+          Next coordination step: identify the outcome reviewer and gather the
+          observations required above within this goal’s stated scope.
         </p>
         <p>
           This read-only sample review records no goal-level decision.

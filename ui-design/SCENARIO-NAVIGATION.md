@@ -21,3 +21,5 @@ Validation: sixteen related tests passed on desktop/mobile for scenario route/pe
 Iteration 72 consolidates Knowledge’s Sample persona and My Work/main exit controls into the global sample context panel. Its fixture explanation is collapsed; navigation, default identities and return semantics are unchanged. Coordination filters are organization-wide and remain when Knowledge persona changes.
 
 Iteration 73: Knowledge and larger software share the compact coordination overview and global persona controls. Larger software has four workstreams per page and three worker summaries, with complete directories available. Iteration 74 also adapts main responses from the interactive attention projection, keeping outside-stream work separate. See [COORDINATION-OVERVIEW.md](COORDINATION-OVERVIEW.md).
+
+Iteration 75 adds shared outcome requirements/context review for all three samples, including scoped evidence and source return. See [SHARED-OUTCOME-REVIEW.md](SHARED-OUTCOME-REVIEW.md).

@@ -12,6 +12,7 @@ export function CoordinationOverview({
   onFilters,
   onAssignment,
   onStream,
+  onOutcome,
   onDirectory,
 }: {
   scenario: OrganizationScenario;
@@ -19,6 +20,7 @@ export function CoordinationOverview({
   onFilters: (f: CoordinationFilters) => void;
   onAssignment: (id: string) => void;
   onStream: (id: string) => void;
+  onOutcome?: (id: string) => void;
   onDirectory: () => void;
 }) {
   const all = coordinationRows(scenario);
@@ -232,7 +234,7 @@ export function CoordinationOverview({
                       <br />
                       <button
                         className="text-link"
-                        onClick={() => onStream(r.stream.id)}
+                        onClick={() => (onOutcome ?? onStream)(r.stream.id)}
                       >
                         Inspect outcome requirement · {c.id}
                       </button>

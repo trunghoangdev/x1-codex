@@ -239,6 +239,7 @@ function App() {
     status: "all",
   });
   const workerDirectorySources = useRef<Record<string, WorkspaceRoute>>({});
+  const outcomeSources = useRef<Record<string, WorkspaceRoute>>({});
   const directorySources = useRef<Record<string, WorkspaceRoute>>({});
   const assignmentSources = useRef<
     Record<
@@ -1561,14 +1562,15 @@ function App() {
                       : "Back to Organization"
                   : undefined
               }
-              onOutcome={() =>
+              onOutcome={() => {
+                delete outcomeSources.current[stream.id];
                 changeRoute({
                   view: "Organization",
                   outcomeId: stream.id,
                   tab: "Overview",
                   work: route.work,
-                })
-              }
+                });
+              }}
               onHandoff={(id) =>
                 changeRoute({
                   view: "Organization",
@@ -1627,18 +1629,28 @@ function App() {
           )}
           {view === "Organization" && outcome && outcomeStream && (
             <OutcomeReview
+              backLabel={
+                outcomeSources.current[outcome.streamId]
+                  ? "Back to Organization"
+                  : "Back to workstream"
+              }
               onInspect={setArtifact}
               stream={outcomeStream}
               outcome={outcome}
               completed={completed}
-              onOpen={open}
+              onOpen={(id, tab) => {
+                const a = assignments.find((a) => a.id === id);
+                if (a) open(a, tab);
+              }}
               onBack={() =>
-                changeRoute({
-                  view: "Organization",
-                  workstreamId: outcome.streamId,
-                  tab: "Overview",
-                  work: route.work,
-                })
+                outcomeSources.current[outcome.streamId]
+                  ? changeRoute(outcomeSources.current[outcome.streamId])
+                  : changeRoute({
+                      view: "Organization",
+                      workstreamId: outcome.streamId,
+                      tab: "Overview",
+                      work: route.work,
+                    })
               }
             />
           )}
@@ -1812,6 +1824,14 @@ function App() {
                           view: "Organization",
                           tab: "Overview",
                           workstreamId: id,
+                        });
+                      }}
+                      onOutcome={(id) => {
+                        outcomeSources.current[id] = route;
+                        changeRoute({
+                          view: "Organization",
+                          tab: "Overview",
+                          outcomeId: id,
                         });
                       }}
                       onDirectory={() =>
