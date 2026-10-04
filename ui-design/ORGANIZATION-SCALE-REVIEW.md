@@ -21,3 +21,5 @@ Findings from this slice:
 - Current organization counts, fixture memberships and detail views still use the small main scenario. This independent experiment does not make those views support interchangeable organizations; a future scenario-provider model would be needed for that.
 
 Validation covers mobile/desktop widths, composed filters, empty results, stream-selection focus, revision/gap context, scenario re-entry and unchanged personal assignments. No throughput or production performance claim is made.
+
+Follow-up: Demos → Open larger scenario workspace now uses shared Organization Overview and directory components via the common scenario contract, with scenario-qualified read-only details. The original page described above remains a standalone demo. See [SHARED-SCENARIOS.md](SHARED-SCENARIOS.md) for identity, record isolation and current input/action limits.

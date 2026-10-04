@@ -51,3 +51,5 @@ This is an incremental boundary, not a finished data layer. Candidate, evidence,
 `responsibilityProposals.ts` now also holds session allocation-decision receipts and the authored binding/assignment preview. Acceptance means plan accepted, allocation pending; no canonical relationship or assignment is created.
 
 `coordinationActivity.ts` projects current session proposals and their decisions into dated coordination records. Each record uses the explicit gap-to-workstream relationship and includes demo actor, proposed worker, role/scope and rationale. Removing a proposal removes its projected records; no immutable audit or allocation-created event is claimed.
+
+`organizationScenario.ts` provides a common frontend contract and main/large adapters for workers, bindings, streams, explicit assignments, flows, gaps, outcome requirements and evidence. `scenarioAttention.ts` derives bounded read-only signals from explicit gaps and selected assignment states. Main overview/directories now consume the common scenario model; specialized interactive assignment fixtures remain main-only.

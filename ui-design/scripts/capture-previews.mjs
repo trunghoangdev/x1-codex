@@ -431,4 +431,16 @@ await page.screenshot({
   fullPage: true,
   animations: "disabled",
 });
+await page.goto("http://127.0.0.1:4173/#/organizations/large");
+await page.screenshot({
+  path: "previews/41-shared-scenario-overview.png",
+  fullPage: true,
+  animations: "disabled",
+});
+await page.getByRole("button", { name: "Browse workers", exact: true }).click();
+await page.screenshot({
+  path: "previews/42-shared-scenario-workers.png",
+  fullPage: true,
+  animations: "disabled",
+});
 await browser.close();

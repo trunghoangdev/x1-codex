@@ -1,25 +1,34 @@
-import { DetailBackButton, DetailEmptyState } from "./DetailPresentation";
-import { responsibilityGaps } from "./data/workerDetails";
 import {
-  workerDirectory,
-  directoryRoles,
+  mainOrganization,
+  scenarioWorkerRows,
+  type OrganizationScenario,
+} from "./data/organizationScenario";
+import { DetailBackButton, DetailEmptyState } from "./DetailPresentation";
+import {
   defaultWorkerFilters,
   type WorkerFilters,
 } from "./data/workerDirectory";
 
 export function WorkersDirectory({
+  scenario = mainOrganization,
   filters,
   onFilters,
   onOpen,
   onBack,
   onAttention,
 }: {
+  scenario?: OrganizationScenario;
   filters: WorkerFilters;
   onFilters: (filters: WorkerFilters) => void;
   onOpen: (id: string) => void;
   onBack: () => void;
   onAttention: () => void;
 }) {
+  const workerDirectory = scenarioWorkerRows(scenario);
+  const directoryRoles = [
+    ...new Set(scenario.bindings.map((binding) => binding.role)),
+  ];
+  const responsibilityGaps = scenario.gaps;
   const visible = workerDirectory.filter(
     ({ worker, type, bindings, assignmentIds }) =>
       `${worker.id} ${worker.name} ${worker.type} ${bindings.map((b) => `${b.role} ${b.scope}`).join(" ")} ${assignmentIds.join(" ")}`
@@ -47,10 +56,10 @@ export function WorkersDirectory({
         </div>
       </div>
       <p className="org-overview-section">
-        Main sample organization · {workerDirectory.length} workers. Bindings
-        describe authored responsibilities; they do not establish live
-        permissions or capacity. No linked assignments does not mean a worker is
-        idle or available.
+        {scenario.name} · {workerDirectory.length} workers. Bindings describe
+        authored responsibilities; they do not establish live permissions or
+        capacity. No linked assignments does not mean a worker is idle or
+        available.
       </p>
       <section
         className="panel stream-directory-filters"
@@ -183,9 +192,9 @@ export function WorkersDirectory({
       >
         <h2>Responsibility gaps · organization</h2>
         <p>
-          {responsibilityGaps.length} explicit gaps remain in the invitation
-          stream. These belong to the workstream; they are not missing duties
-          attributed to an individual worker. Worker filters do not change this
+          {responsibilityGaps.length} explicit gaps remain in this scenario.
+          These belong to the workstream; they are not missing duties attributed
+          to an individual worker. Worker filters do not change this
           organization context.
         </p>
         <ul>

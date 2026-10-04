@@ -1,18 +1,19 @@
+import {
+  mainOrganization,
+  type OrganizationScenario,
+} from "./data/organizationScenario";
+import { scenarioAttention } from "./data/scenarioAttention";
 import { WorkspaceGuide } from "./WorkspaceGuide";
 import type { ResponsibilityProposal } from "./data/responsibilityProposals";
 import { AttentionSummary } from "./AttentionSummary";
 import type { AttentionCategory } from "./data/organizationAttention";
-import { responsibilityGaps } from "./data/workerDetails";
 import { assignments } from "./data/assignments";
-import {
-  roleBindings,
-  workers,
-  workstreams,
-} from "./data/organizationOverview";
+
 import type { Assignment, Readiness } from "./data/models";
 import { releaseWait } from "./data/organization";
 
 export function OrganizationOverview({
+  scenario = mainOrganization,
   completed,
   readiness,
   onOpen,
@@ -26,6 +27,7 @@ export function OrganizationOverview({
   onActivity,
   onAttention,
 }: {
+  scenario?: OrganizationScenario;
   completed: Record<string, string>;
   readiness: Readiness;
   onOpen: (assignment: Assignment, tab?: string) => void;
@@ -39,6 +41,12 @@ export function OrganizationOverview({
   onActivity: () => void;
   onAttention: (category: AttentionCategory | "All") => void;
 }) {
+  const {
+    workers,
+    bindings: roleBindings,
+    streams: workstreams,
+    gaps: responsibilityGaps,
+  } = scenario;
   return (
     <>
       <div className="page-heading">
@@ -51,13 +59,13 @@ export function OrganizationOverview({
           </p>
         </div>
         <button className="button secondary" onClick={onMyWork}>
-          Open My Work · Alex
+          Open My Work · Alex{scenario.readOnly ? " (main sample)" : ""}
         </button>
       </div>
       <div className="org-banner">
         <div>
           <span className="section-label">
-            SOFTWARE FACTORY · SAMPLE ORGANIZATION
+            SOFTWARE FACTORY · {scenario.name.toUpperCase()}
           </span>
           <h2>Build software with accountable collaboration.</h2>
           <p>
@@ -72,6 +80,9 @@ export function OrganizationOverview({
         </div>
       </div>
       <AttentionSummary
+        attentionItems={
+          scenario.readOnly ? scenarioAttention(scenario) : undefined
+        }
         completed={completed}
         readiness={readiness}
         onOpen={onAttention}
@@ -151,43 +162,45 @@ export function OrganizationOverview({
           </button>
         </p>
       </section>
-      <details className="organization-disclosure org-overview-section">
-        <summary>Other organization work · 3 assignments</summary>
-        <section
-          className="panel org-stream org-overview-section"
-          aria-label="Other organization work"
-        >
-          <h2>Other work requiring coordination</h2>
-          <p>
-            These assignments are outside the two modeled streams. A shared
-            project does not establish a dependency.
-          </p>
-          {["A-1041", "A-1035", "A-1032"].map((id) => {
-            const assignment = assignments.find((a) => a.id === id);
-            return (
-              assignment && (
-                <div className="org-stream-assignment" key={id}>
-                  <button
-                    className="text-link"
-                    onClick={() => onOpen(assignment)}
-                  >
-                    {id} · {assignment.title}
-                  </button>
-                  <p>
-                    {completed[id]
-                      ? "Local response recorded; outcome remains unverified."
-                      : id === "A-1041"
-                        ? releaseWait[readiness]
-                        : id === "A-1035"
-                          ? "Staging effect unconfirmed. This is a different subject from the production release."
-                          : "Accessibility assessment requested; no invitation-workstream dependency is established."}
-                  </p>
-                </div>
-              )
-            );
-          })}
-        </section>
-      </details>
+      {scenario.id === "main" && (
+        <details className="organization-disclosure org-overview-section">
+          <summary>Other organization work · 3 assignments</summary>
+          <section
+            className="panel org-stream org-overview-section"
+            aria-label="Other organization work"
+          >
+            <h2>Other work requiring coordination</h2>
+            <p>
+              These assignments are outside the two modeled streams. A shared
+              project does not establish a dependency.
+            </p>
+            {["A-1041", "A-1035", "A-1032"].map((id) => {
+              const assignment = assignments.find((a) => a.id === id);
+              return (
+                assignment && (
+                  <div className="org-stream-assignment" key={id}>
+                    <button
+                      className="text-link"
+                      onClick={() => onOpen(assignment)}
+                    >
+                      {id} · {assignment.title}
+                    </button>
+                    <p>
+                      {completed[id]
+                        ? "Local response recorded; outcome remains unverified."
+                        : id === "A-1041"
+                          ? releaseWait[readiness]
+                          : id === "A-1035"
+                            ? "Staging effect unconfirmed. This is a different subject from the production release."
+                            : "Accessibility assessment requested; no invitation-workstream dependency is established."}
+                    </p>
+                  </div>
+                )
+              );
+            })}
+          </section>
+        </details>
+      )}
       <section
         className="org-overview-section"
         aria-label="Roles and worker bindings"
@@ -234,7 +247,9 @@ export function OrganizationOverview({
         </p>
       </section>
       <details className="organization-disclosure org-overview-section">
-        <summary>Responsibility gaps · 2 known gaps</summary>
+        <summary>
+          Responsibility gaps · {responsibilityGaps.length} known gaps
+        </summary>
         <section
           className="panel org-stream org-overview-section"
           aria-label="Responsibility gaps"
@@ -254,17 +269,19 @@ export function OrganizationOverview({
               >
                 Inspect workstream · {gap.title}
               </button>
-              <p>
-                <button
-                  className="button secondary"
-                  onClick={() => onPropose(gap.id)}
-                >
-                  {proposals[gap.id]
-                    ? "View proposal"
-                    : "Propose responsibility"}{" "}
-                  · {gap.title}
-                </button>
-              </p>
+              {!scenario.readOnly && (
+                <p>
+                  <button
+                    className="button secondary"
+                    onClick={() => onPropose(gap.id)}
+                  >
+                    {proposals[gap.id]
+                      ? "View proposal"
+                      : "Propose responsibility"}{" "}
+                    · {gap.title}
+                  </button>
+                </p>
+              )}
             </article>
           ))}
         </section>

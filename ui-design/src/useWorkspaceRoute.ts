@@ -1,3 +1,4 @@
+import { validScenarioPath } from "./ScenarioWorkspace";
 import {
   defaultWorkerFilters,
   directoryRoles,
@@ -20,6 +21,7 @@ import { useEffect, useState } from "react";
 export type WorkspaceView = "My Work" | "Organization" | "Evidence" | "Demos";
 export type WorkspaceRoute = {
   view: WorkspaceView;
+  scenarioPath?: string;
   assignmentId?: string;
   workstreamId?: string;
   workerId?: string;
@@ -47,6 +49,10 @@ export function useWorkspaceRoute(ids: string[], tabs: string[]) {
     if (!location.hash || location.hash === "#")
       return { ...fallback, view: "Organization" };
     const raw = location.hash.slice(1);
+    if (raw.startsWith("/organizations/"))
+      return validScenarioPath(raw) && raw.startsWith("/organizations/large")
+        ? { view: "Organization", tab: "Overview", scenarioPath: raw }
+        : { ...fallback, invalid: true };
     const separator = raw.indexOf("?");
     fallback.work = readWorkFilters(
       separator < 0 ? "" : raw.slice(separator + 1),
@@ -189,29 +195,31 @@ export function useWorkspaceRoute(ids: string[], tabs: string[]) {
     };
   }, []);
   function navigate(next: WorkspaceRoute, replace = false) {
-    const path = next.workerDirectory
-      ? "#/organization/workers"
-      : next.streamDirectory
-        ? "#/organization/workstreams"
-        : next.assignmentId
-          ? `#/assignments/${next.assignmentId}/${next.tab.toLowerCase()}`
-          : next.workstreamId
-            ? `#/workstreams/${next.workstreamId}`
-            : next.workerId
-              ? `#/workers/${next.workerId}`
-              : next.handoffId
-                ? `#/handoffs/${next.handoffId}`
-                : next.organizationActivity
-                  ? "#/organization/activity"
-                  : next.outcomeId
-                    ? `#/outcomes/${next.outcomeId}`
-                    : next.attention
-                      ? `#/organization/attention/${next.attention.toLowerCase()}`
-                      : next.personalQueue
-                        ? "#/work/attention"
-                        : next.largeOrganization
-                          ? "#/demos/organization"
-                          : `#/${viewPaths[next.view]}`;
+    const path = next.scenarioPath
+      ? `#${next.scenarioPath}`
+      : next.workerDirectory
+        ? "#/organization/workers"
+        : next.streamDirectory
+          ? "#/organization/workstreams"
+          : next.assignmentId
+            ? `#/assignments/${next.assignmentId}/${next.tab.toLowerCase()}`
+            : next.workstreamId
+              ? `#/workstreams/${next.workstreamId}`
+              : next.workerId
+                ? `#/workers/${next.workerId}`
+                : next.handoffId
+                  ? `#/handoffs/${next.handoffId}`
+                  : next.organizationActivity
+                    ? "#/organization/activity"
+                    : next.outcomeId
+                      ? `#/outcomes/${next.outcomeId}`
+                      : next.attention
+                        ? `#/organization/attention/${next.attention.toLowerCase()}`
+                        : next.personalQueue
+                          ? "#/work/attention"
+                          : next.largeOrganization
+                            ? "#/demos/organization"
+                            : `#/${viewPaths[next.view]}`;
     const params = new URLSearchParams();
     if (next.streamDirectory) {
       if (next.streamDirectory.query)

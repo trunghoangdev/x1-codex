@@ -1,18 +1,21 @@
 import {
   organizationAttention,
   type AttentionCategory,
+  type AttentionItem,
 } from "./data/organizationAttention";
 import type { Readiness } from "./data/models";
 export function AttentionSummary({
+  attentionItems,
   completed,
   readiness,
   onOpen,
 }: {
+  attentionItems?: AttentionItem[];
   completed: Record<string, string>;
   readiness: Readiness;
   onOpen: (category: AttentionCategory | "All") => void;
 }) {
-  const items = organizationAttention(completed, readiness);
+  const items = attentionItems ?? organizationAttention(completed, readiness);
   return (
     <section
       className="panel org-stream org-overview-section"

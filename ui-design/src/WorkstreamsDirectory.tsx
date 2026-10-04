@@ -1,23 +1,27 @@
 import { DetailBackButton, DetailEmptyState } from "./DetailPresentation";
-import { workstreams } from "./data/organizationOverview";
-import { responsibilityGaps } from "./data/workerDetails";
-import { outcomes } from "./data/outcomes";
+import {
+  mainOrganization,
+  type OrganizationScenario,
+} from "./data/organizationScenario";
 
 import {
   defaultStreamFilters,
   type StreamFilters,
 } from "./data/workstreamDirectory";
 export function WorkstreamsDirectory({
+  scenario = mainOrganization,
   filters,
   onFilters,
   onOpen,
   onBack,
 }: {
+  scenario?: OrganizationScenario;
   filters: StreamFilters;
   onFilters: (filters: StreamFilters) => void;
   onOpen: (id: string) => void;
   onBack: () => void;
 }) {
+  const { streams: workstreams, gaps: responsibilityGaps, outcomes } = scenario;
   const rows = workstreams.map((stream) => ({
     stream,
     gaps: responsibilityGaps.filter((gap) => gap.workstreamId === stream.id),
@@ -47,11 +51,10 @@ export function WorkstreamsDirectory({
         </div>
       </div>
       <p className="org-overview-section">
-        Main sample organization · {workstreams.length} workstreams.
-        Responsibility signals come from explicit gaps; outcome signals come
-        from unmet sample evidence requirements. Proposals and recorded
-        responses do not resolve either signal. This directory does not include
-        the independent larger organization demo.
+        {scenario.name} · {workstreams.length} workstreams. Responsibility
+        signals come from explicit gaps; outcome signals come from unmet sample
+        evidence requirements. Proposals and recorded responses do not resolve
+        either signal. Counts describe the selected sample scenario.
       </p>
       <section
         className="panel stream-directory-filters"

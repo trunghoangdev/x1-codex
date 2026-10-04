@@ -88,3 +88,7 @@ At the same 390px/1000px viewport, the revised overview measured 3,917px versus 
 ## Follow-up: coordination activity slice completed
 
 Organization activity now includes session proposals and allocation-plan decisions, with explicit workstream scope, demo actor, proposed worker/role, rationale, time and receipt inspection. Accepted plans remain allocation pending; neither record type implies a created assignment or binding. Removing a local proposal removes its derived activity records, so the UI explicitly avoids claiming permanent audit history. A real allocation-created event and durable audit behavior remain future provider work.
+
+## Follow-up: shared scenario foundation completed
+
+Both samples now have a common organization contract. The main overview/directories use its main adapter, and Demos opens the larger sample through the same overview/directory components. Scenario-qualified read-only details expose its assignments, flow responsibilities and unverified outcome requirements. Main records remain isolated; specialized interactive assignment inputs/actions are not invented for the larger sample. This validates shared organization navigation at the larger fixture scale, while full provider-backed assignment workflows remain future work.

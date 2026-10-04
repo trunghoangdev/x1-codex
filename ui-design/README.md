@@ -219,3 +219,5 @@ Current organization design assessment and next priorities: [VIRTUAL-ORGANIZATIO
 Organization Overview now places coordination attention directly after shared purpose. Workstream cards summarize goals/outcomes; worker cards summarize identity/type/binding counts. Use the existing directories/details for assignment and scoped binding inspection. Section shortcuts and secondary disclosures remain available.
 
 Organization activity includes proposal and allocation-plan decision records with scoped filters and receipt inspection. Accepted plans remain pending allocation. See [COORDINATION-ACTIVITY.md](COORDINATION-ACTIVITY.md).
+
+Demos → Open larger scenario workspace uses shared Overview and directory components with six workstreams/nine workers. Scenario-qualified read-only detail/assignment inspection keeps main records separate. See [SHARED-SCENARIOS.md](SHARED-SCENARIOS.md).

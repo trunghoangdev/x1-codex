@@ -167,3 +167,7 @@ Expand Understand this workspace on Organization for the main terms and entry po
 ## Coordination history
 
 Record a responsibility proposal and accept or reject its allocation plan. Open Organization → View organization activity and select the invitation scope. Filter Responsibility proposals or Allocation-plan decisions, then Inspect coordination receipt to view the original proposal/decision without leaving Activity. Removing the local proposal removes both derived records; this is session history rather than a permanent audit log.
+
+## Larger sample through shared organization screens
+
+Demos → Open larger scenario workspace opens the six-workstream/nine-worker sample with the same Overview and directories. Inspect attention categories, filter workstreams/workers, open scoped detail and inspect read-only assignments. Return to main organization preserves its session records during navigation; refresh still clears all local records. My Work remains Alex's main sample inbox. The original larger demo remains separate.

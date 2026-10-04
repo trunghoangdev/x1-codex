@@ -1,3 +1,4 @@
+import { ScenarioWorkspace } from "./ScenarioWorkspace";
 import { WorkersDirectory } from "./WorkersDirectory";
 import { defaultWorkerFilters } from "./data/workerDirectory";
 import { WorkstreamsDirectory } from "./WorkstreamsDirectory";
@@ -225,7 +226,7 @@ function App() {
   >({});
   const source = selected ? assignmentSources.current[selected.id] : undefined;
   const inboxReturn = useRef<{ id: string; y: number } | null>(null);
-  const screenKey = `${route.view}:${route.assignmentId ?? ""}:${!!route.invalid}:${route.workstreamId ?? ""}:${route.workerId ?? ""}:${route.handoffId ?? ""}:${!!route.organizationActivity}:${route.outcomeId ?? ""}:${!!route.attention}:${!!route.personalQueue}:${!!route.largeOrganization}:${!!route.streamDirectory}:${!!route.workerDirectory}`;
+  const screenKey = `${route.view}:${route.assignmentId ?? ""}:${!!route.invalid}:${route.workstreamId ?? ""}:${route.workerId ?? ""}:${route.handoffId ?? ""}:${!!route.organizationActivity}:${route.outcomeId ?? ""}:${!!route.attention}:${!!route.personalQueue}:${!!route.largeOrganization}:${!!route.streamDirectory}:${!!route.workerDirectory}:${route.scenarioPath?.split("?")[0] ?? ""}`;
   const previousScreen = useRef(screenKey);
   useEffect(() => {
     if (route.view !== "My Work" || route.assignmentId)
@@ -318,6 +319,7 @@ function App() {
     route.largeOrganization,
     !!route.streamDirectory,
     !!route.workerDirectory,
+    route.scenarioPath,
     route.assignmentId,
     route.tab,
     route.invalid,
@@ -464,7 +466,11 @@ function App() {
           </span>
           <div>
             <strong>Software Factory</strong>
-            <span>Acme organization</span>
+            <span>
+              {route.scenarioPath
+                ? "Larger sample organization"
+                : "Acme organization"}
+            </span>
           </div>
           <span className="live-dot" title="Demo workspace" />
         </div>
@@ -482,7 +488,15 @@ function App() {
               key={name}
               className={`nav-item ${view === name ? "active" : ""}`}
               aria-current={view === name ? "page" : undefined}
-              onClick={() => navigate(name)}
+              onClick={() =>
+                route.scenarioPath && name === "Organization"
+                  ? changeRoute({
+                      view: "Organization",
+                      tab: "Overview",
+                      scenarioPath: "/organizations/large",
+                    })
+                  : navigate(name)
+              }
             >
               <Icon size={19} />
               <span>{name}</span>
@@ -1512,7 +1526,21 @@ function App() {
               }}
             />
           )}
+          {route.scenarioPath && (
+            <ScenarioWorkspace
+              onMyWork={() => navigate("My Work")}
+              path={route.scenarioPath}
+              onRoute={(path, replace) =>
+                changeRoute(
+                  { view: "Organization", tab: "Overview", scenarioPath: path },
+                  replace,
+                )
+              }
+              onMain={() => navigate("Organization")}
+            />
+          )}
           {view === "Organization" &&
+            !route.scenarioPath &&
             !route.workerDirectory &&
             !route.streamDirectory &&
             !stream &&
@@ -1629,6 +1657,20 @@ function App() {
               </section>
               <section className="panel org-stream org-overview-section">
                 <h2>Larger organization scenario</h2>
+                <p>
+                  <button
+                    className="button primary"
+                    onClick={() =>
+                      changeRoute({
+                        view: "Organization",
+                        tab: "Overview",
+                        scenarioPath: "/organizations/large",
+                      })
+                    }
+                  >
+                    Open larger scenario workspace
+                  </button>
+                </p>
                 <p>
                   Explore six workstreams, multiple assignees and scoped
                   workers.
