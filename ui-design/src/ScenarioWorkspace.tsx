@@ -3,7 +3,8 @@ import { roleCoverage, type RoleFilters } from "./data/roleDirectory";
 import { OrganizationOverview } from "./OrganizationOverview";
 import { scenarioAttention } from "./data/scenarioAttention";
 import { useRef } from "react";
-import { largeOrganization as scenario } from "./data/organizationScenario";
+import { resolveScenario, scenarioPersona } from "./data/scenarioRegistry";
+import { ScenarioMyWork } from "./ScenarioMyWork";
 import { WorkstreamsDirectory } from "./WorkstreamsDirectory";
 import { WorkersDirectory } from "./WorkersDirectory";
 import {
@@ -15,8 +16,10 @@ import {
   type WorkerFilters,
 } from "./data/workerDirectory";
 import { DetailBackButton } from "./DetailPresentation";
-const base = "/organizations/large";
 export function validScenarioPath(raw: string) {
+  const scenario = resolveScenario(raw);
+  if (!scenario) return false;
+  const base = `/organizations/${scenario.id}`;
   const [path, query] = raw.split("?");
   const suffix = path.slice(base.length);
   const params = new URLSearchParams(query);
@@ -26,6 +29,7 @@ export function validScenarioPath(raw: string) {
       "/workstreams",
       "/workers",
       "/roles",
+      ...(scenario.personas ? ["/work"] : []),
       "/attention",
       "/activity",
       ...scenario.streams.map((s) => `/workstreams/${s.id}`),
@@ -35,6 +39,8 @@ export function validScenarioPath(raw: string) {
   )
     return false;
   return (
+    (!params.has("persona") ||
+      !!scenario.personas?.some((p) => p.workerId === params.get("persona"))) &&
     (!params.has("coverage") ||
       roleCoverage.includes(params.get("coverage")!)) &&
     (!params.has("category") ||
@@ -69,20 +75,34 @@ export function ScenarioWorkspace({
   onMyWork: () => void;
 }) {
   const origins = useRef<Record<string, string>>({});
+  const scenario = resolveScenario(path)!;
+  const base = `/organizations/${scenario.id}`;
+  const persona = scenarioPersona(path);
+  const person = scenario.workers.find((w) => w.id === persona?.workerId);
+  const qualify = (next: string) =>
+    base +
+    next +
+    (persona
+      ? `${next.includes("?") ? "&" : "?"}persona=${persona.workerId}`
+      : "");
   const [pathname, query] = path.split("?");
   const suffix = pathname.slice(base.length);
   const params = new URLSearchParams(query);
   const open = (next: string) => {
-    origins.current[next] = path;
-    onRoute(base + next);
+    origins.current[`${persona?.workerId ?? ""}:${base + next.split("?")[0]}`] =
+      path;
+    onRoute(qualify(next));
   };
-  const back = () => onRoute(origins.current[suffix] ?? base);
+  const back = () =>
+    onRoute(
+      origins.current[`${persona?.workerId ?? ""}:${pathname}`] ?? qualify(""),
+    );
   const filter = (kind: string, values: Record<string, string>) => {
     const p = new URLSearchParams();
     Object.entries(values).forEach(([k, v]) => {
       if (v && v !== "All" && v !== "all") p.set(k, v);
     });
-    onRoute(`${base}/${kind}${p.size ? `?${p}` : ""}`, true);
+    onRoute(qualify(`/${kind}${p.size ? `?${p}` : ""}`), true);
   };
   const stream = scenario.streams.find(
     (s) => suffix === `/workstreams/${s.id}`,
@@ -130,7 +150,51 @@ export function ScenarioWorkspace({
           Return to main organization
         </button>
       </section>
-      {suffix === "/roles" ? (
+      {scenario.personas && (
+        <section
+          className="panel stream-directory-filters org-overview-section"
+          aria-label="Sample persona"
+        >
+          <label>
+            Sample persona
+            <select
+              value={persona!.workerId}
+              onChange={(e) => {
+                const p = new URLSearchParams(query);
+                p.set("persona", e.target.value);
+                onRoute(`${pathname}?${p}`);
+              }}
+            >
+              {scenario.personas.map((p) => (
+                <option key={p.workerId} value={p.workerId}>
+                  {p.label}
+                </option>
+              ))}
+            </select>
+          </label>
+          <p>
+            Authored persona preview; this selector does not sign in or grant
+            permissions.
+          </p>
+          {suffix !== "/work" && (
+            <button
+              className="button secondary"
+              onClick={() => onRoute(qualify("/work"))}
+            >
+              Open My Work · {person?.name}
+            </button>
+          )}
+        </section>
+      )}
+      {suffix === "/work" ? (
+        <ScenarioMyWork
+          scenario={scenario}
+          workerId={persona!.workerId}
+          onAssignment={(id) => open(`/assignments/${id}`)}
+          onStream={(id) => open(`/workstreams/${id}`)}
+          onOrganization={() => onRoute(qualify(""))}
+        />
+      ) : suffix === "/roles" ? (
         <RolesDirectory
           scenario={scenario}
           filters={{
@@ -144,7 +208,7 @@ export function ScenarioWorkspace({
           onWorker={(id) => open(`/workers/${id}`)}
           onStream={(id) => open(`/workstreams/${id}`)}
           onAssignment={(id) => open(`/assignments/${id}`)}
-          onBack={() => onRoute(base)}
+          onBack={() => onRoute(qualify(""))}
         />
       ) : suffix === "/workstreams" ? (
         <WorkstreamsDirectory
@@ -163,7 +227,7 @@ export function ScenarioWorkspace({
             })
           }
           onOpen={(id) => open(`/workstreams/${id}`)}
-          onBack={() => onRoute(base)}
+          onBack={() => onRoute(qualify(""))}
         />
       ) : suffix === "/workers" ? (
         <WorkersDirectory
@@ -186,9 +250,9 @@ export function ScenarioWorkspace({
           }
           onOpen={(id) => open(`/workers/${id}`)}
           onAttention={() =>
-            onRoute(base + "/attention?category=responsibility")
+            onRoute(qualify("/attention?category=responsibility"))
           }
-          onBack={() => onRoute(base)}
+          onBack={() => onRoute(qualify(""))}
         />
       ) : (
         <>
@@ -276,8 +340,20 @@ export function ScenarioWorkspace({
                 {scenario.workers.find((w) => w.id === assignment.workerId)
                   ?.name ?? "Unassigned"}
               </p>
+              {assignment.input && (
+                <>
+                  <h2>Input & expected response</h2>
+                  <p>
+                    <strong>Input:</strong> {assignment.input}
+                  </p>
+                  <p>
+                    <strong>Expected response:</strong>{" "}
+                    {assignment.expectedResponse}
+                  </p>
+                </>
+              )}
               <p>
-                Authored read-only state. No candidate, checks or external
+                Authored read-only state. No verified artifacts or external
                 execution record is attached; no response action is enabled.
               </p>
               <button
@@ -345,20 +421,24 @@ export function ScenarioWorkspace({
               readiness="missing"
               proposals={{}}
               onOpen={(a) => open(`/assignments/${a.id}`)}
-              onMyWork={onMyWork}
+              onMyWork={persona ? () => onRoute(qualify("/work")) : onMyWork}
+              myWorkLabel={
+                persona ? `Open personal inbox · ${person?.name}` : undefined
+              }
               onWorkstream={(id) => open(`/workstreams/${id}`)}
               onWorker={(id) => open(`/workers/${id}`)}
-              onDirectory={() => onRoute(base + "/workstreams")}
-              onWorkersDirectory={() => onRoute(base + "/workers")}
-              onRolesDirectory={() => onRoute(base + "/roles")}
-              onActivity={() => onRoute(base + "/activity")}
+              onDirectory={() => onRoute(qualify("/workstreams"))}
+              onWorkersDirectory={() => onRoute(qualify("/workers"))}
+              onRolesDirectory={() => onRoute(qualify("/roles"))}
+              onActivity={() => onRoute(qualify("/activity"))}
               onAttention={(category) =>
                 onRoute(
-                  base +
+                  qualify(
                     "/attention" +
-                    (category === "All"
-                      ? ""
-                      : `?category=${category.toLowerCase()}`),
+                      (category === "All"
+                        ? ""
+                        : `?category=${category.toLowerCase()}`),
+                  ),
                 )
               }
               onPropose={() => {}}

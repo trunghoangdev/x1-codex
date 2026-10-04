@@ -81,3 +81,7 @@ Do not infer completed deployment, verified provenance or server authorization f
 ## Role responsibility view
 
 Organization provides Browse roles alongside Workers. Both scenarios share an explicit role catalog, scoped bindings, role-level assignment membership and explicitly linked responsibility gaps. Search and coverage filters are stored in scenario-qualified URLs. Scope gaps can remain even when a role has a binding elsewhere. Binding-to-assignment scope matching is not verified by this view; no workload, authority or complete coverage is inferred. Main assignment links retain existing response behavior and contextual return, while larger assignments remain read-only.
+
+## Different organization domains and personal entry
+
+Scenario identity includes domain and shared purpose. Knowledge Operations uses the common organization views for a welcome guide and workshop, with human, AI and deterministic workers. A sample persona selector previews Maya's Editor inbox and Leo's Coordinator inbox. Organization retains shared goals, roles, flows and missing responsibility; My Work shows explicit allocations to the selected worker, authored inputs and expected response. Persona identity persists in scenario-qualified URLs. The new scenario is read-only, with no publishing, distribution or scheduling actions. Main software response workflows remain separate.

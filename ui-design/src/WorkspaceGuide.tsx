@@ -1,11 +1,16 @@
-export function WorkspaceGuide() {
+export function WorkspaceGuide({
+  personalLabel = "Alex's",
+}: {
+  personalLabel?: string;
+}) {
   return (
     <details className="panel workspace-guide">
       <summary>Understand this workspace</summary>
       <p>
         Start with shared goals in Organization. Browse workstreams to follow
         coordination, or workers to inspect scoped responsibilities. My Work is
-        Alex's personal inbox. Demos offers a guided customer walkthrough.
+        {personalLabel} personal inbox. Demos offers a guided customer
+        walkthrough.
       </p>
       <dl>
         <dt>Workstream</dt>
@@ -48,7 +53,7 @@ export function WorkspaceGuide() {
       </dl>
       <p>
         This workspace uses sample data. Local proposals, decisions and
-        responses reset on refresh. No live SF action is sent.
+        responses reset on refresh. No live action is sent.
       </p>
     </details>
   );

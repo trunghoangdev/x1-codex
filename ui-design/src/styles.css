@@ -3468,3 +3468,9 @@ main h3,
   display: block;
   margin-top: 16px;
 }
+
+.scenario-inbox-note {
+  margin-top: 24px;
+  color: var(--muted);
+  line-height: 1.6;
+}

@@ -18,7 +18,10 @@ import {
   scenarioAssignments,
 } from "./largeOrganization";
 export type OrganizationScenario = {
-  id: "main" | "large";
+  id: "main" | "large" | "knowledge";
+  domain: string;
+  purpose: string;
+  personas?: { workerId: string; label: string }[];
   name: string;
   readOnly: boolean;
   workers: (Worker & { category: "human" | "ai" | "deterministic" })[];
@@ -33,6 +36,10 @@ export type OrganizationScenario = {
     role: string;
     title: string;
     state: string;
+    responseNeeded?: boolean;
+    waitingForInput?: boolean;
+    input?: string;
+    expectedResponse?: string;
   }[];
   gaps: typeof responsibilityGaps;
   outcomes: OutcomeReview[];
@@ -61,6 +68,8 @@ const categories: Record<string, "human" | "ai" | "deterministic"> = {
 };
 export const mainOrganization: OrganizationScenario = {
   id: "main",
+  domain: "Software Factory",
+  purpose: "Build software with accountable collaboration.",
   name: "Main sample organization",
   readOnly: false,
   workers: workers.map((worker) => ({
@@ -126,6 +135,8 @@ export const mainOrganization: OrganizationScenario = {
 };
 export const largeOrganization: OrganizationScenario = {
   id: "large",
+  domain: "Software Factory",
+  purpose: "Build software with accountable collaboration.",
   name: "Larger sample organization",
   readOnly: true,
   workers: scenarioWorkers.map((worker) => ({

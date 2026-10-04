@@ -52,8 +52,14 @@ export function useWorkspaceRoute(ids: string[], tabs: string[]) {
       return { ...fallback, view: "Organization" };
     const raw = location.hash.slice(1);
     if (raw.startsWith("/organizations/"))
-      return validScenarioPath(raw) && raw.startsWith("/organizations/large")
-        ? { view: "Organization", tab: "Overview", scenarioPath: raw }
+      return validScenarioPath(raw)
+        ? {
+            view: raw.split("?")[0].endsWith("/work")
+              ? "My Work"
+              : "Organization",
+            tab: "Overview",
+            scenarioPath: raw,
+          }
         : { ...fallback, invalid: true };
     const separator = raw.indexOf("?");
     fallback.work = readWorkFilters(

@@ -12,8 +12,14 @@ Main organization actions and records remain app-owned and survive navigation to
 
 Reference checks validate worker, stream, assignment, gap, flow and evidence membership in both adapters. Browser checks cover common screen counts, scoped IDs, filtered URL/history/refresh, keyboard search, read-only boundaries, proposal isolation and unchanged personal work at desktop/mobile widths.
 
-Remaining provider work includes supplying authoritative commands/receipts and full assignment inputs for other scenarios. Paging and a role-centered view are separate design improvements. The contract is a frontend sample model, not a Forge/SF API schema.
+Remaining provider work includes supplying authoritative commands/receipts and full assignment inputs for other scenarios. Paging remains a separate design improvement. The contract is a frontend sample model, not a Forge/SF API schema.
 
 ## Role catalogs
 
-Each adapter now authors role definitions and gap-to-role references independently of its bindings. RolesDirectory uses the same contract in both scenarios. Catalog entries with no bindings remain representable; current sample fixtures contain no globally unbound catalog role. The invitation Developer scope gap in the main sample and unassigned L-02-R in the larger sample illustrate missing scoped responsibility despite bindings elsewhere. No extra outcome role or runtime allocation is invented.
+Each adapter now authors role definitions and gap-to-role references independently of its bindings. RolesDirectory uses the same contract in both scenarios. Catalog entries with no bindings remain representable; the main and larger software fixtures contain no globally unbound catalog role. The invitation Developer scope gap in the main sample and unassigned L-02-R in the larger sample illustrate missing scoped responsibility despite bindings elsewhere. No extra outcome role or runtime allocation is invented.
+
+## Non-software organization and personas
+
+`knowledgeOrganization.ts` supplies a third adapter for Knowledge Operations. Domain and shared purpose now belong to the scenario contract instead of being fixed software headings. `scenarioRegistry.ts` resolves read-only adapters by scenario-qualified path. The knowledge adapter adds Maya/Leo persona references, authored assignment inputs/expected responses and explicit response-needed/input-wait flags. `ScenarioMyWork` projects only worker-allocated assignments; it never derives tasks from bindings. Details and directories use the same read-only workspace as the larger software adapter.
+
+The knowledge persona is stored in the URL and retained by Organization/My Work navigation, filters and detail links. Invalid persona IDs and cross-scenario assignment IDs are rejected. Switching personas does not authenticate or grant permission. Main sample actions remain unchanged; larger software My Work still explicitly opens Alex's main inbox. Knowledge My Work remains within its selected persona. See [KNOWLEDGE-SCENARIO.md](KNOWLEDGE-SCENARIO.md) for scope, flow and production boundaries.

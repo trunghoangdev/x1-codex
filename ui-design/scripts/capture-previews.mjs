@@ -443,4 +443,44 @@ await page.screenshot({
   fullPage: true,
   animations: "disabled",
 });
+await page.setViewportSize({ width: 1440, height: 1000 });
+await page.goto("http://127.0.0.1:4173/#/organization/roles?coverage=gaps");
+await page.screenshot({
+  path: "previews/43-organization-roles.png",
+  fullPage: true,
+  animations: "disabled",
+});
+await page.setViewportSize({ width: 390, height: 1000 });
+await page.goto(
+  "http://127.0.0.1:4173/#/organizations/large/roles?coverage=gaps",
+);
+await page.screenshot({
+  path: "previews/44-scenario-roles-mobile.png",
+  fullPage: true,
+  animations: "disabled",
+});
+await page.setViewportSize({ width: 1440, height: 1000 });
+await page.goto("http://127.0.0.1:4173/#/organizations/knowledge?persona=maya");
+await page.screenshot({
+  path: "previews/45-knowledge-organization.png",
+  fullPage: true,
+  animations: "disabled",
+});
+await page.goto(
+  "http://127.0.0.1:4173/#/organizations/knowledge/work?persona=maya",
+);
+await page.screenshot({
+  path: "previews/46-maya-personal-inbox.png",
+  fullPage: true,
+  animations: "disabled",
+});
+await page.setViewportSize({ width: 390, height: 1000 });
+await page.goto(
+  "http://127.0.0.1:4173/#/organizations/knowledge/work?persona=leo",
+);
+await page.screenshot({
+  path: "previews/47-leo-personal-inbox-mobile.png",
+  fullPage: true,
+  animations: "disabled",
+});
 await browser.close();

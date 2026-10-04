@@ -223,3 +223,5 @@ Organization activity includes proposal and allocation-plan decision records wit
 Demos → Open larger scenario workspace uses shared Overview and directory components with six workstreams/nine workers. Scenario-qualified read-only detail/assignment inspection keeps main records separate. See [SHARED-SCENARIOS.md](SHARED-SCENARIOS.md).
 
 Roles can be explored from Organization → Browse roles, at `#/organization/roles` or `#/organizations/large/roles`. Search and responsibility coverage filters persist in the URL. Role catalogs, bindings, assignments and known scope gaps remain separate sample records.
+
+Demos → **Open knowledge scenario workspace** explores a non-software organization. Select Maya (Editor) or Leo (Coordinator), then open My Work to inspect their different assignments. Direct links: `#/organizations/knowledge?persona=maya`, `#/organizations/knowledge/work?persona=maya` and `#/organizations/knowledge/work?persona=leo`. See [KNOWLEDGE-SCENARIO.md](KNOWLEDGE-SCENARIO.md). This is a read-only persona preview with sample data.

@@ -27,8 +27,10 @@ export function OrganizationOverview({
   onDirectory,
   onActivity,
   onAttention,
+  myWorkLabel,
 }: {
   scenario?: OrganizationScenario;
+  myWorkLabel?: string;
   completed: Record<string, string>;
   readiness: Readiness;
   onOpen: (assignment: Assignment, tab?: string) => void;
@@ -61,23 +63,23 @@ export function OrganizationOverview({
           </p>
         </div>
         <button className="button secondary" onClick={onMyWork}>
-          Open My Work · Alex{scenario.readOnly ? " (main sample)" : ""}
+          {myWorkLabel ??
+            `Open My Work · Alex${scenario.readOnly ? " (main sample)" : ""}`}
         </button>
       </div>
       <div className="org-banner">
         <div>
           <span className="section-label">
-            SOFTWARE FACTORY · {scenario.name.toUpperCase()}
+            {scenario.domain.toUpperCase()} · {scenario.name.toUpperCase()}
           </span>
-          <h2>Build software with accountable collaboration.</h2>
+          <h2>{scenario.purpose}</h2>
           <p>
             {workstreams.length} workstreams · {workers.length} workers ·{" "}
             {roleBindings.length} scoped role bindings
           </p>
           <p>
             Authored design scenario. Workstream membership and role scopes
-            illustrate a proposed organization model; they are not live SF
-            records.
+            illustrate a proposed organization model; they are not live records.
           </p>
         </div>
       </div>
@@ -291,7 +293,11 @@ export function OrganizationOverview({
           ))}
         </section>
       </details>
-      <WorkspaceGuide />
+      <WorkspaceGuide
+        personalLabel={
+          scenario.personas ? "the selected sample persona’s" : "Alex’s"
+        }
+      />
     </>
   );
 }

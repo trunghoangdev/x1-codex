@@ -13,12 +13,14 @@ export function scenarioAttention(
       target: { kind: "workstream" as const, id: gap.workstreamId },
     })),
     ...scenario.assignments
-      .filter((a) =>
-        [
-          "Awaiting assessment",
-          "Awaiting authorization",
-          "Revision requested",
-        ].includes(a.state),
+      .filter(
+        (a) =>
+          a.responseNeeded ||
+          [
+            "Awaiting assessment",
+            "Awaiting authorization",
+            "Revision requested",
+          ].includes(a.state),
       )
       .map((a) => ({
         id: a.id,

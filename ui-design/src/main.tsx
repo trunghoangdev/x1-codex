@@ -1,3 +1,4 @@
+import { resolveScenario, scenarioPersona } from "./data/scenarioRegistry";
 import { RolesDirectory } from "./RolesDirectory";
 import { defaultRoleFilters } from "./data/roleDirectory";
 import { ScenarioWorkspace } from "./ScenarioWorkspace";
@@ -115,12 +116,26 @@ function App() {
     assignmentTabs,
   );
   const view = route.view;
+  const activeScenario = route.scenarioPath
+    ? resolveScenario(route.scenarioPath)
+    : undefined;
+  const activePersona = route.scenarioPath
+    ? scenarioPersona(route.scenarioPath)
+    : undefined;
+  const activePerson = activeScenario?.workers.find(
+    (w) => w.id === activePersona?.workerId,
+  );
   const worker = workers.find((w) => w.id === route.workerId);
   const handoff = handoffs.find((h) => h.id === route.handoffId);
   const outcome = outcomes.find((o) => o.streamId === route.outcomeId);
   const outcomeStream = workstreams.find((s) => s.id === route.outcomeId);
   const stream = workstreams.find((s) => s.id === route.workstreamId);
   const selected = assignments.find((a) => a.id === route.assignmentId) ?? null;
+  const isMainInbox =
+    view === "My Work" &&
+    !route.scenarioPath &&
+    !selected &&
+    !route.personalQueue;
   const tab = route.tab;
   function setTab(next: string) {
     if (selected)
@@ -228,7 +243,7 @@ function App() {
   >({});
   const source = selected ? assignmentSources.current[selected.id] : undefined;
   const inboxReturn = useRef<{ id: string; y: number } | null>(null);
-  const screenKey = `${route.view}:${route.assignmentId ?? ""}:${!!route.invalid}:${route.workstreamId ?? ""}:${route.workerId ?? ""}:${route.handoffId ?? ""}:${!!route.organizationActivity}:${route.outcomeId ?? ""}:${!!route.attention}:${!!route.personalQueue}:${!!route.largeOrganization}:${!!route.streamDirectory}:${!!route.workerDirectory}:${!!route.roleDirectory}:${route.scenarioPath?.split("?")[0] ?? ""}`;
+  const screenKey = `${route.view}:${route.assignmentId ?? ""}:${!!route.invalid}:${route.workstreamId ?? ""}:${route.workerId ?? ""}:${route.handoffId ?? ""}:${!!route.organizationActivity}:${route.outcomeId ?? ""}:${!!route.attention}:${!!route.personalQueue}:${!!route.largeOrganization}:${!!route.streamDirectory}:${!!route.workerDirectory}:${!!route.roleDirectory}:${route.scenarioPath?.split("?")[0] ?? ""}:${activePersona?.workerId ?? ""}`;
   const previousScreen = useRef(screenKey);
   useEffect(() => {
     if (route.view !== "My Work" || route.assignmentId)
@@ -470,12 +485,8 @@ function App() {
             <Code2 size={19} />
           </span>
           <div>
-            <strong>Software Factory</strong>
-            <span>
-              {route.scenarioPath
-                ? "Larger sample organization"
-                : "Acme organization"}
-            </span>
+            <strong>{activeScenario?.domain ?? "Software Factory"}</strong>
+            <span>{activeScenario?.name ?? "Acme organization"}</span>
           </div>
           <span className="live-dot" title="Demo workspace" />
         </div>
@@ -494,11 +505,13 @@ function App() {
               className={`nav-item ${view === name ? "active" : ""}`}
               aria-current={view === name ? "page" : undefined}
               onClick={() =>
-                route.scenarioPath && name === "Organization"
+                route.scenarioPath &&
+                (name === "Organization" ||
+                  (name === "My Work" && activePersona))
                   ? changeRoute({
-                      view: "Organization",
+                      view: name,
                       tab: "Overview",
-                      scenarioPath: "/organizations/large",
+                      scenarioPath: `/organizations/${activeScenario!.id}${name === "My Work" ? "/work" : ""}${activePersona ? `?persona=${activePersona.workerId}` : ""}`,
                     })
                   : navigate(name)
               }
@@ -508,16 +521,21 @@ function App() {
               {name === "My Work" && (
                 <b
                   aria-label={
-                    workDataState === "loading" || workDataState === "error"
+                    !activePersona &&
+                    (workDataState === "loading" || workDataState === "error")
                       ? "Assignment count unavailable"
                       : undefined
                   }
                 >
-                  {workDataState === "loading" || workDataState === "error"
-                    ? "—"
-                    : workDataState === "empty"
-                      ? 0
-                      : active.length}
+                  {activePersona
+                    ? activeScenario!.assignments.filter(
+                        (a) => a.workerId === activePersona.workerId,
+                      ).length
+                    : workDataState === "loading" || workDataState === "error"
+                      ? "—"
+                      : workDataState === "empty"
+                        ? 0
+                        : active.length}
                 </b>
               )}
             </button>
@@ -547,10 +565,21 @@ function App() {
             Interactive design prototype
           </div>
           <div className="profile">
-            <span className="avatar">AM</span>
+            <span className="avatar">
+              {activePerson
+                ? activePerson.name
+                    .split(" ")
+                    .map((n) => n[0])
+                    .join("")
+                : "AM"}
+            </span>
             <div>
-              <strong>Alex Morgan</strong>
-              <span>Reviewer · Release authority</span>
+              <strong>{activePerson?.name ?? "Alex Morgan"}</strong>
+              <span>
+                {activePersona
+                  ? `${activePersona.label} · Sample persona`
+                  : "Reviewer · Release authority"}
+              </span>
             </div>
           </div>
         </div>
@@ -620,7 +649,14 @@ function App() {
           <div className="top-right">
             <span className="demo-pill">DEMO WORKSPACE</span>
             <span className="top-divider" />
-            <span className="tiny-avatar">AM</span>
+            <span className="tiny-avatar">
+              {activePerson
+                ? activePerson.name
+                    .split(" ")
+                    .map((n) => n[0])
+                    .join("")
+                : "AM"}
+            </span>
           </div>
         </header>
         <main id="main-content" tabIndex={-1}>
@@ -649,7 +685,7 @@ function App() {
               </button>
             </div>
           )}
-          {view === "My Work" && !selected && !route.personalQueue && (
+          {isMainInbox && (
             <WorkDataPreview state={workDataState} setState={setWorkDataState}>
               <div className="page-heading">
                 <div>
@@ -1574,11 +1610,18 @@ function App() {
           )}
           {route.scenarioPath && (
             <ScenarioWorkspace
+              key={activeScenario?.id}
               onMyWork={() => navigate("My Work")}
               path={route.scenarioPath}
               onRoute={(path, replace) =>
                 changeRoute(
-                  { view: "Organization", tab: "Overview", scenarioPath: path },
+                  {
+                    view: path.split("?")[0].endsWith("/work")
+                      ? "My Work"
+                      : "Organization",
+                    tab: "Overview",
+                    scenarioPath: path,
+                  },
                   replace,
                 )
               }
@@ -1741,6 +1784,25 @@ function App() {
                   }
                 >
                   Explore larger organization
+                </button>
+              </section>
+              <section className="panel org-stream org-overview-section">
+                <h2>Knowledge organization scenario</h2>
+                <p>
+                  Explore guide creation and workshop coordination, with Maya’s
+                  editorial inbox and Leo’s coordination inbox.
+                </p>
+                <button
+                  className="button primary"
+                  onClick={() =>
+                    changeRoute({
+                      view: "Organization",
+                      tab: "Overview",
+                      scenarioPath: "/organizations/knowledge?persona=maya",
+                    })
+                  }
+                >
+                  Open knowledge scenario workspace
                 </button>
               </section>
               <RevisionCycle />
