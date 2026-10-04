@@ -747,4 +747,37 @@ for (const [width, filename, route] of [
     animations: "disabled",
   });
 }
+for (const [width, filename, route] of [
+  [
+    1440,
+    "69-knowledge-coordination-overview.png",
+    "/organizations/knowledge?persona=maya",
+  ],
+  [
+    390,
+    "70-missing-input-overview-mobile.png",
+    "/organizations/knowledge?persona=leo&coordSignal=input",
+  ],
+  [
+    1440,
+    "71-knowledge-responsibility-source.png",
+    "/organizations/knowledge/workstreams/K-01?persona=maya",
+  ],
+]) {
+  await page.setViewportSize({ width, height: 1000 });
+  await page.goto(`http://127.0.0.1:4173/#${route}`);
+  await page.locator("main h1").first().waitFor();
+  await page.evaluate(async () => {
+    document.activeElement?.blur();
+    window.scrollTo(0, 0);
+    await new Promise((resolve) =>
+      requestAnimationFrame(() => requestAnimationFrame(resolve)),
+    );
+  });
+  await page.screenshot({
+    path: `previews/${filename}`,
+    fullPage: true,
+    animations: "disabled",
+  });
+}
 await browser.close();

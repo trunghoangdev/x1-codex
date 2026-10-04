@@ -71,9 +71,7 @@ for (const width of [390, 1440])
     await expect(
       page.getByRole("heading", { name: scenario.purpose, exact: true }),
     ).toBeVisible();
-    await expect(
-      page.locator(".org-stream-grid.overview-workers article"),
-    ).toHaveCount(4);
+    await expect(page.locator(".overview-workers article")).toHaveCount(3);
     await page
       .getByRole("button", { name: "Browse roles", exact: true })
       .click();

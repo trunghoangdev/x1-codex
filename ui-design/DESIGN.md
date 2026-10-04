@@ -113,3 +113,7 @@ Role catalog and scoped requirements use four-card pages. Catalog cards summariz
 ## Current scenario navigation — iteration 70
 
 All three samples are available through a global organization selector with domain and persona context. Read-only Organization/My Work/Evidence and brand navigation remain scoped; Demos and interactive responses belong to the main sample. Evidence never imports another scenario’s artifacts. A bounded validated return trail survives refresh per scenario/persona within the tab; fresh details fall back to related workstreams/directories. Main response/proposal session records remain unchanged. See [SCENARIO-NAVIGATION.md](SCENARIO-NAVIGATION.md).
+
+## Knowledge coordination overview — iteration 72
+
+Knowledge Overview now groups independent responsibility/input/response/outcome-evidence records by workstream, with exact provider/receiver and source links. Filters/pages retain scenario/persona context. Knowledge’s sample/persona header is consolidated and worker summaries are bounded at three. Main and larger overview adapters remain the next item 1 unit. See [COORDINATION-OVERVIEW.md](COORDINATION-OVERVIEW.md) for record meanings and limits.

@@ -1,3 +1,4 @@
+import type { ReactNode } from "react";
 import {
   mainOrganization,
   type OrganizationScenario,
@@ -14,6 +15,7 @@ import { releaseWait } from "./data/organization";
 
 export function OrganizationOverview({
   scenario = mainOrganization,
+  coordination,
   completed,
   readiness,
   onOpen,
@@ -30,6 +32,7 @@ export function OrganizationOverview({
   myWorkLabel,
 }: {
   scenario?: OrganizationScenario;
+  coordination?: ReactNode;
   myWorkLabel?: string;
   completed: Record<string, string>;
   readiness: Readiness;
@@ -62,10 +65,12 @@ export function OrganizationOverview({
             responsible.
           </p>
         </div>
-        <button className="button secondary" onClick={onMyWork}>
-          {myWorkLabel ??
-            `Open My Work · Alex${scenario.readOnly ? " (main sample)" : ""}`}
-        </button>
+        {!coordination && (
+          <button className="button secondary" onClick={onMyWork}>
+            {myWorkLabel ??
+              `Open My Work · Alex${scenario.readOnly ? " (main sample)" : ""}`}
+          </button>
+        )}
       </div>
       <div className="org-banner">
         <div>
@@ -77,10 +82,13 @@ export function OrganizationOverview({
             {workstreams.length} workstreams · {workers.length} workers ·{" "}
             {roleBindings.length} scoped role bindings
           </p>
-          <p>
-            Authored design scenario. Workstream membership and role scopes
-            illustrate a proposed organization model; they are not live records.
-          </p>
+          {!coordination && (
+            <p>
+              Authored design scenario. Workstream membership and role scopes
+              illustrate a proposed organization model; they are not live
+              records.
+            </p>
+          )}
         </div>
       </div>
       <AttentionSummary
@@ -115,57 +123,61 @@ export function OrganizationOverview({
           View organization activity
         </button>
       </p>
-      <section
-        aria-label="Organization workstreams"
-        className="org-overview-section"
-      >
-        <h2 id="org-goals" tabIndex={-1}>
-          Goals & workstreams
-        </h2>
-        <p>
-          These streams run alongside each other. A recorded response does not
-          establish that a goal has been achieved.
-        </p>
-        <div className="org-stream-grid">
-          {workstreams.map((stream) => (
-            <article
-              className="panel org-stream"
-              key={stream.id}
-              aria-label={stream.name}
-            >
-              <span className="section-label">
-                {stream.id} · {stream.project}
-              </span>
-              <h3>{stream.name}</h3>
-              <button
-                className="text-link"
-                onClick={() => onWorkstream(stream.id)}
-              >
-                Explore workstream · {stream.id}
+      {coordination ?? (
+        <>
+          <section
+            aria-label="Organization workstreams"
+            className="org-overview-section"
+          >
+            <h2 id="org-goals" tabIndex={-1}>
+              Goals & workstreams
+            </h2>
+            <p>
+              These streams run alongside each other. A recorded response does
+              not establish that a goal has been achieved.
+            </p>
+            <div className="org-stream-grid">
+              {workstreams.map((stream) => (
+                <article
+                  className="panel org-stream"
+                  key={stream.id}
+                  aria-label={stream.name}
+                >
+                  <span className="section-label">
+                    {stream.id} · {stream.project}
+                  </span>
+                  <h3>{stream.name}</h3>
+                  <button
+                    className="text-link"
+                    onClick={() => onWorkstream(stream.id)}
+                  >
+                    Explore workstream · {stream.id}
+                  </button>
+                  <p>
+                    <strong>Goal</strong>
+                    <br />
+                    {stream.goal}
+                  </p>
+                  <p>
+                    {stream.assignmentIds.length} linked assignment · inspect
+                    details in the workstream
+                  </p>
+                  <p className="org-outcome">
+                    <strong>Outcome</strong>
+                    <br />
+                    {stream.outcome}
+                  </p>
+                </article>
+              ))}
+            </div>
+            <p>
+              <button className="button secondary" onClick={onDirectory}>
+                Browse workstreams
               </button>
-              <p>
-                <strong>Goal</strong>
-                <br />
-                {stream.goal}
-              </p>
-              <p>
-                {stream.assignmentIds.length} linked assignment · inspect
-                details in the workstream
-              </p>
-              <p className="org-outcome">
-                <strong>Outcome</strong>
-                <br />
-                {stream.outcome}
-              </p>
-            </article>
-          ))}
-        </div>
-        <p>
-          <button className="button secondary" onClick={onDirectory}>
-            Browse workstreams
-          </button>
-        </p>
-      </section>
+            </p>
+          </section>
+        </>
+      )}
       {scenario.id === "main" && (
         <details className="organization-disclosure org-overview-section">
           <summary>Other organization work · 3 assignments</summary>
@@ -220,9 +232,17 @@ export function OrganizationOverview({
         <p>
           {workers.length} workers · {roleBindings.length} scoped bindings.
           Inspect roles, scopes and assignment links in Workers.
+          {coordination &&
+            ` Showing ${Math.min(3, workers.length)} worker summaries; the directory contains all ${workers.length}.`}
         </p>
-        <div className="org-stream-grid overview-workers">
-          {workers.map((worker) => (
+        <div
+          className={
+            coordination
+              ? "compact-worker-summary overview-workers"
+              : "org-stream-grid overview-workers"
+          }
+        >
+          {(coordination ? workers.slice(0, 3) : workers).map((worker) => (
             <article
               className="panel org-stream"
               key={worker.id}

@@ -89,3 +89,7 @@ Inspected current Overview for all three scenarios at 1440px and 390px, height 1
 Visually inspected Knowledge desktop and larger software mobile captures. The repeated context panels and full worker roster motivate item 1’s shorter overview. Measurements and capture script are reproducible with `scripts/review-organization.mjs` against local port 4173. Captures: `previews/67-review-knowledge-overview.png`, `previews/68-review-large-overview-mobile.png`.
 
 No application behavior changed during this review. Build/tests were not rerun for documentation/capture changes; browser checks above were performed on the current prototype. No customer or live-runtime evidence was collected.
+
+## Item 1 started — iteration 72
+
+Delivered Knowledge-first coordination by workstream with explicit gap/input/response/criterion references, provider/receiver links, URL filters, bounded stream summaries and source-return context. Knowledge sample/persona context is consolidated; workers are short bounded summaries and mobile attention counts use two columns. Exact gap/criterion identities are inspectable in stream detail. Build and twenty related checks passed. See [COORDINATION-OVERVIEW.md](COORDINATION-OVERVIEW.md). Item 1 remains in progress: next adapt main local response/readiness/outside-stream records and larger software through the shared coordination view. Items 2–5 remain proposed.

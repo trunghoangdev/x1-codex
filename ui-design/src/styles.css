@@ -3605,3 +3605,86 @@ main h3,
   line-height: 1.5;
   color: #75817e;
 }
+
+.coordination-counts {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 10px;
+  margin: 16px 0;
+}
+.coordination-counts div {
+  background: #f4f6f1;
+  border-radius: 5px;
+  padding: 10px;
+}
+.coordination-counts dt {
+  font-size: 12px;
+  color: #59665f;
+}
+.coordination-counts dd {
+  margin: 4px 0 0;
+  font-size: 20px;
+  font-weight: 600;
+}
+.coordination-input-summary {
+  border-left: 3px solid #c4ac72;
+  padding-left: 12px;
+  margin: 16px 0;
+}
+.coordination-input-summary .text-link {
+  display: block;
+  margin: 10px 0;
+}
+#coordination-results {
+  margin: 16px 0;
+}
+#coordination-results:focus {
+  outline: 2px solid #6578db;
+  outline-offset: 4px;
+}
+.sample-navigation-note {
+  flex: 1 0 100%;
+}
+.sample-navigation-note summary {
+  cursor: pointer;
+  font-size: 13px;
+}
+.sample-switcher .sample-navigation-note p {
+  margin-top: 10px;
+}
+
+.knowledge-workspace .attention-summary-grid {
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+}
+.knowledge-workspace .org-banner {
+  padding: 18px;
+}
+.knowledge-workspace .org-banner h2 {
+  font-size: 22px;
+  margin-top: 8px;
+}
+.compact-worker-summary {
+  display: grid;
+  gap: 8px;
+}
+.compact-worker-summary .org-stream {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 10px 18px;
+  align-items: center;
+  padding: 10px 14px;
+}
+.compact-worker-summary .org-stream .section-label {
+  flex: 0 1 150px;
+}
+.compact-worker-summary .org-stream h3 {
+  font-size: 16px;
+  margin: 0;
+  flex: 1 1 160px;
+}
+.compact-worker-summary .org-stream p {
+  margin: 0;
+}
+.compact-worker-summary .org-stream .text-link {
+  min-height: 44px;
+}

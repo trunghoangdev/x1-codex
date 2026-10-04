@@ -733,9 +733,61 @@ function App() {
                 {activeScenario
                   ? "Read-only sample"
                   : "Interactive software sample"}
-                . Switching samples resets navigation filters. Demos and
-                response actions belong to the main software sample.
               </p>
+              {activeScenario?.id === "knowledge" && (
+                <>
+                  <label>
+                    Sample persona
+                    <select
+                      value={activePersona!.workerId}
+                      onChange={(e) => {
+                        const [path, query] = route.scenarioPath!.split("?");
+                        const p = new URLSearchParams(query);
+                        p.set("persona", e.target.value);
+                        if (path.endsWith("/work"))
+                          for (const key of ["q", "role", "stream", "status"])
+                            p.delete(key);
+                        changeRoute({ ...route, scenarioPath: `${path}?${p}` });
+                      }}
+                    >
+                      {activeScenario.personas!.map((p) => (
+                        <option key={p.workerId} value={p.workerId}>
+                          {p.label}
+                        </option>
+                      ))}
+                    </select>
+                  </label>
+                  {view !== "My Work" && (
+                    <button
+                      className="button secondary"
+                      onClick={() =>
+                        changeRoute({
+                          view: "My Work",
+                          tab: "Overview",
+                          scenarioPath: `/organizations/knowledge/work?persona=${activePersona!.workerId}`,
+                        })
+                      }
+                    >
+                      Open My Work · {activePerson?.name}
+                    </button>
+                  )}
+                  <button
+                    className="text-link"
+                    onClick={() => navigate("Organization")}
+                  >
+                    Return to main organization
+                  </button>
+                </>
+              )}
+              <details className="sample-navigation-note">
+                <summary>About sample navigation</summary>
+                <p>
+                  Switching samples resets filters and selects its default
+                  persona. Demos and interactive responses belong to the main
+                  software sample. Persona previews do not sign in or grant
+                  permissions.
+                </p>
+              </details>
             </section>
           )}
           {tourStep !== null && (
