@@ -1,6 +1,6 @@
 # Next UI review after iteration 62
 
-Reviewed the current shared scenario contract, read-only workspace, personal inbox, role directory, main handoff/proposal fixtures, workstream directory and design documents. This is a code/document review; no new browser measurements, customer research or live-runtime validation were performed. The preceding five-item review sequence is complete. The items below are proposed frontend slices, not implemented capabilities.
+Reviewed the current shared scenario contract, read-only workspace, personal inbox, role directory, main handoff/proposal fixtures, workstream directory and design documents. This is a code/document review; no new browser measurements, customer research or live-runtime validation were performed. The preceding five-item review sequence is complete. The original proposed slices below are now complete in iterations 64–70; completion notes record their implementation and limits.
 
 The workspace now demonstrates organizational primitives in both software and knowledge operations. The next useful step is to make coordination questions easier to answer using explicit relationships, then improve personal work and density. More sample domains are lower priority until these relationships are exercised.
 
@@ -73,3 +73,7 @@ Workstreams now has four compact summaries per page, native goal/gap/outcome dis
 ## Item 4 completed — iteration 69
 
 Roles catalog and scoped requirements now show four cards per page. Catalog summaries expand one role at a time; binding/assignment/gap lists have independent pages of four records. Directory page, expanded role, nested pages and filters survive refresh and detail return with scenario/persona context. Counts retain full-set meaning. Workers/Workstreams were delivered in iterations 67–68; the agreed item 4 slice is complete. See [COMPACT-DIRECTORIES.md](COMPACT-DIRECTORIES.md) for limits. Next is item 5: scenario navigation and evidence context.
+
+## Item 5 completed — iteration 70
+
+Added a global sample selector, visible domain/persona context, scenario-scoped Evidence and brand/sidebar navigation. Empty knowledge/larger Evidence explains its own absent fixture and links to evidence requirements, keeping main artifacts/actions separate. Tab-scoped validated return trails preserve nested context after refresh, isolate personas and unwind revisited details without cycles. Fresh direct details fall back to related streams/directories. Updated stale current navigation documentation. All five items in this review sequence are complete within their documented frontend sample scope. See [SCENARIO-NAVIGATION.md](SCENARIO-NAVIGATION.md).

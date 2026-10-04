@@ -237,3 +237,5 @@ Workers has compact summaries, expandable scope references and URL-preserved pag
 Workstreams also has compact summaries and four records per page, with expandable goal/gap/outcome context and preserved page/filter/persona URLs.
 
 Roles now has four-card catalog/coverage pages and expandable catalog records with independent binding/assignment/gap pages. Expansion and nested page URLs survive refresh and existing detail return.
+
+Use **Sample organization** to switch between main software, larger software and Knowledge Operations. Evidence stays inside the selected sample. Read-only nested return context survives refresh in the same tab. See [scenario navigation](SCENARIO-NAVIGATION.md).

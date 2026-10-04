@@ -8,7 +8,7 @@ The result status describes the full filtered set separately from the displayed 
 
 The optional `page` URL parameter is a positive safe integer. Main and read-only scenario routes preserve it with filters and persona. Refresh restores the requested page; existing detail-return context restores the original directory URL. A positive page above the filtered page count displays the last available page (URL unchanged); malformed/zero/fractional pages are rejected. This is frontend fixture pagination, not a runtime cursor API.
 
-Disclosure state resets after leaving the directory. Page/filter context persists in the URL; refreshing a worker detail still uses the existing fallback to Organization rather than fabricating an origin.
+Disclosure state resets after leaving the directory. Page/filter context persists in the URL; main worker details without a source still fall back to Organization. Read-only detail trails now survive refresh in the same tab (iteration 70); fresh worker links fall back to their scenario directory.
 
 Role catalog/coverage and catalog binding/assignment/gap lists are now paged too (iteration 69 below). Overview is unchanged. No page count or hidden-record count is a health, workload or capacity score.
 

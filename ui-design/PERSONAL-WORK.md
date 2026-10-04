@@ -27,7 +27,7 @@ An inbox with zero allocations is distinct from a nonempty inbox with zero searc
 - `#/organizations/large/work?persona=sam&stream=L-06&status=response`
 - `#/organizations/large/work?persona=jamie`
 
-My Work and Organization navigation remain inside the selected read-only scenario/persona. Return to main organization explicitly restores the main Alex sample and its session records. Refresh keeps the existing global session reset boundary. Evidence navigation consistency remains a separate proposed slice.
+My Work and Organization navigation remain inside the selected read-only scenario/persona. Return to main organization explicitly restores the main Alex sample and its session records. Refresh keeps the existing global session reset boundary. Evidence now stays within the selected scenario/persona; validated per-persona return trails survive refresh in the same tab. See [SCENARIO-NAVIGATION.md](SCENARIO-NAVIGATION.md).
 
 ## Validation and limits
 

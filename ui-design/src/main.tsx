@@ -1,6 +1,10 @@
 import { CoordinationInputs } from "./CoordinationInputs";
 import { mainOrganization } from "./data/organizationScenario";
-import { resolveScenario, scenarioPersona } from "./data/scenarioRegistry";
+import {
+  resolveScenario,
+  scenarioPersona,
+  readOnlyScenarios,
+} from "./data/scenarioRegistry";
 import { RolesDirectory } from "./RolesDirectory";
 import { defaultRoleFilters } from "./data/roleDirectory";
 import { ScenarioWorkspace } from "./ScenarioWorkspace";
@@ -478,7 +482,13 @@ function App() {
           href="#"
           onClick={(e) => {
             e.preventDefault();
-            navigate("My Work");
+            if (activeScenario)
+              changeRoute({
+                view: "Organization",
+                tab: "Overview",
+                scenarioPath: `/organizations/${activeScenario.id}${activePersona ? `?persona=${activePersona.workerId}` : ""}`,
+              });
+            else navigate("My Work");
           }}
         >
           <span className="brand-mark">
@@ -513,11 +523,12 @@ function App() {
               onClick={() =>
                 route.scenarioPath &&
                 (name === "Organization" ||
+                  name === "Evidence" ||
                   (name === "My Work" && activePersona))
                   ? changeRoute({
                       view: name,
                       tab: "Overview",
-                      scenarioPath: `/organizations/${activeScenario!.id}${name === "My Work" ? "/work" : ""}${activePersona ? `?persona=${activePersona.workerId}` : ""}`,
+                      scenarioPath: `/organizations/${activeScenario!.id}${name === "My Work" ? "/work" : name === "Evidence" ? "/evidence" : ""}${activePersona ? `?persona=${activePersona.workerId}` : ""}`,
                     })
                   : navigate(name)
               }
@@ -666,6 +677,67 @@ function App() {
           </div>
         </header>
         <main id="main-content" tabIndex={-1}>
+          {!route.invalid && (
+            <section
+              className="panel sample-switcher"
+              aria-label="Sample organization context"
+            >
+              <label>
+                Sample organization
+                <select
+                  value={activeScenario?.id ?? "main"}
+                  onChange={(e) => {
+                    const id = e.target.value;
+                    if (id === "main") {
+                      navigate(
+                        view === "Evidence"
+                          ? "Evidence"
+                          : view === "My Work"
+                            ? "My Work"
+                            : "Organization",
+                      );
+                      return;
+                    }
+                    const target = readOnlyScenarios.find((s) => s.id === id)!;
+                    const section =
+                      view === "Evidence"
+                        ? "/evidence"
+                        : view === "My Work"
+                          ? "/work"
+                          : "";
+                    changeRoute({
+                      view:
+                        view === "Evidence"
+                          ? "Evidence"
+                          : view === "My Work"
+                            ? "My Work"
+                            : "Organization",
+                      tab: "Overview",
+                      scenarioPath: `/organizations/${id}${section}?persona=${target.personas![0].workerId}`,
+                    });
+                  }}
+                >
+                  <option value="main">
+                    {mainOrganization.name} · {mainOrganization.domain}
+                  </option>
+                  {readOnlyScenarios.map((s) => (
+                    <option value={s.id} key={s.id}>
+                      {s.name} · {s.domain}
+                    </option>
+                  ))}
+                </select>
+              </label>
+              <p>
+                {activeScenario?.domain ?? mainOrganization.domain} ·{" "}
+                {activePerson?.name ?? "Alex Morgan"} ·{" "}
+                {activeScenario
+                  ? "Read-only sample"
+                  : "Interactive software sample"}
+                . Switching samples resets navigation filters. Demos and
+                response actions belong to the main software sample.
+              </p>
+            </section>
+          )}
           {tourStep !== null && (
             <CustomerTour
               step={tourStep}
@@ -1639,7 +1711,9 @@ function App() {
                   {
                     view: path.split("?")[0].endsWith("/work")
                       ? "My Work"
-                      : "Organization",
+                      : path.split("?")[0].endsWith("/evidence")
+                        ? "Evidence"
+                        : "Organization",
                     tab: "Overview",
                     scenarioPath: path,
                   },
@@ -1829,7 +1903,7 @@ function App() {
               <RevisionCycle />
             </>
           )}
-          {view === "Evidence" && (
+          {view === "Evidence" && !route.scenarioPath && (
             <>
               <div className="page-heading">
                 <div>

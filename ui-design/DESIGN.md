@@ -20,7 +20,7 @@ The primary persona is a human contributor or decision maker working alongside A
 | Workstream detail | How should responsibilities exchange work? | Inspect flow, assignment, handoff or outcome |
 | Organization attention/activity | What needs follow-up, and which records exist? | Inspect a signal or record |
 | Demos | How does collaboration work? | Start the guided walkthrough or independent scenarios |
-| Evidence | How do contribution, assessment, authority, and effect connect? | Inspect a record or open the release decision |
+| Evidence | Which artifacts exist in this organization? | Inspect represented records; read-only samples show their own empty fixture and requirements |
 
 ## First-use path
 
@@ -109,3 +109,7 @@ Workstreams now shows four summaries per page, with supporting goal/gap/outcome 
 ## Role density — iteration 69
 
 Role catalog and scoped requirements use four-card pages. Catalog cards summarize records; explicit expansion opens one role and pages binding/assignment/gap records independently. URL state restores expansion and all page/filter/persona context. Search selects whole roles, with matches possibly on another nested page. Full counts remain separate from visible ranges and never imply audited coverage. See [COMPACT-DIRECTORIES.md](COMPACT-DIRECTORIES.md).
+
+## Current scenario navigation — iteration 70
+
+All three samples are available through a global organization selector with domain and persona context. Read-only Organization/My Work/Evidence and brand navigation remain scoped; Demos and interactive responses belong to the main sample. Evidence never imports another scenario’s artifacts. A bounded validated return trail survives refresh per scenario/persona within the tab; fresh details fall back to related workstreams/directories. Main response/proposal session records remain unchanged. See [SCENARIO-NAVIGATION.md](SCENARIO-NAVIGATION.md).

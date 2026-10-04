@@ -44,6 +44,7 @@ export function validScenarioPath(raw: string) {
       ...(scenario.personas ? ["/work"] : []),
       "/attention",
       "/activity",
+      "/evidence",
       ...scenario.streams.map((s) => `/workstreams/${s.id}`),
       ...scenario.workers.map((w) => `/workers/${w.id}`),
       ...scenario.assignments.map((a) => `/assignments/${a.id}`),
@@ -123,19 +124,69 @@ export function ScenarioWorkspace({
   const [pathname, query] = path.split("?");
   const suffix = pathname.slice(base.length);
   const params = new URLSearchParams(query);
+  const trailKey = `forge-scenario-return-v1:${scenario.id}:${persona?.workerId ?? ""}`;
+  const getTrail = () => {
+    const key = persona?.workerId ?? "";
+    if (!origins.current[key]) {
+      try {
+        const saved: unknown = JSON.parse(
+          sessionStorage.getItem(trailKey) ?? "[]",
+        );
+        origins.current[key] = Array.isArray(saved)
+          ? saved
+              .filter(
+                (entry) =>
+                  entry &&
+                  typeof entry.destination === "string" &&
+                  typeof entry.source === "string" &&
+                  entry.destination.startsWith(base + "/") &&
+                  entry.source.split("?")[0] !== entry.destination &&
+                  validScenarioPath(entry.destination) &&
+                  resolveScenario(entry.source)?.id === scenario.id &&
+                  validScenarioPath(entry.source) &&
+                  scenarioPersona(entry.source)?.workerId === persona?.workerId,
+              )
+              .slice(-24)
+          : [];
+      } catch {
+        origins.current[key] = [];
+      }
+    }
+    return origins.current[key];
+  };
+  const saveTrail = () => {
+    try {
+      sessionStorage.setItem(trailKey, JSON.stringify(getTrail()));
+    } catch {
+      /* Return context still works in memory. */
+    }
+  };
   const open = (next: string) => {
     const destination = base + next.split("?")[0];
     if (destination === pathname) return;
-    const key = persona?.workerId ?? "";
-    (origins.current[key] ??= []).push({ destination, source: path });
+    const trail = getTrail();
+    trail.push({ destination, source: path });
+    if (trail.length > 24) trail.shift();
+    saveTrail();
     onRoute(qualify(next));
   };
   const back = () => {
-    const trail = origins.current[persona?.workerId ?? ""] ?? [];
+    const trail = getTrail();
     let index = trail.length - 1;
     while (index >= 0 && trail[index].destination !== pathname) index--;
-    const source = index >= 0 ? trail[index].source : qualify("");
+    const assignment = scenario.assignments.find(
+      (a) => suffix === `/assignments/${a.id}`,
+    );
+    const fallback = assignment?.streamId
+      ? `/workstreams/${assignment.streamId}`
+      : suffix.startsWith("/workers/")
+        ? "/workers"
+        : suffix.startsWith("/workstreams/")
+          ? "/workstreams"
+          : "";
+    const source = index >= 0 ? trail[index].source : qualify(fallback);
     if (index >= 0) trail.splice(index);
+    saveTrail();
     onRoute(source);
   };
   const filter = (kind: string, values: Record<string, string>) => {
@@ -248,6 +299,65 @@ export function ScenarioWorkspace({
           onStream={(id) => open(`/workstreams/${id}`)}
           onOrganization={() => onRoute(qualify(""))}
         />
+      ) : suffix === "/evidence" ? (
+        <div className="detail-page">
+          <DetailBackButton onClick={() => onRoute(qualify(""))}>
+            Back to Organization
+          </DetailBackButton>
+          <div className="page-heading">
+            <div>
+              <div className="eyebrow">SCENARIO EVIDENCE</div>
+              <h1 tabIndex={-1}>Evidence · {scenario.name}</h1>
+              <p>Artifacts represented in this sample organization.</p>
+            </div>
+          </div>
+          {scenario.evidence.length === 0 ? (
+            <section
+              className="panel org-stream"
+              aria-label="Scenario evidence"
+            >
+              <h2>No evidence artifacts represented</h2>
+              <p>
+                {scenario.name} has authored assignments and evidence
+                requirements, but no attached artifacts. Missing records do not
+                establish that work succeeded or failed. Main software sample
+                artifacts and decisions are separate.
+              </p>
+              <button
+                className="button secondary"
+                onClick={() => onRoute(qualify("/workstreams"))}
+              >
+                Browse evidence requirements
+              </button>
+            </section>
+          ) : (
+            <section
+              className="panel org-stream"
+              aria-label="Scenario evidence"
+            >
+              <p>{scenario.evidence.length} authored artifacts</p>
+              {scenario.evidence.map((a) => (
+                <article key={a.id}>
+                  <h2>{a.title}</h2>
+                  <p>
+                    {a.id} · {a.producer}
+                  </p>
+                  <p>{a.detail}</p>
+                  <details>
+                    <summary>Inspect artifact contents · {a.id}</summary>
+                    <pre>{a.content}</pre>
+                  </details>
+                  <button
+                    className="text-link"
+                    onClick={() => open(`/assignments/${a.assignmentId}`)}
+                  >
+                    Inspect artifact assignment · {a.assignmentId}
+                  </button>
+                </article>
+              ))}
+            </section>
+          )}
+        </div>
       ) : suffix === "/roles" ? (
         <RolesDirectory
           scenario={scenario}

@@ -3576,3 +3576,32 @@ main h3,
 #role-results {
   margin: 16px 0;
 }
+
+.sample-switcher {
+  margin-bottom: 24px;
+  padding: 18px 22px;
+  display: flex;
+  align-items: center;
+  flex-wrap: wrap;
+  gap: 16px;
+}
+.sample-switcher label {
+  display: grid;
+  gap: 8px;
+  font-weight: 600;
+  flex: 1 1 280px;
+  min-width: 0;
+}
+.sample-switcher select {
+  width: 100%;
+  min-width: 0;
+  padding: 10px;
+  border: 1px solid #dce2d9;
+  border-radius: 5px;
+}
+.sample-switcher p {
+  flex: 1 1 320px;
+  margin: 0;
+  line-height: 1.5;
+  color: #75817e;
+}

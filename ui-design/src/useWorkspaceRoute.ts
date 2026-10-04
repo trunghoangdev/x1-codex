@@ -65,7 +65,9 @@ export function useWorkspaceRoute(ids: string[], tabs: string[]) {
         ? {
             view: raw.split("?")[0].endsWith("/work")
               ? "My Work"
-              : "Organization",
+              : raw.split("?")[0].endsWith("/evidence")
+                ? "Evidence"
+                : "Organization",
             tab: "Overview",
             scenarioPath: raw,
           }

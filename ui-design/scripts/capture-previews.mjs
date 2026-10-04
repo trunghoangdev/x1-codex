@@ -699,4 +699,52 @@ for (const [width, filename, route] of [
     animations: "disabled",
   });
 }
+for (const [width, filename, route] of [
+  [
+    1440,
+    "64-knowledge-evidence-context.png",
+    "/organizations/knowledge/evidence?persona=leo",
+  ],
+  [
+    390,
+    "65-large-evidence-mobile.png",
+    "/organizations/large/evidence?persona=sam",
+  ],
+  [
+    1440,
+    "66-restored-personal-context.png",
+    "/organizations/knowledge/work?persona=maya&status=waiting",
+  ],
+]) {
+  await page.setViewportSize({ width, height: 1000 });
+  await page.goto(`http://127.0.0.1:4173/#${route}`);
+  await page.locator("main h1").first().waitFor();
+  if (filename.startsWith("66")) {
+    await page
+      .getByRole("button", {
+        name: "Inspect my assignment · K-02-E",
+        exact: true,
+      })
+      .click();
+    await page.reload();
+    await page
+      .getByRole("button", { name: "Back to scenario context", exact: true })
+      .click();
+    await page
+      .getByRole("heading", { name: "My Work · Maya Patel", exact: true })
+      .waitFor();
+  }
+  await page.evaluate(async () => {
+    document.activeElement?.blur();
+    window.scrollTo(0, 0);
+    await new Promise((resolve) =>
+      requestAnimationFrame(() => requestAnimationFrame(resolve)),
+    );
+  });
+  await page.screenshot({
+    path: `previews/${filename}`,
+    fullPage: true,
+    animations: "disabled",
+  });
+}
 await browser.close();
