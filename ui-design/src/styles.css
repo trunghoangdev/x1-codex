@@ -3565,3 +3565,14 @@ main h3,
   padding: 10px 0;
   cursor: pointer;
 }
+
+#role-results:focus,
+#scope-role-results:focus,
+.bounded-records > p:focus {
+  outline: 2px solid var(--accent, #6578db);
+  outline-offset: 4px;
+}
+
+#role-results {
+  margin: 16px 0;
+}

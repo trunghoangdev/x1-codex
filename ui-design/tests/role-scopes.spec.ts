@@ -223,7 +223,7 @@ for (const width of [390, 1440])
         exact: true,
       }),
     ).toContainText("Declared bindings · 0");
-    await expect(page.getByRole("status")).toHaveText(
+    await expect(page.getByRole("status")).toContainText(
       "1 of 5 scoped role requirements shown",
     );
     await page

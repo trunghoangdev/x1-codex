@@ -105,3 +105,7 @@ Workers is the first compact/bounded directory: six summaries per page, full fil
 ## Workstream density — iteration 68
 
 Workstreams now shows four summaries per page, with supporting goal/gap/outcome context in a native disclosure. Full filtered counts and URL-preserved page/filter/persona follow the Workers behavior. Overview remains unchanged; role directories and nested lists are next.
+
+## Role density — iteration 69
+
+Role catalog and scoped requirements use four-card pages. Catalog cards summarize records; explicit expansion opens one role and pages binding/assignment/gap records independently. URL state restores expansion and all page/filter/persona context. Search selects whole roles, with matches possibly on another nested page. Full counts remain separate from visible ranges and never imply audited coverage. See [COMPACT-DIRECTORIES.md](COMPACT-DIRECTORIES.md).

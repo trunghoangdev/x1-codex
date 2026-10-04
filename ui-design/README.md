@@ -235,3 +235,5 @@ Organization → Browse roles → **Coverage by workstream** shows declared bind
 Workers has compact summaries, expandable scope references and URL-preserved pages of six records. See [compact directory behavior and remaining scope](COMPACT-DIRECTORIES.md).
 
 Workstreams also has compact summaries and four records per page, with expandable goal/gap/outcome context and preserved page/filter/persona URLs.
+
+Roles now has four-card catalog/coverage pages and expandable catalog records with independent binding/assignment/gap pages. Expansion and nested page URLs survive refresh and existing detail return.

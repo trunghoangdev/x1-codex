@@ -41,13 +41,19 @@ for (const width of [390, 1440])
     await expect(
       page.getByRole("heading", { name: "Roles", exact: true }),
     ).toBeVisible();
-    await expect(page.getByRole("status")).toHaveText("7 of 7 roles");
+    await expect(page.getByRole("status")).toContainText("7 of 7 roles");
     await page.getByLabel("Responsibility coverage").selectOption("gaps");
-    await expect(page.getByRole("status")).toHaveText("2 of 7 roles");
+    await expect(page.getByRole("status")).toContainText("2 of 7 roles");
     const developer = page.getByRole("article", {
       name: "Developer",
       exact: true,
     });
+    await developer
+      .getByRole("button", {
+        name: "Inspect role records · Developer",
+        exact: true,
+      })
+      .click();
     await expect(developer).toContainText("Payment webhook reliability");
     await expect(developer).toContainText("Invitation implementation");
     await developer
@@ -59,6 +65,12 @@ for (const width of [390, 1440])
     await expect(page.getByLabel("Responsibility coverage")).toHaveValue(
       "gaps",
     );
+    await page
+      .getByRole("button", {
+        name: "Inspect role records · Reviewer",
+        exact: true,
+      })
+      .click();
     await page
       .getByRole("article", { name: "Reviewer", exact: true })
       .getByRole("button", { name: "Alex Morgan" })
@@ -77,7 +89,7 @@ for (const width of [390, 1440])
     await page
       .getByLabel("Responsibility coverage")
       .selectOption("no-assignments");
-    await expect(page.getByRole("status")).toHaveText("3 of 7 roles");
+    await expect(page.getByRole("status")).toContainText("3 of 7 roles");
     await page.getByLabel("Search roles").pressSequentially("impossible");
     await expect(page.getByLabel("Search roles")).toBeFocused();
     await page.getByRole("button", { name: "Show all roles" }).click();
@@ -86,9 +98,15 @@ for (const width of [390, 1440])
     await page
       .getByRole("button", { name: "Browse roles", exact: true })
       .click();
-    await expect(page.getByRole("status")).toHaveText("5 of 5 roles");
+    await expect(page.getByRole("status")).toContainText("5 of 5 roles");
     await page.getByLabel("Responsibility coverage").selectOption("gaps");
-    await expect(page.getByRole("status")).toHaveText("1 of 5 roles");
+    await expect(page.getByRole("status")).toContainText("1 of 5 roles");
+    await page
+      .getByRole("button", {
+        name: "Inspect role records · Reviewer",
+        exact: true,
+      })
+      .click();
     await expect(
       page.getByRole("article", { name: "Reviewer", exact: true }),
     ).toContainText("Unassigned");
@@ -101,7 +119,7 @@ for (const width of [390, 1440])
       "gaps",
     );
     await page.reload();
-    await expect(page.getByRole("status")).toHaveText("1 of 5 roles");
+    await expect(page.getByRole("status")).toContainText("1 of 5 roles");
     expect(
       await page.evaluate(
         () => document.documentElement.scrollWidth <= innerWidth,

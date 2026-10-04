@@ -69,3 +69,7 @@ Delivered the first proposed directory slice: Workers now shows six compact summ
 ## Item 4 continued — iteration 68
 
 Workstreams now has four compact summaries per page, native goal/gap/outcome disclosure and URL-preserved page/filter/persona context. Counts describe all filtered records, not the visible page. Existing six-stream data exercises two pages. Build and nine related tests passed on desktop/mobile. Item 4 still needs Roles and nested assignment/binding lists; item 5 remains proposed.
+
+## Item 4 completed — iteration 69
+
+Roles catalog and scoped requirements now show four cards per page. Catalog summaries expand one role at a time; binding/assignment/gap lists have independent pages of four records. Directory page, expanded role, nested pages and filters survive refresh and detail return with scenario/persona context. Counts retain full-set meaning. Workers/Workstreams were delivered in iterations 67–68; the agreed item 4 slice is complete. See [COMPACT-DIRECTORIES.md](COMPACT-DIRECTORIES.md) for limits. Next is item 5: scenario navigation and evidence context.

@@ -4,7 +4,13 @@ import {
 } from "./data/scenarioWork";
 import { CoordinationInputs } from "./CoordinationInputs";
 import { RolesDirectory } from "./RolesDirectory";
-import { roleCoverage, type RoleFilters } from "./data/roleDirectory";
+import {
+  roleCoverage,
+  roleRecordPages,
+  readRolePages,
+  rolePageParams,
+  type RoleFilters,
+} from "./data/roleDirectory";
 import { OrganizationOverview } from "./OrganizationOverview";
 import { scenarioAttention } from "./data/scenarioAttention";
 import { useRef } from "react";
@@ -47,8 +53,12 @@ export function validScenarioPath(raw: string) {
   return (
     (suffix !== "/work" || validScenarioWorkFilters(scenario, params)) &&
     (!params.has("page") ||
-      (["/workers", "/workstreams"].includes(suffix) &&
+      (["/workers", "/workstreams", "/roles"].includes(suffix) &&
         validDirectoryPage(params.get("page")))) &&
+    (suffix !== "/roles" ||
+      (roleRecordPages.every((key) => validDirectoryPage(params.get(key))) &&
+        (!params.has("detail") ||
+          scenario.roles.some((r) => r.name === params.get("detail"))))) &&
     (!params.has("persona") ||
       !!scenario.personas?.some((p) => p.workerId === params.get("persona"))) &&
     (!params.has("view") || params.get("view") === "scope") &&
@@ -242,6 +252,8 @@ export function ScenarioWorkspace({
         <RolesDirectory
           scenario={scenario}
           filters={{
+            ...readRolePages(params),
+            detail: params.get("detail") ?? undefined,
             query: params.get("q") ?? "",
             view: params.get("view") === "scope" ? "scope" : undefined,
             scope: params.get("scope") ?? undefined,
@@ -250,6 +262,7 @@ export function ScenarioWorkspace({
           }}
           onFilters={(f) =>
             filter("roles", {
+              ...rolePageParams(f),
               q: f.query,
               coverage: f.coverage,
               view: f.view ?? "",

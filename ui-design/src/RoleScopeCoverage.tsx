@@ -1,6 +1,6 @@
 import type { OrganizationScenario } from "./data/organizationScenario";
 import { scopeRequirementRows } from "./data/roleScopes";
-import type { RoleFilters } from "./data/roleDirectory";
+import { rolePageSize, type RoleFilters } from "./data/roleDirectory";
 import { DetailEmptyState } from "./DetailPresentation";
 export function RoleScopeCoverage({
   scenario,
@@ -39,6 +39,18 @@ export function RoleScopeCoverage({
               ? r.bindingState === "unknown"
               : r.gaps.length > 0)),
   );
+  const pages = Math.max(1, Math.ceil(shown.length / rolePageSize));
+  const page = Math.min(filters.page ?? 1, pages);
+  const start = (page - 1) * rolePageSize;
+  const changeFilters = (next: RoleFilters) =>
+    onFilters({
+      ...next,
+      page: undefined,
+      detail: undefined,
+      bindingsPage: undefined,
+      assignmentsPage: undefined,
+      gapsPage: undefined,
+    });
   const reset = () => {
     onFilters({
       view: "scope",
@@ -67,7 +79,9 @@ export function RoleScopeCoverage({
           Coverage workstream
           <select
             value={filters.scope ?? "All"}
-            onChange={(e) => onFilters({ ...filters, scope: e.target.value })}
+            onChange={(e) =>
+              changeFilters({ ...filters, scope: e.target.value })
+            }
           >
             <option value="All">All workstreams</option>
             {scopes.map((s) => (
@@ -83,7 +97,9 @@ export function RoleScopeCoverage({
             type="search"
             value={filters.query}
             placeholder="Role, workstream or bound worker"
-            onChange={(e) => onFilters({ ...filters, query: e.target.value })}
+            onChange={(e) =>
+              changeFilters({ ...filters, query: e.target.value })
+            }
           />
         </label>
         <label>
@@ -91,7 +107,7 @@ export function RoleScopeCoverage({
           <select
             value={filters.coverage}
             onChange={(e) =>
-              onFilters({
+              changeFilters({
                 ...filters,
                 coverage: e.target.value as RoleFilters["coverage"],
               })
@@ -175,8 +191,15 @@ export function RoleScopeCoverage({
           </table>
         </div>
       </details>
-      <p className="personal-queue-results" role="status">
+      <p
+        id="scope-role-results"
+        tabIndex={-1}
+        className="personal-queue-results"
+        role="status"
+      >
         {shown.length} of {scoped.length} scoped role requirements shown
+        {shown.length > 0 &&
+          ` · Showing ${start + 1}–${Math.min(start + rolePageSize, shown.length)} · Page ${page} of ${pages}`}
       </p>
       {shown.length === 0 ? (
         <DetailEmptyState>
@@ -188,7 +211,7 @@ export function RoleScopeCoverage({
         </DetailEmptyState>
       ) : (
         <div className="org-stream-grid">
-          {shown.map((r) => (
+          {shown.slice(start, start + rolePageSize).map((r) => (
             <article
               className="panel org-stream"
               aria-label={`${r.role} · ${r.scope.label}`}
@@ -299,6 +322,37 @@ export function RoleScopeCoverage({
             </article>
           ))}
         </div>
+      )}
+      {pages > 1 && (
+        <nav className="directory-pagination" aria-label="Scoped role pages">
+          <button
+            className="button secondary"
+            disabled={page === 1}
+            onClick={() => {
+              onFilters({ ...filters, page: page - 1 });
+              requestAnimationFrame(() =>
+                document.getElementById("scope-role-results")?.focus(),
+              );
+            }}
+          >
+            Previous scoped roles
+          </button>
+          <span>
+            Page {page} of {pages}
+          </span>
+          <button
+            className="button secondary"
+            disabled={page === pages}
+            onClick={() => {
+              onFilters({ ...filters, page: page + 1 });
+              requestAnimationFrame(() =>
+                document.getElementById("scope-role-results")?.focus(),
+              );
+            }}
+          >
+            Next scoped roles
+          </button>
+        </nav>
       )}
       <details className="organization-disclosure org-overview-section">
         <summary>Scopes outside the workstream view</summary>

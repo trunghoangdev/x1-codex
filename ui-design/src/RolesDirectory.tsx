@@ -1,3 +1,4 @@
+import { BoundedRecords } from "./BoundedRecords";
 import { RoleScopeCoverage } from "./RoleScopeCoverage";
 import {
   mainOrganization,
@@ -5,6 +6,7 @@ import {
 } from "./data/organizationScenario";
 import {
   defaultRoleFilters,
+  rolePageSize,
   scenarioRoleRows,
   type RoleFilters,
 } from "./data/roleDirectory";
@@ -41,6 +43,18 @@ export function RolesDirectory({
             ? row.bindings.length > 0 && row.assignments.length === 0
             : row.gaps.length > 0)),
   );
+  const pages = Math.max(1, Math.ceil(visible.length / rolePageSize));
+  const page = Math.min(filters.page ?? 1, pages);
+  const start = (page - 1) * rolePageSize;
+  const changeFilters = (next: RoleFilters) =>
+    onFilters({
+      ...next,
+      page: undefined,
+      detail: undefined,
+      bindingsPage: undefined,
+      assignmentsPage: undefined,
+      gapsPage: undefined,
+    });
   const reset = () => {
     onFilters(defaultRoleFilters);
     requestAnimationFrame(() =>
@@ -110,7 +124,7 @@ export function RolesDirectory({
                 value={filters.query}
                 placeholder="Role, worker, scope or assignment"
                 onChange={(e) =>
-                  onFilters({ ...filters, query: e.target.value })
+                  changeFilters({ ...filters, query: e.target.value })
                 }
               />
             </label>
@@ -119,7 +133,7 @@ export function RolesDirectory({
               <select
                 value={filters.coverage}
                 onChange={(e) =>
-                  onFilters({
+                  changeFilters({
                     ...filters,
                     coverage: e.target.value as RoleFilters["coverage"],
                   })
@@ -137,8 +151,15 @@ export function RolesDirectory({
               Clear filters
             </button>
           </section>
-          <p role="status">
+          <p className="personal-queue-note">
+            Search selects matching roles across all their records. Inspect a
+            role to browse its full binding, assignment and gap lists; matches
+            may be on another record page.
+          </p>
+          <p id="role-results" tabIndex={-1} role="status">
             {visible.length} of {rows.length} roles
+            {visible.length > 0 &&
+              ` · Showing ${start + 1}–${Math.min(start + rolePageSize, visible.length)} · Page ${page} of ${pages}`}
           </p>
           {visible.length === 0 ? (
             <DetailEmptyState>
@@ -149,7 +170,7 @@ export function RolesDirectory({
             </DetailEmptyState>
           ) : (
             <div className="org-stream-grid">
-              {visible.map((row) => (
+              {visible.slice(start, start + rolePageSize).map((row) => (
                 <article
                   className="panel org-stream"
                   aria-label={row.name}
@@ -157,80 +178,177 @@ export function RolesDirectory({
                 >
                   <h2>{row.name}</h2>
                   <p>{row.purpose}</p>
-                  <h3>Scoped bindings · {row.bindings.length}</h3>
-                  {row.bindings.length ? (
-                    <ul>
-                      {row.bindings.map((b) => (
-                        <li key={`${b.workerId}:${b.scope}`}>
-                          <button
-                            className="text-link"
-                            onClick={() => onWorker(b.workerId)}
-                          >
-                            {
-                              scenario.workers.find((w) => w.id === b.workerId)
-                                ?.name
-                            }
-                          </button>{" "}
-                          · {b.scope}
-                        </li>
-                      ))}
-                    </ul>
-                  ) : (
+                  <p>
+                    Bindings: {row.bindings.length} · Assignments:{" "}
+                    {row.assignments.length} · Known gaps: {row.gaps.length}
+                  </p>
+                  {row.bindings.length === 0 && (
                     <p>No binding represented for this catalog role.</p>
                   )}
-                  <h3>Role assignments · {row.assignments.length}</h3>
-                  <p>
-                    Explicit role membership; assignment-to-binding scope
-                    matching is not verified here.
-                  </p>
-                  {row.assignments.length ? (
-                    row.assignments.map((a) => (
-                      <div className="org-stream-assignment" key={a.id}>
-                        <button
-                          className="text-link"
-                          onClick={() => onAssignment(a.id)}
-                        >
-                          {a.id} · {a.title}
-                        </button>
+                  <button
+                    className="button secondary"
+                    aria-expanded={filters.detail === row.name}
+                    aria-controls={`role-detail-${row.name.replaceAll(" ", "-")}`}
+                    onClick={() =>
+                      onFilters({
+                        ...filters,
+                        detail:
+                          filters.detail === row.name ? undefined : row.name,
+                        bindingsPage: undefined,
+                        assignmentsPage: undefined,
+                        gapsPage: undefined,
+                      })
+                    }
+                  >
+                    Inspect role records · {row.name}
+                  </button>
+                  {filters.detail === row.name && (
+                    <div id={`role-detail-${row.name.replaceAll(" ", "-")}`}>
+                      <h3>Scoped bindings · {row.bindings.length}</h3>
+                      {row.bindings.length ? (
+                        <BoundedRecords
+                          label="Bindings"
+                          items={row.bindings}
+                          page={filters.bindingsPage}
+                          onPage={(bindingsPage) =>
+                            onFilters({ ...filters, bindingsPage })
+                          }
+                          render={(b) => (
+                            <p key={b.id}>
+                              <button
+                                className="text-link"
+                                onClick={() => onWorker(b.workerId)}
+                              >
+                                {
+                                  scenario.workers.find(
+                                    (w) => w.id === b.workerId,
+                                  )?.name
+                                }
+                              </button>{" "}
+                              · {b.scope}
+                            </p>
+                          )}
+                        />
+                      ) : (
+                        <p>No binding represented for this catalog role.</p>
+                      )}
+                      <h3>Role assignments · {row.assignments.length}</h3>
+                      <p>
+                        Explicit role membership; assignment-to-binding scope
+                        matching is not verified here.
+                      </p>
+                      {row.assignments.length ? (
+                        <BoundedRecords
+                          label="Assignments"
+                          items={row.assignments}
+                          page={filters.assignmentsPage}
+                          onPage={(assignmentsPage) =>
+                            onFilters({ ...filters, assignmentsPage })
+                          }
+                          render={(a) => (
+                            <div className="org-stream-assignment" key={a.id}>
+                              <button
+                                className="text-link"
+                                onClick={() => onAssignment(a.id)}
+                              >
+                                {a.id} · {a.title}
+                              </button>
+                              <p>
+                                {scenario.workers.find(
+                                  (w) => w.id === a.workerId,
+                                )?.name ?? "Unassigned"}{" "}
+                                ·{" "}
+                                {completed[a.id]
+                                  ? "Local response recorded · outcome unverified"
+                                  : a.state}
+                              </p>
+                            </div>
+                          )}
+                        />
+                      ) : (
                         <p>
-                          {scenario.workers.find((w) => w.id === a.workerId)
-                            ?.name ?? "Unassigned"}{" "}
-                          ·{" "}
-                          {completed[a.id]
-                            ? "Local response recorded · outcome unverified"
-                            : a.state}
+                          No role assignments represented. This does not mean
+                          the bound workers are idle.
                         </p>
-                      </div>
-                    ))
-                  ) : (
-                    <p>
-                      No role assignments represented. This does not mean the
-                      bound workers are idle.
-                    </p>
-                  )}
-                  <h3>Known scope gaps · {row.gaps.length}</h3>
-                  {row.gaps.length ? (
-                    row.gaps.map((g) => (
-                      <div className="org-stream-assignment" key={g.id}>
-                        <strong>{g.title}</strong>
-                        <p>{g.description}</p>
-                        <button
-                          className="text-link"
-                          onClick={() => onStream(g.workstreamId)}
-                        >
-                          Inspect gap workstream · {g.title}
-                        </button>
-                      </div>
-                    ))
-                  ) : (
-                    <p>
-                      No explicit gap linked to this role; coverage is not
-                      audited.
-                    </p>
+                      )}
+                      <h3>Known scope gaps · {row.gaps.length}</h3>
+                      {row.gaps.length ? (
+                        <BoundedRecords
+                          label="Gaps"
+                          items={row.gaps}
+                          page={filters.gapsPage}
+                          onPage={(gapsPage) =>
+                            onFilters({ ...filters, gapsPage })
+                          }
+                          render={(g) => (
+                            <div className="org-stream-assignment" key={g.id}>
+                              <strong>{g.title}</strong>
+                              <p>{g.description}</p>
+                              <button
+                                className="text-link"
+                                onClick={() => onStream(g.workstreamId)}
+                              >
+                                Inspect gap workstream · {g.title}
+                              </button>
+                            </div>
+                          )}
+                        />
+                      ) : (
+                        <p>
+                          No explicit gap linked to this role; coverage is not
+                          audited.
+                        </p>
+                      )}
+                    </div>
                   )}
                 </article>
               ))}
             </div>
+          )}
+          {pages > 1 && (
+            <nav className="directory-pagination" aria-label="Role pages">
+              <button
+                className="button secondary"
+                disabled={page === 1}
+                onClick={() => {
+                  onFilters({
+                    ...filters,
+                    page: page - 1,
+                    detail: undefined,
+                    bindingsPage: undefined,
+                    assignmentsPage: undefined,
+                    gapsPage: undefined,
+                  });
+                  requestAnimationFrame(() =>
+                    document.getElementById("role-results")?.focus(),
+                  );
+                }}
+              >
+                Previous roles
+              </button>
+              <span>
+                Page {page} of {pages}
+              </span>
+              <button
+                className="button secondary"
+                disabled={page === pages}
+                onClick={() => {
+                  onFilters({
+                    ...filters,
+                    page: page + 1,
+                    detail: undefined,
+                    bindingsPage: undefined,
+                    assignmentsPage: undefined,
+                    gapsPage: undefined,
+                  });
+                  requestAnimationFrame(() =>
+                    document.getElementById("role-results")?.focus(),
+                  );
+                }}
+              >
+                Next roles
+              </button>
+            </nav>
           )}
         </>
       )}

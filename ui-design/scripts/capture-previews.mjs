@@ -670,4 +670,33 @@ for (const [width, filename] of [
     animations: "disabled",
   });
 }
+for (const [width, filename, route] of [
+  [1440, "61-compact-roles.png", "/organization/roles"],
+  [
+    390,
+    "62-nested-role-pages-mobile.png",
+    "/organizations/large/roles?persona=sam&q=Reviewer&detail=Reviewer&assignmentsPage=2&bindingsPage=2",
+  ],
+  [
+    1440,
+    "63-scoped-role-pages.png",
+    "/organizations/large/roles?view=scope&persona=sam&page=2",
+  ],
+]) {
+  await page.setViewportSize({ width, height: 1000 });
+  await page.goto(`http://127.0.0.1:4173/#${route}`);
+  await page.getByRole("heading", { name: "Roles", exact: true }).waitFor();
+  await page.evaluate(async () => {
+    document.activeElement?.blur();
+    window.scrollTo(0, 0);
+    await new Promise((resolve) =>
+      requestAnimationFrame(() => requestAnimationFrame(resolve)),
+    );
+  });
+  await page.screenshot({
+    path: `previews/${filename}`,
+    fullPage: true,
+    animations: "disabled",
+  });
+}
 await browser.close();

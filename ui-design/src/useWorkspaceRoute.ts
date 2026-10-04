@@ -1,5 +1,12 @@
+import { mainOrganization } from "./data/organizationScenario";
 import { mainScopes } from "./data/roleScopes";
-import { roleCoverage, type RoleFilters } from "./data/roleDirectory";
+import {
+  roleCoverage,
+  roleRecordPages,
+  readRolePages,
+  rolePageParams,
+  type RoleFilters,
+} from "./data/roleDirectory";
 import { validScenarioPath } from "./ScenarioWorkspace";
 import {
   defaultWorkerFilters,
@@ -75,6 +82,11 @@ export function useWorkspaceRoute(ids: string[], tabs: string[]) {
       const coverage = params.get("coverage") ?? "all";
       if (
         !roleCoverage.includes(coverage) ||
+        roleRecordPages.some((key) => !validDirectoryPage(params.get(key))) ||
+        (params.has("detail") &&
+          !mainOrganization.roles.some(
+            (role) => role.name === params.get("detail"),
+          )) ||
         (coverage === "unknown" && params.get("view") !== "scope") ||
         (params.has("view") && params.get("view") !== "scope") ||
         (params.has("scope") &&
@@ -90,6 +102,8 @@ export function useWorkspaceRoute(ids: string[], tabs: string[]) {
         view: "Organization",
         tab: "Overview",
         roleDirectory: {
+          ...readRolePages(params),
+          detail: params.get("detail") ?? undefined,
           query: params.get("q") ?? "",
           view: params.get("view") === "scope" ? "scope" : undefined,
           scope: params.get("scope") ?? undefined,
@@ -267,6 +281,11 @@ export function useWorkspaceRoute(ids: string[], tabs: string[]) {
                               : `#/${viewPaths[next.view]}`;
     const params = new URLSearchParams();
     if (next.roleDirectory) {
+      Object.entries(rolePageParams(next.roleDirectory)).forEach(
+        ([key, value]) => {
+          if (value) params.set(key, value);
+        },
+      );
       if (next.roleDirectory.view) params.set("view", next.roleDirectory.view);
       if (next.roleDirectory.scope && next.roleDirectory.scope !== "All")
         params.set("scope", next.roleDirectory.scope);
