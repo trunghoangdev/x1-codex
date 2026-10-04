@@ -1,3 +1,4 @@
+import type { CoordinationFilters } from "./data/coordinationOverview";
 import { mainOrganization } from "./data/organizationScenario";
 import { mainScopes } from "./data/roleScopes";
 import {
@@ -37,6 +38,7 @@ export type WorkspaceRoute = {
   workerId?: string;
   handoffId?: string;
   organizationActivity?: boolean;
+  coordination?: CoordinationFilters;
   streamDirectory?: StreamFilters;
   workerDirectory?: WorkerFilters;
   roleDirectory?: RoleFilters;
@@ -230,6 +232,28 @@ export function useWorkspaceRoute(ids: string[], tabs: string[]) {
       const view = (Object.keys(viewPaths) as WorkspaceView[]).find(
         (v) => viewPaths[v] === path[1],
       );
+      if (view === "Organization") {
+        const p = new URLSearchParams(
+          separator < 0 ? "" : raw.slice(separator + 1),
+        );
+        const signal = p.get("coordSignal") ?? "all";
+        if (
+          !["all", "responsibility", "input", "response", "outcome"].includes(
+            signal,
+          ) ||
+          !validDirectoryPage(p.get("coordPage"))
+        )
+          return { ...fallback, invalid: true };
+        return {
+          ...fallback,
+          view,
+          coordination: {
+            query: p.get("coordQ") ?? "",
+            signal: signal as CoordinationFilters["signal"],
+            page: p.has("coordPage") ? Number(p.get("coordPage")) : undefined,
+          },
+        };
+      }
       if (view) return { ...fallback, view };
     }
     if (
@@ -282,6 +306,14 @@ export function useWorkspaceRoute(ids: string[], tabs: string[]) {
                               ? "#/demos/organization"
                               : `#/${viewPaths[next.view]}`;
     const params = new URLSearchParams();
+    if (next.coordination) {
+      if (next.coordination.query)
+        params.set("coordQ", next.coordination.query);
+      if (next.coordination.signal !== "all")
+        params.set("coordSignal", next.coordination.signal);
+      if ((next.coordination.page ?? 1) > 1)
+        params.set("coordPage", String(next.coordination.page));
+    }
     if (next.roleDirectory) {
       Object.entries(rolePageParams(next.roleDirectory)).forEach(
         ([key, value]) => {
@@ -319,7 +351,10 @@ export function useWorkspaceRoute(ids: string[], tabs: string[]) {
     }
     const hash =
       path +
-      (next.roleDirectory || next.streamDirectory || next.workerDirectory
+      (next.coordination ||
+      next.roleDirectory ||
+      next.streamDirectory ||
+      next.workerDirectory
         ? params.size
           ? `?${params}`
           : ""

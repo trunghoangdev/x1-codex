@@ -218,8 +218,8 @@ export function CoordinationOverview({
                   ))
                 ) : (
                   <p>
-                    No response-needed flag represented. This does not establish
-                    completion.
+                    No pending response signal represented. This does not
+                    establish completion.
                   </p>
                 )}
                 <h4>Outcome evidence needs</h4>

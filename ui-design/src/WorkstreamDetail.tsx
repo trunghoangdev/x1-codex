@@ -55,6 +55,32 @@ export function WorkstreamDetail({
           </button>
         </div>
       </div>
+      <section
+        className="panel org-stream"
+        aria-label="Workstream coordination sources"
+      >
+        <h2>Responsibility and outcome requirements</h2>
+        {mainOrganization.gaps
+          .filter((g) => g.workstreamId === stream.id)
+          .map((g) => (
+            <p key={g.id}>
+              <strong>{g.title}</strong>
+              <br />
+              {g.id} · {g.description}
+            </p>
+          ))}
+        {mainOrganization.outcomes
+          .find((o) => o.streamId === stream.id)
+          ?.criteria.map((c) => (
+            <p key={c.id}>
+              <strong>{c.title}</strong>
+              <br />
+              Criterion · {c.id}
+              <br />
+              {c.gap}
+            </p>
+          ))}
+      </section>
       <WorkstreamFlow
         streamId={stream.id}
         completed={completed}

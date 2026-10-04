@@ -1,3 +1,6 @@
+import { mainOrganization } from "./organizationScenario";
+import { organizationAttention } from "./organizationAttention";
+import type { Readiness } from "./models";
 import type { OrganizationScenario } from "./organizationScenario";
 export type CoordinationFilters = {
   query: string;
@@ -42,4 +45,25 @@ export function filteredCoordinationRows(
               ? r.responses.length
               : r.criteria.length) > 0),
   );
+}
+
+// Main response signals come from the interactive projection, never state labels.
+export function mainCoordinationScenario(
+  completed: Record<string, string>,
+  readiness: Readiness,
+): OrganizationScenario {
+  const pending = organizationAttention(completed, readiness).filter(
+    (i) => i.category === "Response" && i.target.kind === "assignment",
+  );
+  return {
+    ...mainOrganization,
+    assignments: mainOrganization.assignments.map((a) => ({
+      ...a,
+      responseNeeded: Boolean(
+        a.streamId && pending.some((i) => i.target.id === a.id),
+      ),
+      expectedResponse:
+        pending.find((i) => i.target.id === a.id)?.detail ?? a.expectedResponse,
+    })),
+  };
 }

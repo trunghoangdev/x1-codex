@@ -244,4 +244,4 @@ The [latest virtual organization review](VIRTUAL-ORGANIZATION-NEXT-REVIEW.md) pr
 
 Knowledge Organization now has **Coordination by workstream** with missing-input provider links, independent responsibility/response/evidence needs and URL-preserved filters. See [coordination overview](COORDINATION-OVERVIEW.md). Main/larger adaptation follows in the next unit.
 
-Iteration 73: Knowledge and larger software share the compact coordination overview and global persona controls. Larger software has four workstreams per page and three worker summaries, with complete directories available. Main response/readiness adaptation remains pending. See [COORDINATION-OVERVIEW.md](COORDINATION-OVERVIEW.md).
+Iteration 73: Knowledge and larger software share the compact coordination overview and global persona controls. Larger software has four workstreams per page and three worker summaries, with complete directories available. Iteration 74 also adapts main responses from the interactive attention projection, keeping outside-stream work separate. See [COORDINATION-OVERVIEW.md](COORDINATION-OVERVIEW.md).

@@ -93,3 +93,7 @@ No application behavior changed during this review. Build/tests were not rerun f
 ## Item 1 started — iteration 72
 
 Delivered Knowledge-first coordination by workstream with explicit gap/input/response/criterion references, provider/receiver links, URL filters, bounded stream summaries and source-return context. Knowledge sample/persona context is consolidated; workers are short bounded summaries and mobile attention counts use two columns. Exact gap/criterion identities are inspectable in stream detail. Build and twenty related checks passed. See [COORDINATION-OVERVIEW.md](COORDINATION-OVERVIEW.md). Item 1 remains in progress: next adapt main local response/readiness/outside-stream records and larger software through the shared coordination view. Items 2–5 remain proposed.
+
+## Item 1 completed — iterations 72–74
+
+All three samples now use coordination by workstream. Main response-needed signals come from its interactive attention projection; response recording does not verify outcomes. Release/staging/onboarding remain outside modeled workstreams. Main URL filters survive overview refresh and in-session source inspection/return; main detail return references remain in memory. Read-only return trails retain their session storage behavior. Larger software exercises four/two paging, with full directories behind three worker summaries. Build and related desktop/mobile checks passed; see COORDINATION-OVERVIEW.md for validation and limits. Items 2–5 remain proposed; shared outcome review is next.

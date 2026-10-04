@@ -1,6 +1,6 @@
 # Organization coordination overview
 
-Iteration 72 starts item 1 of the review after iteration 70. Open Knowledge Operations → Organization. Iteration 73 extends the same reference-based board to the larger software sample. Main software retains its existing overview until its local response/readiness projection is adapted.
+Iteration 72 starts item 1 of the review after iteration 70. Open Knowledge Operations → Organization. Iteration 73 extends the same reference-based board to the larger software sample. Iteration 74 completes item 1 with the main interactive projection. All three samples now use the shared board.
 
 ## Compact organization context
 
@@ -44,3 +44,11 @@ At the same 1000px viewport height, unfiltered Knowledge document heights change
 The larger sample now uses the same coordination board, compact worker summaries and consolidated global persona controls. Six authored workstreams render across two pages (four/two); the full worker directory still contains nine workers. Missing inputs remain zero because the fixture represents no dependencies; an empty input filter does not prove delivery or completion. Responsibility source inspection now shows referenced gaps in both read-only scenarios.
 
 Fourteen related tests passed, including desktop/mobile paging, result focus, refresh, exact return URL, empty recovery, single persona controls and existing personal queues/scenario navigation. Production build passed. Desktop/mobile previews `72-larger-coordination-1440.png` and `72-larger-coordination-390.png` were inspected. Main adaptation remains the next bounded unit of item 1.
+
+## Main software completion — iteration 74
+
+Main pending responses are projected from `organizationAttention(completed, readiness)` and intersected with explicit stream assignment references. Static assignment state labels are never treated as response-needed flags. Recording a local response removes that pending signal without clearing authored outcome evidence requirements or proving execution. Release, staging and onboarding remain in Other organization work, outside the two modeled streams; existing readiness/response behavior is retained.
+
+Main filters use `coordQ`, `coordSignal` and `coordPage` in the Organization URL. Refresh retains filters. Assignment/workstream inspection restores the filtered source in the current session; main return references and local responses remain in memory and are not durable after refreshing a detail page. Read-only scenarios retain their existing session-storage return trails. Main workstream detail now exposes the referenced responsibility gaps and criterion identities. Three worker summaries link to the full directory, and the personal inbox entry remains available.
+
+Production build and eleven final related checks passed across coordination projection, desktop/mobile filters, refresh, source return, separate outside work and existing attention/section navigation. Five input relationship checks also passed during this unit, preserving represented input versus unconfirmed receipt. Both main previews (`73-main-coordination-1440.png`, `73-main-coordination-390.png`) were inspected. Item 1 is complete within authored frontend sample scope; item 2 is shared outcome review.

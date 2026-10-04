@@ -1,3 +1,8 @@
+import { CoordinationOverview } from "./CoordinationOverview";
+import {
+  mainCoordinationScenario,
+  defaultCoordinationFilters,
+} from "./data/coordinationOverview";
 import { CoordinationInputs } from "./CoordinationInputs";
 import { mainOrganization } from "./data/organizationScenario";
 import {
@@ -1551,7 +1556,9 @@ function App() {
                 directorySources.current[stream.id]
                   ? directorySources.current[stream.id].roleDirectory
                     ? "Back to Roles"
-                    : "Back to Workstreams"
+                    : directorySources.current[stream.id].streamDirectory
+                      ? "Back to Workstreams"
+                      : "Back to Organization"
                   : undefined
               }
               onOutcome={() =>
@@ -1788,6 +1795,34 @@ function App() {
             !route.attention && (
               <>
                 <OrganizationOverview
+                  coordination={
+                    <CoordinationOverview
+                      scenario={mainCoordinationScenario(completed, readiness)}
+                      filters={route.coordination ?? defaultCoordinationFilters}
+                      onFilters={(coordination) =>
+                        changeRoute({ ...route, coordination }, true)
+                      }
+                      onAssignment={(id) => {
+                        const a = assignments.find((a) => a.id === id);
+                        if (a) open(a);
+                      }}
+                      onStream={(id) => {
+                        directorySources.current[id] = route;
+                        changeRoute({
+                          view: "Organization",
+                          tab: "Overview",
+                          workstreamId: id,
+                        });
+                      }}
+                      onDirectory={() =>
+                        changeRoute({
+                          view: "Organization",
+                          tab: "Overview",
+                          streamDirectory: defaultStreamFilters,
+                        })
+                      }
+                    />
+                  }
                   onRolesDirectory={() =>
                     changeRoute({
                       view: "Organization",

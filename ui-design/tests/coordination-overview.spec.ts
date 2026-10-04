@@ -251,3 +251,63 @@ for (const width of [390, 1440]) {
     ).toBe(true);
   });
 }
+
+test("main coordination follows local response signals and keeps outside work separate", async () => {
+  const { mainCoordinationScenario } =
+    await import("../src/data/coordinationOverview");
+  const initial = coordinationRows(mainCoordinationScenario({}, "missing"));
+  expect(initial.flatMap((r) => r.responses.map((a) => a.id)).sort()).toEqual([
+    "A-1038",
+    "A-1042",
+  ]);
+  const responded = coordinationRows(
+    mainCoordinationScenario({ "A-1042": "Assessment" }, "ready"),
+  );
+  expect(responded.flatMap((r) => r.responses.map((a) => a.id))).toEqual([
+    "A-1038",
+  ]);
+  expect(responded.map((r) => r.criteria)).toEqual(
+    initial.map((r) => r.criteria),
+  );
+  expect(initial.every((r) => r.inputs.length === 0)).toBe(true);
+});
+for (const width of [390, 1440]) {
+  test(`main coordination filters, source return and outside work ${width}`, async ({
+    page,
+  }) => {
+    await page.setViewportSize({ width, height: 1000 });
+    await page.goto("/#/organization?coordQ=payment&coordSignal=response");
+    const cards = page
+      .getByRole("region", { name: "Organization workstreams" })
+      .getByRole("article");
+    await expect(cards).toHaveCount(1);
+    await page.reload();
+    await expect(cards).toHaveCount(1);
+    const source = page.url();
+    await cards.first().locator("summary").click();
+    await cards.getByRole("button", { name: /A-1042/ }).click();
+    await page
+      .getByRole("button", { name: "Back to Organization", exact: true })
+      .click();
+    await expect(page).toHaveURL(source);
+    await cards.getByRole("button", { name: /Explore workstream/ }).click();
+    await expect(
+      page.getByRole("region", { name: "Workstream coordination sources" }),
+    ).toBeVisible();
+    await page
+      .getByRole("button", { name: "Back to Organization", exact: true })
+      .click();
+    await expect(page).toHaveURL(source);
+    await page
+      .getByText("Other organization work · 3 assignments", { exact: true })
+      .click();
+    await expect(
+      page.getByText("A-1041", { exact: false }).first(),
+    ).toBeVisible();
+    expect(
+      await page.evaluate(
+        () => document.documentElement.scrollWidth <= innerWidth,
+      ),
+    ).toBe(true);
+  });
+}
