@@ -643,3 +643,9 @@ Validation: production build and fifteen related tests passed for reference iden
 Started item 4 with Workers, as the roadmap permits one directory first. Cards show counts and expandable scope/assignment references; six filtered workers render per page. URL pages preserve filters/persona and existing detail return. Filter changes reset paging; moving pages focuses full-result status. Empty recovery restores search focus. Out-of-range positive pages display the last available page; invalid values are rejected. Stable binding IDs replace display-text keys.
 
 Validation: production build and seven related tests passed for desktop/mobile paging, counts, keyboard disclosure, focus, refresh, context return, filter reset, empty recovery, validation and width, plus existing worker/larger-scenario behavior. Desktop/mobile previews were inspected. Workstreams, Roles and nested lists remain the next item 4 slices; no runtime pagination or availability claims were added.
+
+## 68 — Compact, paged workstream directory
+
+Extended item 4 to Workstreams across all three samples. Four cards per page retain responsibility/outcome signals and assignment counts; goal and supporting prose are expandable. Search includes collapsed goal text. URL page/filter/persona survives refresh and existing detail return; filters reset paging and page changes focus result status. Overview and authored relationships remain unchanged.
+
+Validation: production build and nine related tests passed, including new desktop/mobile Workstreams pagination, keyboard disclosure, refresh, return, counts, empty recovery, clamp/invalid values and width, plus existing Workstreams, larger scenario and Workers pagination checks. Desktop/mobile previews were captured and inspected. Roles and nested lists remain within item 4.

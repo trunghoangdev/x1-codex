@@ -1,4 +1,4 @@
-# Compact directories — first slice
+# Compact directories — Workers and Workstreams
 
 Workers is the first bounded directory in the shared workspace. Open Organization → Browse workers in any of the three samples. The larger software sample has nine workers, enough to exercise two pages without inventing live workload.
 
@@ -10,6 +10,14 @@ The optional `page` URL parameter is a positive safe integer. Main and read-only
 
 Disclosure state resets after leaving the directory. Page/filter context persists in the URL; refreshing a worker detail still uses the existing fallback to Organization rather than fabricating an origin.
 
-Workstreams, role catalog/coverage and nested assignment/binding lists still need bounded presentation. Overview is unchanged. No page count or hidden-record count is a health, workload or capacity score.
+Role catalog/coverage and nested assignment/binding lists still need bounded presentation. Overview is unchanged. No page count or hidden-record count is a health, workload or capacity score.
 
 Validation: build and seven focused checks passed, including desktop/mobile paging, counts, keyboard disclosure, focus, persona preservation, refresh, detail return, filter reset, empty recovery, out-of-range clamp, invalid pages and document-width overflow. Existing worker-directory and larger scenario checks passed in the same run.
+
+## Workstreams — iteration 68
+
+Workstreams now shows four cards per page across all three scenarios. The existing six-stream larger fixture exercises two pages. Summaries retain stream/project identity, responsibility gap count, outcome signal and authored assignment count. Goal, gap titles and outcome prose move to a native disclosure; search still finds collapsed goal text. No explicit gap does not imply coverage, and no represented outcome signal does not imply success.
+
+Workstreams uses the same page validation/clamping, URL/filter/persona preservation, page-change focus and empty recovery behavior as Workers. Search, Project and Attention signal changes reset to page one. Detail return restores page/filters with the existing main/read-only context; disclosures reset when leaving. Overview is unchanged.
+
+Validation: build and nine related tests passed for both widths, including Workstreams paging/disclosure/return/refresh/filter-reset/empty/invalid URLs, existing Workstreams signals/filters, larger scenario navigation and Workers paging regression.

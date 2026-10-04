@@ -233,3 +233,5 @@ Shared read-only My Work supports search and role/workstream/attention filters. 
 Organization → Browse roles → **Coverage by workstream** shows declared bindings, scoped assignments, known gaps and unknown relationships. The optional role × workstream matrix preserves unmodeled cells as unknown. Try `#/organization/roles?view=scope&scope=scope-WS-02`. See [ROLE-SCOPE-COVERAGE.md](ROLE-SCOPE-COVERAGE.md).
 
 Workers has compact summaries, expandable scope references and URL-preserved pages of six records. See [compact directory behavior and remaining scope](COMPACT-DIRECTORIES.md).
+
+Workstreams also has compact summaries and four records per page, with expandable goal/gap/outcome context and preserved page/filter/persona URLs.

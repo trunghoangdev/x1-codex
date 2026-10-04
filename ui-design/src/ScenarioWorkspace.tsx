@@ -47,7 +47,8 @@ export function validScenarioPath(raw: string) {
   return (
     (suffix !== "/work" || validScenarioWorkFilters(scenario, params)) &&
     (!params.has("page") ||
-      (suffix === "/workers" && validDirectoryPage(params.get("page")))) &&
+      (["/workers", "/workstreams"].includes(suffix) &&
+        validDirectoryPage(params.get("page")))) &&
     (!params.has("persona") ||
       !!scenario.personas?.some((p) => p.workerId === params.get("persona"))) &&
     (!params.has("view") || params.get("view") === "scope") &&
@@ -265,6 +266,7 @@ export function ScenarioWorkspace({
           scenario={scenario}
           filters={{
             ...defaultStreamFilters,
+            page: params.has("page") ? Number(params.get("page")) : undefined,
             query: params.get("q") ?? "",
             project: params.get("project") ?? "All",
             signal: (params.get("signal") ?? "all") as StreamFilters["signal"],
@@ -274,6 +276,7 @@ export function ScenarioWorkspace({
               q: f.query,
               project: f.project,
               signal: f.signal,
+              page: (f.page ?? 1) > 1 ? String(f.page) : "",
             })
           }
           onOpen={(id) => open(`/workstreams/${id}`)}

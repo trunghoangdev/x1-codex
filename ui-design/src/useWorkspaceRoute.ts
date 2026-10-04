@@ -132,7 +132,8 @@ export function useWorkspaceRoute(ids: string[], tabs: string[]) {
       const signal = params.get("signal") ?? "all";
       if (
         !["All", ...workstreams.map((s) => s.project)].includes(project) ||
-        !["all", "responsibility", "outcome"].includes(signal)
+        !["all", "responsibility", "outcome"].includes(signal) ||
+        !validDirectoryPage(params.get("page"))
       )
         return { ...fallback, invalid: true };
       return {
@@ -140,6 +141,7 @@ export function useWorkspaceRoute(ids: string[], tabs: string[]) {
         tab: "Overview",
         streamDirectory: {
           ...defaultStreamFilters,
+          page: params.has("page") ? Number(params.get("page")) : undefined,
           query: params.get("q") ?? "",
           project,
           signal: signal as StreamFilters["signal"],
@@ -273,6 +275,8 @@ export function useWorkspaceRoute(ids: string[], tabs: string[]) {
         params.set("coverage", next.roleDirectory.coverage);
     }
     if (next.streamDirectory) {
+      if ((next.streamDirectory.page ?? 1) > 1)
+        params.set("page", String(next.streamDirectory.page));
       if (next.streamDirectory.query)
         params.set("q", next.streamDirectory.query);
       if (next.streamDirectory.project !== "All")

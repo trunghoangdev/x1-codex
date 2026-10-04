@@ -101,3 +101,7 @@ Roles now offers Coverage by workstream beside the original catalog. Stable bind
 ## Current directory density — iteration 67
 
 Workers is the first compact/bounded directory: six summaries per page, full filtered totals, native scope/assignment disclosure and page/filter/persona URLs. Page changes focus result status; filters reset paging. Organization gap context remains independent. See [COMPACT-DIRECTORIES.md](COMPACT-DIRECTORIES.md) for return limitations and remaining Workstreams/Role/nested-list slices.
+
+## Workstream density — iteration 68
+
+Workstreams now shows four summaries per page, with supporting goal/gap/outcome context in a native disclosure. Full filtered counts and URL-preserved page/filter/persona follow the Workers behavior. Overview remains unchanged; role directories and nested lists are next.

@@ -3550,15 +3550,18 @@ main h3,
   gap: 12px;
   margin: 20px 0;
 }
-#worker-results:focus {
+#worker-results:focus,
+#stream-results:focus {
   outline: 2px solid var(--accent, #6578db);
   outline-offset: 4px;
 }
 
-.worker-record-details {
+.worker-record-details,
+.directory-record-details {
   margin: 8px 0;
 }
-.worker-record-details > summary {
+.worker-record-details > summary,
+.directory-record-details > summary {
   padding: 10px 0;
   cursor: pointer;
 }

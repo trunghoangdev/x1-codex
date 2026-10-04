@@ -6,6 +6,7 @@ import {
 
 import {
   defaultStreamFilters,
+  streamPageSize,
   type StreamFilters,
 } from "./data/workstreamDirectory";
 export function WorkstreamsDirectory({
@@ -38,6 +39,17 @@ export function WorkstreamsDirectory({
           ? gaps.length > 0
           : !!outcome?.criteria.some((criterion) => criterion.gap))),
   );
+  const pages = Math.max(1, Math.ceil(visible.length / streamPageSize));
+  const page = Math.min(filters.page ?? 1, pages);
+  const start = (page - 1) * streamPageSize;
+  const changeFilters = (next: StreamFilters) =>
+    onFilters({ ...next, page: undefined });
+  const changePage = (next: number) => {
+    onFilters({ ...filters, page: next });
+    requestAnimationFrame(() =>
+      document.getElementById("stream-results")?.focus(),
+    );
+  };
   return (
     <div className="detail-page">
       <DetailBackButton onClick={onBack}>Back to Organization</DetailBackButton>
@@ -66,7 +78,7 @@ export function WorkstreamsDirectory({
             type="search"
             value={filters.query}
             onChange={(event) =>
-              onFilters({ ...filters, query: event.target.value })
+              changeFilters({ ...filters, query: event.target.value })
             }
             placeholder="Name, ID, goal or project"
           />
@@ -76,7 +88,7 @@ export function WorkstreamsDirectory({
           <select
             value={filters.project}
             onChange={(event) =>
-              onFilters({ ...filters, project: event.target.value })
+              changeFilters({ ...filters, project: event.target.value })
             }
           >
             <option value="All">All projects</option>
@@ -90,7 +102,7 @@ export function WorkstreamsDirectory({
           <select
             value={filters.signal}
             onChange={(event) =>
-              onFilters({
+              changeFilters({
                 ...filters,
                 signal: event.target.value as StreamFilters["signal"],
               })
@@ -108,8 +120,15 @@ export function WorkstreamsDirectory({
           Clear filters
         </button>
       </section>
-      <p className="org-overview-section" role="status">
+      <p
+        id="stream-results"
+        tabIndex={-1}
+        className="org-overview-section"
+        role="status"
+      >
         {visible.length} of {rows.length} workstreams
+        {visible.length > 0 &&
+          ` · Showing ${start + 1}–${Math.min(start + streamPageSize, visible.length)} · Page ${page} of ${pages}`}
       </p>
       {visible.length === 0 ? (
         <DetailEmptyState>
@@ -131,51 +150,79 @@ export function WorkstreamsDirectory({
         </DetailEmptyState>
       ) : (
         <div className="org-stream-grid">
-          {visible.map(({ stream, gaps, outcome }) => (
-            <article
-              className="panel org-stream"
-              key={stream.id}
-              aria-label={stream.name}
-            >
-              <div className="eyebrow">
-                {stream.id} · {stream.project}
-              </div>
-              <h2>{stream.name}</h2>
-              <p>{stream.goal}</p>
-              <p>
-                <strong>Responsibility:</strong>{" "}
-                {gaps.length
-                  ? `${gaps.length} explicit gaps`
-                  : "No explicit gap recorded"}
-              </p>
-              {gaps.length > 0 && (
-                <ul>
-                  {gaps.map((gap) => (
-                    <li key={gap.id}>{gap.title}</li>
-                  ))}
-                </ul>
-              )}
-              <p>
-                <strong>Outcome:</strong>{" "}
-                {outcome?.criteria.some((c) => c.gap)
-                  ? "Unverified · evidence gaps remain"
-                  : "No outcome signal represented"}
-              </p>
-              <p>{stream.outcome}</p>
-              <p>
-                {stream.assignmentIds.length} linked assignment
-                {stream.assignmentIds.length === 1 ? "" : "s"} · authored
-                membership
-              </p>
-              <button
-                className="button secondary"
-                onClick={() => onOpen(stream.id)}
+          {visible
+            .slice(start, start + streamPageSize)
+            .map(({ stream, gaps, outcome }) => (
+              <article
+                className="panel org-stream"
+                key={stream.id}
+                aria-label={stream.name}
               >
-                Open workstream · {stream.id}
-              </button>
-            </article>
-          ))}
+                <div className="eyebrow">
+                  {stream.id} · {stream.project}
+                </div>
+                <h2>{stream.name}</h2>
+
+                <p>
+                  <strong>Responsibility:</strong>{" "}
+                  {gaps.length
+                    ? `${gaps.length} explicit gap${gaps.length === 1 ? "" : "s"}`
+                    : "No explicit gap recorded"}
+                </p>
+                <p>
+                  <strong>Outcome:</strong>{" "}
+                  {outcome?.criteria.some((c) => c.gap)
+                    ? "Unverified · evidence gaps remain"
+                    : "No outcome signal represented"}
+                </p>
+
+                <p>
+                  {stream.assignmentIds.length} linked assignment
+                  {stream.assignmentIds.length === 1 ? "" : "s"} · authored
+                  membership
+                </p>
+                <details className="directory-record-details">
+                  <summary>Goal, gaps and outcome context</summary>
+                  <p>{stream.goal}</p>
+                  {gaps.length > 0 && (
+                    <ul>
+                      {gaps.map((gap) => (
+                        <li key={gap.id}>{gap.title}</li>
+                      ))}
+                    </ul>
+                  )}
+                  <p>{stream.outcome}</p>
+                </details>
+                <button
+                  className="button secondary"
+                  onClick={() => onOpen(stream.id)}
+                >
+                  Open workstream · {stream.id}
+                </button>
+              </article>
+            ))}
         </div>
+      )}
+      {pages > 1 && (
+        <nav className="directory-pagination" aria-label="Workstream pages">
+          <button
+            className="button secondary"
+            disabled={page === 1}
+            onClick={() => changePage(page - 1)}
+          >
+            Previous workstreams
+          </button>
+          <span>
+            Page {page} of {pages}
+          </span>
+          <button
+            className="button secondary"
+            disabled={page === pages}
+            onClick={() => changePage(page + 1)}
+          >
+            Next workstreams
+          </button>
+        </nav>
       )}
     </div>
   );
