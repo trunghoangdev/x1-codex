@@ -82,12 +82,12 @@ for (const width of [1440, 390]) {
       page
         .getByRole("region", { name: "Organization workstreams" })
         .getByRole("article"),
-    ).toHaveCount(6);
+    ).toHaveCount(4);
     await expect(
       page
         .getByRole("region", { name: "Roles and worker bindings" })
         .getByRole("article"),
-    ).toHaveCount(9);
+    ).toHaveCount(3);
     await page
       .getByRole("button", { name: "Return to main organization", exact: true })
       .click();

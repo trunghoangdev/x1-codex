@@ -3653,13 +3653,13 @@ main h3,
   margin-top: 10px;
 }
 
-.knowledge-workspace .attention-summary-grid {
+.coordination-workspace .attention-summary-grid {
   grid-template-columns: repeat(2, minmax(0, 1fr));
 }
-.knowledge-workspace .org-banner {
+.coordination-workspace .org-banner {
   padding: 18px;
 }
-.knowledge-workspace .org-banner h2 {
+.coordination-workspace .org-banner h2 {
   font-size: 22px;
   margin-top: 8px;
 }

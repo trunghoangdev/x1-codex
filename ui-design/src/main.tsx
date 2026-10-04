@@ -734,7 +734,7 @@ function App() {
                   ? "Read-only sample"
                   : "Interactive software sample"}
               </p>
-              {activeScenario?.id === "knowledge" && (
+              {activeScenario?.personas && (
                 <>
                   <label>
                     Sample persona
@@ -764,7 +764,7 @@ function App() {
                         changeRoute({
                           view: "My Work",
                           tab: "Overview",
-                          scenarioPath: `/organizations/knowledge/work?persona=${activePersona!.workerId}`,
+                          scenarioPath: `/organizations/${activeScenario.id}/work?persona=${activePersona!.workerId}`,
                         })
                       }
                     >

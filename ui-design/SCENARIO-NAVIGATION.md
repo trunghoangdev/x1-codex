@@ -19,3 +19,5 @@ Returning truncates the used trail, so assignment → workstream → same assign
 Validation: sixteen related tests passed on desktop/mobile for scenario route/persona validation, sidebar Evidence, empty fixture isolation, switching Evidence/Overview, default identity, refresh, repeated detail unwind, fresh fallbacks, foreign stored context and document width, plus existing personal queues, coordination and role directory return. No backend tenant, login, authorization or durable command contract is implied.
 
 Iteration 72 consolidates Knowledge’s Sample persona and My Work/main exit controls into the global sample context panel. Its fixture explanation is collapsed; navigation, default identities and return semantics are unchanged. Coordination filters are organization-wide and remain when Knowledge persona changes.
+
+Iteration 73: Knowledge and larger software share the compact coordination overview and global persona controls. Larger software has four workstreams per page and three worker summaries, with complete directories available. Main response/readiness adaptation remains pending. See [COORDINATION-OVERVIEW.md](COORDINATION-OVERVIEW.md).

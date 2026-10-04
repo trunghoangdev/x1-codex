@@ -117,3 +117,5 @@ All three samples are available through a global organization selector with doma
 ## Knowledge coordination overview — iteration 72
 
 Knowledge Overview now groups independent responsibility/input/response/outcome-evidence records by workstream, with exact provider/receiver and source links. Filters/pages retain scenario/persona context. Knowledge’s sample/persona header is consolidated and worker summaries are bounded at three. Main and larger overview adapters remain the next item 1 unit. See [COORDINATION-OVERVIEW.md](COORDINATION-OVERVIEW.md) for record meanings and limits.
+
+Iteration 73: Knowledge and larger software share the compact coordination overview and global persona controls. Larger software has four workstreams per page and three worker summaries, with complete directories available. Main response/readiness adaptation remains pending. See [COORDINATION-OVERVIEW.md](COORDINATION-OVERVIEW.md).

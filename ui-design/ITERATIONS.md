@@ -677,3 +677,9 @@ Started the new item 1 with Knowledge Operations. Added a reference-based workst
 Consolidated Knowledge persona/sample controls into the global context panel, collapsed repeated fixture/navigation explanation, removed the repeated overview inbox button and capped compact worker summaries at three. Mobile Knowledge attention counts use two columns. Main/larger overview projections stay unchanged pending the next item 1 unit.
 
 Validation: production build and twenty related checks passed, including new model/desktop/mobile source/filter/return/refresh/persona/empty/width tests and existing scenario, queue, input and software response behavior. Three captures were inspected. Knowledge heights changed 2666→2792px desktop and 4627→4153px mobile; extra desktop coordination context is acknowledged rather than claiming universal reduction. These are layout observations, not customer research. Item 1 remains in progress.
+
+## 73 — Larger software coordination overview
+
+Extended the reference-based coordination overview to larger software, with four/two workstreams across pages, three worker summaries and full directory links. Consolidated sample/persona controls into global context and collapsed repeated fixture explanation. Gap source inspection now applies to both read-only scenarios. Filters, pages and persona remain URL-backed; source return survives refresh. No dependency was invented for the larger fixture.
+
+Validation: production build and fourteen related tests passed, including desktop/mobile paging, focus, refresh, source return, empty recovery, width and existing scenario navigation/personal queue behavior. Two previews were captured and inspected. Item 1 remains in progress: main software needs its explicit local response/readiness projection and outside-stream records preserved.

@@ -60,7 +60,6 @@ test("coordination projection uses authored references and independent signals",
   for (const path of [
     "/organizations/knowledge?coordSignal=healthy",
     "/organizations/knowledge?coordPage=0",
-    "/organizations/large?coordSignal=input",
     "/organizations/knowledge/work?coordSignal=input",
   ])
     expect(validScenarioPath(path)).toBe(false);
@@ -197,5 +196,58 @@ for (const width of [390, 1440]) {
       ),
     ).toBe(true);
     expect(errors).toEqual([]);
+  });
+}
+
+for (const width of [390, 1440]) {
+  test(`larger coordination paging and source return ${width}`, async ({
+    page,
+  }) => {
+    await page.setViewportSize({ width, height: 1000 });
+    await page.goto("/#/organizations/large?persona=sam");
+    const cards = page
+      .getByRole("region", { name: "Organization workstreams" })
+      .getByRole("article");
+    await expect(cards).toHaveCount(4);
+    await expect(page.locator(".overview-workers article")).toHaveCount(3);
+    await expect(
+      page.getByRole("combobox", { name: "Sample persona", exact: true }),
+    ).toHaveCount(1);
+    await page
+      .getByRole("button", { name: "Next coordination", exact: true })
+      .click();
+    await expect(cards).toHaveCount(2);
+    await expect(page.locator("#coordination-results")).toBeFocused();
+    const source = page.url();
+    await page.reload();
+    await expect(cards).toHaveCount(2);
+    await cards
+      .first()
+      .getByRole("button", { name: "Explore workstream", exact: false })
+      .click();
+    await page.reload();
+    await page
+      .getByRole("button", { name: "Back to scenario context", exact: true })
+      .click();
+    await expect(page).toHaveURL(source);
+    await page
+      .getByRole("combobox", { name: "Coordination need", exact: true })
+      .selectOption("input");
+    await expect(cards).toHaveCount(0);
+    await expect(
+      page.getByText("No matching workstreams.", { exact: false }),
+    ).toBeVisible();
+    await page
+      .getByRole("button", { name: "Show all coordination", exact: true })
+      .click();
+    await expect(cards).toHaveCount(4);
+    await expect(
+      page.getByRole("searchbox", { name: "Search coordination", exact: true }),
+    ).toBeFocused();
+    expect(
+      await page.evaluate(
+        () => document.documentElement.scrollWidth <= innerWidth,
+      ),
+    ).toBe(true);
   });
 }

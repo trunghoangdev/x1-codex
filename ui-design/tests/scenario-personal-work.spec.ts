@@ -140,7 +140,7 @@ for (const width of [390, 1440])
     await page.goto("/#/organizations/large");
     await page
       .getByRole("button", {
-        name: "Open personal inbox · Sam Rivera",
+        name: "Open My Work · Sam Rivera",
         exact: true,
       })
       .click();

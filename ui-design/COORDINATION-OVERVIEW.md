@@ -1,6 +1,6 @@
-# Organization coordination overview — Knowledge first
+# Organization coordination overview
 
-Iteration 72 starts item 1 of the review after iteration 70. Open Knowledge Operations → Organization. Main and larger software still use their existing overview/attention projection; adapting them is the next item 1 unit.
+Iteration 72 starts item 1 of the review after iteration 70. Open Knowledge Operations → Organization. Iteration 73 extends the same reference-based board to the larger software sample. Main software retains its existing overview until its local response/readiness projection is adapted.
 
 ## Compact organization context
 
@@ -25,7 +25,7 @@ Cards show the four independent counts. Missing inputs expose provider and waiti
 
 ## Filters, bounds and return
 
-Workstream/goal/project search and Coordination need filters live in Knowledge overview URLs as `coordQ`, `coordSignal` and `coordPage`, retaining `persona`. Up to four matching workstreams render per page, in authored order. Counts describe the whole filtered set separately from the shown range. Search/signal changes reset paging; page controls focus results. Clear/empty recovery resets filters and focuses search. Positive out-of-range pages clamp visually; invalid page/signal values and coordination params outside Knowledge overview are rejected.
+Workstream/goal/project search and Coordination need filters live in Knowledge overview URLs as `coordQ`, `coordSignal` and `coordPage`, retaining `persona`. Up to four matching workstreams render per page, in authored order. Counts describe the whole filtered set separately from the shown range. Search/signal changes reset paging; page controls focus results. Clear/empty recovery resets filters and focuses search. Positive out-of-range pages clamp visually; invalid page/signal values and coordination params outside read-only scenario overviews are rejected.
 
 Provider, receiver, gap and outcome-source inspection uses the existing scenario/persona return trail. The full filtered overview URL survives detail return, browser history and refresh. Card disclosure state is local and resets after leaving. Changing persona retains organization-level filters because the organization questions are shared; personal inbox allocation remains persona-specific.
 
@@ -38,3 +38,9 @@ Production build and twenty related model/browser tests passed at 390px/1440px a
 Three previews were captured and visually inspected: `69-knowledge-coordination-overview.png`, `70-missing-input-overview-mobile.png`, `71-knowledge-responsibility-source.png`.
 
 At the same 1000px viewport height, unfiltered Knowledge document heights changed from 2666→2792px on desktop and 4627→4153px on mobile. Desktop adds coordination detail while mobile benefits from compact context/counts/worker summaries. These are fixture/layout observations, not customer usability validation or a prescribed page-height target.
+
+## Larger software extension — iteration 73
+
+The larger sample now uses the same coordination board, compact worker summaries and consolidated global persona controls. Six authored workstreams render across two pages (four/two); the full worker directory still contains nine workers. Missing inputs remain zero because the fixture represents no dependencies; an empty input filter does not prove delivery or completion. Responsibility source inspection now shows referenced gaps in both read-only scenarios.
+
+Fourteen related tests passed, including desktop/mobile paging, result focus, refresh, exact return URL, empty recovery, single persona controls and existing personal queues/scenario navigation. Production build passed. Desktop/mobile previews `72-larger-coordination-1440.png` and `72-larger-coordination-390.png` were inspected. Main adaptation remains the next bounded unit of item 1.

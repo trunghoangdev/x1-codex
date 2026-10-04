@@ -59,7 +59,7 @@ export function validScenarioPath(raw: string) {
   return (
     (suffix !== "/work" || validScenarioWorkFilters(scenario, params)) &&
     (!["coordQ", "coordSignal", "coordPage"].some((key) => params.has(key)) ||
-      (scenario.id === "knowledge" &&
+      (scenario.readOnly &&
         suffix === "" &&
         ["all", "responsibility", "input", "response", "outcome"].includes(
           params.get("coordSignal") ?? "all",
@@ -237,82 +237,20 @@ export function ScenarioWorkspace({
       );
     });
   return (
-    <div
-      className={`detail-page ${scenario.id === "knowledge" ? "knowledge-workspace" : ""}`}
-    >
-      {scenario.id === "knowledge" ? (
-        <details
-          className="organization-disclosure"
-          role="region"
-          aria-label="Scenario boundary"
-        >
-          <summary>About this sample</summary>
-          <p>
-            {scenario.name} · read-only sample · {scenario.streams.length}{" "}
-            workstreams · {scenario.workers.length} workers. These are authored
-            responsibilities and requirements, not live permissions, capacity or
-            verified outcomes. Main software records remain separate.
-          </p>
-        </details>
-      ) : (
-        <>
-          <section
-            className="panel org-stream org-overview-section"
-            aria-label="Scenario boundary"
-          >
-            <strong>{scenario.name} · read-only sample</strong>
-            <p>
-              {scenario.streams.length} workstreams · {scenario.workers.length}{" "}
-              workers · {scenario.bindings.length} scoped bindings ·{" "}
-              {scenario.assignments.length} assignments. No live capacity,
-              authority or outcomes are verified. Main-scenario records and
-              Alex's inbox remain separate.
-            </p>
-            <button className="button secondary" onClick={onMain}>
-              Return to main organization
-            </button>
-          </section>
-          {scenario.personas && (
-            <section
-              className="panel stream-directory-filters org-overview-section"
-              aria-label="Sample persona"
-            >
-              <label>
-                Sample persona
-                <select
-                  value={persona!.workerId}
-                  onChange={(e) => {
-                    const p = new URLSearchParams(query);
-                    p.set("persona", e.target.value);
-                    if (suffix === "/work")
-                      for (const key of ["q", "role", "stream", "status"])
-                        p.delete(key);
-                    onRoute(`${pathname}?${p}`);
-                  }}
-                >
-                  {scenario.personas.map((p) => (
-                    <option key={p.workerId} value={p.workerId}>
-                      {p.label}
-                    </option>
-                  ))}
-                </select>
-              </label>
-              <p>
-                Authored persona preview; this selector does not sign in or
-                grant permissions.
-              </p>
-              {suffix !== "/work" && (
-                <button
-                  className="button secondary"
-                  onClick={() => onRoute(qualify("/work"))}
-                >
-                  Open My Work · {person?.name}
-                </button>
-              )}
-            </section>
-          )}
-        </>
-      )}
+    <div className="detail-page coordination-workspace">
+      <details
+        className="organization-disclosure"
+        role="region"
+        aria-label="Scenario boundary"
+      >
+        <summary>About this sample</summary>
+        <p>
+          {scenario.name} · read-only sample · {scenario.streams.length}{" "}
+          workstreams · {scenario.workers.length} workers. These are authored
+          responsibilities and requirements, not live permissions, capacity or
+          verified outcomes. Main software records remain separate.
+        </p>
+      </details>
       {suffix === "/work" ? (
         <ScenarioMyWork
           scenario={scenario}
@@ -491,7 +429,7 @@ export function ScenarioWorkspace({
             <>
               <p>{stream.goal}</p>
               <p>{stream.outcome}</p>
-              {scenario.id === "knowledge" && (
+              {
                 <section
                   className="panel org-stream"
                   aria-label="Workstream responsibility sources"
@@ -508,7 +446,7 @@ export function ScenarioWorkspace({
                       </article>
                     ))}
                 </section>
-              )}
+              }
               <section className="panel org-stream">
                 <h2>Coordination & assignments</h2>
                 <p>{stream.coordination}</p>
@@ -660,30 +598,28 @@ export function ScenarioWorkspace({
             <OrganizationOverview
               scenario={scenario}
               coordination={
-                scenario.id === "knowledge" ? (
-                  <CoordinationOverview
-                    scenario={scenario}
-                    filters={{
-                      ...defaultCoordinationFilters,
-                      query: params.get("coordQ") ?? "",
-                      signal: (params.get("coordSignal") ??
-                        "all") as CoordinationFilters["signal"],
-                      page: params.has("coordPage")
-                        ? Number(params.get("coordPage"))
-                        : undefined,
-                    }}
-                    onFilters={(f) =>
-                      filter("", {
-                        coordQ: f.query,
-                        coordSignal: f.signal,
-                        coordPage: (f.page ?? 1) > 1 ? String(f.page) : "",
-                      })
-                    }
-                    onAssignment={(id) => open(`/assignments/${id}`)}
-                    onStream={(id) => open(`/workstreams/${id}`)}
-                    onDirectory={() => onRoute(qualify("/workstreams"))}
-                  />
-                ) : undefined
+                <CoordinationOverview
+                  scenario={scenario}
+                  filters={{
+                    ...defaultCoordinationFilters,
+                    query: params.get("coordQ") ?? "",
+                    signal: (params.get("coordSignal") ??
+                      "all") as CoordinationFilters["signal"],
+                    page: params.has("coordPage")
+                      ? Number(params.get("coordPage"))
+                      : undefined,
+                  }}
+                  onFilters={(f) =>
+                    filter("", {
+                      coordQ: f.query,
+                      coordSignal: f.signal,
+                      coordPage: (f.page ?? 1) > 1 ? String(f.page) : "",
+                    })
+                  }
+                  onAssignment={(id) => open(`/assignments/${id}`)}
+                  onStream={(id) => open(`/workstreams/${id}`)}
+                  onDirectory={() => onRoute(qualify("/workstreams"))}
+                />
               }
               completed={{}}
               readiness="missing"
