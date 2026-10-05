@@ -838,3 +838,11 @@ Added installed organization context to the SF inspection, explicitly separating
 Source inspection buttons scroll/focus exact source headings without changing selection. No-attempt/failed-artifact states remain explicit. The trace derives from the existing validated read projection and does not merge sample receipts, simulated commands or ledger narrative. See [bounded scope and remaining source requirements](SF-ORGANIZATION-ACCOUNTABILITY.md).
 
 Production build and twelve related checks passed across source isolation, missing links, exact source focus, desktop/mobile overflow and existing read-projection/retained-snapshot behavior. Desktop/mobile context and trace previews were captured; the mobile trace was visually inspected. This completes group 1’s first bounded inspection slice, not live installed organization management or a complete verified audit chain.
+
+## 97 — Task accessibility fixes and participant usability plan
+
+Reviewed worker contribution, reviewer/authority and retained operator inspection tasks. Human stage transitions now preserve a meaningful keyboard destination across confirmation, editing return, command submit, receiver response and draft-02. Form inputs reference shared requirements and the receiving summary exposes polite live status. No typing-induced focus changes or command/data semantics are introduced.
+
+Prepared role-based participant tasks, expected distinctions and an unfilled observation template in [the usability/accessibility review](USABILITY-ACCESSIBILITY-REVIEW.md). Technical browser verification is explicitly separate from unperformed participant/screen-reader sessions and full accessibility certification. Inspection density remains a hypothesis to validate with operators.
+
+Production build and sixteen distinct targeted checks passed across runs: worker contribution/command, new keyboard transitions and operator source focus, directory recovery, reviewer assessment, exact release prerequisites, phone response focus and unknown attempt outcomes. After refining receiver focus, all three new checks and four reviewer/operator regressions passed again. Participant, actual screen-reader, cross-browser and comprehensive WCAG reviews remain unperformed.

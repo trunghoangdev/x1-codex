@@ -5,7 +5,7 @@ import {
   projectContributionCommand,
   type CommandPreview,
 } from "./data/contributionCommand";
-import { useState } from "react";
+import { useEffect, useRef, useState } from "react";
 import {
   assessContribution,
   contributionResponsibility as responsibility,
@@ -36,6 +36,29 @@ export function HumanContribution({
         ),
       });
   };
+  const focusStage = `${current.version}:${confirm}:${command?.id ?? ""}:${command?.status ?? ""}:${!!command?.projected}:${!!current.receipt}:${!!current.assessment}`;
+  const previousStage = useRef(focusStage);
+  useEffect(() => {
+    if (previousStage.current === focusStage) return;
+    const previous = previousStage.current;
+    previousStage.current = focusStage;
+    const versionChanged = previous.split(":")[0] !== String(current.version);
+    const receiverChanged =
+      previous.split(":")[5] !== focusStage.split(":")[5] ||
+      previous.split(":")[6] !== focusStage.split(":")[6];
+    const target = versionChanged
+      ? "human-contribution-body"
+      : confirm
+        ? "human-delivery-confirm-heading"
+        : previous.split(":")[1] === "true" && !locked && !current.delivery
+          ? "human-contribution-body"
+          : receiverChanged
+            ? "human-receiver-heading"
+            : command
+              ? "human-command-status-heading"
+              : "human-receiver-heading";
+    document.getElementById(target)?.focus();
+  }, [focusStage, current.version, confirm, locked, current.delivery, command]);
   const ready =
     !!current.body.trim() && !!current.note.trim() && current.citesInput;
   return (
@@ -93,9 +116,14 @@ export function HumanContribution({
               content and decisions remain attached to draft-01.
             </p>
           )}
+          <p id="human-contribution-requirement">
+            Required: contribution text, delivery or revision note, and a
+            citation to the supplied input. Nothing is uploaded.
+          </p>
           <label htmlFor="human-contribution-body">Contribution text</label>
           <textarea
             id="human-contribution-body"
+            aria-describedby="human-contribution-requirement"
             rows={8}
             maxLength={12000}
             value={current.body}
@@ -109,6 +137,7 @@ export function HumanContribution({
           </label>
           <textarea
             id="human-contribution-note"
+            aria-describedby="human-contribution-requirement"
             rows={3}
             maxLength={3000}
             value={current.note}
@@ -173,7 +202,9 @@ export function HumanContribution({
           )}
           {confirm && (
             <section aria-label="Confirm contribution delivery">
-              <h3>Confirm exact delivery</h3>
+              <h3 id="human-delivery-confirm-heading" tabIndex={-1}>
+                Confirm exact delivery
+              </h3>
               <p>
                 {responsibility.subject} / draft-0{current.version} →{" "}
                 {responsibility.receiver}
@@ -214,7 +245,9 @@ export function HumanContribution({
           className="panel org-stream"
           aria-label="Contribution command status"
         >
-          <h2>Submission status</h2>
+          <h2 id="human-command-status-heading" tabIndex={-1}>
+            Submission status
+          </h2>
           <p role="status">
             Command: {command.status}. Delivery projection:{" "}
             {command.projected ? "updated" : "not updated"}.
@@ -315,12 +348,14 @@ export function HumanContribution({
         </section>
       )}
       <section className="panel org-stream">
-        <h2>Delivery and receiver response</h2>
+        <h2 id="human-receiver-heading" tabIndex={-1}>
+          Delivery and receiver response
+        </h2>
         {!current.delivery ? (
           <p>No delivery recorded for draft-0{current.version}.</p>
         ) : (
           <>
-            <p>
+            <p role="status" aria-live="polite">
               Delivered locally: {current.delivery.id}. Receipt:{" "}
               {current.receipt?.id ?? "not recorded"}. Assessment:{" "}
               {current.assessment?.conclusion ?? "not recorded"}.

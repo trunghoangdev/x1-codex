@@ -58,6 +58,10 @@ Before production: extend the existing failure previews to production rejection/
 
 This design is an original implementation based on the allowed repository discussions. It contains no copied private planning documents and uses no material from the excluded `x1` repository.
 
+## Usability and accessibility review
+
+The [task review and participant plan](USABILITY-ACCESSIBILITY-REVIEW.md) records bounded technical findings, focus/form/status fixes and worker/reviewer/operator tasks. Participant and actual screen-reader sessions have not been run.
+
 ## Verification
 
 ```sh
