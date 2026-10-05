@@ -1,3 +1,4 @@
+import { DecisionDirectory } from "./DecisionDirectory";
 import { WorkflowMap } from "./WorkflowMap";
 import { CoordinationOverview } from "./CoordinationOverview";
 import {
@@ -240,6 +241,7 @@ function App() {
     status: "all",
   });
   const workerDirectorySources = useRef<Record<string, WorkspaceRoute>>({});
+  const decisionOrigin = useRef<WorkspaceRoute | undefined>(undefined);
   const workflowSources = useRef<
     Record<string, { route: WorkspaceRoute; streamSource?: WorkspaceRoute }>
   >({});
@@ -259,7 +261,7 @@ function App() {
   >({});
   const source = selected ? assignmentSources.current[selected.id] : undefined;
   const inboxReturn = useRef<{ id: string; y: number } | null>(null);
-  const screenKey = `${route.view}:${route.assignmentId ?? ""}:${!!route.invalid}:${route.workstreamId ?? ""}:${route.workflowId ?? ""}:${route.workerId ?? ""}:${route.handoffId ?? ""}:${!!route.organizationActivity}:${route.outcomeId ?? ""}:${!!route.attention}:${!!route.personalQueue}:${!!route.largeOrganization}:${!!route.streamDirectory}:${!!route.workerDirectory}:${!!route.roleDirectory}:${route.scenarioPath?.split("?")[0] ?? ""}:${activePersona?.workerId ?? ""}`;
+  const screenKey = `${route.view}:${route.assignmentId ?? ""}:${!!route.invalid}:${route.workstreamId ?? ""}:${route.workflowId ?? ""}:${route.workerId ?? ""}:${route.handoffId ?? ""}:${!!route.organizationActivity}:${!!route.decisions}:${route.outcomeId ?? ""}:${!!route.attention}:${!!route.personalQueue}:${!!route.largeOrganization}:${!!route.streamDirectory}:${!!route.workerDirectory}:${!!route.roleDirectory}:${route.scenarioPath?.split("?")[0] ?? ""}:${activePersona?.workerId ?? ""}`;
   const previousScreen = useRef(screenKey);
   useEffect(() => {
     if (route.view !== "My Work" || route.assignmentId)
@@ -347,6 +349,7 @@ function App() {
     route.workerId,
     route.handoffId,
     route.organizationActivity,
+    route.decisions,
     route.attention,
     route.outcomeId,
     route.personalQueue,
@@ -378,23 +381,25 @@ function App() {
     if (!selected && (view !== "My Work" || route.personalQueue)) {
       const label = route.personalQueue
         ? "Response queue"
-        : route.roleDirectory
-          ? "Roles"
-          : route.workflowId
-            ? "Workflow"
-            : stream
-              ? "Workstream"
-              : handoff
-                ? "Handoff"
-                : outcome
-                  ? "Outcome review"
-                  : worker
-                    ? "Worker"
-                    : route.organizationActivity
-                      ? "Organization activity"
-                      : route.attention
-                        ? "Organization attention"
-                        : view;
+        : route.decisions
+          ? "Decision responsibility"
+          : route.roleDirectory
+            ? "Roles"
+            : route.workflowId
+              ? "Workflow"
+              : stream
+                ? "Workstream"
+                : handoff
+                  ? "Handoff"
+                  : outcome
+                    ? "Outcome review"
+                    : worker
+                      ? "Worker"
+                      : route.organizationActivity
+                        ? "Organization activity"
+                        : route.attention
+                          ? "Organization attention"
+                          : view;
       assignmentSources.current[a.id] = {
         route: { ...route },
         key: screenKey,
@@ -629,7 +634,8 @@ function App() {
             <span>Workspace</span>
             <ChevronRight size={14} />
             {view === "Organization" &&
-            (route.workflowId ||
+            (route.decisions ||
+              route.workflowId ||
               stream ||
               worker ||
               handoff ||
@@ -647,9 +653,10 @@ function App() {
                 </button>
                 <ChevronRight size={14} />
                 <strong aria-current="page" className="breadcrumb-detail">
-                  {(route.workflowId
-                    ? `Workflow · ${workstreams.find((s) => s.id === route.workflowId)?.name}`
-                    : undefined) ??
+                  {(route.decisions ? "Decision responsibility" : undefined) ??
+                    (route.workflowId
+                      ? `Workflow · ${workstreams.find((s) => s.id === route.workflowId)?.name}`
+                      : undefined) ??
                     stream?.name ??
                     worker?.name ??
                     handoff?.title ??
@@ -1558,6 +1565,30 @@ function App() {
               </div>
             </>
           )}
+          {view === "Organization" && route.decisions && (
+            <DecisionDirectory
+              scenario={mainOrganization}
+              completed={completed}
+              readiness={readiness}
+              onBack={() =>
+                decisionOrigin.current
+                  ? changeRoute(decisionOrigin.current)
+                  : navigate("Organization")
+              }
+              onAssignment={(id, tab) => {
+                const a = assignments.find((a) => a.id === id);
+                if (a) open(a, tab);
+              }}
+              onWorker={inspectCoordinationWorker}
+              onStream={(id) =>
+                changeRoute({
+                  view: "Organization",
+                  tab: "Overview",
+                  workstreamId: id,
+                })
+              }
+            />
+          )}
           {view === "Organization" && route.workflowId && (
             <WorkflowMap
               scenario={mainOrganization}
@@ -1662,14 +1693,16 @@ function App() {
                 workerDirectorySources.current[worker.id]
                   ? workerDirectorySources.current[worker.id].assignmentId
                     ? "Back to Assignment"
-                    : workerDirectorySources.current[worker.id].workflowId
-                      ? "Back to Workflow"
-                      : workerDirectorySources.current[worker.id].workstreamId
-                        ? "Back to Workstream"
-                        : workerDirectorySources.current[worker.id]
-                              .roleDirectory
-                          ? "Back to Roles"
-                          : "Back to Workers"
+                    : workerDirectorySources.current[worker.id].decisions
+                      ? "Back to Decision responsibility"
+                      : workerDirectorySources.current[worker.id].workflowId
+                        ? "Back to Workflow"
+                        : workerDirectorySources.current[worker.id].workstreamId
+                          ? "Back to Workstream"
+                          : workerDirectorySources.current[worker.id]
+                                .roleDirectory
+                            ? "Back to Roles"
+                            : "Back to Workers"
                   : undefined
               }
               completed={completed}
@@ -1875,11 +1908,20 @@ function App() {
             !stream &&
             !worker &&
             !handoff &&
+            !route.decisions &&
             !route.organizationActivity &&
             !outcome &&
             !route.attention && (
               <>
                 <OrganizationOverview
+                  onDecisions={() => {
+                    decisionOrigin.current = route;
+                    changeRoute({
+                      view: "Organization",
+                      tab: "Overview",
+                      decisions: true,
+                    });
+                  }}
                   coordination={
                     <CoordinationOverview
                       scenario={mainCoordinationScenario(completed, readiness)}

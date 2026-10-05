@@ -38,6 +38,7 @@ export type WorkspaceRoute = {
   workflowId?: string;
   workerId?: string;
   handoffId?: string;
+  decisions?: boolean;
   organizationActivity?: boolean;
   coordination?: CoordinationFilters;
   streamDirectory?: StreamFilters;
@@ -167,6 +168,8 @@ export function useWorkspaceRoute(ids: string[], tabs: string[]) {
         },
       };
     }
+    if (path.join("/") === "/organization/decisions")
+      return { ...fallback, view: "Organization", decisions: true };
     if (
       path.length === 3 &&
       path[0] === "" &&
@@ -286,35 +289,37 @@ export function useWorkspaceRoute(ids: string[], tabs: string[]) {
     };
   }, []);
   function navigate(next: WorkspaceRoute, replace = false) {
-    const path = next.scenarioPath
-      ? `#${next.scenarioPath}`
-      : next.roleDirectory
-        ? "#/organization/roles"
-        : next.workerDirectory
-          ? "#/organization/workers"
-          : next.streamDirectory
-            ? "#/organization/workstreams"
-            : next.assignmentId
-              ? `#/assignments/${next.assignmentId}/${next.tab.toLowerCase()}`
-              : next.workflowId
-                ? `#/workflows/${next.workflowId}`
-                : next.workstreamId
-                  ? `#/workstreams/${next.workstreamId}`
-                  : next.workerId
-                    ? `#/workers/${next.workerId}`
-                    : next.handoffId
-                      ? `#/handoffs/${next.handoffId}`
-                      : next.organizationActivity
-                        ? "#/organization/activity"
-                        : next.outcomeId
-                          ? `#/outcomes/${next.outcomeId}`
-                          : next.attention
-                            ? `#/organization/attention/${next.attention.toLowerCase()}`
-                            : next.personalQueue
-                              ? "#/work/attention"
-                              : next.largeOrganization
-                                ? "#/demos/organization"
-                                : `#/${viewPaths[next.view]}`;
+    const path = next.decisions
+      ? "#/organization/decisions"
+      : next.scenarioPath
+        ? `#${next.scenarioPath}`
+        : next.roleDirectory
+          ? "#/organization/roles"
+          : next.workerDirectory
+            ? "#/organization/workers"
+            : next.streamDirectory
+              ? "#/organization/workstreams"
+              : next.assignmentId
+                ? `#/assignments/${next.assignmentId}/${next.tab.toLowerCase()}`
+                : next.workflowId
+                  ? `#/workflows/${next.workflowId}`
+                  : next.workstreamId
+                    ? `#/workstreams/${next.workstreamId}`
+                    : next.workerId
+                      ? `#/workers/${next.workerId}`
+                      : next.handoffId
+                        ? `#/handoffs/${next.handoffId}`
+                        : next.organizationActivity
+                          ? "#/organization/activity"
+                          : next.outcomeId
+                            ? `#/outcomes/${next.outcomeId}`
+                            : next.attention
+                              ? `#/organization/attention/${next.attention.toLowerCase()}`
+                              : next.personalQueue
+                                ? "#/work/attention"
+                                : next.largeOrganization
+                                  ? "#/demos/organization"
+                                  : `#/${viewPaths[next.view]}`;
     const params = new URLSearchParams();
     if (next.coordination) {
       if (next.coordination.query)

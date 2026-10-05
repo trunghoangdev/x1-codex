@@ -125,3 +125,5 @@ Iteration 75 adds shared outcome requirements/context review for all three sampl
 Iteration 76 starts Knowledge workflow/exchange map inspection with explicit responsibilities, input endpoints and parallel groups. Main/larger adaptation remains next. See [WORKFLOW-MAP.md](WORKFLOW-MAP.md).
 
 Iteration 77 completes workflow/exchange map inspection across main, Knowledge and larger software. Main local responses do not advance flow or confirm input receipt; read-only relationships remain authored and explicitly scoped. See [WORKFLOW-MAP.md](WORKFLOW-MAP.md).
+
+Iteration 78 adds scoped Decision responsibility inspection with main release allocation, an explicitly authored Knowledge clarification requirement, unknown policy/escalation fields and a larger empty state. See [DECISION-RESPONSIBILITY.md](DECISION-RESPONSIBILITY.md).

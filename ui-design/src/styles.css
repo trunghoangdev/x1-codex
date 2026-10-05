@@ -3718,3 +3718,5 @@ main h3,
 @media (max-width: 700px) {
   .workflow-node-grid { grid-template-columns: minmax(0, 1fr); }
 }
+
+.decision-identity { overflow-wrap: anywhere; }

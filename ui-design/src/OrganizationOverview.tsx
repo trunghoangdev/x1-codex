@@ -27,6 +27,7 @@ export function OrganizationOverview({
   onWorkersDirectory,
   onRolesDirectory,
   onDirectory,
+  onDecisions,
   onActivity,
   onAttention,
   myWorkLabel,
@@ -45,6 +46,7 @@ export function OrganizationOverview({
   onWorkersDirectory: () => void;
   onRolesDirectory: () => void;
   onDirectory: () => void;
+  onDecisions?: () => void;
   onActivity: () => void;
   onAttention: (category: AttentionCategory | "All") => void;
 }) {
@@ -72,6 +74,13 @@ export function OrganizationOverview({
           </button>
         )}
       </div>
+      {onDecisions && (
+        <p>
+          <button className="button secondary" onClick={onDecisions}>
+            Inspect decision responsibility
+          </button>
+        </p>
+      )}
       <div className="org-banner">
         <div>
           <span className="section-label">

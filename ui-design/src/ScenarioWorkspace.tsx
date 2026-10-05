@@ -1,3 +1,4 @@
+import { DecisionDirectory } from "./DecisionDirectory";
 import { WorkflowMap } from "./WorkflowMap";
 import { OutcomeReview } from "./OutcomeReview";
 import { CoordinationOverview } from "./CoordinationOverview";
@@ -52,6 +53,7 @@ export function validScenarioPath(raw: string) {
       "/attention",
       "/activity",
       "/evidence",
+      "/decisions",
       ...scenario.streams.map((s) => `/workstreams/${s.id}`),
       ...scenario.outcomes.map((o) => `/outcomes/${o.streamId}`),
       ...scenario.streams.map((s) => `/workflows/${s.id}`),
@@ -260,7 +262,15 @@ export function ScenarioWorkspace({
           verified outcomes. Main software records remain separate.
         </p>
       </details>
-      {suffix.startsWith("/workflows/") ? (
+      {suffix === "/decisions" ? (
+        <DecisionDirectory
+          scenario={scenario}
+          onBack={back}
+          onAssignment={(id) => open(`/assignments/${id}`)}
+          onWorker={(id) => open(`/workers/${id}`)}
+          onStream={(id) => open(`/workstreams/${id}`)}
+        />
+      ) : suffix.startsWith("/workflows/") ? (
         <WorkflowMap
           scenario={scenario}
           streamId={suffix.split("/")[2]}
@@ -641,6 +651,7 @@ export function ScenarioWorkspace({
             </section>
           ) : (
             <OrganizationOverview
+              onDecisions={() => open("/decisions")}
               scenario={scenario}
               coordination={
                 <CoordinationOverview

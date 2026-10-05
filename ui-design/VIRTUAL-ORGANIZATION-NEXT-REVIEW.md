@@ -109,3 +109,7 @@ Knowledge workshop and guide now have scoped workflow/exchange map routes. Respo
 ## Item 3 completed — iterations 76–77
 
 All three organizations now have reference-based workflow/exchange map inspection with workstream entry points and source return. Main preserves session response/receipt/outcome boundaries and worker-only provider representation; larger keeps its missing dependency records explicit. Main map exit restores the original filtered workstream source; read-only routes retain persona-scoped refreshed trails. Build and nineteen related checks passed in the final unit. See [WORKFLOW-MAP.md](WORKFLOW-MAP.md). Items 4–5 remain proposed; decision responsibility/escalation is next.
+
+## Item 4 inspection delivered — iteration 78
+
+Shared decision directory presents exact main production release subject/allocation and one newly authored Knowledge responsibility-clarification requirement. Publication authorization policy/owner are unknown and separate from the missing assessment responsibility. No requester, deadline or escalation chain is invented. Larger has an honest empty record collection. Build and fifteen related checks passed. See [DECISION-RESPONSIBILITY.md](DECISION-RESPONSIBILITY.md). This completes the bounded read-only inspection slice; real escalation/approval requires explicit policy and allocation records. Item 5 remains proposed.
