@@ -1,3 +1,5 @@
+import { WorkstreamAgreement } from "./WorkstreamAgreement";
+import { agreementVersions } from "./data/workstreamAgreements";
 import { CoordinationCases } from "./CoordinationCases";
 import {
   coordinationCases,
@@ -65,6 +67,7 @@ export function validScenarioPath(raw: string) {
       ...(scenario.id === "knowledge"
         ? [
             "/cases",
+            "/agreements/K-01",
             ...coordinationCases(scenario).map((c) => `/cases/${c.id}`),
           ]
         : []),
@@ -77,6 +80,13 @@ export function validScenarioPath(raw: string) {
   )
     return false;
   return (
+    (!["agreementVersion", "compare"].some((k) => params.has(k)) ||
+      (scenario.id === "knowledge" &&
+        suffix === "/agreements/K-01" &&
+        agreementVersions.some(
+          (v) => v.id === (params.get("agreementVersion") ?? "brief-v2"),
+        ) &&
+        ["yes", "no"].includes(params.get("compare") ?? "no"))) &&
     (!["caseQ", "caseOwner", "caseNeed"].some((k) => params.has(k)) ||
       (suffix === "/cases" &&
         ["all", "assigned", "unknown"].includes(
@@ -228,7 +238,10 @@ export function ScenarioWorkspace({
       (a) => suffix === `/assignments/${a.id}`,
     );
     const outcomeStream = scenario.streams.find(
-      (s) => suffix === `/outcomes/${s.id}` || suffix === `/workflows/${s.id}`,
+      (s) =>
+        suffix === `/outcomes/${s.id}` ||
+        suffix === `/workflows/${s.id}` ||
+        suffix === `/agreements/${s.id}`,
     );
     const fallback = outcomeStream
       ? `/workstreams/${outcomeStream.id}`
@@ -296,7 +309,21 @@ export function ScenarioWorkspace({
           verified outcomes. Main software records remain separate.
         </p>
       </details>
-      {suffix === "/cases" || suffix.startsWith("/cases/") ? (
+      {suffix === "/agreements/K-01" ? (
+        <WorkstreamAgreement
+          scenario={scenario}
+          versionId={params.get("agreementVersion") ?? "brief-v2"}
+          compare={params.get("compare") === "yes"}
+          onSelection={(version, compare) =>
+            filter("agreements/K-01", {
+              agreementVersion: version,
+              compare: compare ? "yes" : "no",
+            })
+          }
+          onBack={back}
+          onSource={open}
+        />
+      ) : suffix === "/cases" || suffix.startsWith("/cases/") ? (
         <CoordinationCases
           scenario={scenario}
           caseId={suffix.split("/")[2]}
@@ -565,6 +592,16 @@ export function ScenarioWorkspace({
               }
               <section className="panel org-stream">
                 <h2>Coordination & assignments</h2>
+                {scenario.id === "knowledge" && stream.id === "K-01" && (
+                  <p>
+                    <button
+                      className="button secondary"
+                      onClick={() => open("/agreements/K-01")}
+                    >
+                      Inspect proposed workstream agreement
+                    </button>
+                  </p>
+                )}
                 {
                   <button
                     className="button secondary"

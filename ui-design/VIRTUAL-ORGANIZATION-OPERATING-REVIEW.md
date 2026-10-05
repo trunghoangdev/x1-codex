@@ -85,3 +85,5 @@ The proposed items are a new backlog, not new implemented capabilities. Existing
 ## Item 1 first slice delivered — iteration 81
 
 Knowledge now has the two proposed read-only source-linked cases: current workshop input with explicitly authored Leo follow-up ownership, and publication policy/allocation clarification with unknown case owner. Closure requirements stay unmet/unreviewed; no resolution record or allocation is created. URL filters and refreshed source return are tested. Build and twelve related checks passed. See [COORDINATION-CASES.md](COORDINATION-CASES.md). Interactive drafts/resolution and main/larger case coverage remain future units; item 2 is the next prioritized proposal.
+
+Item 2 delivery (iteration 82): the Knowledge K-01 inspection slice now compares two unapproved, independently authored audience/scope proposals. See [WORKSTREAM-AGREEMENTS.md](WORKSTREAM-AGREEMENTS.md). Existing goal/criteria are reused; assignment/evidence applicability remains unconfirmed and sample state is unchanged.

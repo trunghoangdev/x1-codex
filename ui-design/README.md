@@ -259,3 +259,5 @@ Iteration 79 adds read-only shared exchange history with Knowledge’s explicitl
 The next operating-accountability review is [VIRTUAL-ORGANIZATION-OPERATING-REVIEW.md](VIRTUAL-ORGANIZATION-OPERATING-REVIEW.md), after the five inspection slices through iteration 79. It recommends coordination cases first; these proposals are not implemented features.
 
 Iteration 81 adds Knowledge-first [Coordination cases](COORDINATION-CASES.md), with explicit follow-up ownership/unknowns, next actions, closure requirements and scoped source inspection. It is read-only and does not allocate tasks or resolve cases.
+
+Versioned Knowledge welcome-guide scope proposals: see [WORKSTREAM-AGREEMENTS.md](WORKSTREAM-AGREEMENTS.md). Open K-01 and choose “Inspect proposed workstream agreement” to compare authored audiences and scope without implying adoption or evidence applicability.
