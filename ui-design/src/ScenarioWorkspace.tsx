@@ -1,3 +1,5 @@
+import { CollaborationWalkthrough } from "./CollaborationWalkthrough";
+import { walkthroughRecords } from "./data/collaborationWalkthrough";
 import { OrganizationOperatingContext } from "./OrganizationOperatingContext";
 import { OperatingPattern } from "./OperatingPattern";
 import { operatingPattern } from "./data/operatingPatterns";
@@ -71,6 +73,7 @@ export function validScenarioPath(raw: string) {
       ...(scenario.id === "knowledge"
         ? [
             "/cases",
+            "/walkthroughs/guide-cycle",
             "/agreements/K-01",
             "/outcome-reviews/guide-review-01",
             ...scenario.streams
@@ -88,6 +91,10 @@ export function validScenarioPath(raw: string) {
   )
     return false;
   return (
+    (!params.has("cycleRecord") ||
+      (scenario.id === "knowledge" &&
+        suffix === "/walkthroughs/guide-cycle" &&
+        walkthroughRecords.some((r) => r.id === params.get("cycleRecord")))) &&
     (!["agreementVersion", "compare"].some((k) => params.has(k)) ||
       (scenario.id === "knowledge" &&
         suffix === "/agreements/K-01" &&
@@ -253,19 +260,21 @@ export function ScenarioWorkspace({
         suffix === `/patterns/${s.id}`,
     );
     const fallback =
-      suffix === "/outcome-reviews/guide-review-01"
-        ? "/outcomes/K-01"
-        : outcomeStream
-          ? `/workstreams/${outcomeStream.id}`
-          : assignment?.streamId
-            ? `/workstreams/${assignment.streamId}`
-            : suffix.startsWith("/workers/")
-              ? "/workers"
-              : suffix.startsWith("/workstreams/")
-                ? "/workstreams"
-                : suffix.startsWith("/cases/")
-                  ? "/cases"
-                  : "";
+      suffix === "/walkthroughs/guide-cycle"
+        ? "/workstreams/K-01"
+        : suffix === "/outcome-reviews/guide-review-01"
+          ? "/outcomes/K-01"
+          : outcomeStream
+            ? `/workstreams/${outcomeStream.id}`
+            : assignment?.streamId
+              ? `/workstreams/${assignment.streamId}`
+              : suffix.startsWith("/workers/")
+                ? "/workers"
+                : suffix.startsWith("/workstreams/")
+                  ? "/workstreams"
+                  : suffix.startsWith("/cases/")
+                    ? "/cases"
+                    : "";
     const source = index >= 0 ? trail[index].source : qualify(fallback);
     if (index >= 0) trail.splice(index);
     saveTrail();
@@ -321,7 +330,17 @@ export function ScenarioWorkspace({
           verified outcomes. Main software records remain separate.
         </p>
       </details>
-      {suffix.startsWith("/patterns/") ? (
+      {suffix === "/walkthroughs/guide-cycle" ? (
+        <CollaborationWalkthrough
+          scenario={scenario}
+          recordId={params.get("cycleRecord") ?? walkthroughRecords[0].id}
+          onSelect={(id) =>
+            filter("walkthroughs/guide-cycle", { cycleRecord: id })
+          }
+          onBack={back}
+          onSource={open}
+        />
+      ) : suffix.startsWith("/patterns/") ? (
         <OperatingPattern
           scenario={scenario}
           streamId={suffix.split("/")[2]}

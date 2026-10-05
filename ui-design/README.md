@@ -271,3 +271,5 @@ Knowledge operating guidance and policy gaps: see [OPERATING-PATTERNS.md](OPERAT
 Knowledge overview now connects the operating records: see [ORGANIZATION-OPERATING-CONTEXT.md](ORGANIZATION-OPERATING-CONTEXT.md). Use “Agreements, reviews & policy” to inspect current gaps and separately labeled design examples.
 
 Knowledge personal follow-up: see [PERSONAL-CASE-FOLLOW-UP.md](PERSONAL-CASE-FOLLOW-UP.md). Select Leo and open My Work to inspect the explicitly owned workshop-brief case alongside, but separately from, assignments.
+
+One coherent version-bound collaboration example: see [COLLABORATION-WALKTHROUGH.md](COLLABORATION-WALKTHROUGH.md). Knowledge overview offers “Explore a complete collaboration example” with eleven fictional records and explicit revision/source links.

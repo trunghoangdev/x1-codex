@@ -24,6 +24,14 @@ export function OrganizationOperatingContext({
         Where the current Knowledge workstreams need clarification. Independent
         design examples are shown separately from current operating records.
       </p>
+      <p>
+        <button
+          className="button secondary"
+          onClick={() => onSource("/walkthroughs/guide-cycle")}
+        >
+          Explore a complete collaboration example
+        </button>
+      </p>
       <div className="org-stream-grid">
         {scenario.streams.map((stream) => {
           const association = operatingPattern(scenario, stream.id);
