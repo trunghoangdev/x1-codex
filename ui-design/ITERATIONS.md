@@ -813,3 +813,12 @@ Added one independent fictional human responsibility with explicit input, expect
 A separately editable draft-02 responds to draft-01's assessment, requires a new response/citation and creates a distinct delivery/receipt. Earlier delivered text and records remain unchanged; reassessment remains pending and no publication/effect/outcome is inferred. App-owned state survives screen navigation but reload resets this isolated exercise; Demo continuity does not save it. The deferred screen has a validated Demos deep link. See [scope and behavior](HUMAN-CONTRIBUTION.md).
 
 Production build and twelve targeted checks passed across human contribution, retained snapshot and existing demo continuity. Desktop/mobile previews were captured and the mobile view visually inspected. The new view remains deferred; initial JS stays below 500 kB. Item 2 is complete within this local two-version exercise; live submission/reassessment still requires an application contract.
+
+## 94 — Draft SF inspection read contract and source mapping
+
+Added an executable frontend draft projection for the bounded assignment/attempt/work-product inspection. A SHA-256 response-byte revision is distinct from the original source reference and binds the displayed snapshot representation; it is not an ETag, command token or governed identity. Captured-at and historical freshness stay explicit. Fields distinguish known, not-recorded, redacted and unsupported; exact product relationships distinguish available, unavailable and no reported identity. Identity/permission context is unsupported, not inferred.
+
+The SF view now loads through the adapter and exposes snapshot context/field availability. Wrong origin, bad JSON/version/relationships, oversized data and normalized field conflicts reject the read without fabricating execution outcome. Source mapping and unimplemented backend/query/authority decisions are documented in [the read-contract draft](SF-READ-CONTRACT.md); no endpoint or command is deployed. Production build and twelve related checks passed across projection/error/revision semantics and existing synthetic/retained desktop/mobile inspection.
+
+Digest support is optional for inspection: unsupported/non-secure browser origins show revision unavailable, without inventing a token or hiding source records. Desktop/mobile context previews were captured and the mobile context visually inspected.
+After the digest fallback, production build and all five projection checks passed again, including a browser with digest support removed.

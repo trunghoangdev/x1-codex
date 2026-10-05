@@ -1,9 +1,11 @@
-import { useEffect, useState } from "react";
 import {
-  decodeExampleBytes,
-  parseSfSnapshot,
-  type SfSnapshot,
-} from "./data/sfSnapshot";
+  readSfProjection,
+  ReadProjectionError,
+  type SfReadProjection,
+  type ReadField,
+} from "./data/sfReadProjection";
+import { useEffect, useState } from "react";
+import { decodeExampleBytes, type SfSnapshot } from "./data/sfSnapshot";
 
 function Fields({ record }: { record: Record<string, unknown> }) {
   return (
@@ -31,25 +33,32 @@ export function SfSnapshotInspection({
   const snapshotUrl = retained
     ? "./snapshots/sf-retained-v1.json"
     : "./snapshots/sf-example-v1.json";
-  const [data, setData] = useState<SfSnapshot>();
-  const [error, setError] = useState(false);
+  const [projection, setProjection] = useState<SfReadProjection>();
+  const data: SfSnapshot | undefined = projection?.snapshot;
+  const [error, setError] = useState<string>();
   const [retry, setRetry] = useState(0);
   useEffect(() => {
     const controller = new AbortController();
-    setData(undefined);
-    setError(false);
+    setProjection(undefined);
+    setError(undefined);
     fetch(snapshotUrl, {
       signal: controller.signal,
     })
       .then(async (response) => {
         if (!response.ok) throw new Error("Snapshot unavailable");
-        const value = parseSfSnapshot(await response.json());
-        if (value.source.kind !== (retained ? "retained-redacted" : "synthetic"))
-          throw new Error("Snapshot source does not match this inspection.");
-        if (!controller.signal.aborted) setData(value);
+        const value = await readSfProjection(
+          await response.text(),
+          retained ? "retained-redacted" : "synthetic",
+        );
+        if (!controller.signal.aborted) setProjection(value);
       })
-      .catch(() => {
-        if (!controller.signal.aborted) setError(true);
+      .catch((failure: unknown) => {
+        if (!controller.signal.aborted)
+          setError(
+            failure instanceof ReadProjectionError
+              ? failure.code
+              : "load-failed",
+          );
       });
     return () => controller.abort();
   }, [retry, snapshotUrl]);
@@ -87,6 +96,7 @@ export function SfSnapshotInspection({
             The projection could not load or validate. Assignment outcome is
             unknown; this is not an execution failure.
           </p>
+          <p>Inspection error: {error}. No source outcome is inferred.</p>
           <button
             className="button secondary"
             onClick={() => setRetry((v) => v + 1)}
@@ -98,6 +108,56 @@ export function SfSnapshotInspection({
         <p role="status">Loading inspection snapshot…</p>
       ) : (
         <>
+          {projection && (
+            <section
+              className="panel org-stream"
+              aria-label="Read projection context"
+            >
+              <h2>Snapshot context</h2>
+              <p>Historical snapshot; current runtime freshness is unknown.</p>
+              <p>Captured at: {projection.capturedAt}</p>
+              <details>
+                <summary>
+                  Inspect snapshot identity and field availability
+                </summary>
+                <p className="sf-snapshot-bytes">
+                  Projection revision:{" "}
+                  {projection.revision ??
+                    "unavailable — browser digest support could not be used; no revision is inferred"}
+                </p>
+                <p>
+                  Source record reference: {projection.sourceRevision}. This is
+                  not a change token.
+                </p>
+                <Availability
+                  label="Work identity"
+                  field={projection.assignment.fields.work_id}
+                />
+                <Availability
+                  label="Validator"
+                  field={projection.assignment.fields.validator}
+                />
+                <Availability
+                  label="Worker binding"
+                  field={projection.assignment.fields.worker}
+                />
+                <Availability
+                  label="Effective permission"
+                  field={projection.assignment.fields.permission}
+                />
+                {selected &&
+                  projection.attempts.find((a) => a.id === selected) && (
+                    <Availability
+                      label="Process exit status"
+                      field={
+                        projection.attempts.find((a) => a.id === selected)!
+                          .fields.exit_code
+                      }
+                    />
+                  )}
+              </details>
+            </section>
+          )}
           <section className="panel org-stream">
             <h2>Source and freshness</h2>
             <Fields record={data.source} />
@@ -239,5 +299,16 @@ export function SfSnapshotInspection({
         </>
       )}
     </>
+  );
+}
+
+function Availability({ label, field }: { label: string; field: ReadField }) {
+  return (
+    <p>
+      <strong>{label}</strong>:{" "}
+      {field.state === "known"
+        ? String(field.value)
+        : `${field.state} — ${field.reason}`}
+    </p>
   );
 }
