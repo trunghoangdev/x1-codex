@@ -39,11 +39,14 @@ export function ContributionExchange({
           ? `draft-0${current.version}: delivered locally · ${current.receipt ? "receipt recorded" : "awaiting receiver receipt"} · ${current.assessment ? "revision requested" : "assessment not recorded"}`
           : `draft-0${current.version}: preparation · no delivery recorded`}
       </p>
+      {receiver && <p><strong>Next step:</strong> { !current.delivery ? "Wait for Leo’s next delivered revision; no receipt action is available." : !current.receipt ? `Inspect draft-0${current.version} below, then record its sample receipt.` : current.assessment ? "Revision requested. Wait for Leo’s next delivery." : current.version === 1 ? "Inspect the received text and the authored revision guidance before requesting a sample revision." : "Reassessment remains pending; no acceptance or publication action is available."}</p>}
       {delivered.length === 0 && (
         <p>No delivered contribution is available to receive.</p>
       )}
-      {delivered.map((c) => (
+      {[...delivered].reverse().map((c) => (
         <article key={c.version}>
+          <details open={!receiver || c.version === current.version}>
+          <summary>{c.version === current.version ? "Current delivered revision" : "Earlier delivered revision"} · draft-0{c.version}</summary>
           <h3>
             draft-0{c.version} · {c.delivery!.id}
           </h3>
@@ -75,6 +78,7 @@ export function ContributionExchange({
               : "not recorded"}
           </p>
           {c.assessment && <p>{c.assessment.rationale}</p>}
+          </details>
         </article>
       ))}
       {receiver && current.delivery && (

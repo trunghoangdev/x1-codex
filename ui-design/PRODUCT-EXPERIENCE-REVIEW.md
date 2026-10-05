@@ -72,3 +72,7 @@ Iteration 100 connects Maya's receiver inbox, Leo's preparation/revision path an
 ## Item 3 implementation checkpoint
 
 Iteration 101 makes Knowledge organization needs directly inspectable through compact subject/reason/responsibility/next-step records, including the shared contribution's receiver/revision/command needs. Full Knowledge/larger attention lists use the same presentation; main attention clarifies equivalent responsibility boundaries. Item 4 (simplify the main task path) remains next.
+
+## Item 4 implementation checkpoint
+
+Iteration 102 prioritizes the contributor's current task and exact-version next step, with editor/command focus shortcuts. Receiver inspection places the newest delivery first and separates its next action from collapsed earlier versions. Input, command uncertainty and sample/session boundaries remain visible. Item 5 (participant walkthrough and actual user sessions) remains outstanding; technical checks do not establish improved comprehension.

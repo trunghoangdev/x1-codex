@@ -39,3 +39,9 @@ Maya may **Record sample receipt · draft-01**, then **Request sample revision �
 Integrated contributor views no longer offer the receiver simulation controls: switch the sample persona to Maya to act as receiver. Standalone Demos retains its original receiver controls and independent state. Persona selection grants no real permissions. All these records are local session observations, not server-admitted receipt/assessment records.
 
 Organization's **Contribution exchange · K-01-H** panel shows the same history, with delivery, receipt and assessment distinct and a direct receiver-inbox link. Existing authored coordination counts and outcome requirements are not advanced by these records. Both earlier delivered revisions and earlier receiving records remain inspectable; reload clears the complete shared exercise. Demo continuity still excludes it.
+
+## Main task path — iteration 102
+
+Integrated preparation opens with **Current task**, the current draft version, required deliverable and a state-specific next step. A keyboard-operable shortcut focuses the editor while preparing, or the command-status heading while acknowledgement/projection is unresolved. Exact input remains open beside responsibility context; confirmation explains the exact-version review step. Unresolved status keeps editing/submission blocked and explicitly says not to submit again.
+
+Integrated version history is collapsed by default and remains available through its labeled disclosure. Standalone Demos keeps its history open. Maya's inbox presents the newest delivered revision first, makes the receiver's next step explicit, and collapses earlier revisions. Organization keeps its exchange observations inspectable. Draft preparation, receipt, revision request and pending reassessment retain their original meanings; no new authority or backend behavior is introduced.

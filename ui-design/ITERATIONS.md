@@ -878,3 +878,11 @@ Added a compact Knowledge coordination-needs list and shared complete Knowledge/
 Compact ordering is local observation then authored source order, with three signals and a complete attention-list entrance. Category/source navigation remains intact. See ACTIONABLE-ATTENTION.md for clearing semantics and scope.
 
 Production build and fifteen distinct targeted checks passed across actionable signals, receiver navigation, revision/outcome independence, missing-input inspection/category return, Knowledge personal paths and larger shared organization screens on desktop/phone. Updated category presentation assertions to the separate badge/title structure. Preserved the larger scenario's read-only boundary label while Knowledge remains an authored sample with local interaction. Diff checks passed.
+
+## 102 — Current task and focused contribution inspection
+
+Integrated preparation now opens with current draft version, expected deliverable and a state-specific next step. Editor and unresolved-command shortcuts provide explicit keyboard focus destinations. The confirmation stage explains exact-version review. Input and sample/session boundaries remain visible; unknown acknowledgement or projection lag keeps submission/editing locked.
+
+Integrated version history is collapsed by default; standalone history stays open. Receiver inspection shows newest delivery first, explicit next-step guidance and collapsed earlier revisions. All earlier records remain inspectable, and receipt/reassessment/publication semantics are unchanged. No claim of improved participant comprehension is made before real sessions.
+
+Production build and fourteen distinct related checks passed across runs: contribution/command regressions, shared revision loops, desktop/phone editor and command-focus shortcuts, collapsed-history inspection and narrow-screen overflow with long contribution content. Final four task/exchange checks passed after prioritizing the current-task panel. Diff whitespace checks passed.

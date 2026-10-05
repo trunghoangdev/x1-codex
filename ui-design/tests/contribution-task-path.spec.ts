@@ -1,0 +1,24 @@
+import { test, expect } from '@playwright/test';
+for (const width of [390,1440]) test(`task summary keyboard and uncertain submission ${width}`, async ({page})=>{
+ await page.setViewportSize({width,height:1000});
+ await page.goto('/#/organizations/knowledge/contributions/K-01-H?persona=leo');
+ const task=page.getByRole('region',{name:'Current contribution task'});
+ await expect(task.getByText('Deliverable:',{exact:false})).toBeVisible();
+ await task.getByRole('button',{name:'Continue preparing · draft-01'}).focus();
+ await page.keyboard.press('Enter');
+ await expect(page.getByLabel('Contribution text')).toBeFocused();
+ await page.getByLabel('Contribution text').fill('Long context '.repeat(60));
+ await page.getByLabel('Delivery note',{exact:true}).fill('scope');
+ await page.getByRole('checkbox').check();
+ await page.getByText('Command delivery simulation',{exact:true}).click();
+ await page.getByLabel('Submission result').selectOption('unknown');
+ await page.getByRole('button',{name:'Review delivery'}).click();
+ await page.getByRole('button',{name:'Record local delivery'}).click();
+ await expect(task.getByRole('status')).toContainText('do not submit again');
+ await expect(page.getByRole('button',{name:'Review delivery'})).toHaveCount(0);
+ await task.getByRole('button',{name:'Inspect unresolved command'}).focus();
+ await page.keyboard.press('Enter');
+ await expect(page.locator('#human-command-status-heading')).toBeFocused();
+ await expect(page.locator('details').filter({has:page.getByRole('heading',{name:'Version history',exact:true,includeHidden:true})})).not.toHaveAttribute('open');
+ expect(await page.evaluate(()=>document.documentElement.scrollWidth<=window.innerWidth)).toBe(true);
+});
