@@ -3764,3 +3764,7 @@ main h3,
 
 .human-contribution-text { white-space: pre-wrap; overflow-wrap: anywhere; background: #f5f6f3; padding: 14px; }
 .human-contribution-page textarea { display: block; width: 100%; max-width: 100%; font: inherit; padding: 12px; margin: 8px 0 16px; border: 1px solid #929c94; border-radius: 8px; }
+
+.sf-trace-list article { padding: 12px 0; border-bottom: 1px solid #d9dfd8; }
+.sf-trace-list h3 { display: flex; gap: 10px; align-items: center; flex-wrap: wrap; }
+[id^="sf-source-"] { scroll-margin-top: 85px; }

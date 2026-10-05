@@ -1,3 +1,4 @@
+import { SfAccountability } from "./SfAccountability";
 import {
   readSfProjection,
   ReadProjectionError,
@@ -109,6 +110,17 @@ export function SfSnapshotInspection({
       ) : (
         <>
           {projection && (
+            <SfAccountability
+              projection={projection}
+              attemptId={selected}
+              onSource={(source) => {
+                const element = document.getElementById(`sf-source-${source}`);
+                element?.scrollIntoView({ block: "start" });
+                element?.focus({ preventScroll: true });
+              }}
+            />
+          )}
+          {projection && (
             <section
               className="panel org-stream"
               aria-label="Read projection context"
@@ -181,7 +193,9 @@ export function SfSnapshotInspection({
             </section>
           )}
           <section className="panel org-stream">
-            <h2>Assignment · {String(data.assignment.id)}</h2>
+            <h2 id="sf-source-assignment" tabIndex={-1}>
+              Assignment · {String(data.assignment.id)}
+            </h2>
             <Fields record={data.assignment} />
             <p>
               Worker, actor, effective permission and execution node: unknown.
@@ -189,7 +203,9 @@ export function SfSnapshotInspection({
             </p>
           </section>
           <section className="panel org-stream">
-            <h2>Retained attempts</h2>
+            <h2 id="sf-source-attempt" tabIndex={-1}>
+              Retained attempts
+            </h2>
             <div className="sf-snapshot-links">
               {data.attempts.map((a) => (
                 <button
@@ -220,7 +236,9 @@ export function SfSnapshotInspection({
           </section>
           {attempt && (
             <section className="panel org-stream">
-              <h2>Work product</h2>
+              <h2 id="sf-source-product" tabIndex={-1}>
+                Work product
+              </h2>
               {product ? (
                 <>
                   <Fields
@@ -271,7 +289,9 @@ export function SfSnapshotInspection({
           )}
           {data.integrity_checks && (
             <section className="panel org-stream">
-              <h2>Export integrity observations</h2>
+              <h2 id="sf-source-integrity" tabIndex={-1}>
+                Export integrity observations
+              </h2>
               <Fields record={data.integrity_checks} />
               <p>
                 The export script checked blob bytes and the rebuilt

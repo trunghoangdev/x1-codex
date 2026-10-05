@@ -830,3 +830,11 @@ Integrated a bounded draft command contract into the existing human contribution
 Default immediate admission/projection preserves the existing walkthrough. Additional outcomes/status-query controls are explicit local simulations, not actual authorization, concurrency checks, durable idempotency or backend integration. Proposed server responsibilities and open semantics are documented in [the command contract](CONTRIBUTION-COMMAND-CONTRACT.md).
 
 Production build and seven targeted checks passed across command uncertainty, admission/projection separation, changed-payload rejection, rejected-intent correction and existing desktop/mobile revision flows. A test exposed command-history loss during draft editing; state updates now preserve it and new intents receive distinct IDs/keys. Desktop/mobile status previews were captured and mobile visually inspected.
+
+## 96 — Source-separated organization context and accountability trace
+
+Added installed organization context to the SF inspection, explicitly separating the retained dataset from sample navigation identity/persona. Unsupported organization/version/bindings/policy/placement remain unknown with source freshness visible. An attempt-scoped trace links assignment, attempt, reported artifact and exact work-product/content/blob relationships while preserving the exporter/provenance limits. Responsibility, assessment, authority and effect/reconciliation remain unavailable; no admitted platform state or exit status fills these gaps.
+
+Source inspection buttons scroll/focus exact source headings without changing selection. No-attempt/failed-artifact states remain explicit. The trace derives from the existing validated read projection and does not merge sample receipts, simulated commands or ledger narrative. See [bounded scope and remaining source requirements](SF-ORGANIZATION-ACCOUNTABILITY.md).
+
+Production build and twelve related checks passed across source isolation, missing links, exact source focus, desktop/mobile overflow and existing read-projection/retained-snapshot behavior. Desktop/mobile context and trace previews were captured; the mobile trace was visually inspected. This completes group 1’s first bounded inspection slice, not live installed organization management or a complete verified audit chain.

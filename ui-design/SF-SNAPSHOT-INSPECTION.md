@@ -48,3 +48,5 @@ Run from `x1-codex`. The exporter uses a deliberately narrow allowlist and asser
 Previews: [desktop](previews/90-sf-retained-1440.png) and [mobile](previews/90-sf-retained-390.png).
 
 Iteration 94 routes snapshot loading through `readSfProjection`. Snapshot context exposes a digest of the exact loaded response bytes separately from the original source reference, plus explicit field availability. This is a frontend draft read contract; see [mapping, errors and backend gaps](SF-READ-CONTRACT.md).
+
+Iteration 96 adds source-separated [organization context and accountability inspection](SF-ORGANIZATION-ACCOUNTABILITY.md), with exact source navigation and explicit missing authority/effect records.
