@@ -1,3 +1,9 @@
+import { CoordinationCases } from "./CoordinationCases";
+import {
+  coordinationCases,
+  defaultCaseFilters,
+  type CaseFilters,
+} from "./data/coordinationCases";
 import { ExchangeActivity, type ExchangeFilters } from "./ExchangeActivity";
 import { exchangeActivity, exchangeKinds } from "./data/exchangeActivity";
 import { DecisionDirectory } from "./DecisionDirectory";
@@ -56,6 +62,12 @@ export function validScenarioPath(raw: string) {
       "/activity",
       "/evidence",
       "/decisions",
+      ...(scenario.id === "knowledge"
+        ? [
+            "/cases",
+            ...coordinationCases(scenario).map((c) => `/cases/${c.id}`),
+          ]
+        : []),
       ...scenario.streams.map((s) => `/workstreams/${s.id}`),
       ...scenario.outcomes.map((o) => `/outcomes/${o.streamId}`),
       ...scenario.streams.map((s) => `/workflows/${s.id}`),
@@ -65,6 +77,14 @@ export function validScenarioPath(raw: string) {
   )
     return false;
   return (
+    (!["caseQ", "caseOwner", "caseNeed"].some((k) => params.has(k)) ||
+      (suffix === "/cases" &&
+        ["all", "assigned", "unknown"].includes(
+          params.get("caseOwner") ?? "all",
+        ) &&
+        ["all", "input", "policy"].includes(
+          params.get("caseNeed") ?? "all",
+        ))) &&
     (!["actStream", "actKind", "event"].some((k) => params.has(k)) ||
       (suffix === "/activity" &&
         ["all", ...scenario.streams.map((s) => s.id)].includes(
@@ -218,7 +238,9 @@ export function ScenarioWorkspace({
           ? "/workers"
           : suffix.startsWith("/workstreams/")
             ? "/workstreams"
-            : "";
+            : suffix.startsWith("/cases/")
+              ? "/cases"
+              : "";
     const source = index >= 0 ? trail[index].source : qualify(fallback);
     if (index >= 0) trail.splice(index);
     saveTrail();
@@ -274,7 +296,28 @@ export function ScenarioWorkspace({
           verified outcomes. Main software records remain separate.
         </p>
       </details>
-      {suffix === "/activity" ? (
+      {suffix === "/cases" || suffix.startsWith("/cases/") ? (
+        <CoordinationCases
+          scenario={scenario}
+          caseId={suffix.split("/")[2]}
+          filters={{
+            ...defaultCaseFilters,
+            query: params.get("caseQ") ?? "",
+            owner: (params.get("caseOwner") ?? "all") as CaseFilters["owner"],
+            need: (params.get("caseNeed") ?? "all") as CaseFilters["need"],
+          }}
+          onFilters={(f) =>
+            filter("cases", {
+              caseQ: f.query,
+              caseOwner: f.owner,
+              caseNeed: f.need,
+            })
+          }
+          onBack={back}
+          onCase={(id) => open(`/cases/${id}`)}
+          onSource={open}
+        />
+      ) : suffix === "/activity" ? (
         <ExchangeActivity
           scenario={scenario}
           filters={{
@@ -674,6 +717,9 @@ export function ScenarioWorkspace({
             </section>
           ) : (
             <OrganizationOverview
+              onCases={
+                scenario.id === "knowledge" ? () => open("/cases") : undefined
+              }
               onDecisions={() => open("/decisions")}
               scenario={scenario}
               coordination={

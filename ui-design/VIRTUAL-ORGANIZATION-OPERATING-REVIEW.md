@@ -81,3 +81,7 @@ These capabilities can be designed from authored data on the current machine. Re
 Start with coordination cases. Then stabilize the versioned work agreement before modeling actual goal-level review records. Worker profiles and reusable patterns can follow as separate small units. Keep the organization view central and link My Work only when the selected person has an explicitly allocated action.
 
 The proposed items are a new backlog, not new implemented capabilities. Existing main proposals, decisions and history should remain the source for their current behaviors.
+
+## Item 1 first slice delivered — iteration 81
+
+Knowledge now has the two proposed read-only source-linked cases: current workshop input with explicitly authored Leo follow-up ownership, and publication policy/allocation clarification with unknown case owner. Closure requirements stay unmet/unreviewed; no resolution record or allocation is created. URL filters and refreshed source return are tested. Build and twelve related checks passed. See [COORDINATION-CASES.md](COORDINATION-CASES.md). Interactive drafts/resolution and main/larger case coverage remain future units; item 2 is the next prioritized proposal.

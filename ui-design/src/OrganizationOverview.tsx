@@ -27,6 +27,7 @@ export function OrganizationOverview({
   onWorkersDirectory,
   onRolesDirectory,
   onDirectory,
+  onCases,
   onDecisions,
   onActivity,
   onAttention,
@@ -46,6 +47,7 @@ export function OrganizationOverview({
   onWorkersDirectory: () => void;
   onRolesDirectory: () => void;
   onDirectory: () => void;
+  onCases?: () => void;
   onDecisions?: () => void;
   onActivity: () => void;
   onAttention: (category: AttentionCategory | "All") => void;
@@ -74,6 +76,13 @@ export function OrganizationOverview({
           </button>
         )}
       </div>
+      {onCases && (
+        <p>
+          <button className="button secondary" onClick={onCases}>
+            Browse coordination cases
+          </button>
+        </p>
+      )}
       {onDecisions && (
         <p>
           <button className="button secondary" onClick={onDecisions}>
