@@ -120,6 +120,11 @@ const iconFor = {
   Authority: ShieldCheck,
   Reconciliation: GitBranch,
 };
+const SfSnapshotInspection = deferredScreen(() =>
+  import("./SfSnapshotInspection").then((m) => ({
+    default: m.SfSnapshotInspection,
+  })),
+);
 const DemoContinuity = deferredScreen(() =>
   import("./DemoContinuity").then((m) => ({ default: m.DemoContinuity })),
 );
@@ -306,7 +311,7 @@ function App() {
   >({});
   const source = selected ? assignmentSources.current[selected.id] : undefined;
   const inboxReturn = useRef<{ id: string; y: number } | null>(null);
-  const screenKey = `${route.view}:${route.assignmentId ?? ""}:${!!route.invalid}:${route.workstreamId ?? ""}:${route.workflowId ?? ""}:${route.workerId ?? ""}:${route.handoffId ?? ""}:${!!route.organizationActivity}:${!!route.decisions}:${route.outcomeId ?? ""}:${!!route.attention}:${!!route.personalQueue}:${!!route.largeOrganization}:${!!route.streamDirectory}:${!!route.workerDirectory}:${!!route.roleDirectory}:${route.scenarioPath?.split("?")[0] ?? ""}:${activePersona?.workerId ?? ""}`;
+  const screenKey = `${route.sfSnapshot ?? "no-snapshot"}:${route.view}:${route.assignmentId ?? ""}:${!!route.invalid}:${route.workstreamId ?? ""}:${route.workflowId ?? ""}:${route.workerId ?? ""}:${route.handoffId ?? ""}:${!!route.organizationActivity}:${!!route.decisions}:${route.outcomeId ?? ""}:${!!route.attention}:${!!route.personalQueue}:${!!route.largeOrganization}:${!!route.streamDirectory}:${!!route.workerDirectory}:${!!route.roleDirectory}:${route.scenarioPath?.split("?")[0] ?? ""}:${activePersona?.workerId ?? ""}`;
   const previousScreen = useRef(screenKey);
   useEffect(() => {
     if (route.view !== "My Work" || route.assignmentId)
@@ -2101,18 +2106,49 @@ function App() {
           {view === "Demos" && route.largeOrganization && (
             <LargeOrganizationDemo onBack={() => navigate("Demos")} />
           )}
-          {view === "Demos" && !route.largeOrganization && (
-            <>
-              <div className="page-heading">
-                <div>
-                  <div className="eyebrow">DESIGN DEMONSTRATIONS</div>
-                  <h1 tabIndex={-1}>Collaboration demos</h1>
-                  <p>
-                    Explore a standalone revision cycle with fictional records.
-                  </p>
+          {view === "Demos" && route.sfSnapshot !== undefined && (
+            <SfSnapshotInspection
+              selected={route.sfSnapshot}
+              onSelect={(id) =>
+                changeRoute({ view: "Demos", tab: "Overview", sfSnapshot: id })
+              }
+              onBack={() => navigate("Demos")}
+            />
+          )}
+          {view === "Demos" &&
+            !route.largeOrganization &&
+            route.sfSnapshot === undefined && (
+              <>
+                <div className="page-heading">
+                  <div>
+                    <div className="eyebrow">DESIGN DEMONSTRATIONS</div>
+                    <h1 tabIndex={-1}>Collaboration demos</h1>
+                    <p>
+                      Explore a standalone revision cycle with fictional
+                      records.
+                    </p>
+                  </div>
                 </div>
-              </div>
-              <DemoContinuity
+                <section className="panel org-stream">
+                  <h2>Software Factory snapshot</h2>
+                  <p>
+                    Inspect one coherent read-only assignment, attempt and
+                    work-product example.
+                  </p>
+                  <button
+                    className="button secondary"
+                    onClick={() =>
+                      changeRoute({
+                        view: "Demos",
+                        tab: "Overview",
+                        sfSnapshot: "",
+                      })
+                    }
+                  >
+                    Open SF snapshot
+                  </button>
+                </section>
+                <DemoContinuity
                 current={{
                   format: "forge-ui-demo",
                   version: 1,

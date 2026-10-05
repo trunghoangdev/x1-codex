@@ -3731,3 +3731,33 @@ main h3,
   margin: 4px 0 0;
   color: var(--muted);
 }
+
+.sf-snapshot-fields > div {
+  display: grid;
+  grid-template-columns: minmax(140px, 1fr) minmax(0, 3fr);
+  gap: 12px;
+  padding: 8px 0;
+  border-bottom: 1px solid #ddd;
+}
+.sf-snapshot-fields dt {
+  font-weight: 600;
+}
+.sf-snapshot-fields dd {
+  margin: 0;
+  overflow-wrap: anywhere;
+}
+.sf-snapshot-links {
+  display: flex;
+  gap: 10px;
+  flex-wrap: wrap;
+}
+.sf-snapshot-bytes {
+  white-space: pre-wrap;
+  overflow-wrap: anywhere;
+}
+@media (max-width: 600px) {
+  .sf-snapshot-fields > div {
+    grid-template-columns: 1fr;
+    gap: 4px;
+  }
+}

@@ -26,6 +26,10 @@ Follow the [complete demo walkthrough](WALKTHROUGH.md) for review, draft, eviden
 - **Layout:** persistent desktop navigation; responsive cards and assignment rows; a navigation toggle on narrow screens. Assignment authority stays visible beside its context on large screens and follows it on small screens.
 - **Interaction:** search, responsibility filters, completed work, assignment tabs, artifact inspection, rationale validation, local decision records, keyboard-focus containment and Escape dismissal for dialogs.
 
+## Software Factory inspection
+
+Demos → **Open SF snapshot** provides one coherent read-only assignment/attempt/work-product example with source context and unavailable evidence states. It is synthetic, not live SF data. See [snapshot inspection](SF-SNAPSHOT-INSPECTION.md).
+
 ## Scope and boundaries
 
 See [Architecture alignment review](ARCHITECTURE-ALIGNMENT-REVIEW.md) for the overall assessment at checkpoint 90 and the recommended next sequence, starting with one source-backed work slice.

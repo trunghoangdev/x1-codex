@@ -1,0 +1,70 @@
+{
+  "format": "sf-inspection-example",
+  "version": 1,
+  "source": {
+    "kind": "synthetic",
+    "label": "Contract-shaped SF example; no production capture",
+    "observed_at": "2026-10-01T10:05:00Z",
+    "revision": "example-01"
+  },
+  "assignment": {
+    "id": "snapshot-assignment-01",
+    "objective_file": "objective.md",
+    "working_context": "example-workspace",
+    "output_scope": [
+      "docs/example.md"
+    ],
+    "required_effect_paths": [
+      "docs/example.md"
+    ],
+    "validator": "example-validator",
+    "publication_criterion": "example-publication-policy",
+    "expected_payload_type_tag": "example.document.v1"
+  },
+  "attempts": [
+    {
+      "schema_version": 2,
+      "assignment_id": "snapshot-assignment-01",
+      "objective": "Prepare an example documentation contribution for assessment.",
+      "output_scope": [
+        "docs/example.md"
+      ],
+      "expected_payload_type_tag": "example.document.v1",
+      "attempt_id": "snapshot-attempt-01",
+      "opened_at": "2026-10-01T09:00:00Z",
+      "settled_at": "2026-10-01T09:01:00Z",
+      "outcome": "failed",
+      "termination": "not observed: the process never started",
+      "failure": "Example platform process could not start."
+    },
+    {
+      "schema_version": 2,
+      "assignment_id": "snapshot-assignment-01",
+      "objective": "Prepare an example documentation contribution for assessment.",
+      "output_scope": [
+        "docs/example.md"
+      ],
+      "expected_payload_type_tag": "example.document.v1",
+      "attempt_id": "snapshot-attempt-02",
+      "opened_at": "2026-10-01T10:00:00Z",
+      "settled_at": "2026-10-01T10:02:00Z",
+      "outcome": "produced",
+      "termination": "exit status 0",
+      "exit_code": 0,
+      "artifact_digest": "sha256:fe94a9a087129947cc76a6749363bff39e0dcfd64398906bb3123df38913b2a9",
+      "attempt_digest": "sha256:5b13d1723520b79ca47b5928c9be5411ac5068e1d62880c07682536b00c435ff",
+      "ephemeral_cleanup": "example cleanup observed"
+    }
+  ],
+  "work_products": [
+    {
+      "artifact_digest": "sha256:fe94a9a087129947cc76a6749363bff39e0dcfd64398906bb3123df38913b2a9",
+      "content_digest": "sha256:5c922e6949c5039e92cf94c6b20bd001cf065f23e6772974e57ebb2d043f07fd",
+      "payload_schema_id": "forge.typed-payload",
+      "payload_schema_version": 1,
+      "payload_type_tag": "example.document.v1",
+      "blob_digest": "sha256:dabca8acf0a4c5bba339f4b567e972ad98eb37ff60a580da5f044cacfb7bbc1b",
+      "bytes_base64url": "RXhhbXBsZSBjb250cmlidXRpb24gYXdhaXRpbmcgYXNzZXNzbWVudC4K"
+    }
+  ]
+}

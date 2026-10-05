@@ -33,6 +33,7 @@ export type WorkspaceView = "My Work" | "Organization" | "Evidence" | "Demos";
 export type WorkspaceRoute = {
   view: WorkspaceView;
   scenarioPath?: string;
+  sfSnapshot?: string;
   assignmentId?: string;
   workstreamId?: string;
   workflowId?: string;
@@ -64,6 +65,16 @@ export function useWorkspaceRoute(ids: string[], tabs: string[]) {
     if (!location.hash || location.hash === "#")
       return { ...fallback, view: "Organization" };
     const raw = location.hash.slice(1);
+    if (raw.startsWith("/demos/sf-snapshot")) {
+      const allowed = ["", "snapshot-attempt-01", "snapshot-attempt-02"];
+      const parts = raw.split("/");
+      const selected = parts[3] ?? "";
+      return parts[2] === "sf-snapshot" &&
+        parts.length <= 4 &&
+        allowed.includes(selected)
+        ? { view: "Demos", tab: "Overview", sfSnapshot: selected }
+        : { ...fallback, invalid: true };
+    }
     if (raw.startsWith("/organizations/"))
       return validScenarioPath(raw)
         ? {
@@ -289,7 +300,9 @@ export function useWorkspaceRoute(ids: string[], tabs: string[]) {
     };
   }, []);
   function navigate(next: WorkspaceRoute, replace = false) {
-    const path = next.decisions
+    const path = next.sfSnapshot !== undefined
+      ? `#/demos/sf-snapshot${next.sfSnapshot ? "/" + next.sfSnapshot : ""}`
+      : next.decisions
       ? "#/organization/decisions"
       : next.scenarioPath
         ? `#${next.scenarioPath}`
