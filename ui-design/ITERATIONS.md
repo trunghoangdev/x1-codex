@@ -846,3 +846,9 @@ Reviewed worker contribution, reviewer/authority and retained operator inspectio
 Prepared role-based participant tasks, expected distinctions and an unfilled observation template in [the usability/accessibility review](USABILITY-ACCESSIBILITY-REVIEW.md). Technical browser verification is explicitly separate from unperformed participant/screen-reader sessions and full accessibility certification. Inspection density remains a hypothesis to validate with operators.
 
 Production build and sixteen distinct targeted checks passed across runs: worker contribution/command, new keyboard transitions and operator source focus, directory recovery, reviewer assessment, exact release prerequisites, phone response focus and unknown attempt outcomes. After refining receiver focus, all three new checks and four reviewer/operator regressions passed again. Participant, actual screen-reader, cross-browser and comprehensive WCAG reviews remain unperformed.
+
+## 98 — Second-browser reflow and forced-colors verification
+
+Added a bounded Chromium/Firefox test config without changing the default test browser. Firefox 155.0 and Chromium 153.0.8010.12 ran six passing task checks: 640/320px worker confirmation, reviewer modal dismissal/focus and operator exact-source navigation; forced-colors focus and authority-gap inspection. Captured 320px forced-color form previews in both engines and visually inspected Firefox. No product layout/color fix was needed for these tested paths; corrected inherited Chromium channel in the Firefox harness.
+
+Production build and diff checks passed. [Display review](DISPLAY-ACCESSIBILITY-REVIEW.md) distinguishes effective-width reflow from actual browser-menu zoom, and emulation from real OS high contrast. Manual zoom, screen-reader and participant sessions remain outstanding; no full accessibility certification or browser coverage claim is made.

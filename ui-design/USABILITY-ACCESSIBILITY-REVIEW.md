@@ -58,3 +58,7 @@ Never insert inferred participant results or synthetic completion percentages. P
 2. Check these tasks with a screen reader, zoom/forced colors and another supported browser; confirm heading focus/status announcement behavior in the actual combination.
 3. Evaluate inspection density and source-return discoverability using task observations. Keep unavailable facts visible without repeating every boundary explanation.
 4. Recheck accessibility when authentication, live admission and concurrent updates arrive; current local controls cannot validate production error/permission semantics.
+
+## Follow-up display checks — iteration 98
+
+Chromium and Firefox reflow/forced-colors checks have now been run: see [environments, results and manual zoom limits](DISPLAY-ACCESSIBILITY-REVIEW.md). This resolves a bounded second-browser technical check, not full cross-browser coverage or the outstanding actual screen-reader/user sessions.
