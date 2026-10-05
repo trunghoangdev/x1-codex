@@ -870,3 +870,11 @@ Earlier versions remain intact. Draft/unprojected command text is not received w
 Production build and twelve targeted contribution/exchange/command checks passed, including desktop/phone full revision loops, independent receiver receipt, preservation of earlier content, organization observations and reload reset. Related Knowledge/personal/navigation checks are recorded below after completion.
 
 All nine related Knowledge/personal/navigation checks also passed: twenty-one distinct related checks passed across runs. Diff whitespace validation passed.
+
+## 101 — Actionable organization attention
+
+Added a compact Knowledge coordination-needs list and shared complete Knowledge/larger attention presentation. Signals expose subject, reason, known responsibility, unknown follow-up ownership, suggested next step and destination. Main attention gets equivalent subject/reason/suggestion labels while retaining its existing actions. Contribution receipt/revision/unsettled-command needs derive from the shared session records and update overview category totals without advancing authored outcome requirements. Destination links select the appropriate sample receiver or contributor; no authority or task allocation is inferred.
+
+Compact ordering is local observation then authored source order, with three signals and a complete attention-list entrance. Category/source navigation remains intact. See ACTIONABLE-ATTENTION.md for clearing semantics and scope.
+
+Production build and fifteen distinct targeted checks passed across actionable signals, receiver navigation, revision/outcome independence, missing-input inspection/category return, Knowledge personal paths and larger shared organization screens on desktop/phone. Updated category presentation assertions to the separate badge/title structure. Preserved the larger scenario's read-only boundary label while Knowledge remains an authored sample with local interaction. Diff checks passed.

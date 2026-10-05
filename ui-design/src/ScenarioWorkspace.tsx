@@ -1,3 +1,5 @@
+import { CoordinationNeeds } from "./CoordinationNeeds";
+import { actionableAttention, type CoordinationNeed } from "./data/actionableAttention";
 import { ContributionExchange } from "./ContributionExchange";
 import { HumanContribution } from "./HumanContribution";
 import type { HumanContributionState } from "./data/humanContribution";
@@ -32,7 +34,6 @@ import {
   type RoleFilters,
 } from "./data/roleDirectory";
 import { OrganizationOverview } from "./OrganizationOverview";
-import { scenarioAttention } from "./data/scenarioAttention";
 import { useRef } from "react";
 import { resolveScenario, scenarioPersona } from "./data/scenarioRegistry";
 import { ScenarioMyWork } from "./ScenarioMyWork";
@@ -68,6 +69,7 @@ export function ScenarioWorkspace({
     Record<string, { destination: string; source: string }[]>
   >({});
   const scenario = resolveScenario(path)!;
+  const needs = actionableAttention(scenario, contribution);
   const base = `/organizations/${scenario.id}`;
   const persona = scenarioPersona(path);
   const person = scenario.workers.find((w) => w.id === persona?.workerId);
@@ -126,6 +128,7 @@ export function ScenarioWorkspace({
     saveTrail();
     onRoute(qualify(next));
   };
+  const openNeed = (item: CoordinationNeed) => item.destination ? onRoute(item.destination) : open(`/${item.target.kind === "workstream" ? "workstreams" : "assignments"}/${item.target.id}`);
   const back = () => {
     const trail = getTrail();
     let index = trail.length - 1;
@@ -205,7 +208,7 @@ export function ScenarioWorkspace({
       >
         <summary>About this sample</summary>
         <p>
-          {scenario.name} · authored sample · {scenario.streams.length}{" "}
+          {scenario.name} · {scenario.id === "knowledge" ? "authored sample" : "read-only sample"} · {scenario.streams.length}{" "}
           workstreams · {scenario.workers.length} workers. These are authored
           responsibilities and requirements, not live permissions, capacity or
           verified outcomes. Main software records remain separate.
@@ -663,36 +666,9 @@ export function ScenarioWorkspace({
             </section>
           ) : suffix === "/attention" ? (
             <section className="panel org-stream">
-              {scenarioAttention(scenario)
-                .filter(
-                  (record) =>
-                    !params.get("category") ||
-                    params.get("category") === "all" ||
-                    record.category.toLowerCase() === params.get("category"),
-                )
-                .map((record) => (
-                  <article className="org-stream-assignment" key={record.id}>
-                    <h2>
-                      {record.category} · {record.title}
-                    </h2>
-                    <p>
-                      {record.owner} · {record.detail}
-                    </p>
-                    <button
-                      className="text-link"
-                      onClick={() =>
-                        open(
-                          `/${record.target.kind === "workstream" ? "workstreams" : "assignments"}/${record.target.id}`,
-                        )
-                      }
-                    >
-                      Inspect scenario signal · {record.id}
-                    </button>
-                  </article>
-                ))}
+              <CoordinationNeeds items={needs.filter(record => !params.get("category") || params.get("category") === "all" || record.category.toLowerCase() === params.get("category"))} onOpen={openNeed} />
               <p>
-                Signals reflect authored states. No proposal or allocation
-                action is enabled in this read-only scenario.
+                Signals combine authored context and explicitly local Knowledge contribution transitions. Suggested inspection does not allocate responsibility or establish completion.
               </p>
             </section>
           ) : (
@@ -702,6 +678,7 @@ export function ScenarioWorkspace({
               }
               onDecisions={() => open("/decisions")}
               scenario={scenario}
+              attentionItems={needs}
               coordination={
                 <CoordinationOverview
                   scenario={scenario}
@@ -732,6 +709,7 @@ export function ScenarioWorkspace({
               operatingContext={
                 scenario.id === "knowledge" ? (
                   <>
+                  <CoordinationNeeds items={needs} compact onOpen={openNeed} />
                   <ContributionExchange state={contribution} onOpen={() => onRoute(base + "/work?persona=maya")} />
                   <OrganizationOperatingContext
                     scenario={scenario}

@@ -1,3 +1,4 @@
+import type { AttentionItem } from "./data/organizationAttention";
 import type { ReactNode } from "react";
 import {
   mainOrganization,
@@ -15,6 +16,7 @@ import { releaseWait } from "./data/organization";
 
 export function OrganizationOverview({
   scenario = mainOrganization,
+  attentionItems,
   coordination,
   operatingContext,
   completed,
@@ -35,6 +37,7 @@ export function OrganizationOverview({
   myWorkLabel,
 }: {
   scenario?: OrganizationScenario;
+  attentionItems?: AttentionItem[];
   coordination?: ReactNode;
   operatingContext?: ReactNode;
   myWorkLabel?: string;
@@ -113,7 +116,7 @@ export function OrganizationOverview({
       </div>
       <AttentionSummary
         attentionItems={
-          scenario.readOnly ? scenarioAttention(scenario) : undefined
+          attentionItems ?? (scenario.readOnly ? scenarioAttention(scenario) : undefined)
         }
         completed={completed}
         readiness={readiness}

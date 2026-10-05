@@ -122,7 +122,7 @@ for (const width of [1440, 390]) {
       /attention\?category=responsibility&persona=sam$/,
     );
     await expect(
-      page.getByRole("heading", { name: /Responsibility ·/ }),
+      page.getByRole("region", { name: "Concrete coordination needs" }).locator(".badge").filter({ hasText: "Responsibility" }),
     ).toHaveCount(1);
     await page.goBack();
     await page

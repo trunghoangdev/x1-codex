@@ -167,7 +167,7 @@ for (const width of [390, 1440]) {
     await expect(page).toHaveURL(/category=input/);
     await expect(
       page.getByRole("heading", {
-        name: "Input · Waiting input · Workshop coordinator brief",
+        name: "Waiting input · Workshop coordinator brief",
         exact: true,
       }),
     ).toBeVisible();
@@ -176,7 +176,7 @@ for (const width of [390, 1440]) {
     ).toHaveCount(0);
     await page
       .getByRole("button", {
-        name: "Inspect scenario signal · workshop-brief-input",
+        name: "Inspect assignment · K-02-E",
         exact: true,
       })
       .click();
