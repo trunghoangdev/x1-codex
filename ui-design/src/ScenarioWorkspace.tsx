@@ -1,3 +1,4 @@
+import { WorkflowMap } from "./WorkflowMap";
 import { OutcomeReview } from "./OutcomeReview";
 import { CoordinationOverview } from "./CoordinationOverview";
 import {
@@ -53,6 +54,9 @@ export function validScenarioPath(raw: string) {
       "/evidence",
       ...scenario.streams.map((s) => `/workstreams/${s.id}`),
       ...scenario.outcomes.map((o) => `/outcomes/${o.streamId}`),
+      ...(scenario.id === "knowledge"
+        ? scenario.streams.map((s) => `/workflows/${s.id}`)
+        : []),
       ...scenario.workers.map((w) => `/workers/${w.id}`),
       ...scenario.assignments.map((a) => `/assignments/${a.id}`),
     ].includes(suffix)
@@ -192,7 +196,7 @@ export function ScenarioWorkspace({
       (a) => suffix === `/assignments/${a.id}`,
     );
     const outcomeStream = scenario.streams.find(
-      (s) => suffix === `/outcomes/${s.id}`,
+      (s) => suffix === `/outcomes/${s.id}` || suffix === `/workflows/${s.id}`,
     );
     const fallback = outcomeStream
       ? `/workstreams/${outcomeStream.id}`
@@ -258,7 +262,17 @@ export function ScenarioWorkspace({
           verified outcomes. Main software records remain separate.
         </p>
       </details>
-      {suffix.startsWith("/outcomes/") ? (
+      {suffix.startsWith("/workflows/") ? (
+        <WorkflowMap
+          scenario={scenario}
+          streamId={suffix.split("/")[2]}
+          onBack={back}
+          onAssignment={(id) => open(`/assignments/${id}`)}
+          onWorker={(id) => open(`/workers/${id}`)}
+          onStream={() => open(`/workstreams/${suffix.split("/")[2]}`)}
+          onOutcome={() => open(`/outcomes/${suffix.split("/")[2]}`)}
+        />
+      ) : suffix.startsWith("/outcomes/") ? (
         <OutcomeReview
           scenario={scenario}
           stream={scenario.streams.find((s) => suffix === `/outcomes/${s.id}`)!}
@@ -468,6 +482,14 @@ export function ScenarioWorkspace({
               }
               <section className="panel org-stream">
                 <h2>Coordination & assignments</h2>
+                {scenario.id === "knowledge" && (
+                  <button
+                    className="button secondary"
+                    onClick={() => open(`/workflows/${stream.id}`)}
+                  >
+                    Explore workflow & exchanges
+                  </button>
+                )}
                 <p>{stream.coordination}</p>
                 <ol>
                   {scenario.flows[stream.id].map((step) => (

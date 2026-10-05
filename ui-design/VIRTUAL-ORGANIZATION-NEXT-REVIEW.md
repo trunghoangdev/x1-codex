@@ -101,3 +101,7 @@ All three samples now use coordination by workstream. Main response-needed signa
 ## Item 2 completed — iteration 75
 
 Shared outcome inspection now presents existing scenario criteria, available context, exact evidence references, assignment context and scope boundaries. Absent goal-review result/allocation remains explicit; responses and role bindings do not verify goals. Scoped read-only outcome routes preserve persona and refreshed source return; main evidence dialog and in-memory source return retain their established boundaries. Build and nineteen related checks passed. See [SHARED-OUTCOME-REVIEW.md](SHARED-OUTCOME-REVIEW.md). Items 3–5 remain proposed; shared workflow/exchange map is next.
+
+## Item 3 started — iteration 76
+
+Knowledge workshop and guide now have scoped workflow/exchange map routes. Responsibility cards, separate gaps, explicit brief provider/receiver and declared research/editorial parallel work reuse existing fixtures. Source return survives refresh; no task, transfer event or dependency is invented. Build and eighteen related tests passed. See [WORKFLOW-MAP.md](WORKFLOW-MAP.md). Main/larger adaptation is the next item 3 unit; items 4–5 remain proposed.
