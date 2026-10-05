@@ -89,3 +89,5 @@ Knowledge now has the two proposed read-only source-linked cases: current worksh
 Item 2 delivery (iteration 82): the Knowledge K-01 inspection slice now compares two unapproved, independently authored audience/scope proposals. See [WORKSTREAM-AGREEMENTS.md](WORKSTREAM-AGREEMENTS.md). Existing goal/criteria are reused; assignment/evidence applicability remains unconfirmed and sample state is unchanged.
 
 Item 3 delivery (iteration 83): an independent Knowledge reader-observation example and insufficient-evidence review now identify explicit reviewer allocation, subject/version, proposed agreement, criterion, provenance and conclusion limits. Current fixture outcomes remain unverified. See [OUTCOME-REVIEW-RECORDS.md](OUTCOME-REVIEW-RECORDS.md).
+
+Item 4 delivery (iteration 84): two authored main worker profiles expose capability, provenance, constraints and unknown/stale availability in worker details and existing proposal inspection. Proposal drafts and allocation semantics are preserved. See [WORKER-CAPABILITIES.md](WORKER-CAPABILITIES.md).

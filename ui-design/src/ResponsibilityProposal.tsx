@@ -1,3 +1,4 @@
+import { WorkerCapability } from "./WorkerCapability";
 import { useEffect, useRef, useState } from "react";
 import { responsibilityGaps } from "./data/workerDetails";
 import { workers } from "./data/organizationOverview";
@@ -53,6 +54,12 @@ export function ResponsibilityProposal({
             <dd>{requirement.scope}</dd>
           </dl>
         </>
+      )}
+      {(proposal?.workerId || workerId) && (
+        <details className="directory-record-details">
+          <summary>Inspect candidate capability and availability</summary>
+          <WorkerCapability workerId={proposal?.workerId || workerId} />
+        </details>
       )}
       {proposal ? (
         <section aria-label="Recorded responsibility proposal">

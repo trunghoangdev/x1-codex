@@ -1,3 +1,4 @@
+import { WorkerCapability } from "./WorkerCapability";
 import { DetailBackButton, DetailEmptyState } from "./DetailPresentation";
 import type { Assignment } from "./data/models";
 import { assignments } from "./data/assignments";
@@ -39,6 +40,7 @@ export function WorkerDetail({
           </p>
         </div>
       </div>
+      <WorkerCapability workerId={worker.id} />
       <section
         aria-label="Worker role bindings"
         className="org-overview-section"
