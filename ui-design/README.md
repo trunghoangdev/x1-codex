@@ -255,3 +255,5 @@ Iteration 77 completes workflow/exchange map inspection across main, Knowledge a
 Iteration 78 adds scoped Decision responsibility inspection with main release allocation, an explicitly authored Knowledge clarification requirement, unknown policy/escalation fields and a larger empty state. See [DECISION-RESPONSIBILITY.md](DECISION-RESPONSIBILITY.md).
 
 Iteration 79 adds read-only shared exchange history with Knowledge’s explicitly authored earlier draft events, independent delivery/receipt semantics and scoped URL/source return. Main activity remains unchanged; larger has no events. See [EXCHANGE-ACTIVITY.md](EXCHANGE-ACTIVITY.md).
+
+The next operating-accountability review is [VIRTUAL-ORGANIZATION-OPERATING-REVIEW.md](VIRTUAL-ORGANIZATION-OPERATING-REVIEW.md), after the five inspection slices through iteration 79. It recommends coordination cases first; these proposals are not implemented features.
