@@ -19,13 +19,18 @@ function Fields({ record }: { record: Record<string, unknown> }) {
 }
 export function SfSnapshotInspection({
   selected,
+  retained = false,
   onSelect,
   onBack,
 }: {
   selected: string;
+  retained?: boolean;
   onSelect: (id: string) => void;
   onBack: () => void;
 }) {
+  const snapshotUrl = retained
+    ? "./snapshots/sf-retained-v1.json"
+    : "./snapshots/sf-example-v1.json";
   const [data, setData] = useState<SfSnapshot>();
   const [error, setError] = useState(false);
   const [retry, setRetry] = useState(0);
@@ -33,19 +38,21 @@ export function SfSnapshotInspection({
     const controller = new AbortController();
     setData(undefined);
     setError(false);
-    fetch("./snapshots/sf-example-v1.json", {
+    fetch(snapshotUrl, {
       signal: controller.signal,
     })
       .then(async (response) => {
         if (!response.ok) throw new Error("Snapshot unavailable");
         const value = parseSfSnapshot(await response.json());
+        if (value.source.kind !== (retained ? "retained-redacted" : "synthetic"))
+          throw new Error("Snapshot source does not match this inspection.");
         if (!controller.signal.aborted) setData(value);
       })
       .catch(() => {
         if (!controller.signal.aborted) setError(true);
       });
     return () => controller.abort();
-  }, [retry]);
+  }, [retry, snapshotUrl]);
   const attempt = data?.attempts.find((a) => a.attempt_id === selected);
   const product = attempt?.artifact_digest
     ? data?.work_products.find(
@@ -59,11 +66,17 @@ export function SfSnapshotInspection({
       </button>
       <div className="page-heading">
         <div>
-          <div className="eyebrow">READ-ONLY · SYNTHETIC SNAPSHOT</div>
+          <div className="eyebrow">
+            {retained
+              ? "READ-ONLY · REAL RETAINED METADATA · REDACTED"
+              : "READ-ONLY · SYNTHETIC SNAPSHOT"}
+          </div>
           <h1 tabIndex={-1}>Software Factory inspection</h1>
           <p>
             One assignment, retained attempts and exact work-product references.
-            This is a schema-shaped example, not live SF data.
+            {retained
+              ? "Historical SF records exported read-only with explicit omissions; not live data."
+              : "This is a schema-shaped example, not live SF data."}
           </p>
         </div>
       </div>
@@ -89,11 +102,24 @@ export function SfSnapshotInspection({
             <h2>Source and freshness</h2>
             <Fields record={data.source} />
             <p>
-              Fixed example revision; current runtime state is unknown. No
-              production records, diagnostic streams or credentials were copied.
+              {retained
+                ? "Original record identities and recorded states are preserved. Snapshot observation time is the export time, not the execution time. Current runtime state is unknown."
+                : "Fixed example revision; current runtime state is unknown. No production records, diagnostic streams or credentials were copied."}
             </p>
-            <a href={"./snapshots/sf-example-v1.json"}>Inspect snapshot JSON</a>
+            <a href={snapshotUrl}>Inspect snapshot JSON</a>
           </section>
+          {data.redactions && (
+            <section className="panel org-stream">
+              <h2>Omitted source material</h2>
+              <Fields record={data.redactions} />
+              <p>
+                Omitted fields are redacted, not absent from the original
+                records. No host paths, raw diagnostics, objective text or
+                payload bytes are included. This is a partial inspection export,
+                not a replayable SF assignment.
+              </p>
+            </section>
+          )}
           <section className="panel org-stream">
             <h2>Assignment · {String(data.assignment.id)}</h2>
             <Fields record={data.assignment} />
@@ -144,21 +170,34 @@ export function SfSnapshotInspection({
                       ),
                     )}
                   />
-                  <h3>Example contribution · plain text</h3>
-                  <pre className="sf-snapshot-bytes">
-                    {decodeExampleBytes(String(product.bytes_base64url))}
-                  </pre>
-                  <details>
-                    <summary>Inspect encoded example bytes</summary>
-                    <pre className="sf-snapshot-bytes">
-                      {String(product.bytes_base64url)}
-                    </pre>
-                  </details>
+                  {product.bytes_base64url !== undefined ? (
+                    <>
+                      <h3>Example contribution · plain text</h3>
+                      <pre className="sf-snapshot-bytes">
+                        {decodeExampleBytes(String(product.bytes_base64url))}
+                      </pre>
+                      <details>
+                        <summary>Inspect encoded example bytes</summary>
+                        <pre className="sf-snapshot-bytes">
+                          {String(product.bytes_base64url)}
+                        </pre>
+                      </details>
+                    </>
+                  ) : (
+                    <p>
+                      Payload bytes and referenced file bodies are omitted from
+                      this export. Original digests are retained; no replacement
+                      content is supplied.
+                    </p>
+                  )}
                   <p>
                     Linked by the exact artifact_digest reported in this
-                    attempt. Identities are synthetic. This viewer performs
-                    relationship validation, not cryptographic artifact
-                    verification.
+                    attempt.{" "}
+                    {retained
+                      ? "Identities are copied from the retained source records. They are not regenerated after redaction."
+                      : "Identities are synthetic."}{" "}
+                    This viewer performs relationship validation, not
+                    cryptographic artifact verification.
                   </p>
                 </>
               ) : (
@@ -168,6 +207,19 @@ export function SfSnapshotInspection({
                     : "No artifact reference was reported by this attempt. No work product is inferred."}
                 </p>
               )}
+            </section>
+          )}
+          {data.integrity_checks && (
+            <section className="panel org-stream">
+              <h2>Export integrity observations</h2>
+              <Fields record={data.integrity_checks} />
+              <p>
+                The export script checked blob bytes and the rebuilt
+                typed-payload body on the source host before omitting bytes.
+                These are exporter observations, not a verifier report; the
+                browser cannot independently repeat the blob check from this
+                partial export.
+              </p>
             </section>
           )}
           <section className="panel org-stream">

@@ -20,7 +20,7 @@ Components consume these values. Evidence data no longer imports a UI component 
 
 These types describe what this prototype renders. Assignment fields such as human ownership, role, deadline labels and permission strings are not established fields of the current Software Factory assignment schema. `Readiness` describes interactive demo scenarios, not a backend state machine. `ResponseRecord` is a local session receipt, not a governed server receipt.
 
-The original assignment views remain fixture-backed. The separate SF inspection view fetches and validates a packaged synthetic JSON snapshot; Demo continuity explicitly saves local browser snapshots. Neither introduces an SF endpoint, authentication, server admission or shared persistence. A future integration must map a versioned application API into these views, preserve missing/unknown fields, and use server-authoritative identity, permissions and decision receipts. It must not cast arbitrary JSON to these types or use UI permission labels as authorization.
+The original assignment views remain fixture-backed. The separate SF inspection view fetches and validates a packaged synthetic or explicitly redacted retained JSON snapshot; Demo continuity explicitly saves local browser snapshots. Neither introduces an SF endpoint, authentication, server admission or shared persistence. A future integration must map a versioned application API into these views, preserve missing/unknown fields, and use server-authoritative identity, permissions and decision receipts. It must not cast arbitrary JSON to these types or use UI permission labels as authorization.
 
 ## Remaining extraction
 
@@ -54,4 +54,4 @@ This is an incremental boundary, not a finished data layer. Candidate, evidence,
 
 `organizationScenario.ts` provides a common frontend contract and main/large adapters for workers, bindings, streams, explicit assignments, flows, gaps, outcome requirements and evidence. `scenarioAttention.ts` derives bounded read-only signals from explicit gaps and selected assignment states. Main overview/directories now consume the common scenario model; specialized interactive assignment fixtures remain main-only.
 
-`sfSnapshot.ts` is a bounded adapter for the separately packaged synthetic SF inspection envelope. It preserves retained attempt/assignment and exact work-product relationships without importing demo permission/receipt models. See `../../SF-SNAPSHOT-INSPECTION.md` for pinned shape references and limits.
+`sfSnapshot.ts` is a bounded adapter for the separately packaged synthetic and redacted retained SF inspection envelopes. It preserves retained attempt/assignment and exact work-product relationships without importing demo permission/receipt models. See `../../SF-SNAPSHOT-INSPECTION.md` for pinned shape references and limits.

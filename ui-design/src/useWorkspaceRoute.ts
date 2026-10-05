@@ -34,6 +34,7 @@ export type WorkspaceRoute = {
   view: WorkspaceView;
   scenarioPath?: string;
   sfSnapshot?: string;
+  sfSnapshotSource?: "retained";
   assignmentId?: string;
   workstreamId?: string;
   workflowId?: string;
@@ -65,14 +66,15 @@ export function useWorkspaceRoute(ids: string[], tabs: string[]) {
     if (!location.hash || location.hash === "#")
       return { ...fallback, view: "Organization" };
     const raw = location.hash.slice(1);
-    if (raw.startsWith("/demos/sf-snapshot")) {
-      const allowed = ["", "snapshot-attempt-01", "snapshot-attempt-02"];
+    if (raw.startsWith("/demos/sf-snapshot") || raw.startsWith("/demos/sf-retained")) {
+      const retained = raw.split("/")[2] === "sf-retained";
+      const allowed = retained ? ["", "20260913T153424Z-eb63b7bd05303482"] : ["", "snapshot-attempt-01", "snapshot-attempt-02"];
       const parts = raw.split("/");
       const selected = parts[3] ?? "";
-      return parts[2] === "sf-snapshot" &&
+      return ["sf-snapshot", "sf-retained"].includes(parts[2]) &&
         parts.length <= 4 &&
         allowed.includes(selected)
-        ? { view: "Demos", tab: "Overview", sfSnapshot: selected }
+        ? { view: "Demos", tab: "Overview", sfSnapshot: selected, sfSnapshotSource: retained ? "retained" : undefined }
         : { ...fallback, invalid: true };
     }
     if (raw.startsWith("/organizations/"))
@@ -301,7 +303,7 @@ export function useWorkspaceRoute(ids: string[], tabs: string[]) {
   }, []);
   function navigate(next: WorkspaceRoute, replace = false) {
     const path = next.sfSnapshot !== undefined
-      ? `#/demos/sf-snapshot${next.sfSnapshot ? "/" + next.sfSnapshot : ""}`
+      ? `#/demos/${next.sfSnapshotSource === "retained" ? "sf-retained" : "sf-snapshot"}${next.sfSnapshot ? "/" + next.sfSnapshot : ""}`
       : next.decisions
       ? "#/organization/decisions"
       : next.scenarioPath

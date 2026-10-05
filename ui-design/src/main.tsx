@@ -311,7 +311,7 @@ function App() {
   >({});
   const source = selected ? assignmentSources.current[selected.id] : undefined;
   const inboxReturn = useRef<{ id: string; y: number } | null>(null);
-  const screenKey = `${route.sfSnapshot ?? "no-snapshot"}:${route.view}:${route.assignmentId ?? ""}:${!!route.invalid}:${route.workstreamId ?? ""}:${route.workflowId ?? ""}:${route.workerId ?? ""}:${route.handoffId ?? ""}:${!!route.organizationActivity}:${!!route.decisions}:${route.outcomeId ?? ""}:${!!route.attention}:${!!route.personalQueue}:${!!route.largeOrganization}:${!!route.streamDirectory}:${!!route.workerDirectory}:${!!route.roleDirectory}:${route.scenarioPath?.split("?")[0] ?? ""}:${activePersona?.workerId ?? ""}`;
+  const screenKey = `${route.sfSnapshotSource ?? "example"}:${route.sfSnapshot ?? "no-snapshot"}:${route.view}:${route.assignmentId ?? ""}:${!!route.invalid}:${route.workstreamId ?? ""}:${route.workflowId ?? ""}:${route.workerId ?? ""}:${route.handoffId ?? ""}:${!!route.organizationActivity}:${!!route.decisions}:${route.outcomeId ?? ""}:${!!route.attention}:${!!route.personalQueue}:${!!route.largeOrganization}:${!!route.streamDirectory}:${!!route.workerDirectory}:${!!route.roleDirectory}:${route.scenarioPath?.split("?")[0] ?? ""}:${activePersona?.workerId ?? ""}`;
   const previousScreen = useRef(screenKey);
   useEffect(() => {
     if (route.view !== "My Work" || route.assignmentId)
@@ -2109,8 +2109,9 @@ function App() {
           {view === "Demos" && route.sfSnapshot !== undefined && (
             <SfSnapshotInspection
               selected={route.sfSnapshot}
+              retained={route.sfSnapshotSource === "retained"}
               onSelect={(id) =>
-                changeRoute({ view: "Demos", tab: "Overview", sfSnapshot: id })
+                changeRoute({ view: "Demos", tab: "Overview", sfSnapshot: id, sfSnapshotSource: route.sfSnapshotSource })
               }
               onBack={() => navigate("Demos")}
             />
@@ -2147,6 +2148,8 @@ function App() {
                   >
                     Open SF snapshot
                   </button>
+                  <button className="button secondary" onClick={() => changeRoute({ view: "Demos", tab: "Overview", sfSnapshot: "", sfSnapshotSource: "retained" })}>Inspect retained SF run</button>
+                  <p>Retained run metadata is real and redacted; the example snapshot is synthetic. Neither is live data.</p>
                 </section>
                 <DemoContinuity
                 current={{

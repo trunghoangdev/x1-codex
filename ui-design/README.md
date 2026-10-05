@@ -28,13 +28,13 @@ Follow the [complete demo walkthrough](WALKTHROUGH.md) for review, draft, eviden
 
 ## Software Factory inspection
 
-Demos → **Open SF snapshot** provides one coherent read-only assignment/attempt/work-product example with source context and unavailable evidence states. It is synthetic, not live SF data. See [snapshot inspection](SF-SNAPSHOT-INSPECTION.md).
+Demos → **Open SF snapshot** provides one coherent read-only assignment/attempt/work-product example with source context and unavailable evidence states. The example is synthetic. **Inspect retained SF run** opens redacted metadata from a real historical execution; neither source is live. See [snapshot inspection](SF-SNAPSHOT-INSPECTION.md).
 
 ## Scope and boundaries
 
 See [Architecture alignment review](ARCHITECTURE-ALIGNMENT-REVIEW.md) for the overall assessment at checkpoint 90 and the recommended next sequence, starting with one source-backed work slice.
 
-This is a design prototype using React, TypeScript, Vite, and Lucide icons. All people, IDs, dates, digests, snippets, records, and organizational activity are fictional. Organization combines illustrative role snapshots with session-aware assignment summaries. Evidence records and the inspector are illustrative, not verified artifacts.
+This is a design prototype using React, TypeScript, Vite, and Lucide icons. People and operational interactions in the main/Knowledge/large scenarios are fictional. The separate retained SF inspection contains explicitly labeled real historical metadata with an omission manifest; the synthetic SF inspection remains fictional. Organization combines illustrative role snapshots with session-aware assignment summaries. Main-scenario evidence records and its artifact inspector are illustrative, not verified artifacts. The retained inspection preserves source identities but does not independently verify provenance.
 
 Responses are local demo state. Demos → Demo continuity supports explicit browser snapshots and JSON transfer; reload restores only the last saved snapshot. There is no authentication, backend, actual authorization check, shared durable storage, live event stream, or external execution. A real implementation must obtain identity and permissions from the application API and submit commands for server-side authorization and governed admission. The UI must not treat its local state as an authoritative record.
 

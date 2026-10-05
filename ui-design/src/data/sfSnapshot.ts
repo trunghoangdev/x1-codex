@@ -14,6 +14,8 @@ export type SfSnapshot = {
   assignment: RecordValue;
   attempts: RecordValue[];
   work_products: RecordValue[];
+  redactions?: RecordValue;
+  integrity_checks?: RecordValue;
 };
 function record(value: unknown): RecordValue {
   if (!value || typeof value !== "object" || Array.isArray(value))
@@ -26,11 +28,15 @@ function textField(value: RecordValue, key: string) {
 }
 export function parseSfSnapshot(raw: unknown): SfSnapshot {
   const root = record(raw);
-  if (root.format !== "sf-inspection-example" || root.version !== 1)
+  const retained = root.format === "sf-inspection-redacted";
+  if (
+    (!retained && root.format !== "sf-inspection-example") ||
+    root.version !== 1
+  )
     throw new Error("Unsupported inspection snapshot format.");
   const source = record(root.source);
-  if (source.kind !== "synthetic")
-    throw new Error("Only synthetic examples are supported.");
+  if (source.kind !== (retained ? "retained-redacted" : "synthetic"))
+    throw new Error("Snapshot origin and format disagree.");
   for (const key of ["label", "observed_at", "revision"])
     textField(source, key);
   if (!Number.isFinite(Date.parse(String(source.observed_at))))
@@ -43,19 +49,22 @@ export function parseSfSnapshot(raw: unknown): SfSnapshot {
     typeof assignment.working_context === "string" &&
     assignment.working_context.length > 0;
   if (
-    repository === context ||
-    (repository && typeof assignment.base_revision !== "string")
+    !retained &&
+    (repository === context ||
+      (repository && typeof assignment.base_revision !== "string"))
   )
     throw new Error(
       "Assignment must state one working context or repository/base.",
     );
-  for (const key of [
-    "id",
-    "objective_file",
-    "validator",
-    "publication_criterion",
-    "expected_payload_type_tag",
-  ])
+  for (const key of retained
+    ? ["id", "expected_payload_type_tag"]
+    : [
+        "id",
+        "objective_file",
+        "validator",
+        "publication_criterion",
+        "expected_payload_type_tag",
+      ])
     textField(assignment, key);
   for (const key of ["output_scope", "required_effect_paths"])
     if (
@@ -72,13 +81,15 @@ export function parseSfSnapshot(raw: unknown): SfSnapshot {
   const products = root.work_products.map(record);
   const ids = new Set<unknown>();
   for (const attempt of attempts) {
-    for (const key of [
-      "attempt_id",
-      "assignment_id",
-      "opened_at",
-      "objective",
-      "termination",
-    ])
+    for (const key of retained
+      ? ["attempt_id", "assignment_id", "opened_at", "termination"]
+      : [
+          "attempt_id",
+          "assignment_id",
+          "opened_at",
+          "objective",
+          "termination",
+        ])
       textField(attempt, key);
     if (
       attempt.schema_version !== 2 ||
@@ -113,13 +124,15 @@ export function parseSfSnapshot(raw: unknown): SfSnapshot {
     for (const key of ["artifact_digest", "content_digest", "blob_digest"])
       if (!/^sha256:[a-f0-9]{64}$/.test(String(product[key])))
         throw new Error("Invalid product identity.");
-    for (const key of [
-      "artifact_digest",
-      "content_digest",
-      "blob_digest",
-      "payload_type_tag",
-      "bytes_base64url",
-    ])
+    for (const key of retained
+      ? ["artifact_digest", "content_digest", "blob_digest", "payload_type_tag"]
+      : [
+          "artifact_digest",
+          "content_digest",
+          "blob_digest",
+          "payload_type_tag",
+          "bytes_base64url",
+        ])
       textField(product, key);
     if (
       product.payload_schema_id !== "forge.typed-payload" ||
@@ -129,7 +142,7 @@ export function parseSfSnapshot(raw: unknown): SfSnapshot {
     )
       throw new Error("Invalid work-product schema or artifact relationship.");
     artifacts.add(product.artifact_digest);
-    decodeExampleBytes(String(product.bytes_base64url));
+    if (!retained) decodeExampleBytes(String(product.bytes_base64url));
     const attempt = attempts.find(
       (a) => a.artifact_digest === product.artifact_digest,
     )!;
@@ -137,6 +150,71 @@ export function parseSfSnapshot(raw: unknown): SfSnapshot {
       throw new Error(
         "Work-product kind differs from the attempt requirement.",
       );
+  }
+  if (retained) {
+    const allowed = (value: RecordValue, keys: string[]) => {
+      if (Object.keys(value).some((key) => !keys.includes(key)))
+        throw new Error("Unexpected field in redacted snapshot.");
+    };
+    allowed(assignment, [
+      "id",
+      "work_id",
+      "base_revision",
+      "output_scope",
+      "required_effect_paths",
+      "expected_payload_type_tag",
+    ]);
+    for (const attempt of attempts)
+      allowed(attempt, [
+        "schema_version",
+        "attempt_id",
+        "assignment_id",
+        "opened_at",
+        "settled_at",
+        "outcome",
+        "output_scope",
+        "expected_payload_type_tag",
+        "attempt_digest",
+        "artifact_digest",
+        "state",
+        "termination",
+        "exit_code",
+        "ephemeral_cleanup",
+      ]);
+    for (const product of products)
+      allowed(product, [
+        "artifact_digest",
+        "content_digest",
+        "blob_digest",
+        "payload_schema_id",
+        "payload_schema_version",
+        "payload_type_tag",
+      ]);
+    const redactions = record(root.redactions);
+    for (const key of ["assignment", "attempt", "work_product"]) {
+      if (
+        !Array.isArray(redactions[key]) ||
+        !redactions[key].length ||
+        !(redactions[key] as unknown[]).every((v) => typeof v === "string")
+      )
+        throw new Error("Missing redaction manifest.");
+    }
+    const checks = record(root.integrity_checks);
+    if (
+      checks.blob_bytes_match !== true ||
+      checks.typed_payload_body_match !== true ||
+      checks.artifact_provenance !== "Not independently verified"
+    )
+      throw new Error("Invalid export integrity report.");
+    textField(checks, "checked_by");
+    return {
+      source,
+      assignment,
+      attempts,
+      work_products: products,
+      redactions,
+      integrity_checks: checks,
+    };
   }
   return { source, assignment, attempts, work_products: products };
 }

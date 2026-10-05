@@ -1,0 +1,81 @@
+{
+  "format": "sf-inspection-redacted",
+  "version": 1,
+  "source": {
+    "kind": "retained-redacted",
+    "label": "Software Factory work item 10 \u00b7 retained execution metadata",
+    "observed_at": "2026-10-05T11:13:12.015692+00:00",
+    "revision": "20260913T153424Z-eb63b7bd05303482",
+    "capture_method": "Read-only allowlist export of SF assignment, retained attempt and work-product envelope",
+    "freshness": "Historical retained records; not a live runtime observation"
+  },
+  "assignment": {
+    "id": "a-repoint-the-design-was-built-for",
+    "base_revision": "242faa6112b629b78861a9b7738c925b49af6e79",
+    "output_scope": [
+      "internal/registry/selection.go",
+      "internal/registry/conformancegate_test.go"
+    ],
+    "required_effect_paths": [
+      "internal/registry/selection.go",
+      "internal/registry/conformancegate_test.go"
+    ],
+    "expected_payload_type_tag": "forge.workspace-change-set.v1"
+  },
+  "attempts": [
+    {
+      "schema_version": 2,
+      "attempt_id": "20260913T153424Z-eb63b7bd05303482",
+      "assignment_id": "a-repoint-the-design-was-built-for",
+      "opened_at": "2026-09-13T15:34:24.046192473Z",
+      "settled_at": "2026-09-13T15:41:56.915803495Z",
+      "outcome": "produced",
+      "output_scope": [
+        "internal/registry/selection.go",
+        "internal/registry/conformancegate_test.go"
+      ],
+      "expected_payload_type_tag": "forge.workspace-change-set.v1",
+      "attempt_digest": "sha256:3a3413025b8123885cbaba5ebe749df34de21221eec194b503998d0f7112b212",
+      "artifact_digest": "sha256:cd708416c91aee3408606bc7192dc40a0f5eaa92267450620613964edf6ed826",
+      "state": "admitted",
+      "termination": "exit status 0",
+      "exit_code": 0,
+      "ephemeral_cleanup": "destroyed"
+    }
+  ],
+  "work_products": [
+    {
+      "artifact_digest": "sha256:cd708416c91aee3408606bc7192dc40a0f5eaa92267450620613964edf6ed826",
+      "content_digest": "sha256:96820f1eb8d04716ebd2cf86c445478c796f8646c4c0cd952fba6a78f4509345",
+      "payload_schema_id": "forge.typed-payload",
+      "payload_schema_version": 1,
+      "payload_type_tag": "forge.workspace-change-set.v1",
+      "blob_digest": "sha256:a4b85b38dc9c7186db05fe0bfa4bd87441cee3407d54fdd57bccae9482fc78c0"
+    }
+  ],
+  "redactions": {
+    "assignment": [
+      "objective_file",
+      "source_repository",
+      "working_context",
+      "validator",
+      "publication_criterion",
+      "execution_material"
+    ],
+    "attempt": [
+      "objective",
+      "work_request_digest",
+      "diagnostics"
+    ],
+    "work_product": [
+      "bytes_base64url",
+      "referenced file bodies"
+    ]
+  },
+  "integrity_checks": {
+    "checked_by": "Read-only export script against source bytes before omission",
+    "blob_bytes_match": true,
+    "typed_payload_body_match": true,
+    "artifact_provenance": "Not independently verified"
+  }
+}
