@@ -150,6 +150,7 @@ const HandoffDetail = deferredScreen(() =>
   import("./HandoffDetail").then((m) => ({ default: m.HandoffDetail })),
 );
 function App() {
+  const [knowledgeContribution, setKnowledgeContribution] = useState<HumanContributionState>(emptyContribution);
   const [humanContribution, setHumanContribution] = useState<HumanContributionState>(emptyContribution);
   const { route, navigate: changeRoute } = useWorkspaceRoute(
     assignments.map((a) => a.id),
@@ -819,7 +820,7 @@ function App() {
                 {activeScenario?.domain ?? mainOrganization.domain} ·{" "}
                 {activePerson?.name ?? "Alex Morgan"} ·{" "}
                 {activeScenario
-                  ? "Read-only sample"
+                  ? activeScenario.id === "knowledge" ? "Knowledge sample · session contribution available" : "Read-only sample"
                   : "Interactive software sample"}
               </p>
               {activeScenario?.personas && (
@@ -829,7 +830,8 @@ function App() {
                     <select
                       value={activePersona!.workerId}
                       onChange={(e) => {
-                        const [path, query] = route.scenarioPath!.split("?");
+                        let [path, query] = route.scenarioPath!.split("?");
+                        if (path.endsWith("/contributions/K-01-H")) path = "/organizations/knowledge/work";
                         const p = new URLSearchParams(query);
                         p.set("persona", e.target.value);
                         if (path.endsWith("/work"))
@@ -874,8 +876,7 @@ function App() {
                 <summary>About sample navigation</summary>
                 <p>
                   Switching samples resets filters and selects its default
-                  persona. Demos and interactive responses belong to the main
-                  software sample. Persona previews do not sign in or grant
+                  persona. Main responses belong to the software sample; Knowledge also has a session-only contribution exercise. Persona previews do not sign in or grant
                   permissions.
                 </p>
               </details>
@@ -1947,6 +1948,8 @@ function App() {
           )}
           {route.scenarioPath && (
             <ScenarioWorkspace
+              contribution={knowledgeContribution}
+              onContribution={setKnowledgeContribution}
               key={activeScenario?.id}
               onMyWork={() => navigate("My Work")}
               path={route.scenarioPath}

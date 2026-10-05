@@ -309,3 +309,5 @@ Display follow-up: [Chromium/Firefox reflow and forced-colors review](DISPLAY-AC
 ## Product experience review after iteration 98
 
 The [current review and proposed next sequence](PRODUCT-EXPERIENCE-REVIEW.md) recommends connecting ordinary contribution to My Work, then sharing the same version-bound records with a receiver and organization view. These are proposals, not implemented features.
+
+Iteration 99: Knowledge Operations → Leo → My Work now offers **Open contribution · K-01-H**, with organization/workstream context and navigation-preserved session state. Reload clears this exercise; Demo continuity excludes it. Receiver responses remain explicit simulations. See [human contribution](HUMAN-CONTRIBUTION.md).

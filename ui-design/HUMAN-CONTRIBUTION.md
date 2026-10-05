@@ -21,3 +21,11 @@ Previews: [desktop revision](previews/91-human-contribution-1440.png) and [mobil
 ## Command status simulation — iteration 95
 
 Delivery confirmation now records a local command intent. Expand **Command delivery simulation** before confirmation to preview pending/unknown/rejection/revision conflict or admitted-but-unprojected outcomes. Default admission plus immediate projection preserves the original walkthrough. Pending/unknown locks the submitted text; query the same command before proceeding. Admitted work can wait for explicit projection refresh before any delivery/receiver record appears. See [the draft command contract](CONTRIBUTION-COMMAND-CONTRACT.md).
+
+## Knowledge My Work entrance — iteration 99
+
+Knowledge Operations → select Leo → My Work → **Open contribution · K-01-H** opens the existing preparation/delivery/revision UI with organization and K-01 workstream context. K-01-H is an explicitly authored preparation responsibility scoped to Leo's coordinator binding. It is separate from researcher K-01-D and distribution-scope K-01-P; it does not replace their authored records.
+
+The integrated exercise has its own app-owned session state, separate from the standalone Demos exercise. Navigation preserves drafts, immutable deliveries and command history; reload clears them. Neither exercise is included in Demo continuity. The inbox repeats that boundary before opening preparation and reports only the latest local delivery observation. Its other assignment/coordination records remain authored and do not advance from this exercise.
+
+The route is `#/organizations/knowledge/contributions/K-01-H?persona=leo`. Other personas cannot open that preparation route; switching persona there returns to the chosen person's inbox. This is sample navigation, not an authentication or permission check. Receiver buttons remain explicitly simulated inside preparation; a shared receiver inbox is the next item, not part of this increment.

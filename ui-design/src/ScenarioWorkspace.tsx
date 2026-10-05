@@ -1,3 +1,5 @@
+import { HumanContribution } from "./HumanContribution";
+import type { HumanContributionState } from "./data/humanContribution";
 import { CollaborationWalkthrough } from "./CollaborationWalkthrough";
 import { walkthroughRecords } from "./data/collaborationWalkthrough";
 import { OrganizationOperatingContext } from "./OrganizationOperatingContext";
@@ -51,7 +53,11 @@ export function ScenarioWorkspace({
   onRoute,
   onMain,
   onMyWork,
+  contribution,
+  onContribution,
 }: {
+  contribution: HumanContributionState;
+  onContribution: (state: HumanContributionState) => void;
   path: string;
   onRoute: (path: string, replace?: boolean) => void;
   onMain: () => void;
@@ -198,13 +204,17 @@ export function ScenarioWorkspace({
       >
         <summary>About this sample</summary>
         <p>
-          {scenario.name} · read-only sample · {scenario.streams.length}{" "}
+          {scenario.name} · authored sample · {scenario.streams.length}{" "}
           workstreams · {scenario.workers.length} workers. These are authored
           responsibilities and requirements, not live permissions, capacity or
           verified outcomes. Main software records remain separate.
         </p>
       </details>
-      {suffix === "/walkthroughs/guide-cycle" ? (
+      {suffix === "/contributions/K-01-H" ? (
+        <HumanContribution state={contribution} onChange={onContribution}
+          onBack={() => onRoute(qualify("/work"))}
+          workspace={{ onOrganization: () => onRoute(qualify("")), onWorkstream: () => open("/workstreams/K-01") }} />
+      ) : suffix === "/walkthroughs/guide-cycle" ? (
         <CollaborationWalkthrough
           scenario={scenario}
           recordId={params.get("cycleRecord") ?? walkthroughRecords[0].id}
@@ -324,6 +334,8 @@ export function ScenarioWorkspace({
         />
       ) : suffix === "/work" ? (
         <ScenarioMyWork
+          onContribution={() => onRoute(qualify("/contributions/K-01-H"))}
+          contribution={contribution}
           onCase={(id) => open(`/cases/${id}`)}
           scenario={scenario}
           workerId={persona!.workerId}

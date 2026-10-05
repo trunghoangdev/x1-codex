@@ -60,3 +60,7 @@ Live SF integration, authentication, server-derived permissions and durable comm
 Organization setup, agreement adoption, worker placement and a multi-organization Control Plane remain product opportunities. Defer broad editors/fleet dashboards until a concrete task and supported data source justify their shape. The completed-product marketing vision describes the destination; it does not make every envisioned screen the next useful prototype increment.
 
 The immediate recommendation is item 1, followed by item 2. Together they turn existing design pieces into a visible organization collaboration loop without expanding the number of fictional scenarios.
+
+## Item 1 implementation checkpoint
+
+Iteration 99 implements the bounded personal contribution entrance in Knowledge My Work for Leo (K-01-H), with explicit K-01/organization context, independent session state and reload exclusions. Item 2, a shared receiver inbox and organizational projection of the same contribution records, remains next.

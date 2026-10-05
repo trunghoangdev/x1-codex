@@ -133,7 +133,7 @@ for (const width of [390, 1440])
     await expect(
       page.getByRole("combobox", { name: "Work attention", exact: true }),
     ).toHaveValue("all");
-    await expect(results).toHaveText("2 of 2 allocated assignments shown");
+    await expect(results).toHaveText("3 of 3 allocated assignments shown");
     await expect(
       page.getByRole("article", { name: "K-02-E", exact: true }),
     ).toHaveCount(0);

@@ -1,6 +1,7 @@
 import type { OrganizationScenario } from "./organizationScenario";
 // Independently authored non-software sample. No publication or communication is executed.
 const assignments: OrganizationScenario["assignments"] = [
+  { id: "K-01-H", streamId: "K-01", workerId: "leo", role: "Coordinator", title: "Prepare an access-guide contribution", state: "Session contribution exercise", input: "Fictional access brief; inspect the supplied input before preparation.", expectedResponse: "A cited text contribution and scope note for Maya; preparation only, no publication authority." },
   {
     id: "K-01-D",
     streamId: "K-01",
@@ -79,7 +80,7 @@ const streams: OrganizationScenario["streams"] = [
     name: "New member welcome guide",
     project: "Knowledge sharing",
     goal: "Help new members find reliable answers and their next steps.",
-    assignmentIds: ["K-01-D", "K-01-E", "K-01-P"],
+    assignmentIds: ["K-01-D", "K-01-E", "K-01-P", "K-01-H"],
     coordination:
       "Research and editorial criteria can progress in parallel. Draft assessment precedes publication review; distribution requires explicit approval. These are authored expectations, not confirmed transfers.",
     outcome: "Not verified · no reader observations represented",
@@ -263,6 +264,7 @@ export const knowledgeOrganization: OrganizationScenario = {
     },
   ],
   assignmentScopes: [
+    { assignmentId: "K-01-H", scopeId: "scope-K-01", bindingId: "kb-coordinator" },
     { assignmentId: "K-01-D", scopeId: "scope-K-01", bindingId: "kb-research" },
     { assignmentId: "K-01-E", scopeId: "scope-K-01", bindingId: "kb-editor" },
     {

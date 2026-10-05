@@ -130,7 +130,7 @@ for (const width of [390, 1440])
       page.getByRole("heading", { name: "My Work · Leo Rivera", exact: true }),
     ).toBeFocused();
     await expect(page.locator(".org-overview-section[role=status]")).toHaveText(
-      "2 assignments · 2 awaiting your response · 0 waiting for input",
+      "3 assignments · 2 awaiting your response · 0 waiting for input",
     );
     await expect(
       page.getByRole("article", { name: "K-01-E", exact: true }),

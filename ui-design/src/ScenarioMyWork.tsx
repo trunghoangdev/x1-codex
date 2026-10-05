@@ -1,3 +1,4 @@
+import type { HumanContributionState } from "./data/humanContribution";
 import {
   defaultScenarioWorkFilters,
   scenarioPersonalWork,
@@ -18,7 +19,11 @@ export function ScenarioMyWork({
   filters,
   onFilters,
   onCase,
+  onContribution,
+  contribution,
 }: {
+  onContribution: () => void;
+  contribution: HumanContributionState;
   scenario: OrganizationScenario;
   workerId: string;
   filters: ScenarioWorkFilters;
@@ -62,7 +67,7 @@ export function ScenarioMyWork({
       </DetailBackButton>
       <div className="page-heading">
         <div>
-          <div className="eyebrow">PERSONAL INBOX · READ-ONLY SAMPLE</div>
+          <div className="eyebrow">PERSONAL INBOX · AUTHORED SAMPLE</div>
           <h1 tabIndex={-1}>My Work · {worker.name}</h1>
           <p>
             Explicitly allocated assignments and case follow-up ownership.
@@ -252,6 +257,11 @@ export function ScenarioMyWork({
                 {a.expectedResponse ??
                   "Expected-response details are not represented in this sample."}
               </p>
+              {a.id === "K-01-H" && <div>
+                <p>Session-only exercise · reload clears drafts and command records. Demo continuity excludes this contribution.</p>
+                <p>{contribution.contributions.at(-1)?.delivery ? "Latest revision delivered locally; receiver response remains separate." : "Prepare your current draft; earlier delivered revisions remain inspectable."}</p>
+                <button className="button primary" onClick={onContribution}>Open contribution · K-01-H</button>
+              </div>}
               <CoordinationInputs
                 scenario={scenario}
                 assignmentId={a.id}

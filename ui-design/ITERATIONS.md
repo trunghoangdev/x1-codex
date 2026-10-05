@@ -852,3 +852,11 @@ Production build and sixteen distinct targeted checks passed across runs: worker
 Added a bounded Chromium/Firefox test config without changing the default test browser. Firefox 155.0 and Chromium 153.0.8010.12 ran six passing task checks: 640/320px worker confirmation, reviewer modal dismissal/focus and operator exact-source navigation; forced-colors focus and authority-gap inspection. Captured 320px forced-color form previews in both engines and visually inspected Firefox. No product layout/color fix was needed for these tested paths; corrected inherited Chromium channel in the Firefox harness.
 
 Production build and diff checks passed. [Display review](DISPLAY-ACCESSIBILITY-REVIEW.md) distinguishes effective-width reflow from actual browser-menu zoom, and emulation from real OS high contrast. Manual zoom, screen-reader and participant sessions remain outstanding; no full accessibility certification or browser coverage claim is made.
+
+## 99 — Human contribution through Knowledge My Work
+
+Added an explicit K-01-H preparation responsibility to Leo's scoped Knowledge assignments and the K-01 workstream. My Work opens the existing contribution UI with organization/workstream links and a personal return. A separate app-owned session preserves drafts, commands and exact revisions across navigation without mixing standalone demo state or historical SF records. Reload/save boundaries are visible in the inbox and editor. Other personas cannot open the contribution route; persona switching there returns to their inbox. Receiver actions remain labeled simulations, and shared organization outcome/coordination records do not acquire completion semantics.
+
+Validation: production build and ten contribution/command checks passed, including desktop/phone personal navigation, local delivery and reload reset. Related Knowledge/personal/scenario navigation checks are recorded after completion below.
+
+Final production build passed. All twelve Knowledge/personal/navigation/integrated-contribution checks passed after updating Leo's expected allocation total for the new explicit responsibility. Together with the seven standalone contribution/command regressions, nineteen distinct related checks passed across runs.

@@ -28,6 +28,7 @@ export function validScenarioPath(raw: string) {
       ...(scenario.id === "knowledge"
         ? [
             "/cases",
+            "/contributions/K-01-H",
             "/walkthroughs/guide-cycle",
             "/agreements/K-01",
             "/outcome-reviews/guide-review-01",
@@ -45,6 +46,7 @@ export function validScenarioPath(raw: string) {
     ].includes(suffix)
   )
     return false;
+  if (suffix === "/contributions/K-01-H" && params.get("persona") !== "leo") return false;
   return (
     (!params.has("cycleRecord") ||
       (scenario.id === "knowledge" &&

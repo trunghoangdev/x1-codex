@@ -17,10 +17,12 @@ export function HumanContribution({
   state,
   onChange,
   onBack,
+  workspace,
 }: {
   state: HumanContributionState;
   onChange: (state: HumanContributionState) => void;
   onBack: () => void;
+  workspace?: { onOrganization: () => void; onWorkstream: () => void };
 }) {
   const [confirm, setConfirm] = useState(false);
   const [preview, setPreview] = useState<CommandPreview>("projected");
@@ -64,7 +66,7 @@ export function HumanContribution({
   return (
     <div className="detail-page human-contribution-page">
       <button className="button secondary" onClick={onBack}>
-        Back to Demos
+        {workspace ? "Back to My Work · Leo" : "Back to Demos"}
       </button>
       <div className="page-heading">
         <div>
@@ -75,6 +77,12 @@ export function HumanContribution({
           </p>
         </div>
       </div>
+      {workspace && <section className="panel org-stream" aria-label="Contribution workspace context">
+        <h2>Knowledge Operations · Welcome guide</h2>
+        <p>K-01-H · Leo · preparation and revision. This sample assignment is separate from the authored researcher and distribution responsibilities.</p>
+        <button className="button secondary" onClick={workspace.onOrganization}>View Organization</button>{" "}
+        <button className="button secondary" onClick={workspace.onWorkstream}>View workstream · K-01</button>
+      </section>}
       <div className="org-banner">
         <p>
           Local session only. No upload, real receiver, server admission or
@@ -88,7 +96,7 @@ export function HumanContribution({
           <strong>{responsibility.actor}</strong> → {responsibility.receiver}
         </p>
         <p>
-          Assignment: {responsibility.assignment}
+          Assignment: {workspace ? "K-01-H" : responsibility.assignment}
           <br />
           Subject: {responsibility.subject} / draft-0{current.version}
         </p>
