@@ -28,6 +28,8 @@ Follow the [complete demo walkthrough](WALKTHROUGH.md) for review, draft, eviden
 
 ## Scope and boundaries
 
+See [Architecture alignment review](ARCHITECTURE-ALIGNMENT-REVIEW.md) for the overall assessment at checkpoint 90 and the recommended next sequence, starting with one source-backed work slice.
+
 This is a design prototype using React, TypeScript, Vite, and Lucide icons. All people, IDs, dates, digests, snippets, records, and organizational activity are fictional. Organization combines illustrative role snapshots with session-aware assignment summaries. Evidence records and the inspector are illustrative, not verified artifacts.
 
 Responses are local demo state. Demos → Demo continuity supports explicit browser snapshots and JSON transfer; reload restores only the last saved snapshot. There is no authentication, backend, actual authorization check, shared durable storage, live event stream, or external execution. A real implementation must obtain identity and permissions from the application API and submit commands for server-side authorization and governed admission. The UI must not treat its local state as an authoritative record.

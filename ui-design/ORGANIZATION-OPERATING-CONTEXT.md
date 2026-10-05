@@ -8,4 +8,4 @@ Direct source links open agreement comparison, outcome requirements, pattern/pol
 
 This first integration is Knowledge-only because those scoped records exist there. Main/larger overviews retain existing behavior. Scoped navigation preserves persona and overview coordination filters through refreshed source return. No personal tasks, assignments or operating state are created.
 
-Next proposed sequence: (2) explicitly allocated case follow-up in My Work; (3) one coherent version-bound collaboration demo; (4) local demo save/export/import; (5) reduce repetitive UI copy and inspect loading boundaries. These remain unimplemented proposals.
+The proposed sequence is complete within its bounded demo scope: explicit case follow-up in My Work (iteration 87), a coherent version-bound collaboration walkthrough (88), local save/export/import (89), and reading/loading improvements (90). These do not establish production organization operations. See [the architecture alignment review](ARCHITECTURE-ALIGNMENT-REVIEW.md) for remaining priorities.
