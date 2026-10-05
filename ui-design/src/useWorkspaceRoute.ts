@@ -35,6 +35,7 @@ export type WorkspaceRoute = {
   scenarioPath?: string;
   assignmentId?: string;
   workstreamId?: string;
+  workflowId?: string;
   workerId?: string;
   handoffId?: string;
   organizationActivity?: boolean;
@@ -169,6 +170,13 @@ export function useWorkspaceRoute(ids: string[], tabs: string[]) {
     if (
       path.length === 3 &&
       path[0] === "" &&
+      path[1] === "workflows" &&
+      workstreams.some((s) => s.id === path[2])
+    )
+      return { ...fallback, view: "Organization", workflowId: path[2] };
+    if (
+      path.length === 3 &&
+      path[0] === "" &&
       path[1] === "workstreams" &&
       workstreams.some((stream) => stream.id === path[2])
     ) {
@@ -288,23 +296,25 @@ export function useWorkspaceRoute(ids: string[], tabs: string[]) {
             ? "#/organization/workstreams"
             : next.assignmentId
               ? `#/assignments/${next.assignmentId}/${next.tab.toLowerCase()}`
-              : next.workstreamId
-                ? `#/workstreams/${next.workstreamId}`
-                : next.workerId
-                  ? `#/workers/${next.workerId}`
-                  : next.handoffId
-                    ? `#/handoffs/${next.handoffId}`
-                    : next.organizationActivity
-                      ? "#/organization/activity"
-                      : next.outcomeId
-                        ? `#/outcomes/${next.outcomeId}`
-                        : next.attention
-                          ? `#/organization/attention/${next.attention.toLowerCase()}`
-                          : next.personalQueue
-                            ? "#/work/attention"
-                            : next.largeOrganization
-                              ? "#/demos/organization"
-                              : `#/${viewPaths[next.view]}`;
+              : next.workflowId
+                ? `#/workflows/${next.workflowId}`
+                : next.workstreamId
+                  ? `#/workstreams/${next.workstreamId}`
+                  : next.workerId
+                    ? `#/workers/${next.workerId}`
+                    : next.handoffId
+                      ? `#/handoffs/${next.handoffId}`
+                      : next.organizationActivity
+                        ? "#/organization/activity"
+                        : next.outcomeId
+                          ? `#/outcomes/${next.outcomeId}`
+                          : next.attention
+                            ? `#/organization/attention/${next.attention.toLowerCase()}`
+                            : next.personalQueue
+                              ? "#/work/attention"
+                              : next.largeOrganization
+                                ? "#/demos/organization"
+                                : `#/${viewPaths[next.view]}`;
     const params = new URLSearchParams();
     if (next.coordination) {
       if (next.coordination.query)

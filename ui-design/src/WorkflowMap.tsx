@@ -3,6 +3,8 @@ import { workflowMap } from "./data/workflowMap";
 import { CoordinationInputs } from "./CoordinationInputs";
 import { DetailBackButton } from "./DetailPresentation";
 export function WorkflowMap({
+  completed = {},
+  backLabel = "Back to scenario context",
   scenario,
   streamId,
   onBack,
@@ -11,6 +13,8 @@ export function WorkflowMap({
   onStream,
   onOutcome,
 }: {
+  completed?: Record<string, string>;
+  backLabel?: string;
   scenario: OrganizationScenario;
   streamId: string;
   onBack: () => void;
@@ -28,9 +32,7 @@ export function WorkflowMap({
   if (!map.stream) return null;
   return (
     <div className="detail-page workflow-map">
-      <DetailBackButton onClick={onBack}>
-        Back to scenario context
-      </DetailBackButton>
+      <DetailBackButton onClick={onBack}>{backLabel}</DetailBackButton>
       <div className="page-heading">
         <div>
           <div className="eyebrow">{streamId} · AUTHORED COLLABORATION</div>
@@ -75,7 +77,11 @@ export function WorkflowMap({
                     ? ` · ${worker.type}`
                     : " · allocation not represented"}
                 </p>
-                <span className="badge neutral">{a.state}</span>
+                <span className="badge neutral">
+                  {completed[a.id]
+                    ? "Local response recorded · flow has not advanced"
+                    : a.state}
+                </span>
                 <details className="directory-record-details">
                   <summary>
                     Inspect responsibility expectations · {a.id}
@@ -94,7 +100,8 @@ export function WorkflowMap({
                     className="text-link"
                     onClick={() => onAssignment(a.id)}
                   >
-                    Inspect map assignment · {a.id}
+                    Inspect map {completed[a.id] ? "response" : "assignment"} ·{" "}
+                    {a.id}
                   </button>
                   {worker && (
                     <button
@@ -149,6 +156,7 @@ export function WorkflowMap({
           <CoordinationInputs
             scenario={scoped}
             streamId={streamId}
+            completed={completed}
             onAssignment={onAssignment}
             onWorker={onWorker}
           />

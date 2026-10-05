@@ -11,6 +11,7 @@ import { evidenceFor } from "./data/evidence";
 import { workstreamDetails } from "./data/workstreamDetails";
 
 export function WorkstreamDetail({
+  onWorkflow,
   stream,
   completed,
   onOpen,
@@ -22,6 +23,7 @@ export function WorkstreamDetail({
   onOutcome,
   onWorker,
 }: {
+  onWorkflow?: () => void;
   stream: Workstream;
   completed: Record<string, string>;
   onOpen: (assignment: Assignment, tab?: string) => void;
@@ -55,6 +57,13 @@ export function WorkstreamDetail({
           </button>
         </div>
       </div>
+      {onWorkflow && (
+        <p>
+          <button className="button secondary" onClick={onWorkflow}>
+            Explore workflow & exchanges
+          </button>
+        </p>
+      )}
       <section
         className="panel org-stream"
         aria-label="Workstream coordination sources"

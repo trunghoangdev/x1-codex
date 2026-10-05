@@ -1,6 +1,6 @@
-# Workflow and exchange map — Knowledge first
+# Workflow and exchange map
 
-Iteration 76 starts item 3 with the two Knowledge workstreams. Open a Knowledge workstream and choose Explore workflow & exchanges. Direct routes are `/organizations/knowledge/workflows/K-01` and `/organizations/knowledge/workflows/K-02`, retaining the selected persona. Main and larger software keep their existing flow views until the next unit.
+Iteration 76 starts item 3 with the two Knowledge workstreams. Open a Knowledge workstream and choose Explore workflow & exchanges. Direct routes are `/organizations/knowledge/workflows/K-01` and `/organizations/knowledge/workflows/K-02`, retaining the selected persona. Iteration 77 extends the map to main and larger software while keeping their existing detail/flow views available.
 
 The reusable projection reads explicit stream assignment references, dependencies, parallel groups and responsibility gaps. Assignment cards show role, assigned worker/category, authored state and expandable input/expected-response descriptions. Cards are an unordered responsibility list, not steps or an execution timeline. Gap records remain separate and do not manufacture tasks. Publication review has no task/worker; workshop facilitation has the existing unassigned assignment and its explicit gap.
 
@@ -13,3 +13,17 @@ The card grid, provider/receiver layout and parallel group remain readable textu
 Validation: production build and eighteen related tests passed. New model/browser checks cover reference-based relationships despite reordered assignment/flow lists, no gap-created tasks, unassigned facilitator, missing relationship/endpoint behavior, worker-only software provider, scoped routes, desktop/mobile keyboard-focus entry, provider/receiver/worker/outcome inspection and refreshed nested return, direct fallback and width. Existing outcome, input and larger workspace checks passed. Three previews were inspected; `scripts/capture-workflow-map.mjs` reproduces them against local port 4173.
 
 Next item 3 unit: adapt main and larger software, preserving main local response semantics and its worker-only provider without creating a developer task. No live data or generalized workflow editor is needed for that unit.
+
+## Main and larger software — iteration 77
+
+Item 3 is complete within the existing authored relationship scope. All three organizations offer Explore workflow & exchanges from workstream detail. Main routes are `/workflows/WS-01` and `/workflows/WS-02`; larger routes are `/organizations/large/workflows/L-01` through `L-06`. Foreign or unknown stream IDs are rejected by their respective route validation.
+
+Main passes session-local response records to assignment cards and input inspection. Recorded responses explicitly leave flow advancement, receipt and outcomes unestablished; response inspection opens Activity. Payment’s Codex Developer appears as the explicit input provider worker with no provider assignment. No developer task is manufactured. Release, staging and onboarding assignments remain outside the modeled stream references. Main’s existing specialized flow and evidence remain accessible through workstream detail.
+
+Larger software uses its authored assignment states and allocation gaps. It has no dependency or parallel group records, so the map shows an explicit empty relationship state rather than deriving a contribution → assessment → authorization sequence from card order. The unassigned L-02 reviewer remains visible, separate from the recorded gap.
+
+Main uses its existing in-memory sources to return from assignment, provider worker, gap source and outcome review to the map. Leaving the map restores the original workstream source so overview filters are preserved without a return cycle. Main refresh retains the URL but resets local responses/source references and uses workstream fallback. Read-only larger navigation uses the existing persona-scoped session-storage trail, including nested refresh and direct-map fallback. No durable main audit or execution events are added.
+
+Production build passed. Nineteen related checks passed across this unit (seventeen initially, then both corrected main checks), including all-scenario input/outcome behavior and desktop/mobile larger/main map inspection. Main checks submit an assessment and verify unchanged receipt/outcome semantics, Activity inspection, worker return, gap-source navigation without cycles, source filters and unknown-route recovery. Three new previews were inspected: `76-main-workflow-1440.png`, `76-main-workflow-390.png`, `76-larger-workflow-1440.png`. Capture script now covers all scenarios.
+
+Next: item 4 — decision responsibility and escalation. It requires explicitly authored decision records; a role binding alone is not a decision allocation or escalation policy.

@@ -105,3 +105,7 @@ Shared outcome inspection now presents existing scenario criteria, available con
 ## Item 3 started — iteration 76
 
 Knowledge workshop and guide now have scoped workflow/exchange map routes. Responsibility cards, separate gaps, explicit brief provider/receiver and declared research/editorial parallel work reuse existing fixtures. Source return survives refresh; no task, transfer event or dependency is invented. Build and eighteen related tests passed. See [WORKFLOW-MAP.md](WORKFLOW-MAP.md). Main/larger adaptation is the next item 3 unit; items 4–5 remain proposed.
+
+## Item 3 completed — iterations 76–77
+
+All three organizations now have reference-based workflow/exchange map inspection with workstream entry points and source return. Main preserves session response/receipt/outcome boundaries and worker-only provider representation; larger keeps its missing dependency records explicit. Main map exit restores the original filtered workstream source; read-only routes retain persona-scoped refreshed trails. Build and nineteen related checks passed in the final unit. See [WORKFLOW-MAP.md](WORKFLOW-MAP.md). Items 4–5 remain proposed; decision responsibility/escalation is next.

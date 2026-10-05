@@ -123,3 +123,5 @@ Iteration 73: Knowledge and larger software share the compact coordination overv
 Iteration 75 adds shared outcome requirements/context review for all three samples, including scoped evidence and source return. See [SHARED-OUTCOME-REVIEW.md](SHARED-OUTCOME-REVIEW.md).
 
 Iteration 76 starts Knowledge workflow/exchange map inspection with explicit responsibilities, input endpoints and parallel groups. Main/larger adaptation remains next. See [WORKFLOW-MAP.md](WORKFLOW-MAP.md).
+
+Iteration 77 completes workflow/exchange map inspection across main, Knowledge and larger software. Main local responses do not advance flow or confirm input receipt; read-only relationships remain authored and explicitly scoped. See [WORKFLOW-MAP.md](WORKFLOW-MAP.md).

@@ -54,9 +54,7 @@ export function validScenarioPath(raw: string) {
       "/evidence",
       ...scenario.streams.map((s) => `/workstreams/${s.id}`),
       ...scenario.outcomes.map((o) => `/outcomes/${o.streamId}`),
-      ...(scenario.id === "knowledge"
-        ? scenario.streams.map((s) => `/workflows/${s.id}`)
-        : []),
+      ...scenario.streams.map((s) => `/workflows/${s.id}`),
       ...scenario.workers.map((w) => `/workers/${w.id}`),
       ...scenario.assignments.map((a) => `/assignments/${a.id}`),
     ].includes(suffix)
@@ -482,14 +480,14 @@ export function ScenarioWorkspace({
               }
               <section className="panel org-stream">
                 <h2>Coordination & assignments</h2>
-                {scenario.id === "knowledge" && (
+                {
                   <button
                     className="button secondary"
                     onClick={() => open(`/workflows/${stream.id}`)}
                   >
                     Explore workflow & exchanges
                   </button>
-                )}
+                }
                 <p>{stream.coordination}</p>
                 <ol>
                   {scenario.flows[stream.id].map((step) => (
