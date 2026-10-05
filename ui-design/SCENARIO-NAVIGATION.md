@@ -29,3 +29,5 @@ Iteration 76 starts Knowledge workflow/exchange map inspection with explicit res
 Iteration 77 completes workflow/exchange map inspection across main, Knowledge and larger software. Main local responses do not advance flow or confirm input receipt; read-only relationships remain authored and explicitly scoped. See [WORKFLOW-MAP.md](WORKFLOW-MAP.md).
 
 Iteration 78 adds scoped Decision responsibility inspection with main release allocation, an explicitly authored Knowledge clarification requirement, unknown policy/escalation fields and a larger empty state. See [DECISION-RESPONSIBILITY.md](DECISION-RESPONSIBILITY.md).
+
+Iteration 79 adds read-only shared exchange history with Knowledge’s explicitly authored earlier draft events, independent delivery/receipt semantics and scoped URL/source return. Main activity remains unchanged; larger has no events. See [EXCHANGE-ACTIVITY.md](EXCHANGE-ACTIVITY.md).

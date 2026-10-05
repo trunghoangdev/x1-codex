@@ -129,7 +129,7 @@ for (const width of [1440, 390]) {
       .getByRole("button", { name: "View organization activity", exact: true })
       .click();
     await expect(
-      page.getByText("No scenario records represented", { exact: true }),
+      page.getByText("No exchange records in this view", { exact: true }),
     ).toBeVisible();
     await expect(
       page.getByText("Main scenario record stays isolated.", { exact: true }),

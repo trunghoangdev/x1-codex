@@ -113,3 +113,7 @@ All three organizations now have reference-based workflow/exchange map inspectio
 ## Item 4 inspection delivered — iteration 78
 
 Shared decision directory presents exact main production release subject/allocation and one newly authored Knowledge responsibility-clarification requirement. Publication authorization policy/owner are unknown and separate from the missing assessment responsibility. No requester, deadline or escalation chain is invented. Larger has an honest empty record collection. Build and fifteen related checks passed. See [DECISION-RESPONSIBILITY.md](DECISION-RESPONSIBILITY.md). This completes the bounded read-only inspection slice; real escalation/approval requires explicit policy and allocation records. Item 5 remains proposed.
+
+## Item 5 inspection delivered — iteration 79
+
+Read-only Activity now projects typed scoped exchange history, with five explicitly authored Knowledge events for an earlier incomplete brief version. Response, delivery, acknowledgment, assessment and revision are distinct; related versions/recipients/sources are validated. Current brief availability/receipt and main records remain unchanged. Larger stays empty. URL filters/exact records, refreshed source return and workflow entry are tested. Build and sixteen distinct related checks passed; see [EXCHANGE-ACTIVITY.md](EXCHANGE-ACTIVITY.md). All five proposed bounded inspection slices are now delivered; actual execution, live integration and durable activity recording remain separate.

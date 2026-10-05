@@ -11,6 +11,7 @@ export function WorkflowMap({
   onAssignment,
   onWorker,
   onStream,
+  onActivity,
   onOutcome,
 }: {
   completed?: Record<string, string>;
@@ -21,6 +22,7 @@ export function WorkflowMap({
   onAssignment: (id: string) => void;
   onWorker: (id: string) => void;
   onStream: () => void;
+  onActivity?: () => void;
   onOutcome: () => void;
 }) {
   const map = workflowMap(scenario, streamId);
@@ -40,6 +42,13 @@ export function WorkflowMap({
           <p>{map.stream.goal}</p>
         </div>
       </div>
+      {onActivity && (
+        <p>
+          <button className="button secondary" onClick={onActivity}>
+            Inspect coordination activity
+          </button>
+        </p>
+      )}
       <section className="org-banner" aria-label="Workflow boundary">
         <div>
           <h2>Expected collaboration</h2>

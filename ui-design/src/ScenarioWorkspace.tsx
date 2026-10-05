@@ -1,3 +1,5 @@
+import { ExchangeActivity, type ExchangeFilters } from "./ExchangeActivity";
+import { exchangeActivity, exchangeKinds } from "./data/exchangeActivity";
 import { DecisionDirectory } from "./DecisionDirectory";
 import { WorkflowMap } from "./WorkflowMap";
 import { OutcomeReview } from "./OutcomeReview";
@@ -63,6 +65,16 @@ export function validScenarioPath(raw: string) {
   )
     return false;
   return (
+    (!["actStream", "actKind", "event"].some((k) => params.has(k)) ||
+      (suffix === "/activity" &&
+        ["all", ...scenario.streams.map((s) => s.id)].includes(
+          params.get("actStream") ?? "all",
+        ) &&
+        ["all", ...exchangeKinds].includes(params.get("actKind") ?? "all") &&
+        (!params.has("event") ||
+          exchangeActivity(scenario).some(
+            (e) => e.id === params.get("event"),
+          )))) &&
     (suffix !== "/work" || validScenarioWorkFilters(scenario, params)) &&
     (!["coordQ", "coordSignal", "coordPage"].some((key) => params.has(key)) ||
       (scenario.readOnly &&
@@ -262,7 +274,26 @@ export function ScenarioWorkspace({
           verified outcomes. Main software records remain separate.
         </p>
       </details>
-      {suffix === "/decisions" ? (
+      {suffix === "/activity" ? (
+        <ExchangeActivity
+          scenario={scenario}
+          filters={{
+            stream: params.get("actStream") ?? "all",
+            kind: (params.get("actKind") ?? "all") as ExchangeFilters["kind"],
+            event: params.get("event") ?? undefined,
+          }}
+          onFilters={(f) =>
+            filter("activity", {
+              actStream: f.stream,
+              actKind: f.kind,
+              event: f.event ?? "",
+            })
+          }
+          onBack={back}
+          onAssignment={(id) => open(`/assignments/${id}`)}
+          onWorker={(id) => open(`/workers/${id}`)}
+        />
+      ) : suffix === "/decisions" ? (
         <DecisionDirectory
           scenario={scenario}
           onBack={back}
@@ -275,6 +306,7 @@ export function ScenarioWorkspace({
           scenario={scenario}
           streamId={suffix.split("/")[2]}
           onBack={back}
+          onActivity={() => open(`/activity?actStream=${suffix.split("/")[2]}`)}
           onAssignment={(id) => open(`/assignments/${id}`)}
           onWorker={(id) => open(`/workers/${id}`)}
           onStream={() => open(`/workstreams/${suffix.split("/")[2]}`)}
@@ -638,15 +670,6 @@ export function ScenarioWorkspace({
               <p>
                 Signals reflect authored states. No proposal or allocation
                 action is enabled in this read-only scenario.
-              </p>
-            </section>
-          ) : suffix === "/activity" ? (
-            <section className="panel org-stream">
-              <h2>No scenario records represented</h2>
-              <p>
-                This read-only scenario has authored assignments and states, but
-                no response, proposal, decision or evidence records. Records
-                from the main sample are not shown here.
               </p>
             </section>
           ) : (
