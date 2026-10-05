@@ -59,3 +59,5 @@ This is an incremental boundary, not a finished data layer. Candidate, evidence,
 `humanContribution.ts` holds one fictional two-version exercise, explicit responsibility/input and local immutable delivery/receipt/assessment transitions. It is independent of production snapshots and existing assignment receipts, session-only and excluded from Demo continuity. See `../../HUMAN-CONTRIBUTION.md`.
 
 `sfReadProjection.ts` defines the draft inspection read projection and derives it from validated packaged snapshots. It carries one response-byte revision across assignment/attempt/product links, explicit field availability and read errors. These are frontend integration types, not an approved Go/API schema. See `../../SF-READ-CONTRACT.md`.
+
+`contributionCommand.ts` is a local draft intent/status model for the independent human exercise. It freezes submitted payloads, blocks duplicate submission during uncertainty, preserves command history through edits and separates admission from delivery projection. No real permission/concurrency check or durable idempotency store is implemented. See `../../CONTRIBUTION-COMMAND-CONTRACT.md`.

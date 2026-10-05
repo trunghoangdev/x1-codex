@@ -1,8 +1,14 @@
+import {
+  commandBlocksEditing,
+  submitContributionCommand,
+  resolveContributionCommand,
+  projectContributionCommand,
+  type CommandPreview,
+} from "./data/contributionCommand";
 import { useState } from "react";
 import {
   assessContribution,
   contributionResponsibility as responsibility,
-  deliverContribution,
   receiveContribution,
   reviseContribution,
   type HumanContributionState,
@@ -17,10 +23,14 @@ export function HumanContribution({
   onBack: () => void;
 }) {
   const [confirm, setConfirm] = useState(false);
+  const [preview, setPreview] = useState<CommandPreview>("projected");
+  const command = state.commands?.at(-1);
+  const locked = commandBlocksEditing(state);
   const current = state.contributions.at(-1)!;
   const update = (fields: Partial<typeof current>) => {
-    if (!current.delivery)
+    if (!current.delivery && !locked)
       onChange({
+        ...state,
         contributions: state.contributions.map((c) =>
           c === current ? { ...c, ...fields } : c,
         ),
@@ -74,7 +84,7 @@ export function HumanContribution({
           <p>{responsibility.inputText}</p>
         </details>
       </section>
-      {!current.delivery && (
+      {!current.delivery && !locked && (
         <section className="panel org-stream">
           <h2>Prepare draft-0{current.version}</h2>
           {current.version === 2 && (
@@ -122,6 +132,32 @@ export function HumanContribution({
             A citation records what you relied on; it does not prove the guide
             meets the requirements.
           </p>
+          <details>
+            <summary>Command delivery simulation</summary>
+            <label htmlFor="contribution-command-preview">
+              Submission result
+            </label>
+            <select
+              id="contribution-command-preview"
+              value={preview}
+              onChange={(e) => {
+                setPreview(e.target.value as CommandPreview);
+                setConfirm(false);
+              }}
+            >
+              <option value="projected">Admitted and projection updated</option>
+              <option value="pending">Acknowledged; admission pending</option>
+              <option value="unknown">Acknowledgement unknown</option>
+              <option value="rejected">Rejected: permission denied</option>
+              <option value="conflict">Rejected: revision conflict</option>
+              <option value="admitted-lag">
+                Admitted; projection not updated
+              </option>
+            </select>
+            <p>
+              Authored local outcomes; no backend or actual permission check.
+            </p>
+          </details>
           <button
             className="button primary"
             disabled={!ready || confirm}
@@ -152,7 +188,11 @@ export function HumanContribution({
                 className="button primary"
                 onClick={() => {
                   onChange(
-                    deliverContribution(state, new Date().toISOString()),
+                    submitContributionCommand(
+                      state,
+                      preview,
+                      new Date().toISOString(),
+                    ),
                   );
                   setConfirm(false);
                 }}
@@ -167,6 +207,111 @@ export function HumanContribution({
               </button>
             </section>
           )}
+        </section>
+      )}
+      {command && (
+        <section
+          className="panel org-stream"
+          aria-label="Contribution command status"
+        >
+          <h2>Submission status</h2>
+          <p role="status">
+            Command: {command.status}. Delivery projection:{" "}
+            {command.projected ? "updated" : "not updated"}.
+          </p>
+          <p>
+            Subject: {command.subject} / draft-0{command.version}.{" "}
+            {command.rejection &&
+              `Rejection: ${command.rejection}. The draft is retained; no delivery was created.`}
+          </p>
+          {["pending", "unknown"].includes(command.status) && (
+            <>
+              <p>
+                Keep the submitted payload unchanged. Query this command; do not
+                submit a duplicate.
+              </p>
+              <button
+                className="button secondary"
+                onClick={() =>
+                  onChange(
+                    resolveContributionCommand(
+                      state,
+                      "admitted",
+                      new Date().toISOString(),
+                    ),
+                  )
+                }
+              >
+                Simulate status query: admitted
+              </button>
+              <button
+                className="button secondary"
+                onClick={() =>
+                  onChange(
+                    resolveContributionCommand(
+                      state,
+                      "rejected",
+                      new Date().toISOString(),
+                    ),
+                  )
+                }
+              >
+                Simulate status query: rejected
+              </button>
+              <button
+                className="button secondary"
+                onClick={() =>
+                  onChange(
+                    resolveContributionCommand(
+                      state,
+                      "unknown",
+                      new Date().toISOString(),
+                    ),
+                  )
+                }
+              >
+                Simulate status query: still unknown
+              </button>
+            </>
+          )}
+          {command.status === "admitted" && !command.projected && (
+            <>
+              <p>
+                Admission is recorded in this simulation. The delivery view has
+                not caught up; do not resend.
+              </p>
+              <button
+                className="button secondary"
+                onClick={() => onChange(projectContributionCommand(state))}
+              >
+                Simulate delivery projection refresh
+              </button>
+            </>
+          )}
+          <details>
+            <summary>Inspect local command envelope</summary>
+            <p>
+              {command.id} · Idempotency key: {command.idempotencyKey}
+              <br />
+              Expected revision: {command.expectedRevision}
+              <br />
+              Submitted: {command.submittedAt}
+            </p>
+            <pre className="human-contribution-text">{command.body}</pre>
+            <p>
+              Actor and effective permission must come from the server in a real
+              integration; these tokens are demo-only.
+            </p>
+          </details>
+          <details>
+            <summary>Prior command attempts</summary>
+            {state.commands?.map((c) => (
+              <p key={c.id}>
+                {c.id} · draft-0{c.version} · {c.status} · projection{" "}
+                {c.projected ? "updated" : "not updated"}
+              </p>
+            ))}
+          </details>
         </section>
       )}
       <section className="panel org-stream">

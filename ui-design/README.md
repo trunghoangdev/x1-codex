@@ -34,6 +34,10 @@ Demos → **Try human contribution** lets a human prepare, deliver and revise on
 
 Demos → **Open SF snapshot** provides one coherent read-only assignment/attempt/work-product example with source context and unavailable evidence states. The example is synthetic. **Inspect retained SF run** opens redacted metadata from a real historical execution; neither source is live. See [snapshot inspection](SF-SNAPSHOT-INSPECTION.md).
 
+## Contribution command contract
+
+The human contribution exercise now separates pending/unknown/rejected/admitted command status from delivery projection and receiver receipt. Expand **Command delivery simulation** in its editor to try these local outcomes. See [command contract and backend requirements](CONTRIBUTION-COMMAND-CONTRACT.md).
+
 ## Inspection read contract
 
 SF inspection now consumes a validated draft projection with a snapshot-byte revision, capture/source context and explicit known/not-recorded/redacted/unsupported fields. See [the draft read contract and source mapping](SF-READ-CONTRACT.md). No SF HTTP endpoint or command capability is introduced.

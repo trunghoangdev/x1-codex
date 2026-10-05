@@ -822,3 +822,11 @@ The SF view now loads through the adapter and exposes snapshot context/field ava
 
 Digest support is optional for inspection: unsupported/non-secure browser origins show revision unavailable, without inventing a token or hiding source records. Desktop/mobile context previews were captured and the mobile context visually inspected.
 After the digest fallback, production build and all five projection checks passed again, including a browser with digest support removed.
+
+## 95 — Contribution command intent, acknowledgement and projection lag
+
+Integrated a bounded draft command contract into the existing human contribution exercise. Frozen subject/version/text/note/citation, demo expected revision and command/key identity remain associated through pending/unknown status queries. Duplicate submission/editing is blocked while acknowledgement or projection is unresolved. Rejection retains draft with explicit permission/conflict reasons; correction records a new command/key. Admission remains separate from delivery projection, which cannot project a different payload or create duplicate deliveries. Receiver receipt/assessment stays independent and earlier revision records are preserved.
+
+Default immediate admission/projection preserves the existing walkthrough. Additional outcomes/status-query controls are explicit local simulations, not actual authorization, concurrency checks, durable idempotency or backend integration. Proposed server responsibilities and open semantics are documented in [the command contract](CONTRIBUTION-COMMAND-CONTRACT.md).
+
+Production build and seven targeted checks passed across command uncertainty, admission/projection separation, changed-payload rejection, rejected-intent correction and existing desktop/mobile revision flows. A test exposed command-history loss during draft editing; state updates now preserve it and new intents receive distinct IDs/keys. Desktop/mobile status previews were captured and mobile visually inspected.

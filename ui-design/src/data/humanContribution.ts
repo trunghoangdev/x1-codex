@@ -1,3 +1,4 @@
+import type { ContributionCommand } from "./contributionCommand";
 export type Contribution = {
   version: 1 | 2;
   body: string;
@@ -20,7 +21,10 @@ export type Contribution = {
     rationale: string;
   };
 };
-export type HumanContributionState = { contributions: Contribution[] };
+export type HumanContributionState = {
+  contributions: Contribution[];
+  commands?: ContributionCommand[];
+};
 export const emptyContribution = (): HumanContributionState => ({
   contributions: [{ version: 1, body: "", note: "", citesInput: false }],
 });
@@ -48,6 +52,7 @@ export function deliverContribution(
   const respondsTo = state.contributions[0].assessment?.id;
   if (current.version === 2 && !respondsTo) return state;
   return {
+    ...state,
     contributions: state.contributions.map((c) =>
       c === current
         ? {
@@ -72,6 +77,7 @@ export function receiveContribution(
   const current = state.contributions.at(-1)!;
   if (!current.delivery || current.receipt) return state;
   return {
+    ...state,
     contributions: state.contributions.map((c) =>
       c === current
         ? {
@@ -94,6 +100,7 @@ export function assessContribution(
   if (current.version !== 1 || !current.receipt || current.assessment)
     return state;
   return {
+    ...state,
     contributions: state.contributions.map((c) =>
       c === current
         ? {
@@ -117,6 +124,7 @@ export function reviseContribution(
   if (state.contributions.length !== 1 || !state.contributions[0].assessment)
     return state;
   return {
+    ...state,
     contributions: [
       ...state.contributions,
       {

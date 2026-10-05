@@ -17,3 +17,7 @@ The bounded frontend types and transition helpers in `src/data/humanContribution
 Validation covers required fields, confirmation/edit return, independent receipt/assessment gates, immutable first-version records, revision lineage, session navigation, mobile overflow and explicit reload reset.
 
 Previews: [desktop revision](previews/91-human-contribution-1440.png) and [mobile revision](previews/91-human-contribution-390.png).
+
+## Command status simulation — iteration 95
+
+Delivery confirmation now records a local command intent. Expand **Command delivery simulation** before confirmation to preview pending/unknown/rejection/revision conflict or admitted-but-unprojected outcomes. Default admission plus immediate projection preserves the original walkthrough. Pending/unknown locks the submitted text; query the same command before proceeding. Admitted work can wait for explicit projection refresh before any delivery/receiver record appears. See [the draft command contract](CONTRIBUTION-COMMAND-CONTRACT.md).
