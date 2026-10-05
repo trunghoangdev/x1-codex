@@ -305,3 +305,7 @@ Local save and transfer are available in **Demos → Demo continuity**. See [DEM
 Readability and loading update: [READABILITY-AND-LOADING.md](READABILITY-AND-LOADING.md) describes compact overview summaries, expandable context and deferred secondary views. Initial minified JavaScript is about 491 kB; the build no longer emits the previous >500 kB chunk warning.
 
 Display follow-up: [Chromium/Firefox reflow and forced-colors review](DISPLAY-ACCESSIBILITY-REVIEW.md), with a separate repeatable two-browser test config and explicit actual-zoom/screen-reader limits.
+
+## Product experience review after iteration 98
+
+The [current review and proposed next sequence](PRODUCT-EXPERIENCE-REVIEW.md) recommends connecting ordinary contribution to My Work, then sharing the same version-bound records with a receiver and organization view. These are proposals, not implemented features.
