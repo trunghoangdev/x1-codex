@@ -1,3 +1,5 @@
+import { OperatingPattern } from "./OperatingPattern";
+import { operatingPattern } from "./data/operatingPatterns";
 import { OutcomeReviewRecord } from "./OutcomeReviewRecord";
 import { WorkstreamAgreement } from "./WorkstreamAgreement";
 import { agreementVersions } from "./data/workstreamAgreements";
@@ -70,6 +72,9 @@ export function validScenarioPath(raw: string) {
             "/cases",
             "/agreements/K-01",
             "/outcome-reviews/guide-review-01",
+            ...scenario.streams
+              .filter((s) => operatingPattern(scenario, s.id))
+              .map((s) => `/patterns/${s.id}`),
             ...coordinationCases(scenario).map((c) => `/cases/${c.id}`),
           ]
         : []),
@@ -243,7 +248,8 @@ export function ScenarioWorkspace({
       (s) =>
         suffix === `/outcomes/${s.id}` ||
         suffix === `/workflows/${s.id}` ||
-        suffix === `/agreements/${s.id}`,
+        suffix === `/agreements/${s.id}` ||
+        suffix === `/patterns/${s.id}`,
     );
     const fallback =
       suffix === "/outcome-reviews/guide-review-01"
@@ -314,7 +320,14 @@ export function ScenarioWorkspace({
           verified outcomes. Main software records remain separate.
         </p>
       </details>
-      {suffix === "/outcome-reviews/guide-review-01" ? (
+      {suffix.startsWith("/patterns/") ? (
+        <OperatingPattern
+          scenario={scenario}
+          streamId={suffix.split("/")[2]}
+          onBack={back}
+          onSource={open}
+        />
+      ) : suffix === "/outcome-reviews/guide-review-01" ? (
         <OutcomeReviewRecord
           scenario={scenario}
           onBack={back}
@@ -387,6 +400,11 @@ export function ScenarioWorkspace({
           scenario={scenario}
           streamId={suffix.split("/")[2]}
           onBack={back}
+          onPattern={
+            operatingPattern(scenario, suffix.split("/")[2])
+              ? () => open(`/patterns/${suffix.split("/")[2]}`)
+              : undefined
+          }
           onActivity={() => open(`/activity?actStream=${suffix.split("/")[2]}`)}
           onAssignment={(id) => open(`/assignments/${id}`)}
           onWorker={(id) => open(`/workers/${id}`)}

@@ -13,6 +13,7 @@ export function WorkflowMap({
   onStream,
   onActivity,
   onOutcome,
+  onPattern,
 }: {
   completed?: Record<string, string>;
   backLabel?: string;
@@ -24,6 +25,7 @@ export function WorkflowMap({
   onStream: () => void;
   onActivity?: () => void;
   onOutcome: () => void;
+  onPattern?: () => void;
 }) {
   const map = workflowMap(scenario, streamId);
   const scoped = {
@@ -42,6 +44,13 @@ export function WorkflowMap({
           <p>{map.stream.goal}</p>
         </div>
       </div>
+      {onPattern && (
+        <p>
+          <button className="button secondary" onClick={onPattern}>
+            Inspect operating pattern and policy
+          </button>
+        </p>
+      )}
       {onActivity && (
         <p>
           <button className="button secondary" onClick={onActivity}>

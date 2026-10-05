@@ -91,3 +91,5 @@ Item 2 delivery (iteration 82): the Knowledge K-01 inspection slice now compares
 Item 3 delivery (iteration 83): an independent Knowledge reader-observation example and insufficient-evidence review now identify explicit reviewer allocation, subject/version, proposed agreement, criterion, provenance and conclusion limits. Current fixture outcomes remain unverified. See [OUTCOME-REVIEW-RECORDS.md](OUTCOME-REVIEW-RECORDS.md).
 
 Item 4 delivery (iteration 84): two authored main worker profiles expose capability, provenance, constraints and unknown/stale availability in worker details and existing proposal inspection. Proposal drafts and allocation semantics are preserved. See [WORKER-CAPABILITIES.md](WORKER-CAPABILITIES.md).
+
+Item 5 delivery (iteration 85): distinct versioned Knowledge guide/workshop operating guidance now links explicit instance relationships and exposes separate unknown decision/escalation policies. See [OPERATING-PATTERNS.md](OPERATING-PATTERNS.md). All five proposals now have their bounded first inspection/planning slice; this does not establish live execution, policy adoption or shared durable records.

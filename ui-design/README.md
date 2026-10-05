@@ -265,3 +265,5 @@ Versioned Knowledge welcome-guide scope proposals: see [WORKSTREAM-AGREEMENTS.md
 Explicit goal-level review example: see [OUTCOME-REVIEW-RECORDS.md](OUTCOME-REVIEW-RECORDS.md). From Knowledge K-01 outcome requirements, inspect `guide-review-01` for the reviewer, version-bound reader finding, insufficient-evidence conclusion and remaining gaps.
 
 Worker planning context: see [WORKER-CAPABILITIES.md](WORKER-CAPABILITIES.md). Main Jamie/Codex worker details and invitation proposals show authored capabilities alongside unknown or stale availability.
+
+Knowledge operating guidance and policy gaps: see [OPERATING-PATTERNS.md](OPERATING-PATTERNS.md). From K-01 or K-02 workflow inspection, choose “Inspect operating pattern and policy”.
