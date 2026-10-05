@@ -1,4 +1,4 @@
-import { DemoContinuity } from "./DemoContinuity";
+import { deferredScreen } from "./ScreenLoadBoundary";
 import { readSavedDemo, type DemoSnapshot } from "./data/demoSnapshot";
 import { DecisionDirectory } from "./DecisionDirectory";
 import { WorkflowMap } from "./WorkflowMap";
@@ -16,7 +16,6 @@ import {
 } from "./data/scenarioRegistry";
 import { RolesDirectory } from "./RolesDirectory";
 import { defaultRoleFilters } from "./data/roleDirectory";
-import { ScenarioWorkspace } from "./ScenarioWorkspace";
 import { WorkersDirectory } from "./WorkersDirectory";
 import { defaultWorkerFilters } from "./data/workerDirectory";
 import { WorkstreamsDirectory } from "./WorkstreamsDirectory";
@@ -24,14 +23,11 @@ import { defaultStreamFilters } from "./data/workstreamDirectory";
 import { CustomerTour, customerTourSteps } from "./CustomerTour";
 import { ResponsibilityProposal } from "./ResponsibilityProposal";
 import type { ResponsibilityProposal as Proposal } from "./data/responsibilityProposals";
-import { LargeOrganizationDemo } from "./LargeOrganizationDemo";
 import type { WorkspaceRoute } from "./useWorkspaceRoute";
 import { OrganizationAttention } from "./OrganizationAttention";
 import type { AttentionCategory } from "./data/organizationAttention";
 import { OutcomeReview } from "./OutcomeReview";
 import { outcomes } from "./data/outcomes";
-import { OrganizationActivity } from "./OrganizationActivity";
-import { HandoffDetail } from "./HandoffDetail";
 import { handoffs } from "./data/handoffs";
 import { WorkerDetail } from "./WorkerDetail";
 import { WorkstreamDetail } from "./WorkstreamDetail";
@@ -40,7 +36,6 @@ import { OrganizationOverview } from "./OrganizationOverview";
 import { Modal } from "./Modal";
 import { ResponseDialog } from "./ResponseDialog";
 import { useResponseDrafts } from "./useResponseDrafts";
-import { RevisionCycle } from "./RevisionCycle";
 import { snapshotCriteria } from "./CriterionAssessment";
 import { useResponseSubmission } from "./useResponseSubmission";
 import { ReconciliationReview } from "./ReconciliationReview";
@@ -125,6 +120,28 @@ const iconFor = {
   Authority: ShieldCheck,
   Reconciliation: GitBranch,
 };
+const DemoContinuity = deferredScreen(() =>
+  import("./DemoContinuity").then((m) => ({ default: m.DemoContinuity })),
+);
+const ScenarioWorkspace = deferredScreen(() =>
+  import("./ScenarioWorkspace").then((m) => ({ default: m.ScenarioWorkspace })),
+);
+const LargeOrganizationDemo = deferredScreen(() =>
+  import("./LargeOrganizationDemo").then((m) => ({
+    default: m.LargeOrganizationDemo,
+  })),
+);
+const RevisionCycle = deferredScreen(() =>
+  import("./RevisionCycle").then((m) => ({ default: m.RevisionCycle })),
+);
+const OrganizationActivity = deferredScreen(() =>
+  import("./OrganizationActivity").then((m) => ({
+    default: m.OrganizationActivity,
+  })),
+);
+const HandoffDetail = deferredScreen(() =>
+  import("./HandoffDetail").then((m) => ({ default: m.HandoffDetail })),
+);
 function App() {
   const { route, navigate: changeRoute } = useWorkspaceRoute(
     assignments.map((a) => a.id),
@@ -298,7 +315,9 @@ function App() {
     const previous = previousScreen.current;
     previousScreen.current = screenKey;
     // Run after route-driven dialogs have closed and restored their opener.
-    const frame = requestAnimationFrame(() => {
+    const focusScreen = () => {
+      if (document.querySelector("main [data-screen-loading]")) return;
+      observer.disconnect();
       const origin = Object.entries(assignmentSources.current).find(
         ([id, saved]) =>
           previous.startsWith(`My Work:${id}:`) &&
@@ -338,8 +357,17 @@ function App() {
           tourStep === null ? "main h1" : ".customer-tour h2",
         )
         ?.focus();
+    };
+    const observer = new MutationObserver(focusScreen);
+    observer.observe(document.getElementById("main-content")!, {
+      childList: true,
+      subtree: true,
     });
-    return () => cancelAnimationFrame(frame);
+    const frame = requestAnimationFrame(focusScreen);
+    return () => {
+      cancelAnimationFrame(frame);
+      observer.disconnect();
+    };
   }, [screenKey, route.view, route.assignmentId]);
   const active = assignments.filter((a) => !completed[a.id]);
   const hasDraft = (id: string) =>
@@ -799,7 +827,10 @@ function App() {
                         if (path.endsWith("/work"))
                           for (const key of ["q", "role", "stream", "status"])
                             p.delete(key);
-                        changeRoute({ ...route, scenarioPath: `${path}?${p}` });
+                        changeRoute({
+                          ...route,
+                          scenarioPath: `${path}?${p}`,
+                        });
                       }}
                     >
                       {activeScenario.personas!.map((p) => (

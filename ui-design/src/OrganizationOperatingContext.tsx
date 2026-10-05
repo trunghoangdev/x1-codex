@@ -50,7 +50,7 @@ export function OrganizationOperatingContext({
             >
               <div className="eyebrow">{stream.id}</div>
               <h3>{stream.name}</h3>
-              <dl>
+              <dl className="operating-summary">
                 <dt>
                   <strong>Agreement</strong>
                 </dt>
@@ -77,7 +77,7 @@ export function OrganizationOperatingContext({
                 </dt>
                 <dd>
                   {association?.pattern.policy.state === "unknown"
-                    ? "Unknown · role titles do not supply authority or an escalation contact"
+                    ? "Unknown · policy and escalation recipient not supplied"
                     : "Policy not represented"}
                 </dd>
               </dl>

@@ -275,3 +275,5 @@ Knowledge personal follow-up: see [PERSONAL-CASE-FOLLOW-UP.md](PERSONAL-CASE-FOL
 One coherent version-bound collaboration example: see [COLLABORATION-WALKTHROUGH.md](COLLABORATION-WALKTHROUGH.md). Knowledge overview offers “Explore a complete collaboration example” with eleven fictional records and explicit revision/source links.
 
 Local save and transfer are available in **Demos → Demo continuity**. See [DEMO-CONTINUITY.md](DEMO-CONTINUITY.md) for manual snapshots, reload restoration, reviewed import, reset and moving the demo between machines. Unsaved changes are not restored automatically.
+
+Readability and loading update: [READABILITY-AND-LOADING.md](READABILITY-AND-LOADING.md) describes compact overview summaries, expandable context and deferred secondary views. Initial minified JavaScript is about 491 kB; the build no longer emits the previous >500 kB chunk warning.

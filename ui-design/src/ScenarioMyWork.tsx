@@ -74,12 +74,15 @@ export function ScenarioMyWork({
         {mine.length} assignments · {response} awaiting your response ·{" "}
         {waiting} waiting for input
       </p>
-      <p className="personal-queue-note">
-        Assignment counts cover your full assignment inbox. Response and
-        waiting-input flags can overlap ({both} in both); they are not added
-        together or inferred from role bindings. Input availability remains
-        unverified unless explicitly represented.
-      </p>
+      <details className="personal-queue-note directory-record-details">
+        <summary>How assignment counts work</summary>
+        <p>
+          Assignment counts cover your full assignment inbox. Response and
+          waiting-input flags can overlap ({both} in both); they are not added
+          together or inferred from role bindings. Input availability remains
+          unverified unless explicitly represented.
+        </p>
+      </details>
       <section
         className="panel stream-directory-filters"
         aria-label="Personal work filters"
@@ -147,10 +150,8 @@ export function ScenarioMyWork({
         >
           <h2>My coordination follow-up</h2>
           <p>
-            Case ownership is responsibility for follow-up, separate from
-            assignment allocation or decision authority. Search and workstream
-            filters apply here; assignment role and work attention filters apply
-            only to assignments.
+            Search and workstream filters apply to cases. Assignment role and
+            work attention filters apply only to assignments.
           </p>
           <p role="status">
             {followUp.shown.length} of {followUp.owned.length} owned cases shown
@@ -185,8 +186,7 @@ export function ScenarioMyWork({
                     <strong>Waiting for:</strong> {c.waitingFor}
                   </p>
                   <p>
-                    No case resolution is recorded. Follow-up does not establish
-                    delivery, approval or goal completion.
+                    Resolution not recorded · follow-up responsibility only.
                   </p>
                   <button
                     className="button secondary"

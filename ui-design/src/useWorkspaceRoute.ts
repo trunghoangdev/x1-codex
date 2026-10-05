@@ -8,7 +8,7 @@ import {
   rolePageParams,
   type RoleFilters,
 } from "./data/roleDirectory";
-import { validScenarioPath } from "./ScenarioWorkspace";
+import { validScenarioPath } from "./scenarioRoutes";
 import {
   defaultWorkerFilters,
   validDirectoryPage,

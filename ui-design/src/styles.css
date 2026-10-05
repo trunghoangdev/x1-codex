@@ -3723,3 +3723,11 @@ main h3,
 
 .exchange-record-list { list-style: none; padding: 0; }
 .exchange-record-list > li:focus { outline: 2px solid var(--green); outline-offset: 3px; }
+
+.operating-summary dt {
+  margin-top: 12px;
+}
+.operating-summary dd {
+  margin: 4px 0 0;
+  color: var(--muted);
+}

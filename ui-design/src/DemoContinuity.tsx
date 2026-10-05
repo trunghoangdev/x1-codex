@@ -35,16 +35,22 @@ export function DemoContinuity({
     >
       <h2>Demo continuity</h2>
       <p>
-        Save an explicit snapshot in this browser or export it to continue on
-        another machine. Changes after saving are not saved automatically. This
-        contains main-sample draft text, structured assessment/reconciliation
-        drafts, local response receipts and recorded responsibility proposals.
+        Save this browser’s demo or export it to another machine. Changes after
+        saving are not saved automatically.
       </p>
-      <p>
-        Local demo only: no shared server state, permissions, live SF evidence
-        or execution is restored. Simulation controls, unrecorded proposal forms
-        and navigation remain outside the snapshot.
-      </p>
+      <details className="directory-record-details">
+        <summary>What is saved and restored?</summary>
+        <p>
+          Main-sample text drafts, structured assessment/reconciliation drafts,
+          local response receipts and recorded responsibility proposals are
+          included.
+        </p>
+        <p>
+          Simulation controls, unrecorded proposal forms and navigation are
+          excluded. This is local demo data; no shared server state,
+          permissions, live SF evidence or execution is restored.
+        </p>
+      </details>
       <p>
         <button
           className="button secondary"
