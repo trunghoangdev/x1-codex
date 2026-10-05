@@ -1,3 +1,4 @@
+import { OrganizationOperatingContext } from "./OrganizationOperatingContext";
 import { OperatingPattern } from "./OperatingPattern";
 import { operatingPattern } from "./data/operatingPatterns";
 import { OutcomeReviewRecord } from "./OutcomeReviewRecord";
@@ -820,6 +821,14 @@ export function ScenarioWorkspace({
               }
               completed={{}}
               readiness="missing"
+              operatingContext={
+                scenario.id === "knowledge" ? (
+                  <OrganizationOperatingContext
+                    scenario={scenario}
+                    onSource={open}
+                  />
+                ) : undefined
+              }
               proposals={{}}
               onOpen={(a) => open(`/assignments/${a.id}`)}
               onMyWork={persona ? () => onRoute(qualify("/work")) : onMyWork}

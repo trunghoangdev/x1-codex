@@ -16,6 +16,7 @@ import { releaseWait } from "./data/organization";
 export function OrganizationOverview({
   scenario = mainOrganization,
   coordination,
+  operatingContext,
   completed,
   readiness,
   onOpen,
@@ -35,6 +36,7 @@ export function OrganizationOverview({
 }: {
   scenario?: OrganizationScenario;
   coordination?: ReactNode;
+  operatingContext?: ReactNode;
   myWorkLabel?: string;
   completed: Record<string, string>;
   readiness: Readiness;
@@ -120,6 +122,9 @@ export function OrganizationOverview({
       <nav className="organization-sections" aria-label="Organization sections">
         {[
           ["org-goals", "Goals & workstreams"],
+          ...(operatingContext
+            ? [["org-operating-context", "Agreements, reviews & policy"]]
+            : []),
           ["org-attention", "Attention"],
           ["org-workers", "Roles & workers"],
         ].map(([id, label]) => (
@@ -141,6 +146,7 @@ export function OrganizationOverview({
           View organization activity
         </button>
       </p>
+      {operatingContext}
       {coordination ?? (
         <>
           <section

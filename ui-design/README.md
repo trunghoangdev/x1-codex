@@ -267,3 +267,5 @@ Explicit goal-level review example: see [OUTCOME-REVIEW-RECORDS.md](OUTCOME-REVI
 Worker planning context: see [WORKER-CAPABILITIES.md](WORKER-CAPABILITIES.md). Main Jamie/Codex worker details and invitation proposals show authored capabilities alongside unknown or stale availability.
 
 Knowledge operating guidance and policy gaps: see [OPERATING-PATTERNS.md](OPERATING-PATTERNS.md). From K-01 or K-02 workflow inspection, choose “Inspect operating pattern and policy”.
+
+Knowledge overview now connects the operating records: see [ORGANIZATION-OPERATING-CONTEXT.md](ORGANIZATION-OPERATING-CONTEXT.md). Use “Agreements, reviews & policy” to inspect current gaps and separately labeled design examples.
