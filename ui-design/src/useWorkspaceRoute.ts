@@ -34,6 +34,7 @@ export type WorkspaceRoute = {
   view: WorkspaceView;
   scenarioPath?: string;
   sfSnapshot?: string;
+  humanContribution?: boolean;
   sfSnapshotSource?: "retained";
   assignmentId?: string;
   workstreamId?: string;
@@ -66,6 +67,7 @@ export function useWorkspaceRoute(ids: string[], tabs: string[]) {
     if (!location.hash || location.hash === "#")
       return { ...fallback, view: "Organization" };
     const raw = location.hash.slice(1);
+    if (raw === "/demos/human-contribution") return { view: "Demos", tab: "Overview", humanContribution: true };
     if (raw.startsWith("/demos/sf-snapshot") || raw.startsWith("/demos/sf-retained")) {
       const retained = raw.split("/")[2] === "sf-retained";
       const allowed = retained ? ["", "20260913T153424Z-eb63b7bd05303482"] : ["", "snapshot-attempt-01", "snapshot-attempt-02"];
@@ -302,7 +304,7 @@ export function useWorkspaceRoute(ids: string[], tabs: string[]) {
     };
   }, []);
   function navigate(next: WorkspaceRoute, replace = false) {
-    const path = next.sfSnapshot !== undefined
+    const path = next.humanContribution ? "#/demos/human-contribution" : next.sfSnapshot !== undefined
       ? `#/demos/${next.sfSnapshotSource === "retained" ? "sf-retained" : "sf-snapshot"}${next.sfSnapshot ? "/" + next.sfSnapshot : ""}`
       : next.decisions
       ? "#/organization/decisions"

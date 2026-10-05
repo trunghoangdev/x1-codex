@@ -55,3 +55,5 @@ This is an incremental boundary, not a finished data layer. Candidate, evidence,
 `organizationScenario.ts` provides a common frontend contract and main/large adapters for workers, bindings, streams, explicit assignments, flows, gaps, outcome requirements and evidence. `scenarioAttention.ts` derives bounded read-only signals from explicit gaps and selected assignment states. Main overview/directories now consume the common scenario model; specialized interactive assignment fixtures remain main-only.
 
 `sfSnapshot.ts` is a bounded adapter for the separately packaged synthetic and redacted retained SF inspection envelopes. It preserves retained attempt/assignment and exact work-product relationships without importing demo permission/receipt models. See `../../SF-SNAPSHOT-INSPECTION.md` for pinned shape references and limits.
+
+`humanContribution.ts` holds one fictional two-version exercise, explicit responsibility/input and local immutable delivery/receipt/assessment transitions. It is independent of production snapshots and existing assignment receipts, session-only and excluded from Demo continuity. See `../../HUMAN-CONTRIBUTION.md`.

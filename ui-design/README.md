@@ -26,6 +26,10 @@ Follow the [complete demo walkthrough](WALKTHROUGH.md) for review, draft, eviden
 - **Layout:** persistent desktop navigation; responsive cards and assignment rows; a navigation toggle on narrow screens. Assignment authority stays visible beside its context on large screens and follows it on small screens.
 - **Interaction:** search, responsibility filters, completed work, assignment tabs, artifact inspection, rationale validation, local decision records, keyboard-focus containment and Escape dismissal for dialogs.
 
+## Human contribution
+
+Demos → **Try human contribution** lets a human prepare, deliver and revise one fictional text contribution. Delivery, receipt and assessment are separate; earlier versions remain inspectable. Session-only, excluded from Demo continuity. See [human contribution](HUMAN-CONTRIBUTION.md).
+
 ## Software Factory inspection
 
 Demos → **Open SF snapshot** provides one coherent read-only assignment/attempt/work-product example with source context and unavailable evidence states. The example is synthetic. **Inspect retained SF run** opens redacted metadata from a real historical execution; neither source is live. See [snapshot inspection](SF-SNAPSHOT-INSPECTION.md).

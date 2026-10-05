@@ -1,3 +1,4 @@
+import { emptyContribution, type HumanContributionState } from "./data/humanContribution";
 import { deferredScreen } from "./ScreenLoadBoundary";
 import { readSavedDemo, type DemoSnapshot } from "./data/demoSnapshot";
 import { DecisionDirectory } from "./DecisionDirectory";
@@ -120,6 +121,7 @@ const iconFor = {
   Authority: ShieldCheck,
   Reconciliation: GitBranch,
 };
+const HumanContribution = deferredScreen(() => import("./HumanContribution").then(m => ({ default: m.HumanContribution })));
 const SfSnapshotInspection = deferredScreen(() =>
   import("./SfSnapshotInspection").then((m) => ({
     default: m.SfSnapshotInspection,
@@ -148,6 +150,7 @@ const HandoffDetail = deferredScreen(() =>
   import("./HandoffDetail").then((m) => ({ default: m.HandoffDetail })),
 );
 function App() {
+  const [humanContribution, setHumanContribution] = useState<HumanContributionState>(emptyContribution);
   const { route, navigate: changeRoute } = useWorkspaceRoute(
     assignments.map((a) => a.id),
     assignmentTabs,
@@ -311,7 +314,7 @@ function App() {
   >({});
   const source = selected ? assignmentSources.current[selected.id] : undefined;
   const inboxReturn = useRef<{ id: string; y: number } | null>(null);
-  const screenKey = `${route.sfSnapshotSource ?? "example"}:${route.sfSnapshot ?? "no-snapshot"}:${route.view}:${route.assignmentId ?? ""}:${!!route.invalid}:${route.workstreamId ?? ""}:${route.workflowId ?? ""}:${route.workerId ?? ""}:${route.handoffId ?? ""}:${!!route.organizationActivity}:${!!route.decisions}:${route.outcomeId ?? ""}:${!!route.attention}:${!!route.personalQueue}:${!!route.largeOrganization}:${!!route.streamDirectory}:${!!route.workerDirectory}:${!!route.roleDirectory}:${route.scenarioPath?.split("?")[0] ?? ""}:${activePersona?.workerId ?? ""}`;
+  const screenKey = `${!!route.humanContribution}:${route.sfSnapshotSource ?? "example"}:${route.sfSnapshot ?? "no-snapshot"}:${route.view}:${route.assignmentId ?? ""}:${!!route.invalid}:${route.workstreamId ?? ""}:${route.workflowId ?? ""}:${route.workerId ?? ""}:${route.handoffId ?? ""}:${!!route.organizationActivity}:${!!route.decisions}:${route.outcomeId ?? ""}:${!!route.attention}:${!!route.personalQueue}:${!!route.largeOrganization}:${!!route.streamDirectory}:${!!route.workerDirectory}:${!!route.roleDirectory}:${route.scenarioPath?.split("?")[0] ?? ""}:${activePersona?.workerId ?? ""}`;
   const previousScreen = useRef(screenKey);
   useEffect(() => {
     if (route.view !== "My Work" || route.assignmentId)
@@ -2103,6 +2106,7 @@ function App() {
               />
             </>
           )}
+          {view === "Demos" && route.humanContribution && <HumanContribution state={humanContribution} onChange={setHumanContribution} onBack={() => navigate("Demos")} />}
           {view === "Demos" && route.largeOrganization && (
             <LargeOrganizationDemo onBack={() => navigate("Demos")} />
           )}
@@ -2117,7 +2121,7 @@ function App() {
             />
           )}
           {view === "Demos" &&
-            !route.largeOrganization &&
+            !route.largeOrganization && !route.humanContribution &&
             route.sfSnapshot === undefined && (
               <>
                 <div className="page-heading">
@@ -2130,6 +2134,9 @@ function App() {
                     </p>
                   </div>
                 </div>
+                <section className="panel org-stream">
+                  <h2>Human contribution</h2><p>Prepare, deliver and revise one contribution with separate receiver responses.</p><button className="button secondary" onClick={() => changeRoute({ view: "Demos", tab: "Overview", humanContribution: true })}>Try human contribution</button>
+                </section>
                 <section className="panel org-stream">
                   <h2>Software Factory snapshot</h2>
                   <p>
