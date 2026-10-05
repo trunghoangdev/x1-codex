@@ -32,6 +32,12 @@ export function useResponseSubmission(key: string, commit: () => void) {
     };
   }
   return {
+    reset: () => {
+      if (pending.current) clearTimeout(pending.current.timer);
+      pending.current = null;
+      setStates({});
+      setScenario("success");
+    },
     state,
     scenario,
     setScenario,

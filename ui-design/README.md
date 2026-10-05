@@ -30,7 +30,7 @@ Follow the [complete demo walkthrough](WALKTHROUGH.md) for review, draft, eviden
 
 This is a design prototype using React, TypeScript, Vite, and Lucide icons. All people, IDs, dates, digests, snippets, records, and organizational activity are fictional. Organization combines illustrative role snapshots with session-aware assignment summaries. Evidence records and the inspector are illustrative, not verified artifacts.
 
-Responses live only in React state and reset on refresh. There is no authentication, backend, actual authorization check, durable storage, live event stream, or external execution. A real implementation must obtain identity and permissions from the application API and submit commands for server-side authorization and governed admission. The UI must not treat its local state as an authoritative record.
+Responses are local demo state. Demos → Demo continuity supports explicit browser snapshots and JSON transfer; reload restores only the last saved snapshot. There is no authentication, backend, actual authorization check, shared durable storage, live event stream, or external execution. A real implementation must obtain identity and permissions from the application API and submit commands for server-side authorization and governed admission. The UI must not treat its local state as an authoritative record.
 
 Before production: extend the existing failure previews to production rejection/offline/concurrent-update handling; define versioned API contracts; connect exact artifact provenance; add authentication and server-enforced permissions; conduct a full accessibility review and user testing. The visible multi-role persona exists solely to exercise both review and authority flows.
 
@@ -273,3 +273,5 @@ Knowledge overview now connects the operating records: see [ORGANIZATION-OPERATI
 Knowledge personal follow-up: see [PERSONAL-CASE-FOLLOW-UP.md](PERSONAL-CASE-FOLLOW-UP.md). Select Leo and open My Work to inspect the explicitly owned workshop-brief case alongside, but separately from, assignments.
 
 One coherent version-bound collaboration example: see [COLLABORATION-WALKTHROUGH.md](COLLABORATION-WALKTHROUGH.md). Knowledge overview offers “Explore a complete collaboration example” with eleven fictional records and explicit revision/source links.
+
+Local save and transfer are available in **Demos → Demo continuity**. See [DEMO-CONTINUITY.md](DEMO-CONTINUITY.md) for manual snapshots, reload restoration, reviewed import, reset and moving the demo between machines. Unsaved changes are not restored automatically.

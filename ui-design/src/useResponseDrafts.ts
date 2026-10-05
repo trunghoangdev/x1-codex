@@ -4,23 +4,36 @@ import type {
   ResponseRecord,
   CriterionReview,
 } from "./data/models";
-export function useResponseDrafts(selected: Assignment | null) {
+export type DraftSnapshot = {
+  text: Record<string, Record<string, string>>;
+  assessmentConclusion:
+    NonNullable<ResponseRecord["assessment"]>["conclusion"] | "";
+  assessmentEvidence: string[];
+  criterionReviews: Record<string, CriterionReview>;
+  reconciliationConclusion: "" | "Still undetermined";
+};
+export function useResponseDrafts(
+  selected: Assignment | null,
+  initial?: DraftSnapshot,
+) {
   const [decision, setDecision] = useState<string | null>(null);
   const [drafts, setDrafts] = useState<Record<string, Record<string, string>>>(
-    {},
+    initial?.text ?? {},
   );
   const [assessmentConclusion, setAssessmentConclusion] = useState<
     NonNullable<ResponseRecord["assessment"]>["conclusion"] | ""
-  >("");
-  const [assessmentEvidence, setAssessmentEvidence] = useState<string[]>([]);
+  >(initial?.assessmentConclusion ?? "");
+  const [assessmentEvidence, setAssessmentEvidence] = useState<string[]>(
+    initial?.assessmentEvidence ?? [],
+  );
   const [reconciliationConclusion, setReconciliationConclusion] = useState<
     "" | "Still undetermined"
-  >("");
+  >(initial?.reconciliationConclusion ?? "");
   const reconciliationForm =
     selected?.id === "A-1035" && decision === "Reconciliation";
   const [criterionReviews, setCriterionReviews] = useState<
     Record<string, CriterionReview>
-  >({});
+  >(initial?.criterionReviews ?? {});
   const hasAssessmentDraft =
     !!assessmentConclusion ||
     assessmentEvidence.length > 0 ||
@@ -85,7 +98,23 @@ export function useResponseDrafts(selected: Assignment | null) {
       return remaining;
     });
   }
+  function restore(snapshot: DraftSnapshot) {
+    setDrafts(snapshot.text);
+    setAssessmentConclusion(snapshot.assessmentConclusion);
+    setAssessmentEvidence(snapshot.assessmentEvidence);
+    setCriterionReviews(snapshot.criterionReviews);
+    setReconciliationConclusion(snapshot.reconciliationConclusion);
+    setDecision(null);
+  }
   return {
+    snapshot: {
+      text: drafts,
+      assessmentConclusion,
+      assessmentEvidence,
+      criterionReviews,
+      reconciliationConclusion,
+    },
+    restore,
     decision,
     setDecision,
     assessmentConclusion,

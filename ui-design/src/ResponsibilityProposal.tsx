@@ -277,7 +277,8 @@ export function ResponsibilityProposal({
           </label>
           <p>
             Recording saves a proposal in this browser session for review.
-            Allocation requires a separate decision; refresh clears proposals.
+            Allocation requires a separate decision. Save from Demos → Demo
+            continuity to retain recorded proposals after reload.
           </p>
           <button
             className="button primary"

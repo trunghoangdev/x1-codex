@@ -1,3 +1,5 @@
+import { DemoContinuity } from "./DemoContinuity";
+import { readSavedDemo, type DemoSnapshot } from "./data/demoSnapshot";
 import { DecisionDirectory } from "./DecisionDirectory";
 import { WorkflowMap } from "./WorkflowMap";
 import { CoordinationOverview } from "./CoordinationOverview";
@@ -174,7 +176,15 @@ function App() {
   const setFilter = (kind: Kind | "All") => updateWork({ kind });
   const setQuery = (query: string) => updateWork({ query }, true);
   const setShowCompleted = (completed: boolean) => updateWork({ completed });
-  const [completed, setCompleted] = useState<Record<string, string>>({});
+  const [savedDemo] = useState(readSavedDemo);
+  const [completed, setCompleted] = useState<Record<string, string>>(() =>
+    Object.fromEntries(
+      (savedDemo.snapshot?.receipts ?? []).map((r) => [
+        r.assignmentId,
+        r.decision,
+      ]),
+    ),
+  );
   const [candidateViews, setCandidateViews] = useState<
     Record<string, CandidateViewState>
   >({});
@@ -194,7 +204,7 @@ function App() {
   }
   const [checkScenario, setCheckScenario] = useState<Scenario>("passed");
   const [readiness, setReadiness] = useState<Readiness>("missing");
-  const responseDraft = useResponseDrafts(selected);
+  const responseDraft = useResponseDrafts(selected, savedDemo.snapshot?.drafts);
   const {
     decision,
     setDecision,
@@ -219,11 +229,29 @@ function App() {
       window.scrollTo(0, 0);
     });
   }
-  const [proposals, setProposals] = useState<Record<string, Proposal>>({});
+  const [proposals, setProposals] = useState<Record<string, Proposal>>(
+    savedDemo.snapshot?.proposals ?? {},
+  );
   const [proposalGap, setProposalGap] = useState<string | null>(null);
   const [artifact, setArtifact] = useState<EvidenceArtifact | null>(null);
   const [mobile, setMobile] = useState(false);
-  const [receipts, setReceipts] = useState<ResponseRecord[]>([]);
+  const [receipts, setReceipts] = useState<ResponseRecord[]>(
+    savedDemo.snapshot?.receipts ?? [],
+  );
+  function restoreDemo(snapshot: DemoSnapshot) {
+    responseDraft.restore(snapshot.drafts);
+    submission.reset();
+    setReceipts(snapshot.receipts);
+    setProposals(snapshot.proposals);
+    setCompleted(
+      Object.fromEntries(
+        snapshot.receipts.map((r) => [r.assignmentId, r.decision]),
+      ),
+    );
+    setReadiness("missing");
+    setCheckScenario("passed");
+    setProposalGap(null);
+  }
   const [workDataState, setWorkDataState] = useState<WorkDataState>("ready");
   const [evidenceQueries, setEvidenceQueries] = useState<
     Record<string, string>
@@ -1005,7 +1033,8 @@ function App() {
                   {draftsOnly && (
                     <p className="work-filter-note">
                       Drafts exist only in this session. Sharing this link or
-                      refreshing does not carry draft content.
+                      reload restores only your last explicitly saved snapshot.
+                      Use Demos → Demo continuity to save or export.
                     </p>
                   )}
                   {filter !== "All" && (
@@ -1079,7 +1108,7 @@ function App() {
                         <p>
                           {query
                             ? "Try another title, project, or assignment ID."
-                            : "Try different filters or show all work. Session-only drafts and completions reset on refresh."}
+                            : "Try different filters or show all work. Reload restores only your last saved snapshot. Save or export from Demos → Demo continuity."}
                         </p>
                         <button
                           className="button secondary"
@@ -1460,9 +1489,9 @@ function App() {
                         >
                           <h3>Drafts in this session</h3>
                           <p>
-                            Not submitted. Refresh clears drafts. Recording any
-                            response completes this assignment and clears its
-                            drafts.
+                            Not submitted. Save from Demos → Demo continuity to
+                            retain drafts after reload. Recording any response
+                            completes this assignment and clears its drafts.
                           </p>
                           {draftEntries(selected.id)
                             .filter(([, text]) => text.trim())
@@ -2052,6 +2081,19 @@ function App() {
                   </p>
                 </div>
               </div>
+              <DemoContinuity
+                current={{
+                  format: "forge-ui-demo",
+                  version: 1,
+                  scope: "main-sample",
+                  drafts: responseDraft.snapshot,
+                  receipts,
+                  proposals,
+                }}
+                restoredAt={savedDemo.snapshot?.savedAt}
+                initialError={savedDemo.error}
+                onRestore={restoreDemo}
+              />
               <section className="panel org-stream org-overview-section">
                 <h2>Customer walkthrough</h2>
                 <p>

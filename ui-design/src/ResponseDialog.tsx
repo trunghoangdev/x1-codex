@@ -115,7 +115,8 @@ export function ResponseDialog({
         )}
         <p className="demo-note">
           Draft kept in this session as you type. Closing this dialog does not
-          submit or delete it. Refresh clears it.
+          submit or delete it. Save or export from Demos → Demo continuity to
+          retain it after reload.
         </p>
         {reconciliationForm && (
           <>

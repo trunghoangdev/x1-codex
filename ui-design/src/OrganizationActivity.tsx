@@ -120,10 +120,10 @@ export function OrganizationActivity({
           <section aria-label="Organization coordination records">
             <h2>Local coordination · newest first</h2>
             <p>
-              Current-session proposal and plan-decision records. Accepting a
-              plan does not create an allocation. Removing a proposal removes
-              its local records; refresh clears them. This is not a permanent
-              audit log.
+              Local demo proposal and plan-decision records. Accepting a plan
+              does not create an allocation. Removing a proposal removes its
+              current records. Reload restores only the last explicitly saved
+              snapshot. This is not a permanent audit log.
             </p>
             {coordination.map((record) => (
               <article

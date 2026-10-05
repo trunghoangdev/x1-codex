@@ -18,8 +18,8 @@ export function DecisionReceipt({
         <span className="badge neutral">LOCAL DEMO RECORD</span>
       </div>
       <p className="summary">
-        Saved in this browser session. Not admitted by a server; refresh clears
-        this record.
+        Local demo record, not admitted by a server. Save or export from Demos →
+        Demo continuity to retain it after reload.
       </p>
       <dl className="attempt-fields">
         <div>

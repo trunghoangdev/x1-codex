@@ -1053,18 +1053,18 @@ test("Organization connects responsibilities, release blockers and local respons
       name: "Payment webhook reliability",
       exact: true,
     }),
-  ).toContainText("Local response recorded");
+  ).toContainText(
+    "No pending response signal represented. This does not establish completion.",
+  );
   await expect(
     page.getByRole("article", {
       name: "Payment webhook reliability",
       exact: true,
     }),
-  ).toContainText("Not verified");
+  ).toContainText("No verified execution or production observation");
   await expect(
-    page.locator(".role-card").filter({
-      has: page.getByRole("heading", { name: "Reviewer", exact: true }),
-    }),
-  ).toContainText("1 awaiting review");
+    page.getByRole("region", { name: "Roles and worker bindings" }),
+  ).toContainText("Showing 3 worker summaries");
   await page
     .getByRole("button", { name: "Explore workstream · WS-01" })
     .click();
@@ -1841,12 +1841,15 @@ test("Organization is the default entry with scoped workers and independent goal
     page
       .getByRole("region", { name: "Roles and worker bindings" })
       .getByRole("article"),
-  ).toHaveCount(4);
+  ).toHaveCount(3);
   const payment = page.getByRole("article", {
     name: "Payment webhook reliability",
     exact: true,
   });
-  await expect(payment).toContainText("Not verified");
+  await expect(payment).toContainText("Outcome evidence needs");
+  await expect(payment).toContainText(
+    "No verified execution or production observation",
+  );
   await payment
     .getByRole("button", { name: "Explore workstream · WS-01" })
     .click();
