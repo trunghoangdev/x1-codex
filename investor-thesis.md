@@ -1,79 +1,69 @@
-# Forge — An operating foundation for organizations that include AI
+# Forge — Build the operating foundation for human–AI organizations
 
-**Draft investment thesis · founder review required before fundraising use**
+**Investment thesis: organizational capacity that can grow across people, models and tools.**
 
-## The thesis
+*This memo presents the completed-product vision and business thesis. Current evidence and fundraising inputs are separated below.*
 
-As AI takes on more substantial work, the organizational burden remains: goals must become responsibilities, participants need legitimate scope, results need assessment, and consequential actions need decisions whose basis can be examined.
+## The opportunity we are pursuing
 
-We are building Forge around a thesis: an enduring product opportunity lies in making people, AI and tools operate as accountable organizations. The organization retains its goals, responsibilities and work history while its performers and AI runtimes change.
+AI can perform increasingly substantial work. Turning that work into sustained organizational capacity requires goals, responsibility, coordination, legitimate authority and decisions about results. Our thesis is that these needs create an opportunity for an operating foundation shared by people, AI and tools.
 
-The intended customer value is greater productive capacity with manageable coordination and decision risk. The business thesis is that customers will pay for operating that capability reliably in their own work. Both customer value and willingness to pay still require validation.
+Forge's ambition is to let customers build organizations around what they want to accomplish, then operate those organizations across changing participants and environments. The value to pursue is accepted work with manageable coordination, review cost and decision risk.
 
-## The product
+## The completed product
 
-DartMesh is the reference architecture for governed virtual organizations. Forge is its implementation platform. A virtual organization applies the platform to a particular purpose, with domain-specific roles, work contracts, acceptance criteria and authority.
+Customers establish purpose, teams, roles, work contracts and decision policies. Compatible human, AI and deterministic workers fulfill scoped responsibilities. Workers receive meaningful objectives and room to choose how to accomplish them. Assignments, attempts, artifacts, handoffs, assessments and consequential decisions preserve identity and history.
 
-The intended customer experience combines an organization-wide view with personal work entrances. Participants contribute, assess and decide; compatible workers perform meaningful objectives within bounded authority. Work products, attempts, revisions and evidence support continuation and inspection.
+The customer experience combines an organization-wide view with personal work entrances. Several workstreams can operate in parallel. Revision and failure become manageable parts of continuing work. Customers can examine why a result was accepted, which authority permitted an action and what evidence establishes its effect.
 
-A future operations layer may coordinate installations at scale if repeated production requirements justify it. This is an expansion hypothesis, not an existing Control Plane or a prerequisite for proving the first customer use case.
+The full vision includes a **Forge Control Plane** for coordinating organizations, workers and execution environments at scale: shared operational visibility, capability/placement context, unresolved work and continuity across disruption. Nodes retain local execution authority; central coordination cannot simply override a customer's trust boundary. Customer-controlled, managed and hybrid deployments are possible product directions, with guarantees established through implementation and validation.
 
-## Where we start
+DartMesh supplies the reference architecture. Forge implements the foundation. Domain organizations apply it to particular work; the Control Plane expands their operation. This organization-first structure is intended to remain useful as models and runtimes change.
 
-Software development is the first proving ground. It provides concrete outputs and repeatable checks, while exposing difficult operational conditions: failed attempts, revision, retained evidence, changing execution conditions and decisions about real repository effects.
+## The customer and initial wedge
 
-The proposed entry market is teams already using AI for recurring software work but spending substantial human effort connecting, reviewing and accepting it. The next step is a narrowly scoped customer pilot with measurable acceptance criteria, not a broad promise to automate an entire company.
+Our proposed starting customer is a software team already using AI, with recurring work, checkable outputs and substantial human coordination/review effort. Software Factory provides the initial application and internal proving ground.
 
-An expansion path could include other work domains and multi-organization operations. Each requires independent validation; success in software does not prove readiness elsewhere.
+The entry product should deliver one complete, repeatable responsibility: clear inputs and scope, suitable execution, inspectable output, review, decision and accountable continuation. Demonstrate its value, then expand workstreams and deployment scope. Other domains and fleet operations are expansion opportunities to earn through evidence.
+
+The customer buys productive capacity with continuity and control. A credible commercial proposition must show that those benefits outweigh inference, integration, review, failed-attempt and support costs.
+
+## Commercial direction
+
+Potential paid offerings include supported domain deployments, enterprise integration and operation, and managed coordination where customers want it. An open foundation can make contracts inspectable and support a worker ecosystem; a commercial offering must provide operational value beyond access to architecture.
+
+Pricing, packaging, buyer, procurement path and margin assumptions require validation. No market-size, revenue or adoption estimate is asserted in this memo. A researched market/competitive analysis belongs alongside it before formal fundraising.
+
+## Why this approach could endure
+
+Roles and responsibility are independent of a particular runtime. Execution autonomy is bounded by explicit scope. Attempts and revised results remain distinguishable. Evidence and decisions have defined meanings rather than collapsing every event into “success.” Local authority survives centralized coordination.
+
+Potential defensibility lies in the quality of these contracts and mechanisms, compatible-worker integrations, domain operating knowledge and reliability demonstrated in consequential work. Adoption and execution must establish that advantage; architecture alone is not a proven moat.
 
 ## Evidence today
 
-| What exists | What it establishes | What it does not establish |
+| Evidence | Supported conclusion | Commercial gap |
 | --- | --- | --- |
-| DartMesh architecture and Forge implementation repositories | An explicit organizational model and implemented platform foundations | Complete commercial product readiness |
-| Software Factory real internal work and retained records | The stack has carried bounded software work beyond a visual demo | External customer adoption, revenue or scalable unit economics |
-| Organization-first UI with interactive human/decision scenarios | A concrete product interaction hypothesis | Live production identity, permissions or application integration |
-| Separately labeled retained SF inspection data | A source-backed view of one historical execution | Full end-to-end verified organizational audit or ongoing live operation |
+| DartMesh and Forge repositories | Organizational architecture and implemented platform foundations | Full product experience still to deliver |
+| Real internal Software Factory work | Bounded software execution beyond a visual demo | External repeat use and willingness to pay |
+| Organization-first UI and interaction scenarios | A concrete experience for shared organization/personal participation | Live application identity, permission and command integration |
+| Real retained metadata inspection | Source-backed inspection of one historical execution | Complete admitted decision/effect chain and ongoing operation |
 
-Internal use is technical and operational evidence. It is not paying-customer traction. The UI work is not a proxy for commercial validation.
+Internal use is operational evidence, not paying-customer traction. UI simulations are product hypotheses, not production capabilities. The Control Plane and complete commercial offering are part of the vision, not current delivery.
 
-## Why the approach could be defensible
+## What capital should prove
 
-The intended differentiation is the organizational boundary around work: responsibility independent of runtime, explicit scope and authority, separately inspectable attempts/results, and evidence whose claims have a defined width.
+The funding case should connect resources to evidence milestones:
 
-Potential defensibility would come from the quality of these contracts and implementations, interoperability with capable workers, domain-specific operating knowledge and demonstrated reliability under real conditions. An open foundation can support trust and external inspection. None of these automatically establishes a moat; they need adoption and sustained execution.
+1. Deliver one externally usable organization work slice, including identity, authority, retained records and supported deployment.
+2. Establish repeated customer use and measure accepted output, human effort, total cost and continuation under failure.
+3. Demonstrate willingness to pay and understand delivery/support economics.
+4. Expand the operating surface where repeated requirements justify it, then prove repeatability before wider domains or fleet scale.
 
-This positioning must be tested against agent runtimes, workflow products, engineering automation and enterprise operations tools. A named competitive comparison and market-size claim require current research and customer evidence; neither is asserted here.
+The main risks are customer value insufficient to offset coordination/review cost, expensive deployment/integration support, weak differentiation against existing products and premature breadth. Evidence helps inspect claims; it cannot guarantee domain quality or remove the need for judgement.
 
-## Commercial hypothesis
+## The investment conversation
 
-Customers could pay for supported domain deployments, operation, integration and reliability. Managed or enterprise offerings may become appropriate as requirements emerge. Pricing, packaging, buyer, procurement path, support burden and gross-margin assumptions remain unvalidated.
+We are pursuing an operating foundation that lets organizational capacity grow with ambition while keeping responsibility, continuity and consequential decisions explicit. The next investment case is to turn that foundation into a repeatably valuable customer product.
 
-The initial commercial test should establish who owns the problem, who controls the budget, what responsibility customers will delegate and which result justifies paying. Measure the full cost of accepted work, including inference, infrastructure, review, failed attempts and support.
-
-## What an investment would need to unlock
-
-A credible funding plan should connect capital to concrete evidence milestones:
-
-1. One complete external-customer work slice with real identity, authority, retained records and supported deployment.
-2. Repeated pilot use with measured accepted output, review effort, total cost and failure/continuation behavior.
-3. Demonstrated willingness to pay and a service model whose support demands are understood.
-4. A repeatable delivery path before expanding domains or building fleet capability.
-
-The raise amount and allocation must be derived from a staffing, infrastructure and runway plan. This document does not invent a funding target, valuation, commitments or dates.
-
-## Main risks to test
-
-- Technical governance may not sufficiently reduce the customer's coordination/review cost.
-- Evidence cannot replace domain judgement or guarantee work quality.
-- Provider compatibility, integration and deployment support may be expensive.
-- Customers may already solve enough of the problem with existing tools.
-- Excessive product breadth could delay the one operational slice that proves value.
-
-These become pilot questions and milestone criteria, not reasons to claim certainty.
-
-## Fundraising information still needed
-
-Before this becomes a fundraising memo or deck, supply the company/legal entity, founder/team background, ownership of relevant IP, target customer and buyer, attributable external traction, commercial pipeline, researched market/competition, pricing hypothesis and financial plan. Specify the amount sought, planned runway, use of funds and milestones supported by that budget. Distinguish actual contracts/revenue from exploratory conversations.
-
-**The investment conversation:** Can we turn a working technical foundation into a product customers repeatedly use and pay for to increase their capacity without losing organizational accountability?
+Before a fundraising offer, add founder-confirmed company/team/IP details, attributable external traction, researched market/competition, a pricing hypothesis and a staffing/infrastructure financial plan. The amount sought, runway, use of funds and milestones must follow that plan. No raise amount, valuation, investor commitment or delivery date is invented here.

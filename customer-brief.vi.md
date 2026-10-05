@@ -1,40 +1,27 @@
-# Forge — Mở rộng năng lực đội ngũ, với trách nhiệm rõ ràng
+# Forge — Xây dựng tổ chức tương xứng với tham vọng của bạn
 
-**Kết hợp con người, AI và công cụ để giao việc, đánh giá kết quả và chịu trách nhiệm về những gì được đưa vào sử dụng.**
+**Một tổ chức nơi con người, AI và công cụ cùng theo đuổi mục tiêu, với trách nhiệm rõ ràng và quyền kiểm soát những quyết định có hậu quả.**
 
-AI giúp đội ngũ tạo ra nhiều kết quả hơn. Nhưng vẫn cần người làm rõ yêu cầu, cung cấp bối cảnh, kiểm tra, xử lý sửa đổi và quyết định sử dụng kết quả. Khi giao thêm việc, những trách nhiệm này khó theo dõi qua nhiều cuộc trò chuyện và công cụ.
+*Tầm nhìn sản phẩm hoàn chỉnh; trạng thái hiện tại được ghi riêng bên dưới.*
 
-Forge là nền tảng đang phát triển để xây dựng và vận hành **virtual organization**: một tổ chức làm việc trong đó con người, AI và công cụ phối hợp theo mục tiêu, trách nhiệm và quyền hạn rõ ràng.
+Cơ hội tiếp theo có thể cần năng lực lớn hơn đội ngũ bạn có thể xây dựng hôm nay. Tầm nhìn của Forge là giúp bạn tạo năng lực ấy thành một virtual organization: xác định mục đích, thiết lập trách nhiệm và đưa con người, AI worker, công cụ phù hợp vào công việc.
 
-## Đội ngũ của bạn sẽ làm việc khác đi như thế nào?
+Tổ chức giữ mục tiêu và lịch sử khi bên thực hiện thay đổi. Công việc có thể tiến hành trên nhiều luồng song song, qua bàn giao, đánh giá và sửa đổi. Con người trực tiếp đóng góp và giữ quyền quyết định phù hợp với trách nhiệm.
 
-Bạn tổ chức quanh công việc và kết quả cần đạt. Mỗi trách nhiệm có thể do một người, một AI worker tương thích hoặc một công cụ đảm nhận. Trách nhiệm vẫn được giữ lại khi bên thực hiện thay đổi.
+## Vận hành toàn cảnh. Tham gia qua công việc của chính bạn.
 
-Forge được thiết kế để giúp bạn:
+Organization view kết nối mục tiêu, teams, công việc, workers và kết quả. **My Work** đưa từng người tới phần đóng góp, review và quyết định của mình. **Forge Control Plane** sẽ mở rộng trải nghiệm qua nhiều tổ chức và môi trường thực thi, vẫn giữ boundary quyền hạn tại chỗ.
 
-- **Giao việc rõ ràng:** xác định mục tiêu, đầu vào, phạm vi được phép và kết quả mong đợi.
-- **Giữ quyền quyết định có trách nhiệm:** phân biệt thực hiện, đánh giá và cho phép sử dụng kết quả.
-- **Tiếp tục qua các lần sửa đổi:** giữ từng lần thực hiện và kết quả riêng để có thể xem lại công việc trước đó.
-- **Kiểm tra điều đã xảy ra:** dùng hồ sơ và bằng chứng liên quan để xem xét các tuyên bố được hỗ trợ và nhận biết điều còn chưa chắc chắn.
+Bạn giao quyền chủ động trong scope, giữ các phiên bản trước để xem xét, và phân biệt kết quả đề xuất với assessment, authorization và tác động đã xác lập.
 
-Con người trực tiếp đóng góp, đánh giá và quyết định. AI có không gian chủ động chọn cách làm trong phạm vi được giao.
+Giá trị hướng tới là năng lực làm việc lớn hơn, ownership rõ hơn, ít điều phối lặp lại và tiếp tục tốt hơn qua thay đổi.
 
-## Một ví dụ thực tế
+## Bắt đầu từ công việc có giá trị
 
-Đội ngũ phần mềm cần sửa một lỗi. Một người làm rõ mục tiêu và tiêu chí chấp nhận. AI chuẩn bị bản sửa trong phạm vi được giao. Công cụ kiểm tra và người đánh giá xem xét kết quả. Nếu cần sửa tiếp, một lần thực hiện mới giữ lại kết quả trước đó. Người có thẩm quyền quyết định có cho phép đưa thay đổi vào sản phẩm hay không.
+Tổ chức phần mềm là ứng dụng đầu tiên: con người làm rõ mục tiêu, AI chuẩn bị thay đổi, công cụ kiểm tra, reviewer đánh giá và người có thẩm quyền quyết định sử dụng. Mỗi lĩnh vực khác sẽ có chuyên môn, work contracts và policy riêng.
 
-Đây là các trách nhiệm, không phải chuỗi bước bắt buộc cho mọi tổ chức. Công việc độc lập có thể tiến hành song song; quyết định phụ thuộc vào công việc và chính sách. Test đạt là bằng chứng, approval là quyết định. Riêng một trong hai điều đó chưa xác lập rằng tác động thật đã xảy ra.
+DartMesh định nghĩa kiến trúc; Forge hiện thực nền tảng. Công việc nội bộ Software Factory và prototype UI là bằng chứng ban đầu. Trải nghiệm hoàn chỉnh và Control Plane mô tả ở đây là tầm nhìn, chưa phải dịch vụ thương mại sẵn có.
 
-**Software Factory là ứng dụng thực tế đầu tiên và nơi chúng tôi tự kiểm chứng nền tảng.** Nó đã được dùng cho công việc phần mềm thật; quy trình hiện tại vẫn có các bước đánh giá, duyệt và thay đổi kho mã do người vận hành thực hiện.
+Chọn một trách nhiệm có giá trị, chứng minh đường làm việc và đo kết quả được chấp nhận, công sức con người, tổng chi phí. Mở rộng khi giá trị đã được chứng minh.
 
-## DartMesh và Forge
-
-DartMesh định nghĩa kiến trúc tham chiếu cho governed virtual organization. Forge hiện thực nền tảng. Một virtual organization áp dụng mô hình đó vào công việc cụ thể của đội ngũ; vai trò và tiêu chí chấp nhận xuất phát từ công việc ấy.
-
-Forge và trải nghiệm khách hàng đang được phát triển, kiểm chứng. UI hiện là prototype; dịch vụ quản lý thương mại hoàn chỉnh chưa sẵn sàng. Năng lực và phạm vi triển khai cần được thống nhất theo từng trường hợp sử dụng.
-
-## Bắt đầu từ một trách nhiệm có giá trị
-
-Một cuộc trao đổi hữu ích bắt đầu bằng công việc lặp lại, đầu ra rõ ràng và người chịu trách nhiệm chấp nhận kết quả. Xác định thử nghiệm có phạm vi nhỏ, rồi so sánh kết quả được chấp nhận, thời gian review, số lần thực hiện và tổng chi phí với cách làm hiện tại.
-
-**Đội ngũ của bạn sẽ giao thêm công việc nào nếu trách nhiệm, phạm vi và cách đánh giá được làm rõ hơn?**
+**Bạn sẽ xây dựng điều gì nếu năng lực tổ chức có thể lớn lên cùng tham vọng của bạn?**

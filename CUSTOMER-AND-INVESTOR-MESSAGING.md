@@ -1,16 +1,16 @@
 # Customer and investor messaging
 
-Use different documents for different decisions:
+Lead with the completed product: customers build and operate organizations of people, AI and tools around their ambitions. Show organization-wide operation, personal participation, parallel work, revision/continuity, authority and evidence. Include the Control Plane in the full-product vision while preserving local execution authority.
 
-| Document | Reader's question | Use |
-| --- | --- | --- |
-| customer-brief.md / customer-brief.vi.md | Is this relevant to my team's problem? | Short first introduction |
-| customer-vision.md | What could my organization accomplish with the completed product? | English product-vision discussion; future capabilities explicitly labeled |
-| customer-introduction.md / customer-introduction.vi.md | How does the model work, and what can we evaluate today? | Deeper customer explanation |
-| investor-thesis.md | Why could this become a valuable business, and what must capital prove? | English draft investment memo; not yet a fundraising offer |
+The documents explicitly identify themselves as vision/thesis. Current evidence belongs in a separate closing section, so it does not narrow the opening story or imply the full product is already available.
 
-Customer appeal comes from recognizable work, outcomes and a credible evaluation path. Investor appeal additionally requires a buyer, commercial evidence, economics, a credible team and a capital-to-milestones plan. Product breadth alone cannot establish these.
+| Document | Purpose |
+| --- | --- |
+| customer-brief.md / customer-brief.vi.md | Short vision-first customer introduction |
+| customer-introduction.md / customer-introduction.vi.md | Detailed completed-product customer narrative |
+| customer-vision.md | English shareable copy of the detailed customer narrative; keep synchronized |
+| investor-thesis.md | Full-product investment thesis, initial customer wedge, commercial direction, defensibility and capital-to-evidence milestones |
 
-The new vision and investment memo are original synthesis. They do not reproduce private planning documents, claim the complete vision is delivered, invent market/traction numbers or imply internal dogfooding is external revenue. Existing customer introductions remain unchanged.
+Customer appeal depends on desired outcomes and a recognizable operating experience. Investor appeal also needs commercial evidence, buyer/economics, team and a budgeted funding case. The vision is not evidence of demand, revenue or delivered capability.
 
-To create the fundraising version, obtain founder-confirmed company/team/IP details, external customer evidence, market/competitive research and a budgeted raise proposal. Then condense the memo into a deck with evidence behind each claim. Do not publish a speculative funding amount or describe this draft as a live financing offer.
+All text is original synthesis. No private planning passages or excluded-repository material are reproduced. No invented market numbers, financial results, funding terms or deployment guarantees are included. Control Plane, recovery and domain expansion remain vision-level capabilities requiring operational validation.

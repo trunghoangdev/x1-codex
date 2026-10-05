@@ -1,132 +1,65 @@
-# Forge — Bring people and AI together as a working organization
+# Forge — Build the organization your ambition needs
 
-**Delegate more work to AI, with clear accountability and decisions in your hands.**
+**Bring people, AI and tools together as an organization that can take on more work—and remain accountable for the results.**
 
-A small team carries many responsibilities: understanding requirements, planning,
-doing the work, checking the result, and deciding whether to use it. AI can help
-with many of these responsibilities. To delegate a whole piece of work, you also
-need to know who is accountable, what the AI may do, who checks its work, and
-when the result is good enough to use.
+*Product vision: this document describes the completed experience we are building toward. Current delivery is summarized separately at the end.*
 
-**Forge is a platform in development for running a virtual organization: a
-working organization where people, AI, and tools collaborate under clear goals,
-responsibilities, and authority.**
+Your next opportunity may require a team you cannot assemble today: more engineering capacity, a research operation, or a new service for your customers. Producing more output is only part of the challenge. Work needs ownership, coordination, review and decisions about what may reach the world.
 
-The intended value is practical: your team can take on more work while people
-focus on decisions that need their expertise and authority.
+Forge gives that ambition an organizational shape. You define the purpose, establish responsibilities and bring suitable people, AI workers and tools into the work. The organization keeps its goals and history as participants change and work evolves.
 
-## What is a virtual organization?
+## An organization you can operate
 
-Imagine a team with roles for clarifying requirements, performing the work,
-checking the result, and deciding whether it should be put into use.
+A virtual organization has a purpose, roles, work assignments, decision rights and a continuing record of its work. It may be a small team focused on one outcome or several teams pursuing related goals.
 
-Depending on the work, a role may be fulfilled by one of your experts, an AI,
-or a tool. AI works within its assigned scope and can choose how to accomplish
-the task. People can contribute directly, handle difficult situations, or make
-the final decision.
+People contribute expertise, assess results and exercise authority. AI workers receive meaningful objectives with context and boundaries, then choose how to accomplish the work. Tools perform suitable checks and operations. Roles remain independent of the particular model or runtime filling them.
 
-**The responsibility remains when the person or AI fulfilling it changes.**
-You can select a more suitable AI for the next attempt while preserving the
-goal, acceptance criteria, and history of the work. Substitution depends on
-each worker's verified capabilities and supported execution conditions.
+You can change a performer without losing the responsibility. A failed attempt or a requested revision becomes part of the work's history, with a basis for continuing.
 
-In a small organization, one person may hold several responsibilities. Work
-with greater risk may require independent performers, reviewers, and approvers.
-The division of responsibilities adapts to the work.
+## See the whole organization. Enter through your own work.
 
-## Why does your team need this?
+The organization view connects goals, teams, workstreams, responsibilities and results. You see where work is progressing, what depends on another contribution, where ownership is missing and which decisions need attention. Independent work can proceed in parallel; each domain can have its own collaboration pattern.
 
-The need often becomes clear when AI starts producing work that others rely on
-or that leads to changes in the real world.
+**My Work** gives each person a direct entrance to what they owe: prepare a contribution, assess an exact result, decide within their authority or investigate an uncertain outcome. Their work remains connected to the shared organizational purpose.
 
-| What your team experiences | What Forge is designed to help you do |
-|---|---|
-| You supervise AI closely, repeat requirements, and connect the steps yourself | Delegate work with a clear goal, scope, and acceptance criteria from the start |
-| AI says it is finished, but you still have to check everything | Establish appropriate checks and distinguish their results from the performer's own account |
-| You want to delegate more but worry about excessive access | Bound data access, resources, and execution permissions for each attempt |
-| Work needs another attempt or a different performer | Preserve attempts and results separately so you can continue, compare, and decide |
-| Results are scattered across chats, files, and personal exchanges | Keep work products together with their origin, relevant decisions, and supporting evidence |
+Deliveries, receiving acknowledgements, assessments and revised versions have distinct identities. A revision preserves the earlier result and decision, allowing the organization to learn and continue without rewriting its history.
 
-The expected benefits are less manual coordination, less rework, and more work
-your team can handle. The improvement needs to be measured against your own
-work, including review time and the cost of unsuccessful attempts.
+## Delegate autonomy. Keep control of consequences.
 
-## What would you get?
+Give a worker an outcome to pursue, relevant inputs, permitted scope and requirements for evidence. The worker has room to plan, explore and iterate within that envelope.
 
-A Forge deployment is built around a specific kind of work your team performs:
+Policies determine who may delegate, assess or authorize particular actions. Assessing a result, permitting its use and establishing the resulting effect remain separate. You can inspect the relevant inputs, performers, decisions and evidence—and see where certainty is still missing.
 
-- **A consistent way to delegate:** establish goals, inputs, scope, and acceptance
-  criteria before work begins.
-- **Suitable performers:** bring AI, tools, and human contributions into the
-  work with appropriate authority.
-- **A process for putting results into use:** check, assess, and approve work
-  according to your organization's policies.
-- **A record you can examine later:** retain attempts, work products, and evidence
-  that helps establish what happened and what remains uncertain.
+Quality still requires appropriate criteria and judgement. Organizational records make the basis of a decision inspectable; they do not substitute for expertise.
 
-You decide what to delegate, which criteria must be met, and which actions need
-approval from an authorized person. AI operates within that structure.
+## From one team to many operating environments
 
-## An example: a software development team
+The completed product vision includes a **Forge Control Plane** for operating multiple organizations and their execution environments. It would provide shared visibility into work, worker capability, operational health and unresolved coordination, helping organizations continue across changes and disruptions.
 
-You need to fix a bug in your product. Your team organizes the work as follows:
+Execution environments retain their local authorization boundaries. Central coordination requests work; local authority determines what may execute. Deployment can evolve toward customer-controlled, managed or hybrid operation according to the requirements of the work.
 
-1. **Clarify the request.** Identify the bug, the relevant code, and how to
-   demonstrate that the fix meets the requirements.
-2. **Assign the work.** AI works on a separate working copy with the data and
-   resources it has been permitted to use.
-3. **Preserve the result.** Keep the proposed fix for review. Another attempt
-   has its own result and history.
-4. **Check and assess.** Tools run appropriate checks, and a reviewer assesses
-   whether the fix meets the requirements. The result may be rejected.
-5. **Decide whether to use it.** An authorized person decides whether to bring
-   the fix into the product through the team's established process.
+Continuity and recovery belong to this product vision; the specific guarantees must be demonstrated for each supported deployment.
 
-You delegate work with a clear outcome and criteria. AI has room to work
-autonomously; your team retains the decision to accept the result.
+## Imagine your software organization
 
-Software Factory is the first practical application we are using to develop
-the platform itself. Forge currently supports assignment, AI execution, and
-result collection in this process. Assessment, approval, and applying changes
-to the repository still include human steps outside Forge.
+Your team pursues several product improvements at once. People clarify customer goals and acceptance criteria. AI workers prepare scoped changes. Tools check the results. Reviewers assess particular versions and request revisions. Authorized participants decide which changes may be used, and operations participants examine what actually happened.
 
-## Who is it for?
+The same organization can handle multiple workstreams without making every handoff depend on one person's conversation history. As workers change, responsibilities, decisions and evidence remain connected.
 
-A suitable starting point is a team with recurring work, outputs that can be
-checked, and someone responsible for accepting the result. It is especially
-relevant if you already use AI but spend substantial time supervising,
-reviewing, and handing work over manually.
+Software is the first application. Other organizations could apply the same foundation to research, content or other operations, with their own expertise, contracts and decision policies.
 
-Software development is the application being validated through practical use.
-The same organizational model could be developed for research, content production,
-and other operations. Each field requires its own integrations and validation
-criteria.
+## What you gain
 
-## Where is the product today?
+Greater capacity to pursue your goals. Clearer ownership across human and AI work. Less repeated coordination. Continuity through retries and revisions. Control over consequential actions. A history you can examine when a result needs explanation.
 
-Forge provides foundations for executing work, integrating AI workers, accepting
-human contributions, and producing evidence to examine supported claims about
-the work. DartMesh is the reference architecture defining the organizational
-model behind Forge.
+Measure that value through accepted work, human effort, total cost and reliable continuation—not simply the number of tasks an AI reports complete.
 
-The product is under development and validation. A complete management interface,
-a commercial cloud service, and operation for multiple customers on shared
-infrastructure are not yet available in the current version. Deployment scope
-needs to be established for each use case.
+## The foundation and the path to delivery
 
-Evidence helps check provenance, authority, and recorded outcomes. The quality
-of the work still requires suitable criteria and people or tools capable of
-assessing it.
+DartMesh defines the reference architecture. Forge implements the platform. Virtual organizations apply it to particular work; the Control Plane extends their operation at scale.
 
-## Start with one valuable piece of work
+Today, Forge foundations and Software Factory internal execution provide a starting point, and the UI demonstrates organizational interaction. The complete product described here—including live management integration and the Control Plane—is a vision, not an available commercial service. Current internal work still includes operator-led review, approval and repository effects.
 
-A practical trial starts with one narrowly scoped type of work, a clear output,
-and an agreed way to assess it. Together, we identify who assigns the work,
-who performs it, who checks it, and who decides whether to use the result.
+Start with one important responsibility, its participants, decision rights and acceptance criteria. Prove a complete work path and its value, then expand the organization around what succeeds.
 
-Then measure the human time involved, the share of results accepted, the number
-of attempts needed, and the total cost of completing the work. Those results
-help you decide whether to expand.
-
-**Which work in your team needs more capacity—and what would you need to verify
-before you could confidently delegate it to AI?**
+**What would you build if your organizational capacity could grow with your ambition?**

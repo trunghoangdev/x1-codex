@@ -1,128 +1,65 @@
-# Forge — Vận hành đội ngũ con người và AI
+# Forge — Xây dựng tổ chức tương xứng với tham vọng của bạn
 
-**Giao thêm việc cho AI, với trách nhiệm rõ ràng và quyền quyết định trong tay bạn.**
+**Kết hợp con người, AI và công cụ thành một tổ chức có thể đảm nhận thêm công việc và giữ trách nhiệm đối với kết quả.**
 
-Một đội ngũ nhỏ thường phải đảm nhận nhiều việc: tìm hiểu yêu cầu, lên phương án,
-thực hiện, kiểm tra và quyết định đưa kết quả vào sử dụng. AI có thể tham gia vào
-nhiều phần trong chuỗi đó. Nhưng để giao được cả một công việc, bạn còn cần biết:
-ai chịu trách nhiệm, AI được phép làm đến đâu, ai kiểm tra và khi nào kết quả đủ
-tốt để sử dụng.
+*Tầm nhìn sản phẩm: tài liệu mô tả trải nghiệm hoàn chỉnh chúng tôi hướng tới. Trạng thái triển khai hiện tại được trình bày riêng ở cuối.*
 
-**Forge là nền tảng đang được phát triển để giúp bạn vận hành một virtual
-organization: một tổ chức làm việc trong đó con người, AI và công cụ phối hợp
-theo mục tiêu, trách nhiệm và quyền hạn rõ ràng.**
+Cơ hội tiếp theo có thể đòi hỏi một đội ngũ bạn chưa thể xây dựng hôm nay: thêm năng lực kỹ thuật, một bộ phận nghiên cứu hoặc một dịch vụ mới cho khách hàng. Tạo thêm đầu ra chỉ là một phần. Công việc còn cần người chịu trách nhiệm, phối hợp, đánh giá và quyết định điều gì được đưa vào sử dụng.
 
-Giá trị hướng tới rất cụ thể: đội ngũ của bạn có thể đảm nhận nhiều công việc hơn,
-trong khi con người tập trung vào những quyết định cần chuyên môn và thẩm quyền.
+Forge giúp bạn tổ chức năng lực ấy. Bạn xác định mục đích, thiết lập trách nhiệm và đưa con người, AI worker, công cụ phù hợp vào công việc. Tổ chức giữ mục tiêu và lịch sử khi các bên tham gia thay đổi và công việc phát triển.
 
-## Virtual organization là gì?
+## Một tổ chức bạn có thể vận hành
 
-Hãy hình dung một đội ngũ có các vị trí: người làm rõ yêu cầu, người thực hiện,
-người kiểm tra và người quyết định sử dụng kết quả.
+Virtual organization có mục đích, vai trò, công việc được giao, quyền quyết định và hồ sơ công việc liên tục. Đó có thể là một đội nhỏ tập trung vào một kết quả hoặc nhiều đội theo đuổi các mục tiêu liên quan.
 
-Tùy công việc, một vị trí có thể do chuyên gia của bạn, một AI hoặc một công cụ
-đảm nhận. AI thực hiện trong phạm vi được giao và có thể chủ động chọn cách làm.
-Con người có thể trực tiếp đóng góp chuyên môn, xử lý tình huống khó hoặc đưa ra
-quyết định cuối cùng.
+Con người đóng góp chuyên môn, đánh giá và thực hiện quyền quyết định. AI nhận mục tiêu có ý nghĩa cùng bối cảnh và giới hạn, rồi chủ động chọn cách làm. Công cụ thực hiện các kiểm tra và thao tác phù hợp. Vai trò độc lập với model hoặc runtime đảm nhận nó.
 
-**Vị trí trách nhiệm được giữ lại khi người hoặc AI đảm nhận vị trí đó thay đổi.**
-Bạn có thể chọn AI phù hợp hơn cho lần làm tiếp theo mà vẫn giữ mục tiêu, tiêu chí
-đánh giá và lịch sử của công việc. Khả năng thay thế phụ thuộc vào năng lực và
-phạm vi thực thi đã được kiểm chứng của từng worker.
+Bạn có thể đổi bên thực hiện mà vẫn giữ trách nhiệm. Lần làm thất bại hoặc yêu cầu sửa đổi trở thành một phần của lịch sử, với căn cứ để tiếp tục.
 
-Một tổ chức nhỏ có thể để một người đảm nhận nhiều trách nhiệm. Công việc rủi ro
-cao có thể yêu cầu người làm, người kiểm và người duyệt độc lập. Cách phân công
-được điều chỉnh theo nhu cầu thực tế.
+## Nhìn toàn cảnh. Tham gia qua công việc của chính bạn.
 
-## Vì sao khách hàng cần mô hình này?
+Organization view kết nối mục tiêu, teams, workstreams, trách nhiệm và kết quả. Bạn thấy công việc đang tiến triển ra sao, điều gì phụ thuộc vào đóng góp khác, nơi thiếu ownership và quyết định nào cần chú ý. Công việc độc lập có thể tiến hành song song; mỗi lĩnh vực có cách phối hợp riêng.
 
-Nhu cầu thường xuất hiện khi AI bắt đầu tham gia vào công việc mà kết quả sẽ được
-người khác sử dụng hoặc gây ra thay đổi thật.
+**My Work** là lối vào trực tiếp cho trách nhiệm của từng người: chuẩn bị đóng góp, đánh giá một kết quả cụ thể, quyết định trong quyền hạn hoặc xem xét outcome còn chưa chắc chắn. Công việc cá nhân vẫn gắn với mục đích chung.
 
-| Tình huống trong đội ngũ | Giá trị Forge hướng tới |
-|---|---|
-| Bạn phải theo sát AI, nhắc lại yêu cầu và tự nối các bước | Giao công việc với mục tiêu, phạm vi và tiêu chí hoàn thành rõ ngay từ đầu |
-| AI báo đã xong nhưng bạn vẫn phải kiểm tra lại mọi thứ | Tổ chức bước kiểm tra phù hợp và tách kết quả kiểm tra khỏi lời tự báo của người làm |
-| Bạn muốn giao nhiều việc hơn nhưng lo quyền truy cập quá rộng | Giới hạn dữ liệu, tài nguyên và quyền thực thi theo từng lần làm |
-| Một việc phải thử lại hoặc đổi người thực hiện | Giữ các lần làm và kết quả riêng biệt để tiếp tục công việc, so sánh và quyết định |
-| Kết quả nằm rải rác trong chat, file và trao đổi cá nhân | Giữ sản phẩm công việc cùng nguồn gốc, quyết định và bằng chứng liên quan |
+Delivery, xác nhận nhận hàng, assessment và các phiên bản sửa đổi có identity riêng. Bản sửa giữ lại kết quả và quyết định trước đó, giúp tổ chức tiếp tục mà không viết lại lịch sử.
 
-Lợi ích kỳ vọng là giảm công sức điều phối thủ công, giảm việc làm lại và mở rộng
-khối lượng công việc đội ngũ có thể xử lý. Mức cải thiện cần được đo trên chính
-công việc của bạn, gồm cả thời gian kiểm tra và chi phí những lần làm không đạt.
+## Giao quyền chủ động. Kiểm soát những hành động có hậu quả.
 
-## Khách hàng nhận được gì?
+Giao cho worker mục tiêu, đầu vào liên quan, phạm vi được phép và yêu cầu bằng chứng. Worker có không gian lập kế hoạch, khám phá và thử nghiệm trong giới hạn ấy.
 
-Một triển khai Forge được xây quanh loại công việc cụ thể của đội ngũ:
+Policy xác định ai được giao việc, đánh giá hoặc cho phép từng loại hành động. Đánh giá kết quả, cho phép sử dụng và xác lập tác động đã xảy ra vẫn là các việc riêng. Bạn có thể xem xét đầu vào, bên thực hiện, quyết định và bằng chứng liên quan, đồng thời thấy rõ điều còn chưa biết.
 
-- **Cách giao việc thống nhất:** mục tiêu, dữ liệu đầu vào, phạm vi và tiêu chí
-  chấp nhận được làm rõ trước khi thực hiện.
-- **Các bên thực hiện phù hợp:** tích hợp AI, công cụ và đóng góp của con người
-  vào công việc, với quyền hạn tương ứng.
-- **Quy trình đưa kết quả vào sử dụng:** kiểm tra, đánh giá và phê duyệt theo
-  chính sách của tổ chức.
-- **Hồ sơ công việc có thể xem xét lại:** từng lần làm, sản phẩm tạo ra và các
-  bằng chứng giúp xác lập những gì đã được thực hiện hoặc còn chưa chắc chắn.
+Chất lượng vẫn cần tiêu chí và chuyên môn phù hợp. Hồ sơ tổ chức giúp xem xét căn cứ của quyết định; nó không thay thế năng lực đánh giá.
 
-Bạn quyết định công việc nào được giao, tiêu chí nào phải đạt và hành động nào
-cần người có thẩm quyền duyệt. AI làm việc trong cấu trúc đó.
+## Từ một đội ngũ đến nhiều môi trường vận hành
 
-## Ví dụ: một đội ngũ phát triển phần mềm
+Tầm nhìn hoàn chỉnh bao gồm **Forge Control Plane** để vận hành nhiều tổ chức và môi trường thực thi. Lớp này sẽ cung cấp cái nhìn chung về công việc, năng lực worker, tình trạng vận hành và vấn đề phối hợp chưa được giải quyết, hỗ trợ tiếp tục qua thay đổi và gián đoạn.
 
-Bạn cần sửa một lỗi trong sản phẩm. Đội ngũ tổ chức công việc như sau:
+Mỗi môi trường thực thi giữ boundary quyền hạn tại chỗ. Điều phối trung tâm yêu cầu công việc; quyền hạn local quyết định điều gì được phép chạy. Deployment có thể phát triển theo hướng khách hàng kiểm soát, managed hoặc hybrid tùy yêu cầu.
 
-1. **Làm rõ yêu cầu.** Xác định lỗi cần sửa, phần mã liên quan và cách chứng minh
-   rằng bản sửa đạt yêu cầu.
-2. **Giao thực hiện.** AI làm trên bản sao làm việc riêng với dữ liệu và tài nguyên
-   đã được cho phép.
-3. **Giữ kết quả.** Bản sửa được lưu để kiểm tra; một lần làm lại có kết quả và
-   lịch sử riêng.
-4. **Kiểm tra và đánh giá.** Công cụ chạy kiểm tra phù hợp; người đánh giá xem
-   bản sửa có đáp ứng yêu cầu hay không. Kết quả có thể bị từ chối.
-5. **Quyết định sử dụng.** Người có thẩm quyền quyết định đưa bản sửa vào sản phẩm
-   theo quy trình của đội ngũ.
+Continuity và recovery thuộc tầm nhìn sản phẩm; các bảo đảm cụ thể phải được chứng minh cho từng deployment được hỗ trợ.
 
-Bạn giao một công việc có đầu ra và tiêu chí rõ ràng. AI có không gian chủ động
-thực hiện; đội ngũ giữ quyền chấp nhận kết quả.
+## Hình dung tổ chức phần mềm của bạn
 
-Software Factory là ứng dụng thực tế đầu tiên chúng tôi đang dùng để phát triển
-chính nền tảng. Hiện Forge phục vụ phần giao việc, thực thi AI và nhận kết quả;
-việc đánh giá, duyệt và đưa thay đổi vào kho mã trong quy trình này vẫn có các
-bước do con người thực hiện bên ngoài Forge.
+Đội ngũ theo đuổi nhiều cải tiến sản phẩm cùng lúc. Con người làm rõ mục tiêu khách hàng và tiêu chí chấp nhận. AI chuẩn bị thay đổi có scope. Công cụ kiểm tra. Reviewer đánh giá từng phiên bản và yêu cầu sửa. Người có thẩm quyền quyết định thay đổi nào được sử dụng; bên vận hành xem xét điều thực sự đã xảy ra.
 
-## Phù hợp với đội ngũ nào?
+Tổ chức xử lý nhiều workstreams mà không để mọi bàn giao phụ thuộc vào chat history của một người. Worker có thể thay đổi; trách nhiệm, quyết định và bằng chứng vẫn được kết nối.
 
-Điểm bắt đầu phù hợp là đội ngũ có công việc lặp lại, đầu ra có thể kiểm tra và
-người chịu trách nhiệm chấp nhận kết quả. Đặc biệt khi bạn đã dùng AI nhưng vẫn
-phải dành nhiều thời gian theo dõi, kiểm tra và bàn giao thủ công.
+Phần mềm là ứng dụng đầu tiên. Các tổ chức khác có thể áp dụng cùng nền tảng cho nghiên cứu, nội dung hoặc nghiệp vụ khác, với chuyên môn, work contracts và policy riêng.
 
-Phát triển phần mềm là hướng đang được kiểm chứng thực tế. Cùng mô hình tổ chức
-có thể được phát triển cho nghiên cứu, sản xuất nội dung hoặc các nghiệp vụ khác;
-mỗi lĩnh vực cần tích hợp và tiêu chí kiểm chứng riêng.
+## Giá trị bạn nhận được
 
-## Sản phẩm đang ở đâu?
+Thêm năng lực theo đuổi mục tiêu. Ownership rõ hơn giữa con người và AI. Ít điều phối lặp lại. Tiếp tục qua retry và revision. Kiểm soát hành động có hậu quả. Lịch sử có thể xem xét khi cần giải thích một kết quả.
 
-Forge có nền tảng thực thi công việc, tích hợp AI worker, tiếp nhận đóng góp của
-con người và tạo bằng chứng để kiểm tra các tuyên bố được hỗ trợ. DartMesh là
-kiến trúc tham chiếu định nghĩa mô hình tổ chức phía sau Forge.
+Đo giá trị bằng công việc được chấp nhận, công sức con người, tổng chi phí và khả năng tiếp tục đáng tin cậy; số task AI tự báo hoàn thành chưa đủ.
 
-Sản phẩm đang trong giai đoạn phát triển và kiểm chứng. Giao diện quản lý hoàn
-chỉnh, dịch vụ cloud thương mại và vận hành nhiều khách hàng trên hạ tầng dùng
-chung là các phần chưa sẵn sàng trong phiên bản hiện tại. Phạm vi triển khai cần
-được xác định theo từng trường hợp sử dụng.
+## Nền tảng và đường hiện thực hóa
 
-Bằng chứng giúp kiểm tra nguồn gốc, quyền hạn và các kết quả đã được ghi nhận.
-Chất lượng chuyên môn vẫn cần tiêu chí và người hoặc công cụ đánh giá phù hợp.
+DartMesh định nghĩa kiến trúc tham chiếu. Forge hiện thực nền tảng. Virtual organizations áp dụng nó vào công việc cụ thể; Control Plane mở rộng vận hành ở quy mô lớn.
 
-## Bắt đầu từ một công việc có giá trị
+Hiện nền tảng Forge và các lần thực thi nội bộ của Software Factory tạo căn cứ ban đầu; UI minh họa trải nghiệm tổ chức. Sản phẩm hoàn chỉnh mô tả ở đây, gồm live management integration và Control Plane, là tầm nhìn, chưa phải dịch vụ thương mại sẵn có. Công việc nội bộ hiện vẫn có review, approval và thay đổi kho mã do người vận hành thực hiện.
 
-Một bước thử nghiệm hợp lý là chọn một loại công việc có phạm vi nhỏ, đầu ra rõ
-ràng và cách đánh giá thống nhất. Hai bên xác định ai giao việc, ai thực hiện,
-ai kiểm tra và ai quyết định sử dụng kết quả.
+Bắt đầu từ một trách nhiệm quan trọng, các bên tham gia, quyền quyết định và tiêu chí chấp nhận. Chứng minh một đường làm việc hoàn chỉnh và giá trị của nó, rồi mở rộng quanh những gì thành công.
 
-Sau đó đo thời gian con người phải tham gia, tỷ lệ kết quả được chấp nhận, số lần
-làm lại và tổng chi phí cho một công việc hoàn tất. Những số liệu đó giúp bạn
-quyết định có nên mở rộng.
-
-**Trong đội ngũ của bạn, công việc nào đang cần thêm người thực hiện — và điều
-gì phải được kiểm chứng để bạn có thể yên tâm giao công việc đó cho AI?**
+**Bạn sẽ xây dựng điều gì nếu năng lực tổ chức có thể lớn lên cùng tham vọng của bạn?**

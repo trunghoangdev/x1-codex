@@ -1,40 +1,27 @@
-# Forge — Give your team more capacity, with clear accountability
+# Forge — Build the organization your ambition needs
 
-**Bring people, AI and tools together around work you can delegate, review and stand behind.**
+**An organization where people, AI and tools work together toward your goals—with clear responsibilities and control over consequential decisions.**
 
-AI can help your team produce more. But someone still has to clarify the request, provide context, check the result, handle revisions and decide whether it is ready to use. As you delegate more, those responsibilities become harder to track across conversations and tools.
+*Completed-product vision; current delivery is noted below.*
 
-Forge is a platform in development for building and operating **virtual organizations**: working structures where people, AI and tools collaborate under clear goals, responsibilities and authority.
+Your next opportunity may need more capacity than your team can assemble today. Forge's vision is to let you build that capacity as a virtual organization: define its purpose, establish responsibilities and bring suitable people, AI workers and tools into the work.
 
-## What changes for your team?
+The organization keeps its goals and history as performers change. Meaningful work can move across several parallel streams, through handoffs, assessment and revision. People contribute directly and retain the decision rights appropriate to their responsibilities.
 
-You organize around the work and the result you need. Each responsibility can be fulfilled by a person, a compatible AI worker or a tool. The responsibility remains when the performer changes.
+## Operate the whole. Participate through your own work.
 
-Forge is designed to help you:
+An organization-wide view connects goals, teams, work, workers and results. **My Work** brings each person to their contributions, reviews and decisions. A **Forge Control Plane** would extend this experience across organizations and execution environments, while preserving local authorization boundaries.
 
-- **Delegate with clarity:** state the objective, inputs, permitted scope and expected result.
-- **Keep decisions accountable:** distinguish producing work, assessing it and authorizing its use.
-- **Continue through revisions:** preserve separate attempts and results so earlier work remains inspectable.
-- **Examine what happened:** use relevant records and evidence to check supported claims and identify what remains uncertain.
+You can delegate autonomy within scope, keep earlier versions inspectable and distinguish a proposed result from an assessment, an authorization and an established effect.
 
-People participate as contributors, reviewers and decision makers. AI has room to choose how to do its assigned work within the permitted boundary.
+The intended value is greater productive capacity, clearer ownership, less repeated coordination and better continuity through change.
 
-## A practical example
+## Start with work that matters
 
-Your software team needs a bug fixed. A person clarifies the goal and acceptance criteria. An AI worker prepares a proposed change within its assigned scope. Tests and a reviewer examine the result. If it needs revision, a new attempt preserves the earlier result. An authorized person decides whether the change may enter the product.
+A software organization is the first application: people clarify goals, AI prepares changes, tools check, reviewers assess and authorized participants decide what may be used. Other domains would have their own expertise, work contracts and policies.
 
-These are responsibilities, not a mandatory sequence for every organization. Independent work can proceed in parallel; decisions depend on the work and its policy. A passed test is evidence, and approval is a decision. Neither alone establishes that a real-world effect happened.
+DartMesh defines the architecture; Forge implements the foundation. Internal Software Factory work and the UI prototype provide early evidence. The complete experience and Control Plane described here are the product vision, not an available commercial service.
 
-**Software Factory is our first practical application and an internal proving ground.** It has carried real software work; its current process still includes operator-led review, approval and repository changes.
+Choose one valuable responsibility, prove its work path and measure accepted results, human effort and total cost. Expand where the value is demonstrated.
 
-## DartMesh and Forge
-
-DartMesh defines the reference architecture for governed virtual organizations. Forge implements the platform foundations. A virtual organization applies that model to a particular team's work; its roles and acceptance criteria come from that work.
-
-Forge and the customer experience are under development and validation. The UI is a prototype; a complete commercial management service is not available today. Capability and deployment scope need to be agreed for a specific use case.
-
-## Start with one valuable responsibility
-
-A useful first conversation starts with recurring work that has a clear output and someone accountable for accepting it. Define a bounded trial and compare accepted results, human review time, attempts and total cost against the current process.
-
-**What would your team delegate next if responsibility, boundaries and review were clearer?**
+**What would you build if your organizational capacity could grow with your ambition?**
