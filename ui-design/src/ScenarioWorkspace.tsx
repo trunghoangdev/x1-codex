@@ -1,3 +1,4 @@
+import { ContributionExchange } from "./ContributionExchange";
 import { HumanContribution } from "./HumanContribution";
 import type { HumanContributionState } from "./data/humanContribution";
 import { CollaborationWalkthrough } from "./CollaborationWalkthrough";
@@ -336,6 +337,7 @@ export function ScenarioWorkspace({
         <ScenarioMyWork
           onContribution={() => onRoute(qualify("/contributions/K-01-H"))}
           contribution={contribution}
+          onContributionChange={onContribution}
           onCase={(id) => open(`/cases/${id}`)}
           scenario={scenario}
           workerId={persona!.workerId}
@@ -729,10 +731,13 @@ export function ScenarioWorkspace({
               readiness="missing"
               operatingContext={
                 scenario.id === "knowledge" ? (
+                  <>
+                  <ContributionExchange state={contribution} onOpen={() => onRoute(base + "/work?persona=maya")} />
                   <OrganizationOperatingContext
                     scenario={scenario}
                     onSource={open}
                   />
+                  </>
                 ) : undefined
               }
               proposals={{}}

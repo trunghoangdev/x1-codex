@@ -368,6 +368,7 @@ export function HumanContribution({
               {current.receipt?.id ?? "not recorded"}. Assessment:{" "}
               {current.assessment?.conclusion ?? "not recorded"}.
             </p>
+            {!workspace && <>
             <h3>Receiver simulation · Maya</h3>
             <p>
               These explicit demo controls represent a separate receiver.
@@ -393,6 +394,8 @@ export function HumanContribution({
                 Simulate revision request
               </button>
             )}
+            </>}
+            {workspace && <p>Receiver actions are in Maya’s My Work. Switch sample persona to Maya to record a receipt or request a revision.</p>}
             {current.assessment && (
               <>
                 <p>{current.assessment.rationale}</p>

@@ -311,3 +311,5 @@ Display follow-up: [Chromium/Firefox reflow and forced-colors review](DISPLAY-AC
 The [current review and proposed next sequence](PRODUCT-EXPERIENCE-REVIEW.md) recommends connecting ordinary contribution to My Work, then sharing the same version-bound records with a receiver and organization view. These are proposals, not implemented features.
 
 Iteration 99: Knowledge Operations → Leo → My Work now offers **Open contribution · K-01-H**, with organization/workstream context and navigation-preserved session state. Reload clears this exercise; Demo continuity excludes it. Receiver responses remain explicit simulations. See [human contribution](HUMAN-CONTRIBUTION.md).
+
+Iteration 100: Maya's Knowledge My Work receives Leo's exact delivered revisions and offers local sample receipt/revision-request actions. Leo sees the request in his own inbox; Organization shows the same exchange history. Integrated preparation no longer provides receiver controls. Reassessment/publication/outcome remain separate and unestablished. See [shared contribution behavior](HUMAN-CONTRIBUTION.md).

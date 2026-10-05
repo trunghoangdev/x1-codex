@@ -1,3 +1,4 @@
+import { ContributionExchange } from "./ContributionExchange";
 import type { HumanContributionState } from "./data/humanContribution";
 import {
   defaultScenarioWorkFilters,
@@ -21,9 +22,11 @@ export function ScenarioMyWork({
   onCase,
   onContribution,
   contribution,
+  onContributionChange,
 }: {
   onContribution: () => void;
   contribution: HumanContributionState;
+  onContributionChange: (state: HumanContributionState) => void;
   scenario: OrganizationScenario;
   workerId: string;
   filters: ScenarioWorkFilters;
@@ -75,6 +78,7 @@ export function ScenarioMyWork({
           </p>
         </div>
       </div>
+      {scenario.id === "knowledge" && workerId === "maya" && <ContributionExchange state={contribution} receiver onChange={onContributionChange} />}
       <p className="org-overview-section" role="status">
         {mine.length} assignments · {response} awaiting your response ·{" "}
         {waiting} waiting for input
@@ -260,6 +264,7 @@ export function ScenarioMyWork({
               {a.id === "K-01-H" && <div>
                 <p>Session-only exercise · reload clears drafts and command records. Demo continuity excludes this contribution.</p>
                 <p>{contribution.contributions.at(-1)?.delivery ? "Latest revision delivered locally; receiver response remains separate." : "Prepare your current draft; earlier delivered revisions remain inspectable."}</p>
+                {contribution.contributions.at(-1)?.assessment && <p role="status">Maya requested a revision · human-assessment-v1. Open contribution to prepare draft-02.</p>}
                 <button className="button primary" onClick={onContribution}>Open contribution · K-01-H</button>
               </div>}
               <CoordinationInputs

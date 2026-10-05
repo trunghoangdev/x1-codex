@@ -29,3 +29,13 @@ Knowledge Operations → select Leo → My Work → **Open contribution · K-01-
 The integrated exercise has its own app-owned session state, separate from the standalone Demos exercise. Navigation preserves drafts, immutable deliveries and command history; reload clears them. Neither exercise is included in Demo continuity. The inbox repeats that boundary before opening preparation and reports only the latest local delivery observation. Its other assignment/coordination records remain authored and do not advance from this exercise.
 
 The route is `#/organizations/knowledge/contributions/K-01-H?persona=leo`. Other personas cannot open that preparation route; switching persona there returns to the chosen person's inbox. This is sample navigation, not an authentication or permission check. Receiver buttons remain explicitly simulated inside preparation; a shared receiver inbox is the next item, not part of this increment.
+
+## Shared receiver and organization views — iteration 100
+
+Knowledge Operations now uses the same session records across Leo's contribution, Maya's My Work and the Organization overview. Maya's **Contribution for Maya** panel lists delivered revisions with frozen text, scope note, cited input and exact delivery/receipt/assessment relationships. Draft text and commands awaiting delivery projection do not appear as received work.
+
+Maya may **Record sample receipt · draft-01**, then **Request sample revision · draft-01**. Receipt is required before the revision request. The request uses the existing authored scenario guidance, not an evaluation of entered text. Leo's inbox then exposes the revision request; preparation responds to its exact assessment ID and creates a separate draft-02 delivery. Maya may receive draft-02, but reassessment is intentionally pending.
+
+Integrated contributor views no longer offer the receiver simulation controls: switch the sample persona to Maya to act as receiver. Standalone Demos retains its original receiver controls and independent state. Persona selection grants no real permissions. All these records are local session observations, not server-admitted receipt/assessment records.
+
+Organization's **Contribution exchange · K-01-H** panel shows the same history, with delivery, receipt and assessment distinct and a direct receiver-inbox link. Existing authored coordination counts and outcome requirements are not advanced by these records. Both earlier delivered revisions and earlier receiving records remain inspectable; reload clears the complete shared exercise. Demo continuity still excludes it.
