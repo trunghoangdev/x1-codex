@@ -1,3 +1,4 @@
+import { OutcomeReviewRecord } from "./OutcomeReviewRecord";
 import { WorkstreamAgreement } from "./WorkstreamAgreement";
 import { agreementVersions } from "./data/workstreamAgreements";
 import { CoordinationCases } from "./CoordinationCases";
@@ -68,6 +69,7 @@ export function validScenarioPath(raw: string) {
         ? [
             "/cases",
             "/agreements/K-01",
+            "/outcome-reviews/guide-review-01",
             ...coordinationCases(scenario).map((c) => `/cases/${c.id}`),
           ]
         : []),
@@ -243,17 +245,20 @@ export function ScenarioWorkspace({
         suffix === `/workflows/${s.id}` ||
         suffix === `/agreements/${s.id}`,
     );
-    const fallback = outcomeStream
-      ? `/workstreams/${outcomeStream.id}`
-      : assignment?.streamId
-        ? `/workstreams/${assignment.streamId}`
-        : suffix.startsWith("/workers/")
-          ? "/workers"
-          : suffix.startsWith("/workstreams/")
-            ? "/workstreams"
-            : suffix.startsWith("/cases/")
-              ? "/cases"
-              : "";
+    const fallback =
+      suffix === "/outcome-reviews/guide-review-01"
+        ? "/outcomes/K-01"
+        : outcomeStream
+          ? `/workstreams/${outcomeStream.id}`
+          : assignment?.streamId
+            ? `/workstreams/${assignment.streamId}`
+            : suffix.startsWith("/workers/")
+              ? "/workers"
+              : suffix.startsWith("/workstreams/")
+                ? "/workstreams"
+                : suffix.startsWith("/cases/")
+                  ? "/cases"
+                  : "";
     const source = index >= 0 ? trail[index].source : qualify(fallback);
     if (index >= 0) trail.splice(index);
     saveTrail();
@@ -309,7 +314,13 @@ export function ScenarioWorkspace({
           verified outcomes. Main software records remain separate.
         </p>
       </details>
-      {suffix === "/agreements/K-01" ? (
+      {suffix === "/outcome-reviews/guide-review-01" ? (
+        <OutcomeReviewRecord
+          scenario={scenario}
+          onBack={back}
+          onSource={open}
+        />
+      ) : suffix === "/agreements/K-01" ? (
         <WorkstreamAgreement
           scenario={scenario}
           versionId={params.get("agreementVersion") ?? "brief-v2"}
@@ -391,6 +402,11 @@ export function ScenarioWorkspace({
           )!}
           completed={{}}
           backLabel="Back to scenario context"
+          onReviewRecord={
+            scenario.id === "knowledge" && suffix === "/outcomes/K-01"
+              ? () => open("/outcome-reviews/guide-review-01")
+              : undefined
+          }
           onBack={back}
           onOpen={(id) => open(`/assignments/${id}`)}
         />

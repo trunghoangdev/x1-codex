@@ -17,6 +17,7 @@ export function OutcomeReview({
   onOpen,
   onInspect,
   onBack,
+  onReviewRecord,
 }: {
   scenario?: OrganizationScenario;
   backLabel?: string;
@@ -26,6 +27,7 @@ export function OutcomeReview({
   onOpen: (id: string, tab?: string) => void;
   onInspect?: (artifact: EvidenceArtifact) => void;
   onBack: () => void;
+  onReviewRecord?: () => void;
 }) {
   return (
     <div className="detail-page">
@@ -48,6 +50,22 @@ export function OutcomeReview({
           </p>
         </div>
       </div>
+      {onReviewRecord && (
+        <section
+          className="panel org-stream org-overview-section"
+          aria-label="Independent review example"
+        >
+          <h2>Inspect an authored review example</h2>
+          <p>
+            An independent reader observation and insufficient-evidence
+            conclusion demonstrate version-bound review. The current workstream
+            remains unverified and has no allocated reviewer.
+          </p>
+          <button className="button secondary" onClick={onReviewRecord}>
+            Inspect outcome review record · guide-review-01
+          </button>
+        </section>
+      )}
       <section
         className="org-overview-section"
         aria-label="Outcome evidence requirements"

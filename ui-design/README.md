@@ -261,3 +261,5 @@ The next operating-accountability review is [VIRTUAL-ORGANIZATION-OPERATING-REVI
 Iteration 81 adds Knowledge-first [Coordination cases](COORDINATION-CASES.md), with explicit follow-up ownership/unknowns, next actions, closure requirements and scoped source inspection. It is read-only and does not allocate tasks or resolve cases.
 
 Versioned Knowledge welcome-guide scope proposals: see [WORKSTREAM-AGREEMENTS.md](WORKSTREAM-AGREEMENTS.md). Open K-01 and choose “Inspect proposed workstream agreement” to compare authored audiences and scope without implying adoption or evidence applicability.
+
+Explicit goal-level review example: see [OUTCOME-REVIEW-RECORDS.md](OUTCOME-REVIEW-RECORDS.md). From Knowledge K-01 outcome requirements, inspect `guide-review-01` for the reviewer, version-bound reader finding, insufficient-evidence conclusion and remaining gaps.
