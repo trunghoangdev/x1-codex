@@ -7,6 +7,7 @@ import { DetailEmptyState } from "./DetailPresentation";
 import { CoordinationInputs } from "./CoordinationInputs";
 import type { OrganizationScenario } from "./data/organizationScenario";
 import { DetailBackButton } from "./DetailPresentation";
+import { personalCaseFollowUp } from "./data/coordinationCases";
 export function ScenarioMyWork({
   scenario,
   workerId,
@@ -16,6 +17,7 @@ export function ScenarioMyWork({
   onWorker,
   filters,
   onFilters,
+  onCase,
 }: {
   scenario: OrganizationScenario;
   workerId: string;
@@ -25,6 +27,7 @@ export function ScenarioMyWork({
   onStream: (id: string) => void;
   onOrganization: () => void;
   onWorker: (id: string) => void;
+  onCase: (id: string) => void;
 }) {
   const worker = scenario.workers.find((w) => w.id === workerId)!;
   const {
@@ -34,11 +37,15 @@ export function ScenarioMyWork({
     waiting,
     both,
   } = scenarioPersonalWork(scenario, workerId, filters);
+  const followUp = personalCaseFollowUp(scenario, workerId, filters);
   const roles = [...new Set(mine.map((a) => a.role))];
   if (filters.role !== "All" && !roles.includes(filters.role))
     roles.push(filters.role);
   const streamIds = [
-    ...new Set(mine.map((a) => a.streamId).filter((id): id is string => !!id)),
+    ...new Set([
+      ...mine.map((a) => a.streamId).filter((id): id is string => !!id),
+      ...followUp.owned.map((c) => c.streamId),
+    ]),
   ];
   if (filters.stream !== "All" && !streamIds.includes(filters.stream))
     streamIds.push(filters.stream);
@@ -58,8 +65,8 @@ export function ScenarioMyWork({
           <div className="eyebrow">PERSONAL INBOX · READ-ONLY SAMPLE</div>
           <h1 tabIndex={-1}>My Work · {worker.name}</h1>
           <p>
-            Only explicitly allocated assignments appear here. Organization
-            retains the shared goals and gaps.
+            Explicitly allocated assignments and case follow-up ownership.
+            Organization retains the shared goals and gaps.
           </p>
         </div>
       </div>
@@ -68,10 +75,10 @@ export function ScenarioMyWork({
         {waiting} waiting for input
       </p>
       <p className="personal-queue-note">
-        Counts cover your full inbox. Response and waiting-input flags can
-        overlap ({both} in both); they are not added together or inferred from
-        role bindings. Input availability remains unverified unless explicitly
-        represented.
+        Assignment counts cover your full assignment inbox. Response and
+        waiting-input flags can overlap ({both} in both); they are not added
+        together or inferred from role bindings. Input availability remains
+        unverified unless explicitly represented.
       </p>
       <section
         className="panel stream-directory-filters"
@@ -81,7 +88,7 @@ export function ScenarioMyWork({
           Search my work
           <input
             type="search"
-            placeholder="Assignment, role, goal or input"
+            placeholder="Assignment, case, goal or input"
             value={filters.query}
             onChange={(e) => onFilters({ ...filters, query: e.target.value })}
           />
@@ -133,6 +140,74 @@ export function ScenarioMyWork({
           Clear work filters
         </button>
       </section>
+      {scenario.id === "knowledge" && (
+        <section
+          className="org-overview-section"
+          aria-label="My coordination follow-up"
+        >
+          <h2>My coordination follow-up</h2>
+          <p>
+            Case ownership is responsibility for follow-up, separate from
+            assignment allocation or decision authority. Search and workstream
+            filters apply here; assignment role and work attention filters apply
+            only to assignments.
+          </p>
+          <p role="status">
+            {followUp.shown.length} of {followUp.owned.length} owned cases shown
+          </p>
+          {followUp.owned.length === 0 ? (
+            <p>
+              No case follow-up ownership is represented for you. Unknown owners
+              and role bindings do not place cases in your inbox.
+            </p>
+          ) : followUp.shown.length === 0 ? (
+            <p>
+              No matching owned cases. Search and workstream filters do not
+              change your ownership.
+            </p>
+          ) : (
+            <div className="org-stream-grid">
+              {followUp.shown.map((c) => (
+                <article
+                  className="panel org-stream"
+                  aria-label={`My case · ${c.id}`}
+                  key={c.id}
+                >
+                  <div className="eyebrow">CASE FOLLOW-UP · {c.streamId}</div>
+                  <h3>{c.title}</h3>
+                  <p>
+                    <strong>{c.status}</strong>
+                  </p>
+                  <p>
+                    <strong>Next action:</strong> {c.nextAction}
+                  </p>
+                  <p>
+                    <strong>Waiting for:</strong> {c.waitingFor}
+                  </p>
+                  <p>
+                    No case resolution is recorded. Follow-up does not establish
+                    delivery, approval or goal completion.
+                  </p>
+                  <button
+                    className="button secondary"
+                    onClick={() => onCase(c.id)}
+                  >
+                    Inspect my follow-up case · {c.id}
+                  </button>
+                  <p>
+                    <button
+                      className="text-link"
+                      onClick={() => onStream(c.streamId)}
+                    >
+                      View case shared goal · {c.streamId}
+                    </button>
+                  </p>
+                </article>
+              ))}
+            </div>
+          )}
+        </section>
+      )}
       <p className="personal-queue-results" role="status">
         {shown.length} of {mine.length} allocated assignments shown
       </p>
@@ -152,7 +227,7 @@ export function ScenarioMyWork({
         </section>
       ) : shown.length === 0 ? (
         <DetailEmptyState>
-          No matching personal work. Filters do not change your allocation.
+          No matching assignments. Filters do not change your allocation.
           <button className="button secondary" onClick={reset}>
             Show all my work
           </button>

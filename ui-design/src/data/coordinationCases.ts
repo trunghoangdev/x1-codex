@@ -93,6 +93,26 @@ export function coordinationCases(scenario: OrganizationScenario) {
       scenario.streams.some((s) => s.id === c.streamId),
   );
 }
+
+export function personalCaseFollowUp(
+  scenario: OrganizationScenario,
+  workerId: string,
+  filters: { query: string; stream: string } = { query: "", stream: "All" },
+) {
+  const owned = coordinationCases(scenario).filter(
+    (c) => c.owner.state === "assigned" && c.owner.workerId === workerId,
+  );
+  const shown = owned.filter((c) => {
+    const stream = scenario.streams.find((s) => s.id === c.streamId);
+    return (
+      (filters.stream === "All" || filters.stream === c.streamId) &&
+      `${c.id} ${c.title} ${c.status} ${c.nextAction} ${c.waitingFor} ${stream?.name ?? ""} ${stream?.project ?? ""}`
+        .toLowerCase()
+        .includes(filters.query.trim().toLowerCase())
+    );
+  });
+  return { owned, shown };
+}
 export type CaseFilters = {
   query: string;
   owner: "all" | "assigned" | "unknown";

@@ -431,6 +431,7 @@ export function ScenarioWorkspace({
         />
       ) : suffix === "/work" ? (
         <ScenarioMyWork
+          onCase={(id) => open(`/cases/${id}`)}
           scenario={scenario}
           workerId={persona!.workerId}
           filters={readScenarioWorkFilters(params)}

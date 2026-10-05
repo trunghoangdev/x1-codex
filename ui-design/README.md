@@ -269,3 +269,5 @@ Worker planning context: see [WORKER-CAPABILITIES.md](WORKER-CAPABILITIES.md). M
 Knowledge operating guidance and policy gaps: see [OPERATING-PATTERNS.md](OPERATING-PATTERNS.md). From K-01 or K-02 workflow inspection, choose “Inspect operating pattern and policy”.
 
 Knowledge overview now connects the operating records: see [ORGANIZATION-OPERATING-CONTEXT.md](ORGANIZATION-OPERATING-CONTEXT.md). Use “Agreements, reviews & policy” to inspect current gaps and separately labeled design examples.
+
+Knowledge personal follow-up: see [PERSONAL-CASE-FOLLOW-UP.md](PERSONAL-CASE-FOLLOW-UP.md). Select Leo and open My Work to inspect the explicitly owned workshop-brief case alongside, but separately from, assignments.
