@@ -1,69 +1,83 @@
-# Forge — Build the operating foundation for human–AI organizations
+# Forge
+## Build the organization your ambition needs.
 
-**Investment thesis: organizational capacity that can grow across people, models and tools.**
+**An operating platform for organizations where people, AI and tools work together.**
 
-*This memo presents the completed-product vision and business thesis. Current evidence and fundraising inputs are separated below.*
+Our investment thesis is that the ability to assemble and operate these organizations can become a valuable enterprise product category. Forge aims to make productive capacity expandable while keeping responsibility, continuity and consequential decisions explicit.
 
-## The opportunity we are pursuing
+*Completed-product vision and proposed business strategy. Current evidence is separated below.*
 
-AI can perform increasingly substantial work. Turning that work into sustained organizational capacity requires goals, responsibility, coordination, legitimate authority and decisions about results. Our thesis is that these needs create an opportunity for an operating foundation shared by people, AI and tools.
+## 1. The ambition: organizational capacity on demand
 
-Forge's ambition is to let customers build organizations around what they want to accomplish, then operate those organizations across changing participants and environments. The value to pursue is accepted work with manageable coordination, review cost and decision risk.
+A customer should be able to define what an organization must accomplish, establish its responsibilities, and bring suitable people, AI workers and tools into the work. Several teams and workstreams can operate together. Participants can change without losing the organization's purpose or the context needed to continue.
 
-## The completed product
+Forge's destination is a platform on which customers build and run these **virtual organizations**—from a focused software team to multiple domain organizations coordinated through a shared Control Plane.
 
-Customers establish purpose, teams, roles, work contracts and decision policies. Compatible human, AI and deterministic workers fulfill scoped responsibilities. Workers receive meaningful objectives and room to choose how to accomplish them. Assignments, attempts, artifacts, handoffs, assessments and consequential decisions preserve identity and history.
+The economic promise to test is straightforward: more accepted work without a proportional increase in human coordination effort.
 
-The customer experience combines an organization-wide view with personal work entrances. Several workstreams can operate in parallel. Revision and failure become manageable parts of continuing work. Customers can examine why a result was accepted, which authority permitted an action and what evidence establishes its effect.
+## 2. The customer problem: delegation creates an operating burden
 
-The full vision includes a **Forge Control Plane** for coordinating organizations, workers and execution environments at scale: shared operational visibility, capability/placement context, unresolved work and continuity across disruption. Nodes retain local execution authority; central coordination cannot simply override a customer's trust boundary. Customer-controlled, managed and hybrid deployments are possible product directions, with guarantees established through implementation and validation.
+Consider a software team delegating recurring changes to AI. Producing a change is one responsibility. Someone must also supply the right context, coordinate dependencies, review the exact result, request corrections and decide what may enter the product.
 
-DartMesh supplies the reference architecture. Forge implements the foundation. Domain organizations apply it to particular work; the Control Plane expands their operation. This organization-first structure is intended to remain useful as models and runtimes change.
+When that coordination lives across conversations and tools, people repeatedly reconstruct what happened and what should happen next. Adding execution capacity can increase the burden on the people responsible for accepting its output.
 
-## The customer and initial wedge
+Our starting hypothesis is that teams experiencing this burden will pay for a coherent way to operate the work. The pilot must prove that Forge reduces enough of this burden to justify its full cost.
 
-Our proposed starting customer is a software team already using AI, with recurring work, checkable outputs and substantial human coordination/review effort. Software Factory provides the initial application and internal proving ground.
+## 3. The product: one organization, connected work
 
-The entry product should deliver one complete, repeatable responsibility: clear inputs and scope, suitable execution, inspectable output, review, decision and accountable continuation. Demonstrate its value, then expand workstreams and deployment scope. Other domains and fleet operations are expansion opportunities to earn through evidence.
+In the completed experience, a team sets goals, assigns responsibilities and gives workers meaningful objectives with appropriate autonomy. Work moves across parallel streams and explicit handoffs. A person opens **My Work** to contribute, review or decide; the shared Organization view shows where coordination is needed.
 
-The customer buys productive capacity with continuity and control. A credible commercial proposition must show that those benefits outweigh inference, integration, review, failed-attempt and support costs.
+For example, a worker prepares a software change, a reviewer requests a revision, and an authorized participant decides whether the revised result may be used. Everyone works against the same identified versions. If a worker fails or changes, retained context supports continuation rather than another round of reconstruction.
 
-## Commercial direction
+At scale, the **Forge Control Plane** extends operational visibility and coordination across organizations, workers and execution environments. Customers retain local execution authority. Managed, customer-controlled and hybrid deployments are product directions to validate.
 
-Potential paid offerings include supported domain deployments, enterprise integration and operation, and managed coordination where customers want it. An open foundation can make contracts inspectable and support a worker ecosystem; a commercial offering must provide operational value beyond access to architecture.
+DartMesh defines the reference architecture; Forge implements the foundation; domain organizations apply it to particular work. The customer-facing promise is an organization that can keep working as its participants and tools evolve.
 
-Pricing, packaging, buyer, procurement path and margin assumptions require validation. No market-size, revenue or adoption estimate is asserted in this memo. A researched market/competitive analysis belongs alongside it before formal fundraising.
+## 4. The entry market: a repeatable software responsibility
 
-## Why this approach could endure
+The proposed first customer is a software team already delegating recurring AI work, with checkable outputs and costly human review or coordination. The buyer hypothesis is an engineering leader accountable for delivery and team capacity.
 
-Roles and responsibility are independent of a particular runtime. Execution autonomy is bounded by explicit scope. Attempts and revised results remain distinguishable. Evidence and decisions have defined meanings rather than collapsing every event into “success.” Local authority survives centralized coordination.
+Start with one bounded responsibility, such as a recurring class of software changes. Deliver the complete work path—from objective and scope through output, review, decision and continuation. Software Factory is our internal proving ground for that path.
 
-Potential defensibility lies in the quality of these contracts and mechanisms, compatible-worker integrations, domain operating knowledge and reliability demonstrated in consequential work. Adoption and execution must establish that advantage; architecture alone is not a proven moat.
+The first commercial proof is repeated use on customer work, with measurable accepted results, human effort and total cost. A larger organization vision makes the opportunity ambitious; a narrow entry responsibility makes it testable.
 
-## Evidence today
+## 5. The business: earn expansion inside the customer
 
-| Evidence | Supported conclusion | Commercial gap |
+The proposed commercial offering starts with a supported software organization deployment. Customers pay for a usable, reliable operating capability, including the integration and support needed to put it into their work.
+
+Expansion follows demonstrated value: more responsibilities, additional workstreams and teams, then multiple organizations and managed coordination. Other domains become opportunities when their expertise, work contracts and acceptance requirements can be supported.
+
+An open foundation can support inspection and compatible workers. The paid product must earn its value through the operating experience, reliability and service around that foundation. Pricing and packaging should be established through buyer conversations and paid pilots.
+
+## 6. The timing thesis and potential advantage
+
+The timing thesis is conditional: as customers delegate more substantial work across people and AI, the need to coordinate responsibility, context and decisions grows. Forge seeks to become the operating layer those customers rely on across changes in models and runtimes.
+
+Potential advantage can accumulate through reliable work contracts, worker integrations, domain operating knowledge and customer deployments that prove continuation under real failure conditions. These are mechanisms to build and test, not an established moat.
+
+The commercial test must also compare Forge with the customer's existing process and available alternatives. The relevant result is accepted work per unit of human effort and total cost—not the number of agents or executions.
+
+## 7. What we have established
+
+The projects provide an implemented technical foundation, real bounded internal Software Factory work, retained execution metadata and an organization-centered UI prototype. The UI now demonstrates a shared contributor–receiver revision loop and organizational coordination around the same local records.
+
+This supports a concrete product and execution hypothesis. It does not establish external demand, revenue or production readiness. The full commercial experience and Control Plane remain the destination; internal use and local simulations are not paying-customer traction.
+
+## 8. What investment should unlock
+
+The proposed use of capital is to convert that foundation into a repeatably valuable customer product:
+
+| Stage | Result to establish | Decision it enables |
 | --- | --- | --- |
-| DartMesh and Forge repositories | Organizational architecture and implemented platform foundations | Full product experience still to deliver |
-| Real internal Software Factory work | Bounded software execution beyond a visual demo | External repeat use and willingness to pay |
-| Organization-first UI and interaction scenarios | A concrete experience for shared organization/personal participation | Live application identity, permission and command integration |
-| Real retained metadata inspection | Source-backed inspection of one historical execution | Complete admitted decision/effect chain and ongoing operation |
+| Customer-ready work path | Real identity, authority, retained records and supported deployment for one responsibility | Can a customer operate meaningful work? |
+| Repeated external use | Accepted results, human effort, total cost and failure-continuation observations | Does the product create economic value? |
+| Paid delivery | Willingness to pay and understood integration/support costs | Can this become a repeatable business? |
+| Earned expansion | Additional responsibilities and deployments driven by customer needs | Where should the operating platform grow next? |
 
-Internal use is operational evidence, not paying-customer traction. UI simulations are product hypotheses, not production capabilities. The Control Plane and complete commercial offering are part of the vision, not current delivery.
+The principal risks are insufficient customer value, costly integration/support, weak differentiation and premature product breadth. The milestones above should determine investment in further scope.
 
-## What capital should prove
+## The investment case
 
-The funding case should connect resources to evidence milestones:
+**Forge's ambition is to let customers build organizations whose capacity can grow with their goals.** Software work is the entry point. A shared operating foundation across teams, workers and domains is the larger opportunity.
 
-1. Deliver one externally usable organization work slice, including identity, authority, retained records and supported deployment.
-2. Establish repeated customer use and measure accepted output, human effort, total cost and continuation under failure.
-3. Demonstrate willingness to pay and understand delivery/support economics.
-4. Expand the operating surface where repeated requirements justify it, then prove repeatability before wider domains or fleet scale.
-
-The main risks are customer value insufficient to offset coordination/review cost, expensive deployment/integration support, weak differentiation against existing products and premature breadth. Evidence helps inspect claims; it cannot guarantee domain quality or remove the need for judgement.
-
-## The investment conversation
-
-We are pursuing an operating foundation that lets organizational capacity grow with ambition while keeping responsibility, continuity and consequential decisions explicit. The next investment case is to turn that foundation into a repeatably valuable customer product.
-
-Before a fundraising offer, add founder-confirmed company/team/IP details, attributable external traction, researched market/competition, a pricing hypothesis and a staffing/infrastructure financial plan. The amount sought, runway, use of funds and milestones must follow that plan. No raise amount, valuation, investor commitment or delivery date is invented here.
+The next financing case is to prove that customers repeatedly use and pay for this capacity—and that we can deliver it with repeatable economics.

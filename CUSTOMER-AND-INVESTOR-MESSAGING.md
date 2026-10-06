@@ -9,7 +9,8 @@ The documents explicitly identify themselves as vision/thesis. Current evidence 
 | customer-brief.md / customer-brief.vi.md | Short vision-first customer introduction |
 | customer-introduction.md / customer-introduction.vi.md | Detailed completed-product customer narrative |
 | customer-vision.md | English shareable copy of the detailed customer narrative; keep synchronized |
-| investor-thesis.md | Full-product investment thesis, initial customer wedge, commercial direction, defensibility and capital-to-evidence milestones |
+| investor-thesis.md | Ambition → customer problem → product → entry buyer → commercial expansion → potential advantage → evidence → investment milestones |
+| INVESTOR-PREPARATION.md | Founder evidence, market research and budgeted funding inputs needed before a fundraising offer |
 
 Customer appeal depends on desired outcomes and a recognizable operating experience. Investor appeal also needs commercial evidence, buyer/economics, team and a budgeted funding case. The vision is not evidence of demand, revenue or delivered capability.
 
