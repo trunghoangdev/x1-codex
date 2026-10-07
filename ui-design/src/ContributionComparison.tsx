@@ -1,30 +1,47 @@
+import { diffLines, type Row } from "./diff";
 import type { HumanContributionState } from "./data/humanContribution";
 
-// Mark one changed passage bounded by equal lines. Linear work even for long text;
-// this is an exact text comparison, not a semantic assessment or minimal edit diff.
+// Reuse the exact line diff only within a bounded middle; very large edits
+// retain an explicitly labelled coarse passage rather than allocating a huge matrix.
 export function contributionTextChange(before: string, after: string) {
-  const left = before.split("\n");
-  const right = after.split("\n");
-  let start = 0;
+  const left = before.split("\n"),
+    right = after.split("\n");
+  let start = 0,
+    end = 0;
   while (
     start < left.length &&
     start < right.length &&
     left[start] === right[start]
   )
     start++;
-  let end = 0;
   while (
     end < left.length - start &&
     end < right.length - start &&
     left[left.length - 1 - end] === right[right.length - 1 - end]
   )
     end++;
-  return {
-    prefix: left.slice(0, start),
-    removed: left.slice(start, left.length - end),
-    added: right.slice(start, right.length - end),
-    suffix: end ? left.slice(left.length - end) : [],
-  };
+  const removed = left.slice(start, left.length - end),
+    added = right.slice(start, right.length - end);
+  const coarse = (removed.length + 1) * (added.length + 1) > 250_000;
+  const rows: Row[] = [
+    ...left.slice(0, start).map((text) => ({ kind: "context" as const, text })),
+    ...(coarse
+      ? [
+          ...removed.map((text) => ({ kind: "removed" as const, text })),
+          ...added.map((text) => ({ kind: "added" as const, text })),
+        ]
+      : diffLines(removed, added)),
+    ...(end
+      ? left
+          .slice(left.length - end)
+          .map((text) => ({ kind: "context" as const, text }))
+      : []),
+  ];
+  const regions = rows.filter(
+    (row, i) =>
+      row.kind !== "context" && (i === 0 || rows[i - 1].kind === "context"),
+  ).length;
+  return { rows, coarse, regions };
 }
 export function ContributionComparison({
   state,
@@ -46,40 +63,35 @@ export function ContributionComparison({
   const note = second.delivery?.note ?? second.note;
   const change = contributionTextChange(before.body, body);
   const changed = before.body !== body;
-  const render = (version: 1 | 2) => (
-    <>
-      {change.prefix.map((line, i) => (
-        <span key={`p${i}`}>
-          {line}
-          {"\n"}
-        </span>
-      ))}
-      {(version === 1 ? change.removed : change.added).map((line, i) =>
-        version === 1 ? (
-          <del key={i}>
-            {line}
-            {"\n"}
-          </del>
-        ) : (
-          <ins key={i}>
-            {line}
-            {"\n"}
-          </ins>
-        ),
-      )}
-      {change.suffix.map((line, i) => (
-        <span key={`s${i}`}>
-          {line}
-          {"\n"}
-        </span>
-      ))}
-    </>
-  );
+  const render = (version: 1 | 2) => {
+    const rows = change.rows.filter(
+      (row) =>
+        row.kind === "context" ||
+        row.kind === (version === 1 ? "removed" : "added"),
+    );
+    return rows.map((row, i) => {
+      const text = row.text + (i < rows.length - 1 ? "\n" : "");
+      return row.kind === "removed" ? (
+        <del key={i}>{text}</del>
+      ) : row.kind === "added" ? (
+        <ins key={i}>{text}</ins>
+      ) : (
+        <span key={i}>{text}</span>
+      );
+    });
+  };
   return (
     <details className="panel org-stream contribution-comparison">
       <summary>Compare draft-01 and draft-02</summary>
       <section aria-label="Contribution version comparison">
         <h2>Revision comparison</h2>
+        <p>
+          {change.regions} changed{" "}
+          {change.regions === 1 ? "passage" : "passages"} ·{" "}
+          {change.coarse
+            ? "Coarse comparison for a large edit; unchanged lines inside the marked passage may also be highlighted."
+            : "Separate changes are marked; matching lines between them remain unmarked."}
+        </p>
         <p>
           draft-01 is the frozen delivery. draft-02 is{" "}
           {second.delivery
@@ -90,11 +102,11 @@ export function ContributionComparison({
         <details>
           <summary>How to read this comparison</summary>
           <p>
-            Highlighting marks a changed passage between equal lines; it does
-            not evaluate whether the request was satisfied. Removed or replaced
-            passages are struck through; added or replacement passages are
-            underlined. Leo’s revision response is an explanation, not
-            confirmation that Maya’s request has been satisfied.
+            Highlighting compares exact lines, not meaning; it does not evaluate
+            whether the request was satisfied. Removed or replaced passages are
+            struck through; added or replacement passages are underlined. Leo’s
+            revision response is an explanation, not confirmation that Maya’s
+            request has been satisfied.
           </p>
         </details>
         <h3>Request attached to draft-01</h3>

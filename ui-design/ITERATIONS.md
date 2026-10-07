@@ -988,3 +988,9 @@ Production build, diff checks and twelve targeted checks passed across runs: des
 Collapsed extended assignment/session/scope explanations while preserving visible task, next step, input and essential reload/demo boundaries. Receiver source/action explanations and long result rationale move into disclosures; exact identities, current state and next responsibility remain visible. Comparison explains highlighting and response limitations once rather than repeating them in both columns. Phone session notes stack vertically.
 
 Production build, diff checks and twelve targeted browser/model checks passed across task paths, exchange, comparison, receiver focus and Chromium/Firefox keyboard recovery. Phone previews were visually inspected and recaptured after the session-note layout adjustment; final build passed. See [layout review](CONTRIBUTION-LAYOUT.md). No participant session was conducted.
+
+## 119 — Separate changed passages in revision comparison
+
+Contribution comparison now uses the existing line LCS helper on a bounded middle after trimming equal edges. Matching context between independent edits stays unmarked; the view reports changed-passage count. A 250,000-cell limit falls back to an explicitly labelled coarse passage for large edits. Exact source text is preserved in both rendered columns without an extra final newline. Assessment and delivery semantics remain unchanged.
+
+Production build, diff checks and ten targeted checks passed across comparison edge cases, separate edits, bounded fallback, desktop/320px exact DOM text and receiver boundaries, shared exchanges and Chromium/Firefox keyboard recovery. Comparison checks passed again after final text assertions. See [comparison guide](CONTRIBUTION-COMPARISON.md). No participant or backend result is claimed.

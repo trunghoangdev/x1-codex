@@ -20,15 +20,50 @@ test("changed passage preserves equal boundaries and exact content", () => {
     ["a\nb", "a"],
     ["a", "a\nb"],
     ["a\n", "a"],
+    [
+      "start\nold one\nunchanged\nold two\nend",
+      "start\nnew one\nunchanged\nnew two\nend",
+    ],
+    ["repeat\nrepeat\nx", "repeat\nx\nrepeat"],
   ]) {
     const diff = contributionTextChange(before, after);
-    expect([...diff.prefix, ...diff.removed, ...diff.suffix].join("\n")).toBe(
-      before,
-    );
-    expect([...diff.prefix, ...diff.added, ...diff.suffix].join("\n")).toBe(
-      after,
-    );
+    expect(
+      diff.rows
+        .filter((r) => r.kind !== "added")
+        .map((r) => r.text)
+        .join("\n"),
+    ).toBe(before);
+    expect(
+      diff.rows
+        .filter((r) => r.kind !== "removed")
+        .map((r) => r.text)
+        .join("\n"),
+    ).toBe(after);
   }
+});
+test("separate edits preserve middle context and large edits are bounded", () => {
+  const split = contributionTextChange(
+    "a\nold\nkeep\nold2\nz",
+    "a\nnew\nkeep\nnew2\nz",
+  );
+  expect(split.regions).toBe(2);
+  expect(split.rows.find((r) => r.text === "keep")?.kind).toBe("context");
+  const before = Array.from({ length: 600 }, (_, i) => `old${i}`).join("\n");
+  const after = Array.from({ length: 600 }, (_, i) => `new${i}`).join("\n");
+  const large = contributionTextChange(before, after);
+  expect(large.coarse).toBe(true);
+  expect(
+    large.rows
+      .filter((r) => r.kind !== "added")
+      .map((r) => r.text)
+      .join("\n"),
+  ).toBe(before);
+  expect(
+    large.rows
+      .filter((r) => r.kind !== "removed")
+      .map((r) => r.text)
+      .join("\n"),
+  ).toBe(after);
 });
 for (const width of [320, 1440])
   test(`comparison binds assessment and hides unsent revision from receiver ${width}`, async ({
@@ -38,7 +73,7 @@ for (const width of [320, 1440])
     const first = emptyContribution();
     first.contributions[0] = {
       ...first.contributions[0],
-      body: "Welcome\nOld next step\nShared context",
+      body: "Welcome\nOld next step\nShared context\nOld ending",
       note: "Original scope",
       citesInput: true,
     };
@@ -52,7 +87,7 @@ for (const width of [320, 1440])
     const revision = reviseContribution(assessed);
     revision.contributions[1] = {
       ...revision.contributions[1],
-      body: "Welcome\nContact onboarding with account context\nShared context",
+      body: "Welcome\nContact onboarding with account context\nShared context\nNew ending",
       note: "Made the contact and required context explicit.",
       citesInput: true,
     };
@@ -87,10 +122,27 @@ for (const width of [320, 1440])
     await expect(comparison).toContainText(
       "human-assessment-v1 → human-receipt-v1 → human-delivery-v1",
     );
-    await expect(comparison.locator("del")).toHaveText("Old next step\n");
-    await expect(comparison.locator("ins")).toHaveText(
+    await expect(comparison.locator("del")).toHaveText([
+      "Old next step\n",
+      "Old ending",
+    ]);
+    await expect(comparison).toContainText("2 changed passages");
+    expect(
+      await comparison
+        .getByRole("article", { name: "Comparison draft-01" })
+        .locator("pre")
+        .textContent(),
+    ).toBe(first.contributions[0].body);
+    expect(
+      await comparison
+        .getByRole("article", { name: "Comparison draft-02" })
+        .locator("pre")
+        .textContent(),
+    ).toBe(revision.contributions[1].body);
+    await expect(comparison.locator("ins")).toHaveText([
       "Contact onboarding with account context\n",
-    );
+      "New ending",
+    ]);
     await expect(comparison).toContainText(
       "Made the contact and required context explicit.",
     );
