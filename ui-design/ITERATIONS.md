@@ -976,3 +976,9 @@ Production build, diff checks and eight targeted checks passed across desktop/ph
 Added an explicit whole-exercise replacement preview: current/incoming stage, resulting next step, removed/added versions, changed contribution/receiver fields and command history differences. Current unsaved-checkpoint differences are explained; current and incoming text, notes, citations and record identities are inspectable before confirmation. Impact stays derived from current state rather than a captured stale copy. No merge, schema or persistence behavior changes.
 
 Production build, diff checks and thirteen targeted checks passed, including desktop/320px removal of draft-02 and receiver records, unsaved text inspection, cancellation preservation, explicit restore, invalid files/storage and Chromium/Firefox keyboard flows. See [contribution recovery](CONTRIBUTION-RECOVERY.md).
+
+## 117 — Local contribution lane in K-01 coordination
+
+Added a separate local progress lane to Knowledge K-01 workstream and workflow views. It displays preparation and exact delivery/receipt/revision records through draft-02, current stage and represented next responsibility. Explicit entrances open Leo’s contribution and Maya’s inbox. Unknown commands stay distinct from delivery; receipt and pending reassessment stay distinct from acceptance. Authored flow, gaps, counters and outcome remain unchanged.
+
+Production build, diff checks and twelve targeted checks passed across runs: desktop/320px imported lifecycle consistency across both views, unchanged authored coordination, lineage/reflow/navigation, Knowledge personal work and main/larger workflow return paths. Older map checks now include the already-existing K-01-H assignment. See [local progress guide](CONTRIBUTION-PROGRESS.md). No backend or participant result is claimed.

@@ -1,8 +1,10 @@
+import type { ReactNode } from "react";
 import type { OrganizationScenario } from "./data/organizationScenario";
 import { workflowMap } from "./data/workflowMap";
 import { CoordinationInputs } from "./CoordinationInputs";
 import { DetailBackButton } from "./DetailPresentation";
 export function WorkflowMap({
+  localProgress,
   completed = {},
   backLabel = "Back to scenario context",
   scenario,
@@ -15,6 +17,7 @@ export function WorkflowMap({
   onOutcome,
   onPattern,
 }: {
+  localProgress?: ReactNode;
   completed?: Record<string, string>;
   backLabel?: string;
   scenario: OrganizationScenario;
@@ -44,6 +47,7 @@ export function WorkflowMap({
           <p>{map.stream.goal}</p>
         </div>
       </div>
+      {localProgress}
       {onPattern && (
         <p>
           <button className="button secondary" onClick={onPattern}>

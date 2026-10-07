@@ -1,3 +1,4 @@
+import { ContributionProgress } from "./ContributionProgress";
 import { contributionView } from "./data/contributionView";
 import { ContributionRecovery } from "./ContributionRecovery";
 import { CoordinationNeeds } from "./CoordinationNeeds";
@@ -320,6 +321,7 @@ export function ScenarioWorkspace({
           onAssignment={(id) => open(`/assignments/${id}`)}
           onWorker={(id) => open(`/workers/${id}`)}
           onStream={() => open(`/workstreams/${suffix.split("/")[2]}`)}
+          localProgress={scenario.id === "knowledge" && suffix === "/workflows/K-01" ? <ContributionProgress state={contribution} onContributor={() => onRoute(base + "/contributions/K-01-H?persona=leo")} onReceiver={() => onRoute(base + "/work?persona=maya")} /> : undefined}
           onOutcome={() => open(`/outcomes/${suffix.split("/")[2]}`)}
         />
       ) : suffix.startsWith("/outcomes/") ? (
@@ -521,6 +523,8 @@ export function ScenarioWorkspace({
             <>
               <p>{stream.goal}</p>
               <p>{stream.outcome}</p>
+              {scenario.id === "knowledge" && stream.id === "K-01" && <ContributionProgress state={contribution} onContributor={() => onRoute(base + "/contributions/K-01-H?persona=leo")} onReceiver={() => onRoute(base + "/work?persona=maya")} />}
+
               {
                 <section
                   className="panel org-stream"

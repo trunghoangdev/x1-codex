@@ -9,7 +9,12 @@ test("workflow links use explicit references, never card order or gap-created ta
     workshop = workflowMap(scenario, "K-02");
   expect(guide.dependencies).toHaveLength(0);
   expect(guide.parallelWork[0].assignmentIds).toEqual(["K-01-D", "K-01-E"]);
-  expect(guide.assignments).toHaveLength(3);
+  expect(guide.assignments.map((a) => a.id).sort()).toEqual([
+    "K-01-D",
+    "K-01-E",
+    "K-01-H",
+    "K-01-P",
+  ]);
   expect(guide.gaps.map((g) => g.id)).toEqual(["knowledge-publication"]);
   expect(
     workshop.dependencies.map((d) => [
@@ -147,7 +152,7 @@ for (const width of [390, 1440]) {
       page
         .getByRole("region", { name: "Workflow responsibilities" })
         .getByRole("listitem"),
-    ).toHaveCount(3);
+    ).toHaveCount(4);
     await page
       .getByRole("button", {
         name: "Inspect map assignment · K-01-E",

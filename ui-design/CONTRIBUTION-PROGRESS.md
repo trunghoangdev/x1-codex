@@ -1,0 +1,9 @@
+# Local contribution progress in the workstream · iteration 117
+
+Knowledge K-01’s workstream detail and workflow map now include a separately labelled local contribution lane. It follows the same contribution records used by Leo’s editor, Maya’s inbox, Organization attention and explicit checkpoint/import recovery.
+
+Six steps show preparation, original delivery, original receipt, revision request, revised preparation/delivery and revised receipt with reassessment kept separate. Recorded delivery/receipt/assessment identities and timestamps are shown at the relevant step. Missing records stay explicitly missing; an unknown or pending command is not counted as delivery. The current stage comes from `contributionView`; the next responsibility points to Leo during preparation/command correction or uncertainty, and Maya while receiver receipt is missing. No new assessor responsibility is inferred after receipt.
+
+Buttons open Leo’s contribution or Maya’s My Work using explicit sample-persona navigation. This is not authentication or delegation. The lane only appears in K-01, not other workstreams or organizations. It does not advance authored coordination steps, modify workstream counters, resolve responsibility gaps, authorize publication or verify an outcome. Local recovery can roll the lane back because it is a projection of current local records, not an immutable organizational audit.
+
+Production build and twelve targeted checks passed across runs. Desktop/320px lifecycle checks import unknown/delivered/revision/preparation/revised/received states, verify both workstream and workflow stages, preserve authored flow text, inspect exact version links, test navigation and absence on K-02, and check horizontal reflow. Existing Knowledge and main/larger workflow navigation checks pass. Older workflow assertions were updated to include the already-existing K-01-H assignment. No live backend or participant session was tested.
