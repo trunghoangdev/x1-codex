@@ -946,3 +946,9 @@ Production build and diff checks passed. Thirteen contribution lifecycle, worksp
 Separated permission-denied recovery from revision-conflict guidance in the shared contribution projection and editor status. Missing preparation now lists the exact remaining fields. Delivery confirmation is bound to the complete state and selected simulation; external restore/import changes cancel the old confirmation and require fresh review, preserving the new draft. Invalid import/storage handling and unresolved-command locks remain intact.
 
 Production build, diff checks and twelve targeted checks passed, including desktop/phone import during confirmation, both rejection reasons and retained text, missing-field guidance, uncertainty/projection handling, lifecycle round trips and file transfer. See [error recovery](CONTRIBUTION-ERROR-RECOVERY.md). No participant or backend result is claimed.
+
+## 112 — Keyboard focus and cross-browser contribution recovery
+
+Checkpoint save/removal and restore/import previews now focus their review headings; completion/cancellation returns to the checkpoint heading. Rejected commands focus Submission status, and command removal cannot target a missing command heading. Added Chromium/Firefox keyboard checks at 320px and desktop, including long unbroken contributions, confirmation/cancellation, preview navigation and rejection recovery.
+
+Production build and fifteen distinct related checks passed across targeted runs, including existing forced-colors/reflow, uncertainty navigation, checkpoint failures and interrupted-review checks. See [contribution accessibility review](CONTRIBUTION-ACCESSIBILITY-REVIEW.md) for evidence and limits. No screen-reader or participant session was conducted.

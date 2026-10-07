@@ -80,6 +80,12 @@ export function ContributionRecovery({
   const [notice, setNotice] = useState("");
   const [preview, setPreview] = useState<ContributionCheckpoint>();
   const [confirm, setConfirm] = useState<"save" | "remove">();
+  const actionHeading = useRef<HTMLHeadingElement>(null);
+  const previewHeading = useRef<HTMLHeadingElement>(null);
+  useEffect(() => {
+    if (preview) previewHeading.current?.focus();
+    else if (confirm) actionHeading.current?.focus();
+  }, [preview, confirm]);
   const run = (fn: () => void) => {
     try {
       fn();
@@ -244,6 +250,7 @@ export function ContributionRecovery({
           <p role="status">{notice}</p>
           {confirm && (
             <div>
+              <h3 ref={actionHeading} tabIndex={-1}>{confirm === "save" ? "Review checkpoint save" : "Review checkpoint removal"}</h3>
               <button
                 className="button secondary"
                 onClick={() =>
@@ -287,7 +294,7 @@ export function ContributionRecovery({
           )}
           {preview && (
             <div>
-              <h3>{imported ? "Import preview" : "Restore preview"}</h3>
+              <h3 ref={previewHeading} tabIndex={-1}>{imported ? "Import preview" : "Restore preview"}</h3>
               <p>
                 {imported ? "File captured" : "Saved"}: {preview.savedAt} ·{" "}
                 {preview.state.contributions.length} versions ·{" "}

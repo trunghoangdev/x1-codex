@@ -64,10 +64,15 @@ export function HumanContribution({
     const receiverChanged =
       previous.split(":")[5] !== focusStage.split(":")[5] ||
       previous.split(":")[6] !== focusStage.split(":")[6];
+    const commandChanged = !!command && (
+      previous.split(":")[2] !== command.id || previous.split(":")[3] !== command.status
+    );
     const target = versionChanged
       ? "human-contribution-body"
       : confirm
         ? "human-delivery-confirm-heading"
+        : commandChanged
+          ? "human-command-status-heading"
         : previous.split(":")[1] === "true" && !locked && !current.delivery
           ? "human-contribution-body"
           : receiverChanged
