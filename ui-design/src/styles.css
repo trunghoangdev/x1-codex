@@ -3775,3 +3775,6 @@ main h3,
 .contribution-comparison ins { background: #e4f1e7; text-decoration: underline; }
 @media (max-width: 700px) { .contribution-comparison-columns { grid-template-columns: minmax(0, 1fr); } }
 @media (forced-colors: active) { .contribution-comparison del, .contribution-comparison ins { background: Canvas; color: CanvasText; } }
+
+.contribution-session-note { display: block; }
+.contribution-session-note details { margin-top: 8px; }

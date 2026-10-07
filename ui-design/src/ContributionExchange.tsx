@@ -52,11 +52,15 @@ export function ContributionExchange({
       <h2>
         {receiver ? "Contribution for Maya" : "Contribution exchange · K-01-H"}
       </h2>
-      <p>
-        Knowledge Operations · K-01 · Leo → Maya. Local session sample; reload
-        starts empty; explicitly restore a saved contribution checkpoint to
-        resume. No publication authority or verified outcome is established.
-      </p>
+      <p>Knowledge Operations · K-01 · Leo → Maya · local demo.</p>
+      <details>
+        <summary>Source, recovery and outcome boundaries</summary>
+        <p>
+          Local session sample; reload starts empty; explicitly restore a saved
+          contribution checkpoint to resume. No publication authority or
+          verified outcome is established.
+        </p>
+      </details>
       <p role="status">{view.summary}</p>
       {receiver && !current.receipt && (
         <p>
@@ -84,7 +88,10 @@ export function ContributionExchange({
                 Assessment: {current.assessment.id} →{" "}
                 {current.assessment.receiptId} · {current.assessment.at}.
               </p>
-              <p>{current.assessment.rationale}</p>
+              <details>
+                <summary>Inspect recorded revision guidance</summary>
+                <p>{current.assessment.rationale}</p>
+              </details>
             </>
           )}
           <p>
@@ -145,11 +152,14 @@ export function ContributionExchange({
       <ContributionComparison state={state} deliveredOnly />
       {receiver && current.delivery && (
         <>
-          <p>
-            Sample receiver actions · Maya. These local records are not
-            server-admitted decisions. The revision request uses authored
-            guidance; it does not evaluate your text.
-          </p>
+          <details>
+            <summary>About sample receiver actions</summary>
+            <p>
+              Sample receiver actions · Maya. These local records are not
+              server-admitted decisions. The revision request uses authored
+              guidance; it does not evaluate your text.
+            </p>
+          </details>
           <button
             className="button secondary"
             disabled={!onChange || !!current.receipt}

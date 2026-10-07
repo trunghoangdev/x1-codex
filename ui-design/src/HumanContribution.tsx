@@ -108,16 +108,15 @@ export function HumanContribution({
       </section>}
       {workspace && <section className="panel org-stream" aria-label="Contribution workspace context">
         <h2>Knowledge Operations · Welcome guide</h2>
-        <p>K-01-H · Leo · preparation and revision. This sample assignment is separate from the authored researcher and distribution responsibilities.</p>
+        <details><summary>Assignment context</summary><p>K-01-H · Leo · preparation and revision. This sample assignment is separate from the authored researcher and distribution responsibilities.</p></details>
         <button className="button secondary" onClick={workspace.onOrganization}>View Organization</button>{" "}
         <button className="button secondary" onClick={workspace.onWorkstream}>View workstream · K-01</button>
       </section>}
-      <div className="org-banner">
-        <p>
-          Local session only. No upload, real receiver, server admission or
-          publication. Leaving this screen preserves this session; reload clears
-          it. {workspace ? "Use Save or restore Knowledge contribution to save and explicitly restore a browser checkpoint. Demos continuity remains separate." : "Demo continuity does not save this exercise."}
-        </p>
+      <div className="org-banner contribution-session-note">
+        <p>Local demo · no upload or publication. Reload starts empty; recover a saved checkpoint explicitly.</p>
+        <details><summary>Session storage and demo boundaries</summary>
+          <p>Leaving this screen preserves this session. {workspace ? "Use Save or restore Knowledge contribution to save and explicitly restore a browser checkpoint. Demos continuity remains separate." : "Demo continuity does not save this exercise; reload clears it."} No real receiver or server admission is established.</p>
+        </details>
       </div>
       {interruptedReview && <p role="status">Work changed after the delivery review. The previous confirmation is cancelled; inspect the current draft and review again. No command was submitted by that cancelled confirmation.</p>}
       <section className="panel org-stream">
@@ -130,6 +129,7 @@ export function HumanContribution({
           <br />
           Subject: {responsibility.subject} / draft-0{current.version}
         </p>
+        <details><summary>Responsibility and publication scope</summary>
         <p>
           Prepare a short onboarding guide with a clear next step and a citation
           to the supplied brief. Deliver a text contribution plus a note
@@ -140,6 +140,7 @@ export function HumanContribution({
           Scope: preparation and revision only. Publication permission and
           verified cohort usefulness are not established.
         </p>
+        </details>
         <details open>
           <summary>Inspect input · {responsibility.input}</summary>
           <p>{responsibility.inputText}</p>

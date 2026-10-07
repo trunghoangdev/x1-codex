@@ -982,3 +982,9 @@ Production build, diff checks and thirteen targeted checks passed, including des
 Added a separate local progress lane to Knowledge K-01 workstream and workflow views. It displays preparation and exact delivery/receipt/revision records through draft-02, current stage and represented next responsibility. Explicit entrances open Leo’s contribution and Maya’s inbox. Unknown commands stay distinct from delivery; receipt and pending reassessment stay distinct from acceptance. Authored flow, gaps, counters and outcome remain unchanged.
 
 Production build, diff checks and twelve targeted checks passed across runs: desktop/320px imported lifecycle consistency across both views, unchanged authored coordination, lineage/reflow/navigation, Knowledge personal work and main/larger workflow return paths. Older map checks now include the already-existing K-01-H assignment. See [local progress guide](CONTRIBUTION-PROGRESS.md). No backend or participant result is claimed.
+
+## 118 — Consolidate contribution guidance and layout
+
+Collapsed extended assignment/session/scope explanations while preserving visible task, next step, input and essential reload/demo boundaries. Receiver source/action explanations and long result rationale move into disclosures; exact identities, current state and next responsibility remain visible. Comparison explains highlighting and response limitations once rather than repeating them in both columns. Phone session notes stack vertically.
+
+Production build, diff checks and twelve targeted browser/model checks passed across task paths, exchange, comparison, receiver focus and Chromium/Firefox keyboard recovery. Phone previews were visually inspected and recaptured after the session-note layout adjustment; final build passed. See [layout review](CONTRIBUTION-LAYOUT.md). No participant session was conducted.

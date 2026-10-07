@@ -85,9 +85,18 @@ export function ContributionComparison({
           {second.delivery
             ? "the frozen revised delivery"
             : "current preparation, not delivered"}
-          . Highlighting marks a changed passage between equal lines; it does
-          not evaluate whether the request was satisfied.
+          .
         </p>
+        <details>
+          <summary>How to read this comparison</summary>
+          <p>
+            Highlighting marks a changed passage between equal lines; it does
+            not evaluate whether the request was satisfied. Removed or replaced
+            passages are struck through; added or replacement passages are
+            underlined. Leo’s revision response is an explanation, not
+            confirmation that Maya’s request has been satisfied.
+          </p>
+        </details>
         <h3>Request attached to draft-01</h3>
         <p>
           {first.assessment.id} → {first.assessment.receiptId} → {before.id} ·
@@ -111,7 +120,6 @@ export function ContributionComparison({
         <div className="contribution-comparison-columns">
           <article aria-label="Comparison draft-01">
             <h3>draft-01 · delivered</h3>
-            <p>Removed or replaced passage is struck through.</p>
             <pre className="human-contribution-text">{render(1)}</pre>
             <h4>Original scope note</h4>
             <p>{before.note}</p>
@@ -119,7 +127,6 @@ export function ContributionComparison({
           </article>
           <article aria-label="Comparison draft-02">
             <h3>draft-02 · {second.delivery ? "delivered" : "preparation"}</h3>
-            <p>Added or replacement passage is underlined.</p>
             <pre className="human-contribution-text">{render(2)}</pre>
             <h4>Contributor revision response</h4>
             <p>{note.trim() ? note : "No revision response written yet."}</p>
@@ -127,10 +134,6 @@ export function ContributionComparison({
               Input:{" "}
               {second.delivery?.input ??
                 (second.citesInput ? before.input : "citation not selected")}
-            </p>
-            <p>
-              This response is Leo’s explanation, not confirmation that Maya’s
-              request has been satisfied.
             </p>
           </article>
         </div>
