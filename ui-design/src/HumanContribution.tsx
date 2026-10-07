@@ -1,3 +1,4 @@
+import { ContributionComparison } from "./ContributionComparison";
 import { contributionView } from "./data/contributionView";
 import {
   commandBlocksEditing,
@@ -449,6 +450,7 @@ export function HumanContribution({
           </>
         )}
       </section>
+      <ContributionComparison state={state} />
       <details className="panel org-stream" open={!workspace}>
         <summary>Version history · {state.contributions.length} versions</summary>
         <h2>Version history</h2>

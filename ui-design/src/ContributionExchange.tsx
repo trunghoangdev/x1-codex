@@ -1,3 +1,4 @@
+import { ContributionComparison } from "./ContributionComparison";
 import { contributionView } from "./data/contributionView";
 import {
   assessContribution,
@@ -79,6 +80,7 @@ export function ContributionExchange({
           </details>
         </article>
       ))}
+      <ContributionComparison state={state} deliveredOnly />
       {receiver && current.delivery && (
         <>
           <p>

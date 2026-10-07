@@ -31,7 +31,9 @@ for (const width of [390, 1440])
       .selectOption("maya");
     const inbox = page.getByRole("region", { name: "Maya contribution inbox" });
     await expect(
-      inbox.getByText("Original exact contribution.", { exact: true }),
+      inbox
+        .locator(":scope > article")
+        .getByText("Original exact contribution.", { exact: true }),
     ).toBeVisible();
     await expect(
       page.getByRole("button", { name: "Request sample revision · draft-01" }),
@@ -65,10 +67,14 @@ for (const width of [390, 1440])
       .getByRole("combobox", { name: "Sample persona", exact: true })
       .selectOption("maya");
     await expect(
-      inbox.getByText("Revised exact contribution.", { exact: true }),
+      inbox
+        .locator(":scope > article")
+        .getByText("Revised exact contribution.", { exact: true }),
     ).toBeVisible();
     await expect(
-      inbox.getByText("Original exact contribution.", { exact: true }),
+      inbox
+        .locator(":scope > article")
+        .getByText("Original exact contribution.", { exact: true }),
     ).toHaveCount(1);
     await page
       .getByRole("button", { name: "Record sample receipt · draft-02" })
@@ -81,7 +87,9 @@ for (const width of [390, 1440])
     await page
       .getByRole("button", { name: "Back to Organization", exact: true })
       .click();
-    await page.getByText("Contribution exchange history · K-01-H", {exact:true}).click();
+    await page
+      .getByText("Contribution exchange history · K-01-H", { exact: true })
+      .click();
     const observations = page.getByRole("region", {
       name: "Shared contribution observations",
     });
@@ -94,7 +102,9 @@ for (const width of [390, 1440])
       ),
     ).toBeVisible();
     await page.reload();
-    await page.getByText("Contribution exchange history · K-01-H", {exact:true}).click();
+    await page
+      .getByText("Contribution exchange history · K-01-H", { exact: true })
+      .click();
     await expect(
       page
         .getByRole("region", { name: "Shared contribution observations" })

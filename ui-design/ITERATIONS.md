@@ -952,3 +952,9 @@ Production build, diff checks and twelve targeted checks passed, including deskt
 Checkpoint save/removal and restore/import previews now focus their review headings; completion/cancellation returns to the checkpoint heading. Rejected commands focus Submission status, and command removal cannot target a missing command heading. Added Chromium/Firefox keyboard checks at 320px and desktop, including long unbroken contributions, confirmation/cancellation, preview navigation and rejection recovery.
 
 Production build and fifteen distinct related checks passed across targeted runs, including existing forced-colors/reflow, uncertainty navigation, checkpoint failures and interrupted-review checks. See [contribution accessibility review](CONTRIBUTION-ACCESSIBILITY-REVIEW.md) for evidence and limits. No screen-reader or participant session was conducted.
+
+## 113 — Exact-version contribution comparison
+
+Added a collapsible draft-01/draft-02 comparison in the contribution editor and, after revised delivery, receiver/shared exchange. Frozen original text, scope note and assessment chain appear beside current preparation or frozen revised delivery, contributor response and citation state. A bounded changed passage uses strike-through/underline; narrow layouts stack columns. Unsent draft-02 stays out of receiver/shared comparison, and assessment satisfaction is not inferred.
+
+Production build, diff checks and nine distinct targeted checks passed across runs, including text reconstruction edge cases, checkpoint-restored preparation, receiver visibility, original assessment binding and pending reassessment, shared revision loops and Chromium/Firefox keyboard flows. Existing exchange assertions now scope exact delivered text to delivery articles because comparison intentionally repeats that content. See [comparison guide](CONTRIBUTION-COMPARISON.md).
