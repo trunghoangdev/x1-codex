@@ -53,6 +53,7 @@ for (const width of [390, 1440])
         .getByRole("button", { name: "Back to scenario context", exact: true })
         .click();
       await expect(page).toHaveURL(origin);
+      await page.getByRole("button", {name:"Agreements, reviews & policy",exact:true}).click();
     }
     await workshop.locator("summary").click();
     await expect(workshop).toContainText("Follow-up: Leo Rivera");

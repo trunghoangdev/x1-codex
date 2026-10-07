@@ -319,3 +319,5 @@ Iteration 101: Knowledge Organization now offers a compact actionable coordinati
 Iteration 102: integrated contribution starts with current version, deliverable and next-action shortcuts; Maya sees the newest delivery and receiver next step first. Earlier versions remain behind disclosures. Command uncertainty and session boundaries stay visible. See [main task path](HUMAN-CONTRIBUTION.md).
 
 Review after iteration 102: [UI consolidation priorities](EXPERIENCE-CONSOLIDATION-REVIEW.md) recommends simplifying Organization composition, labeling authored/session signal sources, deciding contribution recovery behavior and updating the integrated participant walkthrough. These are proposals, not implemented features.
+
+Iteration 103: Organization prioritizes shared purpose, attention/next actions and workstreams. Contribution history and policy/agreement context move into separate initially collapsed disclosures after workstreams; the policy shortcut opens and focuses its target. See [landing-page consolidation](ORGANIZATION-CONSOLIDATION.md).

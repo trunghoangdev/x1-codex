@@ -706,18 +706,9 @@ export function ScenarioWorkspace({
               }
               completed={{}}
               readiness="missing"
-              operatingContext={
-                scenario.id === "knowledge" ? (
-                  <>
-                  <CoordinationNeeds items={needs} compact onOpen={openNeed} />
-                  <ContributionExchange state={contribution} onOpen={() => onRoute(base + "/work?persona=maya")} />
-                  <OrganizationOperatingContext
-                    scenario={scenario}
-                    onSource={open}
-                  />
-                  </>
-                ) : undefined
-              }
+              coordinationNeeds={scenario.id === "knowledge" ? <CoordinationNeeds items={needs} compact onOpen={openNeed} /> : undefined}
+              exchangeHistory={scenario.id === "knowledge" ? <ContributionExchange state={contribution} onOpen={() => onRoute(base + "/work?persona=maya")} /> : undefined}
+              operatingContext={scenario.id === "knowledge" ? <OrganizationOperatingContext scenario={scenario} onSource={open} /> : undefined}
               proposals={{}}
               onOpen={(a) => open(`/assignments/${a.id}`)}
               onMyWork={persona ? () => onRoute(qualify("/work")) : onMyWork}

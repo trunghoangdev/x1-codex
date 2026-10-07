@@ -45,6 +45,7 @@ for (const width of [390, 1440])
     await page.setViewportSize({ width, height: 1000 });
     await page.goto("/#/organizations/knowledge?persona=leo&coordSignal=input");
     const origin = page.url();
+    await page.getByRole("button", {name: "Agreements, reviews & policy", exact:true}).click();
     await page
       .getByRole("button", {
         name: "Explore a complete collaboration example",

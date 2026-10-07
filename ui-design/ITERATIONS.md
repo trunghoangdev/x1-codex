@@ -886,3 +886,9 @@ Integrated preparation now opens with current draft version, expected deliverabl
 Integrated version history is collapsed by default; standalone history stays open. Receiver inspection shows newest delivery first, explicit next-step guidance and collapsed earlier revisions. All earlier records remain inspectable, and receipt/reassessment/publication semantics are unchanged. No claim of improved participant comprehension is made before real sessions.
 
 Production build and fourteen distinct related checks passed across runs: contribution/command regressions, shared revision loops, desktop/phone editor and command-focus shortcuts, collapsed-history inspection and narrow-screen overflow with long contribution content. Final four task/exchange checks passed after prioritizing the current-task panel. Diff whitespace checks passed.
+
+## 103 — Consolidated Organization landing page
+
+Separated primary coordination from secondary inspection. Shared purpose/attention lead into compact Knowledge needs and workstreams. Case/decision/activity entrances follow workstream coordination. Knowledge contribution history and operating context are separate initially collapsed disclosures after the primary content. Policy shortcuts open enclosing details before focus/scroll; source routes, persona/filter context and exact records remain unchanged. Returning to the overview starts its disclosures collapsed.
+
+Production build and thirteen distinct related checks passed across desktop/phone consolidation, keyboard policy/history disclosure, reflow, shared revision loop, policy/source return, collaboration walkthrough and deferred view recovery. After moving secondary action entrances, both consolidation checks passed again; final build and diff checks passed. No participant session or comprehension claim is introduced.

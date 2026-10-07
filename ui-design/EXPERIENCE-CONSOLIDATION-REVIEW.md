@@ -47,3 +47,7 @@ Live identity, server-authorized commands, shared persistence and SF integration
 ## Suggested next unit
 
 Start with item 1: reorganize the existing Organization content without changing record semantics. Follow with item 2 before testing participant comprehension. Item 3 is useful for session continuity, but should not postpone actual task feedback indefinitely.
+
+## Item 1 implementation checkpoint
+
+Iteration 103 implements the primary Organization order and collapses Knowledge contribution history and operating context after workstreams. Case/decision/activity entrances also follow the primary coordination path. Existing record semantics and navigation remain; the policy shortcut opens the disclosure and focuses its target. Item 2, signal source labeling, remains next.

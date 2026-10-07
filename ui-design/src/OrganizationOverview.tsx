@@ -19,6 +19,8 @@ export function OrganizationOverview({
   attentionItems,
   coordination,
   operatingContext,
+  coordinationNeeds,
+  exchangeHistory,
   completed,
   readiness,
   onOpen,
@@ -40,6 +42,8 @@ export function OrganizationOverview({
   attentionItems?: AttentionItem[];
   coordination?: ReactNode;
   operatingContext?: ReactNode;
+  coordinationNeeds?: ReactNode;
+  exchangeHistory?: ReactNode;
   myWorkLabel?: string;
   completed: Record<string, string>;
   readiness: Readiness;
@@ -81,20 +85,6 @@ export function OrganizationOverview({
           </button>
         )}
       </div>
-      {onCases && (
-        <p>
-          <button className="button secondary" onClick={onCases}>
-            Browse coordination cases
-          </button>
-        </p>
-      )}
-      {onDecisions && (
-        <p>
-          <button className="button secondary" onClick={onDecisions}>
-            Inspect decision responsibility
-          </button>
-        </p>
-      )}
       <div className="org-banner">
         <div>
           <span className="section-label">
@@ -136,6 +126,11 @@ export function OrganizationOverview({
             key={id}
             onClick={() => {
               const heading = document.getElementById(id);
+              let ancestor = heading?.parentElement;
+              while (ancestor) {
+                if (ancestor instanceof HTMLDetailsElement) ancestor.open = true;
+                ancestor = ancestor.parentElement;
+              }
               heading?.focus({ preventScroll: true });
               heading?.scrollIntoView({ block: "start", behavior: "instant" });
             }}
@@ -144,12 +139,7 @@ export function OrganizationOverview({
           </button>
         ))}
       </nav>
-      <p className="org-overview-section">
-        <button className="button secondary" onClick={onActivity}>
-          View organization activity
-        </button>
-      </p>
-      {operatingContext}
+      {coordinationNeeds}
       {coordination ?? (
         <>
           <section
@@ -205,6 +195,33 @@ export function OrganizationOverview({
           </section>
         </>
       )}
+      {onCases && (
+        <p>
+          <button className="button secondary" onClick={onCases}>
+            Browse coordination cases
+          </button>
+        </p>
+      )}
+      {onDecisions && (
+        <p>
+          <button className="button secondary" onClick={onDecisions}>
+            Inspect decision responsibility
+          </button>
+        </p>
+      )}
+      <p className="org-overview-section">
+        <button className="button secondary" onClick={onActivity}>
+          View organization activity
+        </button>
+      </p>
+      {exchangeHistory && <details className="organization-disclosure org-overview-section">
+        <summary>Contribution exchange history · K-01-H</summary>
+        {exchangeHistory}
+      </details>}
+      {operatingContext && <details className="organization-disclosure org-overview-section">
+        <summary>Inspect agreements, reviews & policy</summary>
+        {operatingContext}
+      </details>}
       {scenario.id === "main" && (
         <details className="organization-disclosure org-overview-section">
           <summary>Other organization work · 3 assignments</summary>

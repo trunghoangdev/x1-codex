@@ -81,6 +81,7 @@ for (const width of [390, 1440])
     await page
       .getByRole("button", { name: "Back to Organization", exact: true })
       .click();
+    await page.getByText("Contribution exchange history · K-01-H", {exact:true}).click();
     const observations = page.getByRole("region", {
       name: "Shared contribution observations",
     });
@@ -93,6 +94,7 @@ for (const width of [390, 1440])
       ),
     ).toBeVisible();
     await page.reload();
+    await page.getByText("Contribution exchange history · K-01-H", {exact:true}).click();
     await expect(
       page
         .getByRole("region", { name: "Shared contribution observations" })

@@ -38,6 +38,7 @@ test("scenario view loads on demand and focuses the loaded heading", async ({
       exact: true,
     }),
   ).toBeFocused();
+  await page.getByRole("button", {name: "Agreements, reviews & policy", exact:true}).click();
   await page
     .getByRole("button", {
       name: "Explore a complete collaboration example",
