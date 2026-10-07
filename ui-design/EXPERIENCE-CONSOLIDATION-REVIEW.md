@@ -59,3 +59,7 @@ Iteration 104 adds source metadata/labels to coordination signals and main atten
 ## Item 3 implementation checkpoint
 
 Iteration 105 adds explicit Knowledge contribution checkpoint save/review/restore/removal with bounded versioned validation. Reload still starts empty; an explicitly restored checkpoint preserves revisions, receiving records and command uncertainty. Main and standalone Demos formats are unchanged. Item 4, the integrated participant walkthrough and actual observations, remains next.
+
+## Item 4 preparation checkpoint
+
+Iteration 106 prepares the integrated participant walkthrough and an unfilled session record. Contributor/receiver/coordinator tasks include source-counter comprehension, command uncertainty and checkpoint recovery. The package is ready; actual participant and assistive-technology sessions remain outstanding and cannot be replaced by browser automation.

@@ -325,3 +325,5 @@ Iteration 103: Organization prioritizes shared purpose, attention/next actions a
 Iteration 104: attention signals label authored context versus local sample state, summaries show source totals, and Knowledge/larger workstream counters explain their independent scope. Knowledge contribution observations reset on reload; main local state retains its existing explicit snapshot rules. See [attention source semantics](ACTIONABLE-ATTENTION.md).
 
 Iteration 105: **Save or restore Knowledge contribution** offers a confirmed browser checkpoint with validated, previewed restoration after reload. Unknown-command identities and submission locks survive restoration. This is separate from Demos continuity and requires explicit saving/restoring. See [contribution recovery](CONTRIBUTION-RECOVERY.md).
+
+Iteration 106: the [integrated participant walkthrough](INTEGRATED-PARTICIPANT-WALKTHROUGH.md) covers Leo → Maya → revision → Organization, command uncertainty and checkpoint recovery. A [blank session record](PARTICIPANT-SESSION-RECORD.md) separates observed feedback from facilitator interpretation. Ready for human sessions; no participant results are claimed.

@@ -62,3 +62,7 @@ Never insert inferred participant results or synthetic completion percentages. P
 ## Follow-up display checks — iteration 98
 
 Chromium and Firefox reflow/forced-colors checks have now been run: see [environments, results and manual zoom limits](DISPLAY-ACCESSIBILITY-REVIEW.md). This resolves a bounded second-browser technical check, not full cross-browser coverage or the outstanding actual screen-reader/user sessions.
+
+## Integrated participant plan — iteration 106
+
+For the current shared Knowledge experience, use [the integrated participant walkthrough](INTEGRATED-PARTICIPANT-WALKTHROUGH.md) and [blank session record](PARTICIPANT-SESSION-RECORD.md). They supersede the standalone contributor entry above for collaboration research, adding Maya's receiving inbox, Organization source/counter questions and explicit checkpoint recovery. Existing software reviewer/authority and retained-SF operator tasks remain useful separate exercises. Actual participant and screen-reader sessions remain unperformed.
