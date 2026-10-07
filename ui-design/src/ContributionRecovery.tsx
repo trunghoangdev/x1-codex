@@ -67,6 +67,15 @@ export function ContributionRecovery({
         : empty
           ? `Saved checkpoint available · not restored. Saved at ${saved.checkpoint.savedAt}`
           : `Unsaved changes · current work differs from checkpoint saved at ${saved.checkpoint.savedAt}`;
+  const fileRead = useRef(0);
+  useEffect(
+    () => () => {
+      fileRead.current++;
+    },
+    [],
+  );
+  const [reading, setReading] = useState(false);
+  const [imported, setImported] = useState(false);
   const heading = useRef<HTMLHeadingElement>(null);
   const [notice, setNotice] = useState("");
   const [preview, setPreview] = useState<ContributionCheckpoint>();
@@ -105,6 +114,7 @@ export function ContributionRecovery({
           </p>
           <button
             className="button secondary"
+            disabled={reading}
             onClick={() => {
               setPreview(undefined);
               setConfirm("save");
@@ -117,6 +127,7 @@ export function ContributionRecovery({
           </button>{" "}
           <button
             className="button secondary"
+            disabled={reading}
             onClick={() =>
               run(() => {
                 setConfirm(undefined);
@@ -131,6 +142,7 @@ export function ContributionRecovery({
                 }
                 const parsed = parseContributionCheckpoint(raw);
                 setSaved({ checkpoint: parsed });
+                setImported(false);
                 setPreview(parsed);
                 setNotice(
                   "Review the checkpoint before replacing current work.",
@@ -142,6 +154,7 @@ export function ContributionRecovery({
           </button>{" "}
           <button
             className="text-link"
+            disabled={reading}
             onClick={() => {
               setPreview(undefined);
               setConfirm("remove");
@@ -152,6 +165,82 @@ export function ContributionRecovery({
           >
             Remove saved checkpoint
           </button>
+          <details>
+            <summary>Move contribution between machines</summary>
+            <p>
+              Export the current exercise, including contribution text and local
+              command/receiver records. On another machine, import the file and
+              review before replacing current work. Export does not save a
+              browser checkpoint; import does not write one. Save explicitly
+              afterward if needed.
+            </p>
+            <button
+              className="button secondary"
+              disabled={reading}
+              onClick={() =>
+                run(() => {
+                  const raw = encodeContributionCheckpoint(state);
+                  const url = URL.createObjectURL(
+                    new Blob([raw], { type: "application/json" }),
+                  );
+                  const link = document.createElement("a");
+                  link.href = url;
+                  link.download = "forge-knowledge-contribution.json";
+                  document.body.appendChild(link);
+                  try {
+                    link.click();
+                  } finally {
+                    link.remove();
+                    setTimeout(() => URL.revokeObjectURL(url), 1000);
+                  }
+                  setNotice(
+                    "Export download requested for current contribution. Browser checkpoint is unchanged.",
+                  );
+                })
+              }
+            >
+              Export current contribution
+            </button>
+            <label>
+              Import contribution file
+              <input
+                type="file"
+                accept=".json,application/json"
+                onChange={async (event) => {
+                  const file = event.target.files?.[0];
+                  event.target.value = "";
+                  if (!file) return;
+                  const request = ++fileRead.current;
+                  setReading(true);
+                  setPreview(undefined);
+                  setConfirm(undefined);
+                  setNotice(
+                    "Reading contribution file; current work is unchanged.",
+                  );
+                  try {
+                    if (file.size > 2_000_000)
+                      throw new Error("File too large");
+                    const parsed = parseContributionCheckpoint(
+                      await file.text(),
+                    );
+                    if (request !== fileRead.current) return;
+                    setImported(true);
+                    setPreview(parsed);
+                    setNotice(
+                      "Import validated. Review before replacing current contribution; browser checkpoint is unchanged.",
+                    );
+                  } catch {
+                    if (request !== fileRead.current) return;
+                    setNotice(
+                      "Contribution import rejected: invalid, unsupported, unreadable or oversized file. Current work and saved checkpoint are unchanged.",
+                    );
+                  } finally {
+                    if (request === fileRead.current) setReading(false);
+                  }
+                }}
+              />
+            </label>
+          </details>
           <p role="status">{notice}</p>
           {confirm && (
             <div>
@@ -198,10 +287,11 @@ export function ContributionRecovery({
           )}
           {preview && (
             <div>
-              <h3>Restore preview</h3>
+              <h3>{imported ? "Import preview" : "Restore preview"}</h3>
               <p>
-                Saved: {preview.savedAt} · {preview.state.contributions.length}{" "}
-                versions · {preview.state.commands?.length ?? 0} commands.
+                {imported ? "File captured" : "Saved"}: {preview.savedAt} ·{" "}
+                {preview.state.contributions.length} versions ·{" "}
+                {preview.state.commands?.length ?? 0} commands.
               </p>
               <p>
                 Latest command:{" "}
@@ -216,22 +306,30 @@ export function ContributionRecovery({
                   onChange(preview.state);
                   setPreview(undefined);
                   setNotice(
-                    "Checkpoint restored. This is local demo state; no server status was queried.",
+                    imported
+                      ? "Contribution imported into current session. Browser checkpoint is unchanged; save explicitly to keep it after reload."
+                      : "Checkpoint restored. This is local demo state; no server status was queried.",
                   );
                   heading.current?.focus();
                 }}
               >
-                Confirm restore contribution
+                {imported
+                  ? "Confirm import contribution"
+                  : "Confirm restore contribution"}
               </button>{" "}
               <button
                 className="button secondary"
                 onClick={() => {
                   setPreview(undefined);
-                  setNotice("Restore cancelled. Current work is unchanged.");
+                  setNotice(
+                    imported
+                      ? "Import cancelled. Current work and browser checkpoint are unchanged."
+                      : "Restore cancelled. Current work is unchanged.",
+                  );
                   heading.current?.focus();
                 }}
               >
-                Cancel restore
+                {imported ? "Cancel import" : "Cancel restore"}
               </button>
             </div>
           )}

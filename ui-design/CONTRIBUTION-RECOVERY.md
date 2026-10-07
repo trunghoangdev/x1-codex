@@ -28,3 +28,19 @@ A save-status line now sits outside the checkpoint disclosure on Knowledge scree
 Comparison covers the complete contribution/command/receiver state, not merely draft text. Receipt, assessment and command transitions can therefore make a saved exercise differ. Object key order is normalized for comparison; omitted command history and an empty command list are equivalent. Editing back to the saved state correctly restores the matching status.
 
 The status reads the validated browser checkpoint on mount and refreshes after save/review/removal, browser focus and relevant cross-tab storage events. A preview does not restore anything. Reload does not claim a nonempty saved exercise is already loaded. Storage failure never creates a new saved timestamp. Cross-tab refresh only updates checkpoint status, not the current exercise. Save/restore remain explicit and local.
+
+## File transfer between machines — iteration 108
+
+Open **Save or restore Knowledge contribution → Move contribution between machines**.
+
+1. On the source machine, choose **Export current contribution**. The browser downloads `forge-knowledge-contribution.json` containing the current exercise, including unsaved draft/command/receiver changes. This does not update the browser checkpoint.
+2. Transfer the file using your own file-transfer method and open a compatible UI version on the destination machine.
+3. Choose **Import contribution file**. Format, size and record relationships are validated before an import preview is offered. Inspect the file capture time, version/command totals and latest command status.
+4. **Cancel import** leaves current work untouched. **Confirm import contribution** replaces current Knowledge session state, including unsaved work. No merge or server reconciliation is performed.
+5. Save a contribution checkpoint explicitly on the destination browser if you want local recovery after reload. Import itself does not modify that browser's saved checkpoint.
+
+The existing versioned checkpoint wrapper is reused. On export its `savedAt` field denotes file capture time, displayed as **File captured** in the import preview; it is not evidence that browser storage was saved. Unknown/pending commands, admitted projection lag, exact payloads and idempotency identities retain their original behavior. File-format validation does not authenticate provenance.
+
+Files include entered contribution text and local records. Standalone Demos, main-software continuity snapshots and historical SF data are separate and cannot be imported as this format. Files larger than 2 MB, unsupported formats, malformed JSON or inconsistent relationships are rejected without replacing work or checkpoint. While a file is being read, checkpoint/export actions are disabled; a newer file selection supersedes earlier reads. Same-file reselection is supported after cancellation or rejection.
+
+Technical transfer checks use independent browser contexts, not a physical Mac session. Actual cross-machine transfer is manual; the UI neither uploads files nor synchronizes machines.

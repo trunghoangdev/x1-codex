@@ -920,3 +920,9 @@ Knowledge screens now show save status outside the checkpoint disclosure. It dis
 Explicit preview/confirmation and unknown-command recovery semantics remain unchanged. Reload cannot imply that nonempty saved work is already restored. Main Demos and standalone contribution are unaffected.
 
 Production build and diff checks passed. Nine distinct related checks passed across runs: desktop/phone status through edit/navigation/reload/cancel/restore/removal, invalid storage, receipt/assessment marking saved work changed, checkpoint validation/uncertainty locks and blocked save, plus shared revision loops. No participant results are claimed.
+
+## 108 — Contribution file export/import
+
+Added export of current Knowledge exercise and file import through the existing bounded versioned validator. Import preview distinguishes file capture from browser save time and requires confirmation before replacing current session work. Cancel/rejected input preserves work and checkpoint. Export and import do not automatically save browser storage; destination save remains explicit. Unresolved commands retain payload/identity and submission locks. Async file reads reject stale selections and disable conflicting checkpoint/export actions while pending.
+
+Production build and ten targeted checks passed: independent desktop/phone browser-context transfer with unknown acknowledgement and unchanged destination checkpoint, cancel/reselect, invalid/unsupported/oversized file rejection, existing checkpoint recovery/validation/storage failure and save-state transitions including receiver actions. Diff checks passed. No actual Mac/physical-device transfer, participant session or live synchronization is claimed.

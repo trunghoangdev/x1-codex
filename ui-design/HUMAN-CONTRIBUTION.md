@@ -49,3 +49,7 @@ Integrated version history is collapsed by default and remains available through
 ## Explicit Knowledge checkpoint — iteration 105
 
 Knowledge now supports a separate [contribution checkpoint](CONTRIBUTION-RECOVERY.md). Reload still starts empty, but users can explicitly save, review and restore the shared draft/command/delivery/receiver state. Demos continuity and standalone contribution remain independent. This supersedes earlier statements that Knowledge work can only be lost on reload; unsaved work still cannot be recovered.
+
+## Portable Knowledge exercise — iteration 108
+
+The [recovery controls](CONTRIBUTION-RECOVERY.md) now support exporting current work and importing a validated file into another browser/machine. Import requires a preview and confirmation, replaces the whole local exercise, and does not change the saved checkpoint until an explicit save. Standalone Demos and real retained SF sources remain separate.
