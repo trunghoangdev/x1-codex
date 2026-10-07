@@ -76,7 +76,7 @@ for (const width of [390, 1440])
       .getByRole("button", { name: "Browse roles", exact: true })
       .click();
     await page.getByLabel("Responsibility coverage").selectOption("unbound");
-    await expect(page.getByRole("status")).toContainText("2 of 6 roles");
+    await expect(page.locator("#role-results")).toContainText("2 of 6 roles");
     await expect(
       page.getByRole("article", { name: "Publication reviewer", exact: true }),
     ).toContainText("No binding represented");

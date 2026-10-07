@@ -1,3 +1,4 @@
+import { contributionView } from "./data/contributionView";
 import {
   commandBlocksEditing,
   submitContributionCommand,
@@ -27,6 +28,7 @@ export function HumanContribution({
   const [confirm, setConfirm] = useState(false);
   const [preview, setPreview] = useState<CommandPreview>("projected");
   const command = state.commands?.at(-1);
+  const view = contributionView(state);
   const locked = commandBlocksEditing(state);
   const current = state.contributions.at(-1)!;
   const update = (fields: Partial<typeof current>) => {
@@ -80,7 +82,7 @@ export function HumanContribution({
       {workspace && <section className="panel org-stream" aria-label="Current contribution task">
         <h2>Current task · draft-0{current.version}</h2>
         <p><strong>Deliverable:</strong> cited access-guide text plus a scope or revision note.</p>
-        <p role="status">{locked ? "Command unresolved. Inspect acknowledgement or delivery projection; do not submit again." : current.assessment ? "Maya requested a revision. Inspect the request below and prepare draft-02." : current.delivery ? current.receipt ? "Receipt recorded. Assessment remains separate; no further contributor action is established." : "Delivered locally. Waiting for Maya’s receipt; do not resend." : confirm ? "Review the exact version and content below before recording a local delivery." : "Prepare your contribution using the supplied brief, then review the exact delivery."}</p>
+        <p role="status">{confirm && !locked && !current.delivery ? "Review the exact version and content below before recording a local delivery." : view.contributorNext}</p>
         {!current.delivery && !locked && !confirm && <button className="button primary" onClick={() => document.getElementById("human-contribution-body")?.focus()}>Continue preparing · draft-0{current.version}</button>}
         {locked && <button className="button secondary" onClick={() => document.getElementById("human-command-status-heading")?.focus()}>Inspect unresolved command</button>}
       </section>}

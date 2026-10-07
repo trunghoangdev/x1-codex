@@ -934,3 +934,9 @@ Added Demos → Start organization demo as the recommended Knowledge/Leo entry, 
 Captured five new labeled desktop/phone/contributor/receiver/software-evidence previews with a reproducible script. Inspected the phone overview and receiver capture. During presentation checks, corrected active-navigation inference for contribution routes and persona switching into My Work; sidebar/breadcrumbs now match personal content.
 
 Production build, all five related browser checks and current demo document-link/diff validation passed. Entry checks confirm starting again preserves the draft and correct personal navigation. Shared revision and deferred recovery checks remain passing. Screenshots show fictional examples; no participant research or production integration is claimed.
+
+## 110 — Consistent contribution state across personal and shared views
+
+Added one contribution presentation projection for current version, stage, summary, next responsibility and attention. My Work, assignment inspection, editor and receiver/history now follow the same records, including restored/imported checkpoints. Unknown commands no longer suggest preparing a draft while editing is locked. Rejections create a correction signal; local response filters follow represented command/revision needs. Other assignment flags and workstream counters remain authored. Exact earlier delivery and assessment bindings are preserved.
+
+Production build and diff checks passed. Thirteen contribution lifecycle, workspace, exchange, transfer and task-path checks passed during implementation. Eleven final consistency, actionable-attention, personal-queue and Knowledge checks passed across targeted runs on desktop and phone. An older Knowledge navigation test now scopes its role-result status selector to avoid ambiguity with the visible save status. No participant session or backend integration is claimed. See [consistency review](CONTRIBUTION-CONSISTENCY.md).

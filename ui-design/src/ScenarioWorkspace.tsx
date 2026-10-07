@@ -1,3 +1,4 @@
+import { contributionView } from "./data/contributionView";
 import { ContributionRecovery } from "./ContributionRecovery";
 import { CoordinationNeeds } from "./CoordinationNeeds";
 import { actionableAttention, type CoordinationNeed } from "./data/actionableAttention";
@@ -189,7 +190,7 @@ export function ScenarioWorkspace({
             {a.id} · {a.role} ·{" "}
             {scenario.workers.find((w) => w.id === a.workerId)?.name ??
               "Unassigned"}{" "}
-            · {a.state}
+            · {a.id === "K-01-H" ? contributionView(contribution).stage : a.state}
           </p>
           <button
             className="text-link"
@@ -622,8 +623,9 @@ export function ScenarioWorkspace({
           ) : assignment ? (
             <section className="panel org-stream">
               <p>
-                {assignment.id} · {assignment.role} · {assignment.state}
+                {assignment.id} · {assignment.role} · {assignment.id === "K-01-H" ? contributionView(contribution).stage : assignment.state}
               </p>
+              {assignment.id === "K-01-H" && <><p role="status">{contributionView(contribution).summary}</p><p>{contributionView(contribution).contributorNext}</p></>}
               <p>
                 Worker:{" "}
                 {scenario.workers.find((w) => w.id === assignment.workerId)

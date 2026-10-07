@@ -1,3 +1,4 @@
+import { contributionView } from "./contributionView";
 import { scenarioAttention } from "./scenarioAttention";
 import type { OrganizationScenario } from "./organizationScenario";
 import type { HumanContributionState } from "./humanContribution";
@@ -33,14 +34,13 @@ export function actionableAttention(
   }));
   if (scenario.id !== "knowledge") return authored;
   const current = contribution.contributions.at(-1)!;
-  const command = contribution.commands?.at(-1);
-  const receiver = !!current.delivery && !current.receipt;
-  const revision = !!current.assessment;
-  const unsettled =
-    (command && ["pending", "unknown"].includes(command.status)) ||
-    (command?.status === "admitted" && !command.projected);
+  const view = contributionView(contribution);
+  const receiver = view.attention === "receipt";
+  const revision = view.attention === "revision";
+  const unsettled = view.attention === "command";
+  const correction = view.attention === "correction";
   // Only represented transitions create signals. No delivery does not imply a missed deadline.
-  if (!receiver && !revision && !unsettled) return authored;
+  if (!receiver && !revision && !unsettled && !correction) return authored;
   const local: CoordinationNeed = {
     id: "local-K-01-H",
     source: "session",
@@ -54,12 +54,16 @@ export function actionableAttention(
       ? `draft-0${current.version} delivered locally; receiver receipt is not recorded.`
       : revision
         ? "draft-01 has a sample revision request; draft-02 preparation has not started."
-        : "Contribution command acknowledgement or delivery projection remains unresolved. Do not resend.",
+        : correction
+          ? view.summary
+          : "Contribution command acknowledgement or delivery projection remains unresolved. Do not resend.",
     nextStep: receiver
       ? "Inspect the exact delivered revision and record a sample receipt."
       : revision
         ? "Inspect Maya’s request and prepare draft-02."
-        : "Inspect command status before editing or submitting again.",
+        : correction
+          ? view.contributorNext
+          : "Inspect command status before editing or submitting again.",
     target: { kind: "assignment", id: "K-01-H" },
     destination: receiver
       ? "/organizations/knowledge/work?persona=maya"

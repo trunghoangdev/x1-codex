@@ -1,3 +1,4 @@
+import { contributionView } from "./data/contributionView";
 import { ContributionExchange } from "./ContributionExchange";
 import type { HumanContributionState } from "./data/humanContribution";
 import {
@@ -37,6 +38,8 @@ export function ScenarioMyWork({
   onWorker: (id: string) => void;
   onCase: (id: string) => void;
 }) {
+  const contributionStatus = contributionView(contribution);
+  const personalScenario = scenario.id === "knowledge" ? {...scenario, assignments: scenario.assignments.map(a => a.id === "K-01-H" ? {...a, state:contributionStatus.stage, responseNeeded: contributionStatus.attention === "revision" || contributionStatus.attention === "command" || contributionStatus.stage === "Submission rejected"} : a)} : scenario;
   const worker = scenario.workers.find((w) => w.id === workerId)!;
   const {
     allocated: mine,
@@ -44,7 +47,7 @@ export function ScenarioMyWork({
     response,
     waiting,
     both,
-  } = scenarioPersonalWork(scenario, workerId, filters);
+  } = scenarioPersonalWork(personalScenario, workerId, filters);
   const followUp = personalCaseFollowUp(scenario, workerId, filters);
   const roles = [...new Set(mine.map((a) => a.role))];
   if (filters.role !== "All" && !roles.includes(filters.role))
@@ -83,6 +86,7 @@ export function ScenarioMyWork({
         {mine.length} assignments · {response} awaiting your response ·{" "}
         {waiting} waiting for input
       </p>
+      {scenario.id === "knowledge" && workerId === "leo" && <p>K-01-H status and response flags follow the local contribution records, including restored/imported work. Other assignment flags remain authored context. Receiver receipt is not a missing input.</p>}
       <details className="personal-queue-note directory-record-details">
         <summary>How assignment counts work</summary>
         <p>
@@ -250,7 +254,7 @@ export function ScenarioMyWork({
               </div>
               <h2>{a.title}</h2>
               <p>
-                <strong>{a.state}</strong>
+                <strong>{a.id === "K-01-H" ? contributionStatus.stage : a.state}</strong>
               </p>
               <p>
                 <strong>Input:</strong>{" "}
@@ -263,7 +267,8 @@ export function ScenarioMyWork({
               </p>
               {a.id === "K-01-H" && <div>
                 <p>Local exercise · reload starts empty. Use Save or restore Knowledge contribution to restore a saved browser checkpoint. Demos continuity remains separate.</p>
-                <p>{contribution.contributions.at(-1)?.delivery ? "Latest revision delivered locally; receiver response remains separate." : "Prepare your current draft; earlier delivered revisions remain inspectable."}</p>
+                <p role="status">{contributionStatus.summary}</p>
+                <p>{contributionStatus.contributorNext}</p>
                 {contribution.contributions.at(-1)?.assessment && <p role="status">Maya requested a revision · human-assessment-v1. Open contribution to prepare draft-02.</p>}
                 <button className="button primary" onClick={onContribution}>Open contribution · K-01-H</button>
               </div>}

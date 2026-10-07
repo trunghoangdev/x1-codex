@@ -23,7 +23,7 @@ for (const width of [390, 1440]) test(`personal contribution preserves session a
   await page.getByRole('button', {name:'Review delivery'}).click();
   await page.getByRole('button', {name:'Record local delivery'}).click();
   await page.getByRole('button', {name:'Back to My Work · Leo'}).click();
-  await expect(page.getByText('Latest revision delivered locally; receiver response remains separate.')).toBeVisible();
+  await expect(page.getByText('draft-01: delivered locally · awaiting receiver receipt · assessment not recorded')).toBeVisible();
   await page.reload();
   await page.getByRole('button', {name:'Open contribution · K-01-H'}).click();
   await expect(page.getByLabel('Contribution text')).toHaveValue('');

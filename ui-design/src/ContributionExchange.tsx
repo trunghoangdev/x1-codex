@@ -1,3 +1,4 @@
+import { contributionView } from "./data/contributionView";
 import {
   assessContribution,
   receiveContribution,
@@ -15,6 +16,7 @@ export function ContributionExchange({
   onChange?: (state: HumanContributionState) => void;
   onOpen?: () => void;
 }) {
+  const view = contributionView(state);
   const current = state.contributions.at(-1)!;
   const delivered = state.contributions.filter((c) => c.delivery);
   return (
@@ -34,12 +36,8 @@ export function ContributionExchange({
         starts empty; explicitly restore a saved contribution checkpoint to resume. No publication authority or verified outcome is
         established.
       </p>
-      <p role="status">
-        {current.delivery
-          ? `draft-0${current.version}: delivered locally · ${current.receipt ? "receipt recorded" : "awaiting receiver receipt"} · ${current.assessment ? "revision requested" : "assessment not recorded"}`
-          : `draft-0${current.version}: preparation · no delivery recorded`}
-      </p>
-      {receiver && <p><strong>Next step:</strong> { !current.delivery ? "Wait for Leo’s next delivered revision; no receipt action is available." : !current.receipt ? `Inspect draft-0${current.version} below, then record its sample receipt.` : current.assessment ? "Revision requested. Wait for Leo’s next delivery." : current.version === 1 ? "Inspect the received text and the authored revision guidance before requesting a sample revision." : "Reassessment remains pending; no acceptance or publication action is available."}</p>}
+      <p role="status">{view.summary}</p>
+      {receiver && <p><strong>Next step:</strong> {view.receiverNext}</p>}
       {delivered.length === 0 && (
         <p>No delivered contribution is available to receive.</p>
       )}
