@@ -41,9 +41,25 @@ for (const width of [390, 1440])
     await page
       .getByRole("button", { name: "Record sample receipt · draft-01" })
       .click();
+    const result = inbox.getByRole("region", {
+      name: "Receiver action result",
+    });
+    await expect(result.getByRole("heading")).toBeFocused();
+    await expect(result).toContainText("Sample receipt recorded · draft-01");
+    await expect(result).toContainText("human-receipt-v1 → human-delivery-v1");
+    await expect(result).toContainText("before requesting a sample revision");
     await page
       .getByRole("button", { name: "Request sample revision · draft-01" })
-      .click();
+      .focus();
+    await page.keyboard.press("Enter");
+    await expect(result.getByRole("heading")).toBeFocused();
+    await expect(result).toContainText(
+      "Sample revision request recorded · draft-01",
+    );
+    await expect(result).toContainText(
+      "human-assessment-v1 → human-receipt-v1",
+    );
+    await expect(result).toContainText("Wait for Leo’s next delivery");
     await page
       .getByRole("combobox", { name: "Sample persona", exact: true })
       .selectOption("leo");
@@ -79,6 +95,11 @@ for (const width of [390, 1440])
     await page
       .getByRole("button", { name: "Record sample receipt · draft-02" })
       .click();
+    await expect(result.getByRole("heading")).toBeFocused();
+    await expect(result).toContainText("Sample receipt recorded · draft-02");
+    await expect(result).toContainText("human-receipt-v2 → human-delivery-v2");
+    await expect(result).not.toContainText("human-assessment-v1");
+    await expect(result).toContainText("Reassessment remains pending");
     await expect(
       page.getByText(
         "Reassessment remains pending. A receipt does not accept this revision.",

@@ -1,3 +1,4 @@
+import { useEffect, useRef } from "react";
 import { ContributionComparison } from "./ContributionComparison";
 import { contributionView } from "./data/contributionView";
 import {
@@ -20,6 +21,25 @@ export function ContributionExchange({
   const view = contributionView(state);
   const current = state.contributions.at(-1)!;
   const delivered = state.contributions.filter((c) => c.delivery);
+  const resultHeading = useRef<HTMLHeadingElement>(null);
+  const pendingResult = useRef<string | undefined>(undefined);
+  const resultId = current.assessment?.id ?? current.receipt?.id;
+  useEffect(() => {
+    if (
+      receiver &&
+      pendingResult.current &&
+      pendingResult.current === resultId
+    ) {
+      pendingResult.current = undefined;
+      resultHeading.current?.focus();
+    }
+  }, [state, receiver, resultId]);
+  const record = (next: HumanContributionState) => {
+    if (!onChange || next === state) return;
+    const changed = next.contributions.at(-1)!;
+    pendingResult.current = changed.assessment?.id ?? changed.receipt?.id;
+    onChange(next);
+  };
   return (
     <section
       className="panel org-stream"
@@ -34,49 +54,91 @@ export function ContributionExchange({
       </h2>
       <p>
         Knowledge Operations · K-01 · Leo → Maya. Local session sample; reload
-        starts empty; explicitly restore a saved contribution checkpoint to resume. No publication authority or verified outcome is
-        established.
+        starts empty; explicitly restore a saved contribution checkpoint to
+        resume. No publication authority or verified outcome is established.
       </p>
       <p role="status">{view.summary}</p>
-      {receiver && <p><strong>Next step:</strong> {view.receiverNext}</p>}
+      {receiver && !current.receipt && (
+        <p>
+          <strong>Next step:</strong> {view.receiverNext}
+        </p>
+      )}
+      {receiver && current.receipt && (
+        <section aria-label="Receiver action result" className="org-banner">
+          <h3 ref={resultHeading} tabIndex={-1}>
+            Receiver result · draft-0{current.version}
+          </h3>
+          <p role="status">
+            {current.assessment
+              ? "Sample revision request recorded"
+              : "Sample receipt recorded"}{" "}
+            · draft-0{current.version}.
+          </p>
+          <p>
+            Receipt: {current.receipt.id} → {current.receipt.deliveryId} ·{" "}
+            {current.receipt.at}.
+          </p>
+          {current.assessment && (
+            <>
+              <p>
+                Assessment: {current.assessment.id} →{" "}
+                {current.assessment.receiptId} · {current.assessment.at}.
+              </p>
+              <p>{current.assessment.rationale}</p>
+            </>
+          )}
+          <p>
+            <strong>Next step:</strong> {view.receiverNext}
+          </p>
+          <p>
+            Local sample record. Receipt does not establish acceptance,
+            publication permission or a verified outcome.
+          </p>
+        </section>
+      )}
       {delivered.length === 0 && (
         <p>No delivered contribution is available to receive.</p>
       )}
       {[...delivered].reverse().map((c) => (
         <article key={c.version}>
           <details open={!receiver || c.version === current.version}>
-          <summary>{c.version === current.version ? "Current delivered revision" : "Earlier delivered revision"} · draft-0{c.version}</summary>
-          <h3>
-            draft-0{c.version} · {c.delivery!.id}
-          </h3>
-          <p>
-            Subject: human-guide-example / draft-0{c.version} · delivered{" "}
-            {c.delivery!.at}
-          </p>
-          <details open={receiver && c.version === current.version}>
             <summary>
-              Inspect exact delivered contribution · draft-0{c.version}
+              {c.version === current.version
+                ? "Current delivered revision"
+                : "Earlier delivered revision"}{" "}
+              · draft-0{c.version}
             </summary>
-            <pre className="human-contribution-text">{c.delivery!.body}</pre>
-            <p>Scope note: {c.delivery!.note}</p>
-            <p>Input: {c.delivery!.input}</p>
-            {c.delivery!.respondsTo && (
-              <p>Responds to: {c.delivery!.respondsTo}</p>
-            )}
-          </details>
-          <p>
-            Receipt:{" "}
-            {c.receipt
-              ? `${c.receipt.id} → ${c.receipt.deliveryId} · ${c.receipt.at}`
-              : "not recorded"}
-          </p>
-          <p>
-            Assessment:{" "}
-            {c.assessment
-              ? `${c.assessment.id} → ${c.assessment.receiptId} · ${c.assessment.conclusion}`
-              : "not recorded"}
-          </p>
-          {c.assessment && <p>{c.assessment.rationale}</p>}
+            <h3>
+              draft-0{c.version} · {c.delivery!.id}
+            </h3>
+            <p>
+              Subject: human-guide-example / draft-0{c.version} · delivered{" "}
+              {c.delivery!.at}
+            </p>
+            <details open={receiver && c.version === current.version}>
+              <summary>
+                Inspect exact delivered contribution · draft-0{c.version}
+              </summary>
+              <pre className="human-contribution-text">{c.delivery!.body}</pre>
+              <p>Scope note: {c.delivery!.note}</p>
+              <p>Input: {c.delivery!.input}</p>
+              {c.delivery!.respondsTo && (
+                <p>Responds to: {c.delivery!.respondsTo}</p>
+              )}
+            </details>
+            <p>
+              Receipt:{" "}
+              {c.receipt
+                ? `${c.receipt.id} → ${c.receipt.deliveryId} · ${c.receipt.at}`
+                : "not recorded"}
+            </p>
+            <p>
+              Assessment:{" "}
+              {c.assessment
+                ? `${c.assessment.id} → ${c.assessment.receiptId} · ${c.assessment.conclusion}`
+                : "not recorded"}
+            </p>
+            {c.assessment && <p>{c.assessment.rationale}</p>}
           </details>
         </article>
       ))}
@@ -90,9 +152,9 @@ export function ContributionExchange({
           </p>
           <button
             className="button secondary"
-            disabled={!!current.receipt}
+            disabled={!onChange || !!current.receipt}
             onClick={() =>
-              onChange?.(receiveContribution(state, new Date().toISOString()))
+              record(receiveContribution(state, new Date().toISOString()))
             }
           >
             Record sample receipt · draft-0{current.version}
@@ -100,9 +162,9 @@ export function ContributionExchange({
           {current.version === 1 && (
             <button
               className="button secondary"
-              disabled={!current.receipt || !!current.assessment}
+              disabled={!onChange || !current.receipt || !!current.assessment}
               onClick={() =>
-                onChange?.(assessContribution(state, new Date().toISOString()))
+                record(assessContribution(state, new Date().toISOString()))
               }
             >
               Request sample revision · draft-01

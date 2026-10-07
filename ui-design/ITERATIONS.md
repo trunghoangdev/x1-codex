@@ -964,3 +964,9 @@ Production build, diff checks and nine distinct targeted checks passed across ru
 Reviewed current SF assignment/platform consumption and Forge delivery/authorization/receipt semantics against existing frontend drafts. Added a read/command inventory, integration lifecycle, missing-contract decisions and incremental connection gates. Forge installation delivery and component receipts are explicitly distinct from the human contribution exercise. Architecture note move notices point to canon files absent from this checkout; no new canon alignment is claimed.
 
 Added an isolated injected demo-checkpoint port with bounded parsing, explicit scope/source, abort/unavailable/invalid results, obsolete-read invalidation and unsupported backend operations. No screen data source, auth or mutation behavior changes. Production build, diff checks and six targeted checks passed across runs, including existing lifecycle and desktop/phone consistency. See [integration plan](BACKEND-INTEGRATION-PLAN.md). No live backend was tested.
+
+## 115 — Maya receiver action results and focus
+
+Added an exact-version receiver result with receipt/delivery and assessment/receipt identities, timestamps, request rationale and shared next-step guidance. Local receipt/revision actions focus the resulting heading after state updates; returning to existing results preserves normal navigation focus. Already-recorded and callback-less actions remain disabled. Draft-02 receipt continues to leave reassessment pending.
+
+Production build, diff checks and eight targeted checks passed across desktop/phone exchange/comparison, attention routing and a Firefox 320px keyboard/return-focus sequence. See [receiver experience](RECEIVER-EXPERIENCE.md). No backend, participant or screen-reader result is claimed.

@@ -53,7 +53,7 @@ Main software **Demos → Demo continuity** has a separate explicit snapshot/exp
 
 React, TypeScript, Vite and Lucide power this original English-language design. No authentication, server-enforced authorization, shared durable organization state, live SF API or external execution is implemented. Local records and imported files are demonstrations, not server-admitted organizational facts. No material from the excluded `x1` repository is used.
 
-Read [architecture alignment](ARCHITECTURE-ALIGNMENT-REVIEW.md), [source boundaries](SF-READ-CONTRACT.md), [backend integration plan](BACKEND-INTEGRATION-PLAN.md), [revision comparison](CONTRIBUTION-COMPARISON.md), [contribution accessibility review](CONTRIBUTION-ACCESSIBILITY-REVIEW.md), [contribution error recovery](CONTRIBUTION-ERROR-RECOVERY.md), [contribution consistency](CONTRIBUTION-CONSISTENCY.md), [actionable attention](ACTIONABLE-ATTENTION.md) and [consolidation review](EXPERIENCE-CONSOLIDATION-REVIEW.md) for design rationale and remaining work.
+Read [architecture alignment](ARCHITECTURE-ALIGNMENT-REVIEW.md), [source boundaries](SF-READ-CONTRACT.md), [receiver experience](RECEIVER-EXPERIENCE.md), [backend integration plan](BACKEND-INTEGRATION-PLAN.md), [revision comparison](CONTRIBUTION-COMPARISON.md), [contribution accessibility review](CONTRIBUTION-ACCESSIBILITY-REVIEW.md), [contribution error recovery](CONTRIBUTION-ERROR-RECOVERY.md), [contribution consistency](CONTRIBUTION-CONSISTENCY.md), [actionable attention](ACTIONABLE-ATTENTION.md) and [consolidation review](EXPERIENCE-CONSOLIDATION-REVIEW.md) for design rationale and remaining work.
 
 ## Verify and test with people
 
