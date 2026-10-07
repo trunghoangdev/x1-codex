@@ -317,3 +317,5 @@ Iteration 100: Maya's Knowledge My Work receives Leo's exact delivered revisions
 Iteration 101: Knowledge Organization now offers a compact actionable coordination list; Knowledge/larger attention lists identify subjects, waiting reasons, known responsibilities and suggested destinations. Local contribution needs route to Maya's receipt inbox or Leo's revision/command context. Main attention also exposes responsibility/follow-up boundaries. See [actionable attention](ACTIONABLE-ATTENTION.md).
 
 Iteration 102: integrated contribution starts with current version, deliverable and next-action shortcuts; Maya sees the newest delivery and receiver next step first. Earlier versions remain behind disclosures. Command uncertainty and session boundaries stay visible. See [main task path](HUMAN-CONTRIBUTION.md).
+
+Review after iteration 102: [UI consolidation priorities](EXPERIENCE-CONSOLIDATION-REVIEW.md) recommends simplifying Organization composition, labeling authored/session signal sources, deciding contribution recovery behavior and updating the integrated participant walkthrough. These are proposals, not implemented features.
