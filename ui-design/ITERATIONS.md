@@ -1000,3 +1000,9 @@ Production build, diff checks and ten targeted checks passed across comparison e
 Reviewed organizational coverage against the product vision and current local/state boundaries. The next backlog focuses on connecting a complete work path: revised contribution reassessment, explicit local allocation, exact-version input handoff, adopted workstream scope and separate authorization/effect/outcome review. Production authentication, authority enforcement, durable commands/projections and execution remain a distinct integration track. These are proposals, not implemented capabilities.
 
 Added [completion review](VIRTUAL-ORGANIZATION-COMPLETION-REVIEW.md) with evidence, acceptance criteria and a definition of the first completed operational slice. Documentation-only review; no new browser checks or participant session was conducted. Diff checks passed.
+
+## 121 — Exact draft-02 reassessment
+
+Maya can explicitly record a local reassessment after draft-02 receipt, choosing suitability or further revision with mandatory rationale. The immutable record binds Maya and exact receipt/delivery/version while preserving draft-01 assessment. Shared presentation updates personal queues, receiver/history, attention, comparison, editor and workstream progress. Further revision creates a represented Leo follow-up but does not fabricate draft-03; suitability creates no publication/outcome decision.
+
+New reassessment-bearing checkpoints use format v2; old v1 checkpoints remain readable under the existing storage key. Validation checks exact links/assessor/conclusion/rationale, and replacement impact includes the new record. Production build, diff checks and twenty-two distinct targeted checks passed across runs. See [reassessment guide](CONTRIBUTION-REASSESSMENT.md). No backend or participant result is claimed.

@@ -64,6 +64,22 @@ export function contributionView(state: HumanContributionState) {
         : current.version === 1
           ? "Inspect the received text and the authored revision guidance before requesting a sample revision."
           : "Reassessment remains pending; no acceptance or publication action is available.";
+  if (current.reassessment) {
+    const needsRevision =
+      current.reassessment.conclusion === "Further revision needed";
+    return {
+      version: current.version,
+      stage: current.reassessment.conclusion,
+      summary: `draft-02: delivered locally · receipt recorded · ${current.reassessment.conclusion.toLowerCase()}`,
+      contributorNext: needsRevision
+        ? "Further revision needed. Inspect Maya’s reassessment and coordinate the next revision; draft-03 is not supported in this exercise."
+        : "Maya assessed draft-02 as suitable for the stated scope. Publication authority and outcome verification remain separate; no further contributor action is established.",
+      receiverNext:
+        "Reassessment recorded for draft-02. No publication or outcome decision was created.",
+      attention: needsRevision ? "revision" : undefined,
+      locked,
+    };
+  }
   return {
     version: current.version,
     stage,

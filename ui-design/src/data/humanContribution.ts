@@ -13,6 +13,15 @@ export type Contribution = {
     respondsTo?: string;
   };
   receipt?: { id: string; deliveryId: string; at: string };
+  reassessment?: {
+    id: "human-reassessment-v2";
+    receiptId: string;
+    deliveryId: string;
+    assessor: "Maya";
+    at: string;
+    conclusion: "Suitable for stated scope" | "Further revision needed";
+    rationale: string;
+  };
   assessment?: {
     id: string;
     receiptId: string;
@@ -134,5 +143,45 @@ export function reviseContribution(
         citesInput: false,
       },
     ],
+  };
+}
+
+export function reassessContribution(
+  state: HumanContributionState,
+  conclusion: NonNullable<Contribution["reassessment"]>["conclusion"],
+  rationale: string,
+  at: string,
+): HumanContributionState {
+  const current = state.contributions.at(-1)!;
+  if (
+    current.version !== 2 ||
+    !current.delivery ||
+    !current.receipt ||
+    current.reassessment ||
+    !rationale.trim() ||
+    rationale.length > 3000 ||
+    !["Suitable for stated scope", "Further revision needed"].includes(
+      conclusion,
+    )
+  )
+    return state;
+  return {
+    ...state,
+    contributions: state.contributions.map((c) =>
+      c === current
+        ? {
+            ...c,
+            reassessment: {
+              id: "human-reassessment-v2",
+              receiptId: current.receipt!.id,
+              deliveryId: current.delivery!.id,
+              assessor: "Maya",
+              at,
+              conclusion,
+              rationale: rationale.trim(),
+            },
+          }
+        : c,
+    ),
   };
 }

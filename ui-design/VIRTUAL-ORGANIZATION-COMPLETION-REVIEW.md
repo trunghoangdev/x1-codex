@@ -27,7 +27,9 @@ A virtual organization does not require one universal linear workflow. It needs 
 
 These five items are proposals, not backend contracts. Each can first be demonstrated with explicitly local records. Do not imply that local decisions grant real authority or perform an external action.
 
-### 1. Close the revised-contribution assessment loop — recommended first
+### 1. Close the revised-contribution assessment loop — local slice completed at iteration 121
+
+See [implemented reassessment](CONTRIBUTION-REASSESSMENT.md). The following records the original acceptance scope; production integration remains pending.
 
 Allow an explicit sample reassessment of draft-02 after its exact receipt. Record the assessor, conclusion, rationale and exact receipt/delivery/version references. Support an assessed-as-suitable conclusion and a further-revision-needed conclusion without silently creating draft-03 or claiming publication. The latter may remain an explicit next responsibility pending a later version-model extension.
 

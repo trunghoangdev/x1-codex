@@ -53,14 +53,18 @@ export function actionableAttention(
     detail: receiver
       ? `draft-0${current.version} delivered locally; receiver receipt is not recorded.`
       : revision
-        ? "draft-01 has a sample revision request; draft-02 preparation has not started."
+        ? current.reassessment
+          ? view.summary
+          : "draft-01 has a sample revision request; draft-02 preparation has not started."
         : correction
           ? view.summary
           : "Contribution command acknowledgement or delivery projection remains unresolved. Do not resend.",
     nextStep: receiver
       ? "Inspect the exact delivered revision and record a sample receipt."
       : revision
-        ? "Inspect Maya’s request and prepare draft-02."
+        ? current.reassessment
+          ? view.contributorNext
+          : "Inspect Maya’s request and prepare draft-02."
         : correction
           ? view.contributorNext
           : "Inspect command status before editing or submitting again.",

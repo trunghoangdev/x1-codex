@@ -20,7 +20,9 @@ export function ContributionProgress({
           view.attention === "correction" ||
           !state.contributions.at(-1)?.delivery
         ? `Leo · ${view.contributorNext}`
-        : "No further action owner is established by the current records; assessment remains separate.";
+        : state.contributions.at(-1)?.reassessment
+          ? view.contributorNext
+          : "No further action owner is established by the current records; assessment remains separate.";
   return (
     <section
       className="panel org-stream"
@@ -94,7 +96,7 @@ export function ContributionProgress({
           <strong>Maya · receive draft-02 and reassess separately</strong>
           <p>
             {second?.receipt
-              ? `${second.receipt.id} → ${second.receipt.deliveryId} · ${second.receipt.at}. Reassessment pending.`
+              ? `${second.receipt.id} → ${second.receipt.deliveryId} · ${second.receipt.at}. ${second.reassessment ? `${second.reassessment.id} · ${second.reassessment.assessor} · ${second.reassessment.conclusion}` : "Reassessment pending."}`
               : "Revised receipt not recorded. No reassessment or acceptance is established."}
           </p>
         </li>

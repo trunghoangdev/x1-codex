@@ -4,7 +4,7 @@ import {
 } from "./humanContribution";
 export const contributionCheckpointKey = "forge-knowledge-contribution-v1";
 export type ContributionCheckpoint = {
-  format: "forge.knowledge-contribution.v1";
+  format: "forge.knowledge-contribution.v1" | "forge.knowledge-contribution.v2";
   savedAt: string;
   state: HumanContributionState;
 };
@@ -28,7 +28,10 @@ export function parseContributionCheckpoint(
   const time = (v: any) => text(v, 100) && Number.isFinite(Date.parse(v));
   if (
     !object(value, ["format", "savedAt", "state"]) ||
-    value.format !== "forge.knowledge-contribution.v1" ||
+    ![
+      "forge.knowledge-contribution.v1",
+      "forge.knowledge-contribution.v2",
+    ].includes(value.format) ||
     !time(value.savedAt)
   )
     fail();
@@ -51,6 +54,7 @@ export function parseContributionCheckpoint(
         "delivery",
         "receipt",
         "assessment",
+        "reassessment",
       ]) ||
       c.version !== i + 1 ||
       !text(c.body) ||
@@ -58,7 +62,7 @@ export function parseContributionCheckpoint(
       typeof c.citesInput !== "boolean"
     )
       fail();
-    for (const field of ["delivery", "receipt", "assessment"])
+    for (const field of ["delivery", "receipt", "assessment", "reassessment"])
       if (
         c[field] !== undefined &&
         (!c[field] || typeof c[field] !== "object" || Array.isArray(c[field]))
@@ -107,6 +111,33 @@ export function parseContributionCheckpoint(
         c.assessment.conclusion !== "Revision requested" ||
         !text(c.assessment.rationale) ||
         !c.assessment.rationale.trim())
+    )
+      fail();
+    if (
+      c.reassessment &&
+      (value.format !== "forge.knowledge-contribution.v2" ||
+        i !== 1 ||
+        !c.receipt ||
+        !d ||
+        !object(c.reassessment, [
+          "id",
+          "receiptId",
+          "deliveryId",
+          "assessor",
+          "at",
+          "conclusion",
+          "rationale",
+        ]) ||
+        c.reassessment.id !== "human-reassessment-v2" ||
+        c.reassessment.receiptId !== c.receipt.id ||
+        c.reassessment.deliveryId !== d.id ||
+        c.reassessment.assessor !== "Maya" ||
+        !time(c.reassessment.at) ||
+        !["Suitable for stated scope", "Further revision needed"].includes(
+          c.reassessment.conclusion,
+        ) ||
+        !text(c.reassessment.rationale, 3000) ||
+        !c.reassessment.rationale.trim())
     )
       fail();
     if (i === 1 && !s.contributions[0].assessment) fail();
@@ -207,7 +238,9 @@ export function parseContributionCheckpoint(
 }
 export function encodeContributionCheckpoint(state: HumanContributionState) {
   const raw = JSON.stringify({
-    format: "forge.knowledge-contribution.v1",
+    format: state.contributions.some((c) => c.reassessment)
+      ? "forge.knowledge-contribution.v2"
+      : "forge.knowledge-contribution.v1",
     savedAt: new Date().toISOString(),
     state,
   });

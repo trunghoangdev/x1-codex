@@ -1,7 +1,8 @@
-import { useEffect, useRef } from "react";
+import { useEffect, useRef, useState } from "react";
 import { ContributionComparison } from "./ContributionComparison";
 import { contributionView } from "./data/contributionView";
 import {
+  reassessContribution,
   assessContribution,
   receiveContribution,
   type HumanContributionState,
@@ -18,12 +19,17 @@ export function ContributionExchange({
   onChange?: (state: HumanContributionState) => void;
   onOpen?: () => void;
 }) {
+  const [conclusion, setConclusion] = useState<
+    "Suitable for stated scope" | "Further revision needed"
+  >("Suitable for stated scope");
+  const [rationale, setRationale] = useState("");
   const view = contributionView(state);
   const current = state.contributions.at(-1)!;
   const delivered = state.contributions.filter((c) => c.delivery);
   const resultHeading = useRef<HTMLHeadingElement>(null);
   const pendingResult = useRef<string | undefined>(undefined);
-  const resultId = current.assessment?.id ?? current.receipt?.id;
+  const resultId =
+    current.reassessment?.id ?? current.assessment?.id ?? current.receipt?.id;
   useEffect(() => {
     if (
       receiver &&
@@ -37,7 +43,8 @@ export function ContributionExchange({
   const record = (next: HumanContributionState) => {
     if (!onChange || next === state) return;
     const changed = next.contributions.at(-1)!;
-    pendingResult.current = changed.assessment?.id ?? changed.receipt?.id;
+    pendingResult.current =
+      changed.reassessment?.id ?? changed.assessment?.id ?? changed.receipt?.id;
     onChange(next);
   };
   return (
@@ -73,9 +80,11 @@ export function ContributionExchange({
             Receiver result · draft-0{current.version}
           </h3>
           <p role="status">
-            {current.assessment
-              ? "Sample revision request recorded"
-              : "Sample receipt recorded"}{" "}
+            {current.reassessment
+              ? "Sample reassessment recorded"
+              : current.assessment
+                ? "Sample revision request recorded"
+                : "Sample receipt recorded"}{" "}
             · draft-0{current.version}.
           </p>
           <p>
@@ -92,6 +101,20 @@ export function ContributionExchange({
                 <summary>Inspect recorded revision guidance</summary>
                 <p>{current.assessment.rationale}</p>
               </details>
+            </>
+          )}
+          {current.reassessment && (
+            <>
+              <p>
+                Reassessment: {current.reassessment.id} →{" "}
+                {current.reassessment.receiptId} →{" "}
+                {current.reassessment.deliveryId} ·{" "}
+                {current.reassessment.assessor} · {current.reassessment.at}.
+              </p>
+              <p>
+                {current.reassessment.conclusion}:{" "}
+                {current.reassessment.rationale}
+              </p>
             </>
           )}
           <p>
@@ -146,6 +169,14 @@ export function ContributionExchange({
                 : "not recorded"}
             </p>
             {c.assessment && <p>{c.assessment.rationale}</p>}
+            {c.reassessment && (
+              <p>
+                Reassessment: {c.reassessment.id} → {c.reassessment.receiptId} →{" "}
+                {c.reassessment.deliveryId} · {c.reassessment.assessor} ·{" "}
+                {c.reassessment.at}. {c.reassessment.conclusion}:{" "}
+                {c.reassessment.rationale}
+              </p>
+            )}
           </details>
         </article>
       ))}
@@ -180,7 +211,63 @@ export function ContributionExchange({
               Request sample revision · draft-01
             </button>
           )}
-          {current.version === 2 && (
+          {current.version === 2 &&
+            current.receipt &&
+            !current.reassessment && (
+              <section aria-label="Reassess draft-02">
+                <h3>Assess received draft-02</h3>
+                <p>
+                  Maya’s local sample judgement of {current.receipt.id} →{" "}
+                  {current.delivery.id}. Inspect the delivered text and
+                  comparison before recording. This does not authorize
+                  publication.
+                </p>
+                <label>
+                  Reassessment conclusion
+                  <select
+                    value={conclusion}
+                    onChange={(e) =>
+                      setConclusion(e.target.value as typeof conclusion)
+                    }
+                  >
+                    <option>Suitable for stated scope</option>
+                    <option>Further revision needed</option>
+                  </select>
+                </label>
+                <label>
+                  Reassessment rationale
+                  <textarea
+                    value={rationale}
+                    maxLength={3000}
+                    onChange={(e) => setRationale(e.target.value)}
+                  />
+                </label>
+                <button
+                  className="button secondary"
+                  disabled={!onChange || !rationale.trim()}
+                  onClick={() => {
+                    record(
+                      reassessContribution(
+                        state,
+                        conclusion,
+                        rationale,
+                        new Date().toISOString(),
+                      ),
+                    );
+                    setRationale("");
+                  }}
+                >
+                  Record sample reassessment · draft-02
+                </button>
+                {!rationale.trim() && (
+                  <p>
+                    A rationale is required. Nothing is recorded until you
+                    submit.
+                  </p>
+                )}
+              </section>
+            )}
+          {current.version === 2 && !current.reassessment && (
             <p>
               Reassessment remains pending. A receipt does not accept this
               revision.

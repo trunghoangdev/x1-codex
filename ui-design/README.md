@@ -43,6 +43,8 @@ With Vite running on port 4173, reproduce from this directory using `node script
 
 Assessment, authorization, execution observations and verified outcomes remain distinct. Missing responsibility or evidence is visible. Contribution receipt does not establish acceptance or publication.
 
+Maya can reassess received draft-02 with a reasoned local conclusion. Suitability, publication authority and verified outcome remain separate. See [reassessment](CONTRIBUTION-REASSESSMENT.md), including checkpoint v1/v2 compatibility.
+
 ## Save, recover and move work
 
 Knowledge's visible save status distinguishes current work from its browser checkpoint. **Save or restore Knowledge contribution** supports explicit save, validated preview/restore and JSON export/import between machines. Reload starts Knowledge empty; recover explicitly. Unsaved work is not recovered. Import replaces the current exercise and does not automatically update the checkpoint. See [contribution recovery](CONTRIBUTION-RECOVERY.md).

@@ -125,9 +125,11 @@ export function ContributionComparison({
         <p>
           Text: {changed ? "changed" : "unchanged"}. Note:{" "}
           {before.note === note ? "unchanged" : "changed"}.{" "}
-          {second.delivery
-            ? "Reassessment remains pending; delivery and receipt do not establish acceptance."
-            : "Preparation can still change; no revised delivery or reassessment is recorded."}
+          {second.reassessment
+            ? `Reassessment: ${second.reassessment.id} → ${second.reassessment.receiptId} → ${second.reassessment.deliveryId} · ${second.reassessment.assessor}. ${second.reassessment.conclusion}: ${second.reassessment.rationale}. Publication authority and outcome verification remain separate.`
+            : second.delivery
+              ? "Reassessment remains pending; delivery and receipt do not establish acceptance."
+              : "Preparation can still change; no revised delivery or reassessment is recorded."}
         </p>
         <div className="contribution-comparison-columns">
           <article aria-label="Comparison draft-01">

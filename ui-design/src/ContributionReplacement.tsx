@@ -68,6 +68,8 @@ export function ContributionReplacement({
                   identity(old.receipt) !== identity(next.receipt) && "receipt",
                   identity(old.assessment) !== identity(next.assessment) &&
                     "assessment",
+                  identity(old.reassessment) !== identity(next.reassessment) &&
+                    "reassessment",
                 ].filter(Boolean)
               : [];
           return (
@@ -120,6 +122,12 @@ export function ContributionReplacement({
                 {c.assessment?.id ?? "none"}.
               </p>
               {c.assessment && <p>{c.assessment.rationale}</p>}
+              {c.reassessment && (
+                <p>
+                  Reassessment: {c.reassessment.id} · {c.reassessment.assessor}{" "}
+                  · {c.reassessment.conclusion}: {c.reassessment.rationale}
+                </p>
+              )}
             </article>
           ))}
           {state.commands?.map((c) => (

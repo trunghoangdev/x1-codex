@@ -401,7 +401,7 @@ export function HumanContribution({
             <p role="status" aria-live="polite">
               Delivered locally: {current.delivery.id}. Receipt:{" "}
               {current.receipt?.id ?? "not recorded"}. Assessment:{" "}
-              {current.assessment?.conclusion ?? "not recorded"}.
+              {current.reassessment?.conclusion ?? current.assessment?.conclusion ?? "not recorded"}.
             </p>
             {!workspace && <>
             <h3>Receiver simulation · Maya</h3>
@@ -442,7 +442,8 @@ export function HumanContribution({
                 </button>
               </>
             )}
-            {current.version === 2 && (
+            {current.reassessment && <p>Reassessment: {current.reassessment.id} → {current.reassessment.receiptId} → {current.reassessment.deliveryId} · {current.reassessment.assessor}. {current.reassessment.conclusion}: {current.reassessment.rationale}. Publication authority and outcome verification remain separate.</p>}
+            {current.version === 2 && !current.reassessment && (
               <p>
                 Reassessment is pending. Receipt does not accept draft-02,
                 authorize publication or verify the shared outcome.
@@ -479,6 +480,7 @@ export function HumanContribution({
                     {c.receipt.at}
                   </p>
                 )}
+                {c.reassessment && <p>Reassessment: {c.reassessment.id} → {c.reassessment.receiptId} → {c.reassessment.deliveryId} · {c.reassessment.assessor} · {c.reassessment.at}. {c.reassessment.conclusion}: {c.reassessment.rationale}</p>}
                 {c.assessment && (
                   <p>
                     Assessment: {c.assessment.id} → {c.assessment.receiptId} ·{" "}
