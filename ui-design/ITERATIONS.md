@@ -970,3 +970,9 @@ Added an isolated injected demo-checkpoint port with bounded parsing, explicit s
 Added an exact-version receiver result with receipt/delivery and assessment/receipt identities, timestamps, request rationale and shared next-step guidance. Local receipt/revision actions focus the resulting heading after state updates; returning to existing results preserves normal navigation focus. Already-recorded and callback-less actions remain disabled. Draft-02 receipt continues to leave reassessment pending.
 
 Production build, diff checks and eight targeted checks passed across desktop/phone exchange/comparison, attention routing and a Firefox 320px keyboard/return-focus sequence. See [receiver experience](RECEIVER-EXPERIENCE.md). No backend, participant or screen-reader result is claimed.
+
+## 116 — Restore/import replacement impact
+
+Added an explicit whole-exercise replacement preview: current/incoming stage, resulting next step, removed/added versions, changed contribution/receiver fields and command history differences. Current unsaved-checkpoint differences are explained; current and incoming text, notes, citations and record identities are inspectable before confirmation. Impact stays derived from current state rather than a captured stale copy. No merge, schema or persistence behavior changes.
+
+Production build, diff checks and thirteen targeted checks passed, including desktop/320px removal of draft-02 and receiver records, unsaved text inspection, cancellation preservation, explicit restore, invalid files/storage and Chromium/Firefox keyboard flows. See [contribution recovery](CONTRIBUTION-RECOVERY.md).

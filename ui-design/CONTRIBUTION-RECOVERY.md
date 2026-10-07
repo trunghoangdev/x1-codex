@@ -44,3 +44,11 @@ The existing versioned checkpoint wrapper is reused. On export its `savedAt` fie
 Files include entered contribution text and local records. Standalone Demos, main-software continuity snapshots and historical SF data are separate and cannot be imported as this format. Files larger than 2 MB, unsupported formats, malformed JSON or inconsistent relationships are rejected without replacing work or checkpoint. While a file is being read, checkpoint/export actions are disabled; a newer file selection supersedes earlier reads. Same-file reselection is supported after cancellation or rejection.
 
 Technical transfer checks use independent browser contexts, not a physical Mac session. Actual cross-machine transfer is manual; the UI neither uploads files nor synchronizes machines.
+
+## Replacement impact preview · iteration 116
+
+Restore/import previews now show current and incoming stages, the next contributor step after replacement, versions added/removed and changed text/note/citation/delivery/receipt/assessment fields. Command history replacement is explicit, including counts even when the latest status is unchanged. Current work is compared with the readable browser checkpoint; when no comparison is available, the UI says so rather than claiming work is saved.
+
+Two disclosures expose current and incoming text, notes, citations, receiver identities and command statuses before confirmation. Differences from the saved checkpoint are warned about, with export suggested before discarding current work. Restore/import still replaces the whole local exercise, preserves the browser checkpoint and never merges histories or cancels server operations. The impact derives from current props, so edits while the preview is open are reflected. Cancellation changes neither current work nor the saved checkpoint.
+
+Production build and thirteen targeted checks passed across desktop/320px rollback and unsaved-text previews, cancel/restore preservation, checkpoint/storage failures, file transfer and Chromium/Firefox keyboard recovery. No participant session was conducted.

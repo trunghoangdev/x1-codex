@@ -1,3 +1,4 @@
+import { ContributionReplacement } from "./ContributionReplacement";
 import { useEffect, useRef, useState } from "react";
 import {
   emptyContribution,
@@ -307,6 +308,7 @@ export function ContributionRecovery({
                 unchanged. This replaces current Knowledge work, including
                 unsaved changes.
               </p>
+              <ContributionReplacement current={state} incoming={preview.state} unsaved={saved.checkpoint ? !matches : undefined} />
               <button
                 className="button secondary"
                 onClick={() => {
