@@ -25,8 +25,22 @@ export function HumanContribution({
   onBack: () => void;
   workspace?: { onOrganization: () => void; onWorkstream: () => void };
 }) {
-  const [confirm, setConfirm] = useState(false);
+  const [reviewed, setReviewed] = useState<string>();
   const [preview, setPreview] = useState<CommandPreview>("projected");
+  // A confirmation authorizes only the exact state and simulation reviewed.
+  const reviewIdentity = JSON.stringify({ state, preview });
+  const confirm = reviewed === reviewIdentity;
+  const setConfirm = (value: boolean) => {
+    setReviewed(value ? reviewIdentity : undefined);
+    setInterruptedReview(false);
+  };
+  const [interruptedReview, setInterruptedReview] = useState(false);
+  useEffect(() => {
+    if (reviewed !== undefined && reviewed !== reviewIdentity) {
+      setReviewed(undefined);
+      setInterruptedReview(true);
+    }
+  }, [reviewed, reviewIdentity]);
   const command = state.commands?.at(-1);
   const view = contributionView(state);
   const locked = commandBlocksEditing(state);
@@ -99,6 +113,7 @@ export function HumanContribution({
           it. {workspace ? "Use Save or restore Knowledge contribution to save and explicitly restore a browser checkpoint. Demos continuity remains separate." : "Demo continuity does not save this exercise."}
         </p>
       </div>
+      {interruptedReview && <p role="status">Work changed after the delivery review. The previous confirmation is cancelled; inspect the current draft and review again. No command was submitted by that cancelled confirmation.</p>}
       <section className="panel org-stream">
         <h2>Your responsibility</h2>
         <p>
@@ -213,8 +228,11 @@ export function HumanContribution({
           </button>
           {!ready && (
             <p>
-              Provide contribution text, a note and the supporting input
-              citation before delivery.
+              Still needed: {[
+                !current.body.trim() && "contribution text",
+                !current.note.trim() && (current.version === 2 ? "revision response" : "delivery note"),
+                !current.citesInput && "supporting input citation",
+              ].filter(Boolean).join(", ")}. Your draft stays editable; no command has been submitted for this preparation.
             </p>
           )}
           {confirm && (
@@ -274,6 +292,7 @@ export function HumanContribution({
             {command.rejection &&
               `Rejection: ${command.rejection}. The draft is retained; no delivery was created.`}
           </p>
+          {command.status === "rejected" && <p>{view.contributorNext}</p>}
           {["pending", "unknown"].includes(command.status) && (
             <>
               <p>

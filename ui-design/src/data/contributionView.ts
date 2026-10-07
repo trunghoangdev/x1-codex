@@ -49,7 +49,9 @@ export function contributionView(state: HumanContributionState) {
           ? "Receipt recorded. Assessment remains separate; no further contributor action is established."
           : "Delivered locally. Waiting for Maya’s receipt; do not resend."
         : active?.status === "rejected"
-          ? `Submission rejected (${active.rejection}). Inspect the reason and correct the draft before a new submission.`
+          ? active.rejection === "permission-denied"
+            ? "Permission denied. Your draft is retained. Check submission authority with the responsible administrator before trying again; editing text does not grant permission. This demo cannot change real permissions."
+            : "Revision conflict. Your draft is retained. Compare the current assignment revision with your submitted version before preparing a new submission. This demo has no server revision to fetch or merge automatically."
           : current.version === 2
             ? `Prepare draft-02 in response to ${state.contributions[0].assessment?.id}; earlier delivery and review remain attached to draft-01.`
             : "Prepare your contribution using the supplied brief, then review the exact delivery.";
