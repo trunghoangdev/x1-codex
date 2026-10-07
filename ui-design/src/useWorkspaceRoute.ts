@@ -82,7 +82,7 @@ export function useWorkspaceRoute(ids: string[], tabs: string[]) {
     if (raw.startsWith("/organizations/"))
       return validScenarioPath(raw)
         ? {
-            view: raw.split("?")[0].endsWith("/work")
+            view: (raw.split("?")[0].endsWith("/work") || raw.split("?")[0].includes("/contributions/"))
               ? "My Work"
               : raw.split("?")[0].endsWith("/evidence")
                 ? "Evidence"

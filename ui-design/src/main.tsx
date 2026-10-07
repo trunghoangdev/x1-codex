@@ -839,6 +839,7 @@ function App() {
                             p.delete(key);
                         changeRoute({
                           ...route,
+                          view: path.endsWith("/work") ? "My Work" : route.view,
                           scenarioPath: `${path}?${p}`,
                         });
                       }}
@@ -1956,7 +1957,7 @@ function App() {
               onRoute={(path, replace) =>
                 changeRoute(
                   {
-                    view: path.split("?")[0].endsWith("/work")
+                    view: (path.split("?")[0].endsWith("/work") || path.split("?")[0].includes("/contributions/"))
                       ? "My Work"
                       : path.split("?")[0].endsWith("/evidence")
                         ? "Evidence"
@@ -2132,11 +2133,16 @@ function App() {
                     <div className="eyebrow">DESIGN DEMONSTRATIONS</div>
                     <h1 tabIndex={-1}>Collaboration demos</h1>
                     <p>
-                      Explore a standalone revision cycle with fictional
-                      records.
+                      Start with the shared organization and personal work, then explore domain evidence and independent exercises.
                     </p>
                   </div>
                 </div>
+                <section className="panel org-stream" aria-label="Recommended organization demo">
+                  <h2>Start with a virtual organization</h2>
+                  <p>Explore Knowledge Operations, open Leo’s My Work, deliver a contribution and switch to Maya to receive and request a revision. Return to Organization for shared attention and history. Sample data only; starting preserves current local work.</p>
+                  <button className="button primary" onClick={() => changeRoute({view:"Organization",tab:"Overview",scenarioPath:"/organizations/knowledge?persona=leo"})}>Start organization demo</button>
+                  <p>Software review and retained SF inspection are separate examples below; they are not the continuation of this contribution.</p>
+                </section>
                 <section className="panel org-stream">
                   <h2>Human contribution</h2><p>Prepare, deliver and revise one contribution with separate receiver responses.</p><button className="button secondary" onClick={() => changeRoute({ view: "Demos", tab: "Overview", humanContribution: true })}>Try human contribution</button>
                 </section>
