@@ -51,3 +51,7 @@ Start with item 1: reorganize the existing Organization content without changing
 ## Item 1 implementation checkpoint
 
 Iteration 103 implements the primary Organization order and collapses Knowledge contribution history and operating context after workstreams. Case/decision/activity entrances also follow the primary coordination path. Existing record semantics and navigation remain; the policy shortcut opens the disclosure and focuses its target. Item 2, signal source labeling, remains next.
+
+## Item 2 implementation checkpoint
+
+Iteration 104 adds source metadata/labels to coordination signals and main attention, source totals to scoped summaries and explicit authored-counter context beside read-only-scenario workstreams. Knowledge contribution needs can change without implying a change to authored counters or outcomes. Item 3, deliberate contribution save/recovery behavior, remains next.

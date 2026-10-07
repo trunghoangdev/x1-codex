@@ -28,6 +28,7 @@ export function CoordinationNeeds({
         <article className="org-stream-assignment" key={item.id}>
           <h3>{item.title}</h3>
           <span className="badge neutral">{item.category}</span>
+          <p><strong>Source:</strong> {item.source === "session" ? "Local session observation · resets on reload" : "Authored scenario · fixed context"}</p>
           <p>
             <strong>Affected subject:</strong> {item.target.id}
           </p>

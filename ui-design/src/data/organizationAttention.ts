@@ -8,6 +8,7 @@ export type AttentionCategory =
   "Responsibility" | "Response" | "Input" | "Outcome";
 export type AttentionItem = {
   id: string;
+  source?: "authored" | "session";
   category: AttentionCategory;
   title: string;
   detail: string;
@@ -21,6 +22,7 @@ export function organizationAttention(
 ): AttentionItem[] {
   const items: AttentionItem[] = responsibilityGaps.map((gap) => ({
     id: gap.id,
+    source: "authored",
     category: "Responsibility",
     title: gap.title,
     detail: gap.description,
@@ -34,6 +36,7 @@ export function organizationAttention(
     if (responded && !effectUnverified) continue;
     items.push({
       id: assignment.id,
+      source: responded || (assignment.id === "A-1041" && readiness !== "missing") ? "session" : "authored",
       category:
         responded || assignment.id === "A-1035" ? "Outcome" : "Response",
       title: assignment.title,
@@ -54,6 +57,7 @@ export function organizationAttention(
   for (const stream of workstreams)
     items.push({
       id: `${stream.id}-outcome`,
+      source: "authored",
       category: "Outcome",
       title: `${stream.name} · outcome`,
       detail: stream.outcome,

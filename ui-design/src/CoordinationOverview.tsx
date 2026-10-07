@@ -55,6 +55,9 @@ export function CoordinationOverview({
         that need coordination. Categories can overlap; counts are not a
         progress or urgency score.
       </p>
+      {scenario.readOnly && <p aria-label="Workstream counter source">
+        Source: authored scenario context. These workstream counts do not follow local contribution receipts or revisions; use Organization attention for those session needs.
+      </p>}
       <div
         className="stream-directory-filters panel"
         aria-label="Coordination filters"

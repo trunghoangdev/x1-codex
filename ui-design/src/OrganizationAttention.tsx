@@ -88,6 +88,7 @@ export function OrganizationAttention({
             >
               <span className="badge neutral">{item.category}</span>
               <h3>{item.title}</h3>
+              <p><strong>Source:</strong> {item.source === "session" ? "Local demo state · includes restored demo snapshots" : "Authored scenario · fixed context"}</p>
               <p>
                 <strong>Represented responsibility: {item.owner}</strong>
               </p>

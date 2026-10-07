@@ -4,6 +4,7 @@ import type { HumanContributionState } from "./humanContribution";
 import type { AttentionItem } from "./organizationAttention";
 
 export type CoordinationNeed = AttentionItem & {
+  source: "authored" | "session";
   responsibility: string;
   nextStep: string;
   destination?: string;
@@ -14,6 +15,7 @@ export function actionableAttention(
 ): CoordinationNeed[] {
   const authored = scenarioAttention(scenario).map((item) => ({
     ...item,
+    source: "authored" as const,
     responsibility:
       item.category === "Response"
         ? `Assignment responsibility: ${item.owner}. Follow-up ownership is not separately recorded.`
@@ -41,6 +43,7 @@ export function actionableAttention(
   if (!receiver && !revision && !unsettled) return authored;
   const local: CoordinationNeed = {
     id: "local-K-01-H",
+    source: "session",
     category: "Response",
     title: "Access-guide contribution · K-01-H",
     owner: receiver ? "Maya · sample receiver" : "Leo · sample contributor",

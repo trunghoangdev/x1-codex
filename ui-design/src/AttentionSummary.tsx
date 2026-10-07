@@ -48,6 +48,9 @@ export function AttentionSummary({
         Counts describe signals, not assignments or progress. A recorded
         response does not verify a goal.
       </p>
+      {items.length > 0 && items.every(item => item.source) && <p aria-label="Attention counter sources">
+        Source scope: {items.filter(item => item.source === "authored").length} authored scenario signals · {items.filter(item => item.source === "session").length} local session signals. These totals follow the attention list. Local signals follow this sample’s save/reload rules. Neither source is live organizational data.
+      </p>}
       <button className="button secondary" onClick={() => onOpen("All")}>
         View all organization attention
       </button>

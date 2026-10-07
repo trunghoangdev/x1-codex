@@ -321,3 +321,5 @@ Iteration 102: integrated contribution starts with current version, deliverable 
 Review after iteration 102: [UI consolidation priorities](EXPERIENCE-CONSOLIDATION-REVIEW.md) recommends simplifying Organization composition, labeling authored/session signal sources, deciding contribution recovery behavior and updating the integrated participant walkthrough. These are proposals, not implemented features.
 
 Iteration 103: Organization prioritizes shared purpose, attention/next actions and workstreams. Contribution history and policy/agreement context move into separate initially collapsed disclosures after workstreams; the policy shortcut opens and focuses its target. See [landing-page consolidation](ORGANIZATION-CONSOLIDATION.md).
+
+Iteration 104: attention signals label authored context versus local sample state, summaries show source totals, and Knowledge/larger workstream counters explain their independent scope. Knowledge contribution observations reset on reload; main local state retains its existing explicit snapshot rules. See [attention source semantics](ACTIONABLE-ATTENTION.md).

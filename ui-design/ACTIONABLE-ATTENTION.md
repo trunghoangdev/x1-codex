@@ -21,3 +21,11 @@ The compact list shows at most three signals: local contribution observation fir
 Knowledge local records remain session-only and excluded from Demo continuity. Larger software is authored inspection. Main software preserves its existing local-response signal behavior. No backend, new assignment allocation, evidence verification or external effect is introduced.
 
 Browser/model checks cover exact receiver navigation, missing-input/category inspection and source return, contributor/receiver revision loops, clearing bounded needs without closing outcome gaps, and existing Knowledge personal navigation on desktop/phone. Tests are technical checks, not participant research.
+
+## Source labels and counter scope — iteration 104
+
+Each Knowledge/larger coordination signal now identifies its source as **Authored scenario · fixed context** or **Local session observation · resets on reload**. Source metadata is assigned where signals are derived, not guessed from their titles or destination. Compact overview and complete attention lists share those labels.
+
+Attention summaries report authored versus local source totals when all supplied signals have explicit source metadata. Main software attention also tags its authored gaps/context versus local response/prerequisite state, which may include restored demo snapshots. The summary refers to each sample's save/reload rules rather than claiming all local state always disappears on reload.
+
+Read-only-scenario workstream coordination has its own source explanation: these counters use authored context and do not track local contribution receipts/revisions. Knowledge delivery adds a local attention need; receipt clears that need without changing authored workstream counters or closing outcomes. Larger software has authored context only. Labels establish neither live data nor verified provenance.
