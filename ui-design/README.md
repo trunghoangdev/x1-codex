@@ -49,6 +49,8 @@ Knowledge's visible save status distinguishes current work from its browser chec
 
 Main software **Demos → Demo continuity** has a separate explicit snapshot/export/import mechanism; reload may restore its last saved snapshot. Standalone human contribution is session-only and excluded from both save mechanisms. See [demo continuity](DEMO-CONTINUITY.md).
 
+See the [current organization completion review](VIRTUAL-ORGANIZATION-COMPLETION-REVIEW.md) for the next implementation sequence and production requirements.
+
 ## Scope and product boundaries
 
 React, TypeScript, Vite and Lucide power this original English-language design. No authentication, server-enforced authorization, shared durable organization state, live SF API or external execution is implemented. Local records and imported files are demonstrations, not server-admitted organizational facts. No material from the excluded `x1` repository is used.
