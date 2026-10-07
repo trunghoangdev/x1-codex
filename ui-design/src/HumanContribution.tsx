@@ -94,7 +94,7 @@ export function HumanContribution({
         <p>
           Local session only. No upload, real receiver, server admission or
           publication. Leaving this screen preserves this session; reload clears
-          it. Demo continuity does not save this exercise.
+          it. {workspace ? "Use Save or restore Knowledge contribution to save and explicitly restore a browser checkpoint. Demos continuity remains separate." : "Demo continuity does not save this exercise."}
         </p>
       </div>
       <section className="panel org-stream">

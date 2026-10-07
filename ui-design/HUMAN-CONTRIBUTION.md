@@ -45,3 +45,7 @@ Organization's **Contribution exchange · K-01-H** panel shows the same history,
 Integrated preparation opens with **Current task**, the current draft version, required deliverable and a state-specific next step. A keyboard-operable shortcut focuses the editor while preparing, or the command-status heading while acknowledgement/projection is unresolved. Exact input remains open beside responsibility context; confirmation explains the exact-version review step. Unresolved status keeps editing/submission blocked and explicitly says not to submit again.
 
 Integrated version history is collapsed by default and remains available through its labeled disclosure. Standalone Demos keeps its history open. Maya's inbox presents the newest delivered revision first, makes the receiver's next step explicit, and collapses earlier revisions. Organization keeps its exchange observations inspectable. Draft preparation, receipt, revision request and pending reassessment retain their original meanings; no new authority or backend behavior is introduced.
+
+## Explicit Knowledge checkpoint — iteration 105
+
+Knowledge now supports a separate [contribution checkpoint](CONTRIBUTION-RECOVERY.md). Reload still starts empty, but users can explicitly save, review and restore the shared draft/command/delivery/receiver state. Demos continuity and standalone contribution remain independent. This supersedes earlier statements that Knowledge work can only be lost on reload; unsaved work still cannot be recovered.

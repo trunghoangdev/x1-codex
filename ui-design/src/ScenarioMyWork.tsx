@@ -262,7 +262,7 @@ export function ScenarioMyWork({
                   "Expected-response details are not represented in this sample."}
               </p>
               {a.id === "K-01-H" && <div>
-                <p>Session-only exercise · reload clears drafts and command records. Demo continuity excludes this contribution.</p>
+                <p>Local exercise · reload starts empty. Use Save or restore Knowledge contribution to restore a saved browser checkpoint. Demos continuity remains separate.</p>
                 <p>{contribution.contributions.at(-1)?.delivery ? "Latest revision delivered locally; receiver response remains separate." : "Prepare your current draft; earlier delivered revisions remain inspectable."}</p>
                 {contribution.contributions.at(-1)?.assessment && <p role="status">Maya requested a revision · human-assessment-v1. Open contribution to prepare draft-02.</p>}
                 <button className="button primary" onClick={onContribution}>Open contribution · K-01-H</button>

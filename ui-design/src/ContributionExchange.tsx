@@ -31,7 +31,7 @@ export function ContributionExchange({
       </h2>
       <p>
         Knowledge Operations · K-01 · Leo → Maya. Local session sample; reload
-        clears these records. No publication authority or verified outcome is
+        starts empty; explicitly restore a saved contribution checkpoint to resume. No publication authority or verified outcome is
         established.
       </p>
       <p role="status">

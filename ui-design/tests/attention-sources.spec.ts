@@ -16,11 +16,11 @@ for(const width of [390,1440]) test(`attention sources stay distinct from workst
  await page.getByRole('button',{name:'View Organization',exact:true}).click();
  await expect(summary).toContainText('1 local session signals');
  const needs=page.getByRole('region',{name:'Concrete coordination needs'});
- await expect(needs.getByText('Local session observation · resets on reload')).toBeVisible();
+ await expect(needs.getByText('Local session observation · explicit checkpoint restore')).toBeVisible();
  await expect(needs.getByText('Authored scenario · fixed context').first()).toBeVisible();
  expect(await work.locator('.coordination-counts').allTextContents()).toEqual(before);
  await page.getByRole('button',{name:'View all organization attention'}).click();
- await expect(page.getByText('Local session observation · resets on reload')).toBeVisible();
+ await expect(page.getByText('Local session observation · explicit checkpoint restore')).toBeVisible();
  await page.getByRole('button',{name:'Open next step · Maya · sample receiver'}).click();
  await page.getByRole('button',{name:'Record sample receipt · draft-01'}).click();
  await page.getByRole('button',{name:'Back to Organization',exact:true}).click();

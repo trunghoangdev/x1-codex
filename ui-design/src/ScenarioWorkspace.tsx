@@ -1,3 +1,4 @@
+import { ContributionRecovery } from "./ContributionRecovery";
 import { CoordinationNeeds } from "./CoordinationNeeds";
 import { actionableAttention, type CoordinationNeed } from "./data/actionableAttention";
 import { ContributionExchange } from "./ContributionExchange";
@@ -214,6 +215,7 @@ export function ScenarioWorkspace({
           verified outcomes. Main software records remain separate.
         </p>
       </details>
+      {scenario.id === "knowledge" && <details className="organization-disclosure org-overview-section"><summary>Save or restore Knowledge contribution</summary><ContributionRecovery state={contribution} onChange={onContribution} /></details>}
       {suffix === "/contributions/K-01-H" ? (
         <HumanContribution state={contribution} onChange={onContribution}
           onBack={() => onRoute(qualify("/work"))}

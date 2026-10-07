@@ -55,3 +55,7 @@ Iteration 103 implements the primary Organization order and collapses Knowledge 
 ## Item 2 implementation checkpoint
 
 Iteration 104 adds source metadata/labels to coordination signals and main attention, source totals to scoped summaries and explicit authored-counter context beside read-only-scenario workstreams. Knowledge contribution needs can change without implying a change to authored counters or outcomes. Item 3, deliberate contribution save/recovery behavior, remains next.
+
+## Item 3 implementation checkpoint
+
+Iteration 105 adds explicit Knowledge contribution checkpoint save/review/restore/removal with bounded versioned validation. Reload still starts empty; an explicitly restored checkpoint preserves revisions, receiving records and command uncertainty. Main and standalone Demos formats are unchanged. Item 4, the integrated participant walkthrough and actual observations, remains next.
