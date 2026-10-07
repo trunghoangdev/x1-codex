@@ -20,3 +20,11 @@ Blocked/full browser storage or invalid data shows an error without clearing cur
 ## Verification
 
 Model checks cover unresolved commands, admission/projection lag, two-version history, payload/identity consistency and invalid formats. Desktop/phone browser tasks cover explicit save/review/cancel/restore, unknown-command locks, exact command-status focus and invalid-checkpoint removal. Storage failure must preserve the draft. Existing contribution, receiver, attention and command tests protect the shared work path. No participant session is claimed.
+
+## Persistent save status — iteration 107
+
+A save-status line now sits outside the checkpoint disclosure on Knowledge screens. It distinguishes no checkpoint, current work matching a checkpoint (with save time), unsaved differences, an available checkpoint not restored into an empty session, and unavailable/invalid storage.
+
+Comparison covers the complete contribution/command/receiver state, not merely draft text. Receipt, assessment and command transitions can therefore make a saved exercise differ. Object key order is normalized for comparison; omitted command history and an empty command list are equivalent. Editing back to the saved state correctly restores the matching status.
+
+The status reads the validated browser checkpoint on mount and refreshes after save/review/removal, browser focus and relevant cross-tab storage events. A preview does not restore anything. Reload does not claim a nonempty saved exercise is already loaded. Storage failure never creates a new saved timestamp. Cross-tab refresh only updates checkpoint status, not the current exercise. Save/restore remain explicit and local.

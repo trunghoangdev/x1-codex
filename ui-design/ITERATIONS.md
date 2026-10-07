@@ -912,3 +912,11 @@ Production build and diff checks passed. Seventeen distinct related checks passe
 Prepared six role-based tasks covering personal responsibility/delivery, receiver receipt/revision request, exact-version correction, shared coordination/source boundaries, command uncertainty and explicit checkpoint recovery. Participant prompts are separated from facilitator routes and expected distinctions. Added an unfilled session template with assistance, actual quotes/actions and separate interpretation fields. The original usability review now points collaboration testing to this integrated plan while retaining its separate software reviewer/operator exercises.
 
 Eight related automated checks passed across shared revision loops, source/counter separation, checkpoint validation/recovery and blocked-storage preservation. Diff checks passed. These verify mechanics only. No human participant or screen-reader session was conducted; item 4's actual observation stage remains pending participation.
+
+## 107 — Visible contribution save status
+
+Knowledge screens now show save status outside the checkpoint disclosure. It distinguishes no saved checkpoint, current-state match with save time, unsaved differences, an available checkpoint not restored into an empty session, and unavailable/invalid storage. The comparison covers draft, commands, deliveries, receipts and assessments with normalized object keys. Checkpoint reads refresh on mount, successful save/review/removal, focus and relevant cross-tab storage changes; they never automatically replace current work.
+
+Explicit preview/confirmation and unknown-command recovery semantics remain unchanged. Reload cannot imply that nonempty saved work is already restored. Main Demos and standalone contribution are unaffected.
+
+Production build and diff checks passed. Nine distinct related checks passed across runs: desktop/phone status through edit/navigation/reload/cancel/restore/removal, invalid storage, receipt/assessment marking saved work changed, checkpoint validation/uncertainty locks and blocked save, plus shared revision loops. No participant results are claimed.

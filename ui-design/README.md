@@ -327,3 +327,5 @@ Iteration 104: attention signals label authored context versus local sample stat
 Iteration 105: **Save or restore Knowledge contribution** offers a confirmed browser checkpoint with validated, previewed restoration after reload. Unknown-command identities and submission locks survive restoration. This is separate from Demos continuity and requires explicit saving/restoring. See [contribution recovery](CONTRIBUTION-RECOVERY.md).
 
 Iteration 106: the [integrated participant walkthrough](INTEGRATED-PARTICIPANT-WALKTHROUGH.md) covers Leo → Maya → revision → Organization, command uncertainty and checkpoint recovery. A [blank session record](PARTICIPANT-SESSION-RECORD.md) separates observed feedback from facilitator interpretation. Ready for human sessions; no participant results are claimed.
+
+Iteration 107: Knowledge shows contribution save status even with checkpoint controls collapsed—unsaved, matching a timestamped checkpoint, changed since saving, saved-but-not-restored, or unavailable. Draft/command/receiver changes all participate in the comparison. Explicit save/restore behavior is unchanged.
