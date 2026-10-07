@@ -61,3 +61,5 @@ This is an incremental boundary, not a finished data layer. Candidate, evidence,
 `sfReadProjection.ts` defines the draft inspection read projection and derives it from validated packaged snapshots. It carries one response-byte revision across assignment/attempt/product links, explicit field availability and read errors. These are frontend integration types, not an approved Go/API schema. See `../../SF-READ-CONTRACT.md`.
 
 `contributionCommand.ts` is a local draft intent/status model for the independent human exercise. It freezes submitted payloads, blocks duplicate submission during uncertainty, preserves command history through edits and separates admission from delivery projection. No real permission/concurrency check or durable idempotency store is implemented. See `../../CONTRIBUTION-COMMAND-CONTRACT.md`.
+
+`../integration/contributionPort.ts` is an isolated local-checkpoint adapter example with validated reads, cancellation and superseded-response handling. Backend operations explicitly return unsupported. It is not wired into screens and does not define an approved server API. See [integration plan](../../BACKEND-INTEGRATION-PLAN.md).
