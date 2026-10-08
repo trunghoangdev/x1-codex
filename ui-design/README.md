@@ -88,3 +88,5 @@ Knowledge continuity: [whole workspace checkpoint, export and explicit recovery]
 Knowledge scope governance: [exact source applicability decisions](SCOPE-APPLICABILITY.md).
 
 Knowledge repeated operation: [one explicit subsequent bounded-use cycle](USE-CONTINUATION.md).
+
+Main local allocations: [performer acceptance and confirmed reassignment](RESPONSIBILITY-ACCEPTANCE.md).

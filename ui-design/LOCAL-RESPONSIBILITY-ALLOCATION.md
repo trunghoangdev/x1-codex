@@ -23,3 +23,5 @@ Main Demo continuity writes version 2 only when local allocations exist and reta
 ## Verification
 
 Production build and twelve distinct targeted checks passed across runs: accepted-plan preconditions, rejection/no-op and duplicate prevention, Alex binding reuse and new Codex binding/scope projection, desktop/320px cancellation/record/focus, My Work worker selection, workstream/worker/role assignment inspection, allocation activity filtering, exact v2 recovery and invalid-link rejection, plus existing plan reviews and v1 continuity/reset/activity behavior. The main bundle now triggers Vite's advisory size warning above 500 kB; the build succeeds. No backend, participant or screen-reader session was conducted.
+
+Lifecycle update · iteration 131: [performer responses and confirmed transfer](RESPONSIBILITY-ACCEPTANCE.md) now extend local allocation. Main snapshots carrying this history use v3; original allocation remains preserved. Capacity, effective permission and execution remain unverified.

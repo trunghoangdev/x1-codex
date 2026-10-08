@@ -42,7 +42,7 @@ export function DemoContinuity({
         <summary>What is saved and restored?</summary>
         <p>
           Main-sample text drafts, structured assessment/reconciliation drafts,
-          local response receipts, recorded responsibility proposals and their local allocations are
+          local response receipts, recorded responsibility proposals, local allocations and performer/transfer history are
           included.
         </p>
         <p>

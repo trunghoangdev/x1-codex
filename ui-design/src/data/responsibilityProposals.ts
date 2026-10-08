@@ -1,3 +1,4 @@
+import type { ResponsibilityEvent } from "./responsibilityLifecycle";
 export type ResponsibilityProposal = {
   id: string;
   gapId: string;
@@ -8,6 +9,7 @@ export type ResponsibilityProposal = {
   proposer: string;
   recordedAt: string;
   allocation?: LocalAllocation;
+  responsibilityHistory?: ResponsibilityEvent[];
   decision?: {
     outcome: "Accepted" | "Rejected";
     rationale: string;

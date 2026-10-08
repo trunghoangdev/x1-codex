@@ -68,6 +68,18 @@ export function coordinationActivity(
           boundary:
             "Local responsibility allocated; prerequisites, performer acceptance and effective permissions remain unverified. Original gap is retained with a local resolution reference.",
         });
+      for (const e of proposal.responsibilityHistory ?? [])
+        records.push({
+          ...common,
+          id: e.id,
+          kind: "allocations",
+          title: `${e.kind} · ${gap.title}`,
+          actor: e.actorId,
+          rationale: `${e.rationale}${e.handoff ? " · " + e.handoff : ""}`,
+          recordedAt: e.at,
+          boundary:
+            "Local responsibility lifecycle only; input validity, permission and execution remain separate.",
+        });
       return records;
     })
     .sort(

@@ -46,7 +46,9 @@ Support a bounded subsequent cycle with new version/attempt/decision identities 
 
 Acceptance: a failed simulated execution can receive a separately authorized subsequent attempt; changed material requires its own delivery/receipt/assessment as appropriate. Refusal and revision decisions remain inspectable. Retry does not duplicate an already recorded action or reuse authority for a changed version. Recovery and stale-source protection cover both cycles. Define which follow-up is actually supported before offering controls.
 
-### 5. Add performer acceptance and explicit reassignment continuity
+### 5. Add performer acceptance and explicit reassignment continuity — local slice implemented at iteration 131
+
+See [responsibility acceptance](RESPONSIBILITY-ACCEPTANCE.md). This extends the main sample invitation allocations; production consent, capacity, permission and exact input/authority transfer remain unverified. Original criteria follow.
 
 Build on recorded local allocation with the selected performer's separate acceptance, clarification or decline. For reassignment, distinguish a proposal from an effective responsibility change and record the exact pending work and input/decision history transferred. Represent availability as unknown unless supplied. Do not treat a worker selection as consent, permission or capacity.
 

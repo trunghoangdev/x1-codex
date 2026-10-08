@@ -1,3 +1,4 @@
+import { responsibilityState } from "./data/responsibilityLifecycle";
 import { WorkerCapability } from "./WorkerCapability";
 import { useEffect, useRef, useState } from "react";
 import { responsibilityGaps } from "./data/workerDetails";
@@ -120,10 +121,10 @@ export function ResponsibilityProposal({
                 {proposal.allocation.recordedAt} ·{" "}
                 {proposal.allocation.allocator}.
               </p>
+              <p>Current local performer: {responsibilityState(proposal).workerId} · {responsibilityState(proposal).status}. Original allocation above remains historical.</p>
               <p>
                 The original gap is preserved with this local resolution
-                reference. Performer acceptance, capability, capacity and
-                effective permission remain unverified. Work prerequisites still
+                reference. Capability, capacity and effective permission remain unverified. Performer response is recorded separately. Work prerequisites still
                 apply.
               </p>
             </section>

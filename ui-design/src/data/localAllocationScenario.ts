@@ -1,3 +1,4 @@
+import { responsibilityState } from "./responsibilityLifecycle";
 import type { OrganizationScenario } from "./organizationScenario";
 import {
   allocationPreview,
@@ -16,18 +17,33 @@ export function localAllocationScenario(
       ...allocated.map((p) => ({
         id: p.allocation!.assignmentId,
         streamId: "WS-02",
-        workerId: p.workerId,
+        workerId: responsibilityState(p).workerId,
         role: p.role,
         title: allocationPreview(p).assignment,
-        state: "Allocated locally · prerequisites pending",
+        state: `${responsibilityState(p).status} · prerequisites pending`,
         waitingForInput: true,
         input: allocationPreview(p).prerequisites,
         expectedResponse:
-          "Prepare the scoped work when prerequisites are supplied; execution and performer acceptance are not established.",
+          "Prepare the scoped work when prerequisites are supplied; execution and effective permission are not established.",
       })),
     ],
     bindings: [
       ...base.bindings,
+      ...allocated
+        .filter(
+          (p) =>
+            responsibilityState(p).workerId !== p.workerId &&
+            responsibilityState(p).bindingId !== "mb-reviewer",
+        )
+        .map((p) => ({
+          id: responsibilityState(p).bindingId!,
+          workerId: responsibilityState(p).workerId,
+          role: p.role,
+          scope: p.scope,
+          scopeIds: ["scope-WS-02"],
+          permission:
+            "Local accepted transfer only; effective permission unverified",
+        })),
       ...allocated
         .filter((p) => p.allocation!.bindingMode === "created")
         .map((p) => ({
@@ -51,10 +67,10 @@ export function localAllocationScenario(
             bindingIds: [
               ...new Set([
                 ...requirement.bindingIds,
-                ...local.map((p) => p.allocation!.bindingId),
+                ...local.map((p) => responsibilityState(p).bindingId!),
               ]),
             ],
-            note: "Local allocation declared; performer acceptance and effective permissions remain unverified. Original gap history is retained.",
+            note: "Local allocation declared; performer response is tracked per assignment; effective permissions remain unverified. Original gap history is retained.",
           }
         : requirement;
     }),
@@ -74,7 +90,7 @@ export function localAllocationScenario(
       ...allocated.map((p) => ({
         assignmentId: p.allocation!.assignmentId,
         scopeId: "scope-WS-02",
-        bindingId: p.allocation!.bindingId,
+        bindingId: responsibilityState(p).bindingId!,
       })),
     ],
   };

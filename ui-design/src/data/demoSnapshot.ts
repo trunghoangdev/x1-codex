@@ -1,3 +1,4 @@
+import { recordResponsibilityEvent } from "./responsibilityLifecycle";
 import { evidenceFor } from "./evidence";
 import { reviewRequirements } from "./requirements";
 import { assignments } from "./assignments";
@@ -8,7 +9,7 @@ import type { DraftSnapshot } from "../useResponseDrafts";
 export const demoStorageKey = "forge-ui-demo-snapshot-v1";
 export type DemoSnapshot = {
   format: "forge-ui-demo";
-  version: 1 | 2;
+  version: 1 | 2 | 3;
   scope: "main-sample";
   savedAt: string;
   drafts: DraftSnapshot;
@@ -86,7 +87,7 @@ export function parseDemoSnapshot(raw: string): DemoSnapshot {
       "proposals",
     ]) ||
     x.format !== "forge-ui-demo" ||
-    ![1, 2].includes(x.version) ||
+    ![1, 2, 3].includes(x.version) ||
     x.scope !== "main-sample" ||
     !date(x.savedAt)
   )
@@ -259,6 +260,7 @@ export function parseDemoSnapshot(raw: string): DemoSnapshot {
         "recordedAt",
         "decision",
         "allocation",
+        "responsibilityHistory",
       ]) ||
       p.gapId !== gap ||
       !requirement.workerIds.includes(p.workerId) ||
@@ -282,7 +284,7 @@ export function parseDemoSnapshot(raw: string): DemoSnapshot {
   for (const p of Object.values(x.proposals) as ResponsibilityProposal[]) {
     if (p.allocation !== undefined) {
       if (
-        x.version !== 2 ||
+        ![2, 3].includes(x.version) ||
         p.decision?.outcome !== "Accepted" ||
         !obj(p.allocation) ||
         !date(p.allocation.recordedAt)
@@ -294,6 +296,47 @@ export function parseDemoSnapshot(raw: string): DemoSnapshot {
         Object.entries(expected).some(
           ([k, value]) => (p.allocation as any)[k] !== value,
         )
+      )
+        return fail();
+    }
+  }
+  for (const p of Object.values(x.proposals) as ResponsibilityProposal[]) {
+    if (p.responsibilityHistory !== undefined) {
+      if (
+        x.version !== 3 ||
+        !p.allocation ||
+        !Array.isArray(p.responsibilityHistory) ||
+        p.responsibilityHistory.length > 100
+      )
+        return fail();
+      const { responsibilityHistory, ...base } = p;
+      let replay: Record<string, ResponsibilityProposal> = { [p.gapId]: base };
+      for (const e of responsibilityHistory) {
+        if (!obj(e) || !str(e.rationale) || !date(e.at)) return fail();
+        replay = recordResponsibilityEvent(
+          replay,
+          p.gapId,
+          e.kind,
+          e.actorId,
+          e.rationale,
+          e.at,
+          e.targetWorkerId,
+          e.handoff,
+        );
+      }
+      const stable = (value: unknown) =>
+        JSON.stringify(value, (_key, v) =>
+          obj(v)
+            ? Object.fromEntries(
+                Object.keys(v)
+                  .sort()
+                  .map((k) => [k, v[k]]),
+              )
+            : v,
+        );
+      if (
+        stable(replay[p.gapId].responsibilityHistory ?? []) !==
+        stable(responsibilityHistory)
       )
         return fail();
     }

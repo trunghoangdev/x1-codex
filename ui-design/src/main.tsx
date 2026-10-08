@@ -2136,7 +2136,7 @@ function App() {
               />
             </>
           )}
-          {!route.scenarioPath && !selected && (view === "My Work" || (view === "Organization" && !route.attention && !route.organizationActivity && !route.decisions && !handoff && !outcome)) && <LocalResponsibilities proposals={proposals} personal={view === "My Work"} workerId={worker?.id} streamId={stream?.id ?? route.workflowId} onInspect={setProposalGap} />}
+          {!route.scenarioPath && !selected && (view === "My Work" || (view === "Organization" && !route.attention && !route.organizationActivity && !route.decisions && !handoff && !outcome)) && <LocalResponsibilities onChange={setProposals} proposals={proposals} personal={view === "My Work"} workerId={worker?.id} streamId={stream?.id ?? route.workflowId} onInspect={setProposalGap} />}
           {view === "Demos" && route.humanContribution && <HumanContribution state={humanContribution} onChange={setHumanContribution} onBack={() => navigate("Demos")} />}
           {view === "Demos" && route.largeOrganization && (
             <LargeOrganizationDemo onBack={() => navigate("Demos")} />
@@ -2197,7 +2197,7 @@ function App() {
                 <DemoContinuity
                 current={{
                   format: "forge-ui-demo",
-                  version: Object.values(proposals).some(p => p.allocation) ? 2 : 1,
+                  version: Object.values(proposals).some(p => p.responsibilityHistory !== undefined) ? 3 : Object.values(proposals).some(p => p.allocation) ? 2 : 1,
                   scope: "main-sample",
                   drafts: responseDraft.snapshot,
                   receipts,
