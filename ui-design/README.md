@@ -31,6 +31,10 @@ Captured from iteration 109 on 2026-10-07. These are fictional demo views, not p
 
 With Vite running on port 4173, reproduce from this directory using `node scripts/capture-current-demo.mjs`. Screenshots in other files retain their own historical checkpoint dates; see [development history](README-HISTORY.md).
 
+## Content revision loop · iteration 132
+
+Leo and Maya can continue requested revisions through draft-09. Each version preserves its own delivery, receipt and assessment; the comparison follows the latest two versions. Checkpoints recover the full history. See [content revisions](CONTRIBUTION-REVISIONS.md). Use authorization remains exact to draft-02 and does not transfer to changed material.
+
 ## What is interactive?
 
 | Surface | Source and behavior |

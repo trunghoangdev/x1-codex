@@ -166,7 +166,7 @@ for (const width of [320, 1440])
       await page.goto("/#/organizations/knowledge/attention?persona=leo");
       if (conclusion === "Further revision needed")
         await expect(
-          page.getByText("draft-03 is not supported", { exact: false }),
+          page.getByText("prepare draft-03", { exact: false }),
         ).toBeVisible();
       else
         await expect(

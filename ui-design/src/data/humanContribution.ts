@@ -1,6 +1,6 @@
 import type { ContributionCommand } from "./contributionCommand";
 export type Contribution = {
-  version: 1 | 2;
+  version: number;
   body: string;
   note: string;
   citesInput: boolean;
@@ -14,7 +14,7 @@ export type Contribution = {
   };
   receipt?: { id: string; deliveryId: string; at: string };
   reassessment?: {
-    id: "human-reassessment-v2";
+    id: string;
     receiptId: string;
     deliveryId: string;
     assessor: "Maya";
@@ -46,6 +46,15 @@ export const contributionResponsibility = {
   inputText:
     "For this fictional cohort, access questions go to the onboarding contact. The guide should explain who to contact and what context to include. This is an authored input, not an adopted policy.",
 };
+export const maxContributionVersions = 9;
+export function revisionRequest(c: Contribution | undefined) {
+  return (
+    c?.assessment ??
+    (c?.reassessment?.conclusion === "Further revision needed"
+      ? c.reassessment
+      : undefined)
+  );
+}
 export function deliverContribution(
   state: HumanContributionState,
   at: string,
@@ -58,8 +67,8 @@ export function deliverContribution(
     !current.citesInput
   )
     return state;
-  const respondsTo = state.contributions[0].assessment?.id;
-  if (current.version === 2 && !respondsTo) return state;
+  const respondsTo = revisionRequest(state.contributions.at(-2))?.id;
+  if (current.version > 1 && !respondsTo) return state;
   return {
     ...state,
     contributions: state.contributions.map((c) =>
@@ -72,7 +81,7 @@ export function deliverContribution(
               body: c.body,
               note: c.note,
               input: contributionResponsibility.input,
-              ...(c.version === 2 ? { respondsTo } : {}),
+              ...(c.version > 1 ? { respondsTo } : {}),
             },
           }
         : c,
@@ -130,15 +139,20 @@ export function assessContribution(
 export function reviseContribution(
   state: HumanContributionState,
 ): HumanContributionState {
-  if (state.contributions.length !== 1 || !state.contributions[0].assessment)
+  const current = state.contributions.at(-1)!;
+  if (
+    state.contributions.length >= maxContributionVersions ||
+    !current.delivery ||
+    !revisionRequest(current)
+  )
     return state;
   return {
     ...state,
     contributions: [
       ...state.contributions,
       {
-        version: 2,
-        body: state.contributions[0].delivery!.body,
+        version: current.version + 1,
+        body: current.delivery.body,
         note: "",
         citesInput: false,
       },
@@ -154,7 +168,7 @@ export function reassessContribution(
 ): HumanContributionState {
   const current = state.contributions.at(-1)!;
   if (
-    current.version !== 2 ||
+    current.version < 2 ||
     !current.delivery ||
     !current.receipt ||
     current.reassessment ||
@@ -172,7 +186,7 @@ export function reassessContribution(
         ? {
             ...c,
             reassessment: {
-              id: "human-reassessment-v2",
+              id: `human-reassessment-v${current.version}`,
               receiptId: current.receipt!.id,
               deliveryId: current.delivery!.id,
               assessor: "Maya",

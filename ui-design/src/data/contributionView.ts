@@ -1,4 +1,8 @@
-import type { HumanContributionState } from "./humanContribution";
+import {
+  maxContributionVersions,
+  revisionRequest,
+  type HumanContributionState,
+} from "./humanContribution";
 import { commandBlocksEditing } from "./contributionCommand";
 
 // Presentation derived from the same session records, including restored/imported state.
@@ -30,7 +34,7 @@ export function contributionView(state: HumanContributionState) {
           : "Awaiting receiver receipt"
         : active?.status === "rejected"
           ? "Submission rejected"
-          : current.version === 2
+          : current.version > 1
             ? "Preparing revision"
             : "Preparing contribution";
   const summary = current.delivery
@@ -52,8 +56,8 @@ export function contributionView(state: HumanContributionState) {
           ? active.rejection === "permission-denied"
             ? "Permission denied. Your draft is retained. Check submission authority with the responsible administrator before trying again; editing text does not grant permission. This demo cannot change real permissions."
             : "Revision conflict. Your draft is retained. Compare the current assignment revision with your submitted version before preparing a new submission. This demo has no server revision to fetch or merge automatically."
-          : current.version === 2
-            ? `Prepare draft-02 in response to ${state.contributions[0].assessment?.id}; earlier delivery and review remain attached to draft-01.`
+          : current.version > 1
+            ? `Prepare draft-0${current.version} in response to ${revisionRequest(state.contributions.at(-2))?.id}; earlier deliveries and reviews remain attached to their versions.`
             : "Prepare your contribution using the supplied brief, then review the exact delivery.";
   const receiverNext = !current.delivery
     ? "Wait for Leo’s next delivered revision; no receipt action is available."
@@ -70,12 +74,13 @@ export function contributionView(state: HumanContributionState) {
     return {
       version: current.version,
       stage: current.reassessment.conclusion,
-      summary: `draft-02: delivered locally · receipt recorded · ${current.reassessment.conclusion.toLowerCase()}`,
+      summary: `draft-0${current.version}: delivered locally · receipt recorded · ${current.reassessment.conclusion.toLowerCase()}`,
       contributorNext: needsRevision
-        ? "Further revision needed. Inspect Maya’s reassessment and coordinate the next revision; draft-03 is not supported in this exercise."
-        : "Maya assessed draft-02 as suitable for the stated scope. Publication authority and outcome verification remain separate; no further contributor action is established.",
-      receiverNext:
-        "Reassessment recorded for draft-02. No publication or outcome decision was created.",
+        ? current.version < maxContributionVersions
+          ? `Further revision needed. Inspect Maya’s reassessment and prepare draft-0${current.version + 1}.`
+          : "Further revision needed. This local exercise supports up to draft-09; coordinate further work separately."
+        : `Maya assessed draft-0${current.version} as suitable for the stated scope. Publication authority and outcome verification remain separate; no further contributor action is established.`,
+      receiverNext: `Reassessment recorded for draft-0${current.version}. No publication or outcome decision was created.`,
       attention: needsRevision ? "revision" : undefined,
       locked,
     };

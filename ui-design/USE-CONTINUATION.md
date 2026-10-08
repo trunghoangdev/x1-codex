@@ -27,3 +27,5 @@ No external action occurs. Retry scheduling, additional cycles, revocation, chan
 ## Validation
 
 Production build, diff checks and fifteen targeted model/browser checks passed, covering continuation eligibility, fresh authority, source mismatch, no duplicated third cycle, applicability non-transfer, forged history/link rejection, cancel/confirm, phone/desktop second-attempt records and v3 reload/restore. Existing bundle-size advisory remains; no backend or participant result is claimed.
+
+Revision update · iteration 132: [content revisions](CONTRIBUTION-REVISIONS.md) now support draft-03 through draft-09 after an explicit revision request. Each has separate exact delivery/receipt/reassessment and comparison with its predecessor. Contribution checkpoints use v3 for three or more versions; v1/v2 remain readable. Use cycles still apply only to the same assessed draft-02; authorization does not transfer to changed material.

@@ -15,3 +15,5 @@ Validation requires the exact revised receipt/delivery IDs, fixed sample assesso
 ## Verification
 
 Production build and twenty-two distinct targeted checks passed across runs: model preconditions/immutability, original-version preservation, exact-link validation and v1/v2 round trips; both conclusions on desktop/320px through My Work, attention, workstream, comparison and reload/restore; existing checkpoint failures, exchange, local progress, replacement preview, consistency and comparison behavior. No participant, live backend or screen-reader session was conducted.
+
+Revision update · iteration 132: [content revisions](CONTRIBUTION-REVISIONS.md) now support draft-03 through draft-09 after an explicit revision request. Each has separate exact delivery/receipt/reassessment and comparison with its predecessor. Contribution checkpoints use v3 for three or more versions; v1/v2 remain readable. Use cycles still apply only to the same assessed draft-02; authorization does not transfer to changed material.

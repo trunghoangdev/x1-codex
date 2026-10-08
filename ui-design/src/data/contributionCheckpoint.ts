@@ -1,10 +1,15 @@
 import {
   contributionResponsibility as r,
   type HumanContributionState,
+  maxContributionVersions,
+  revisionRequest,
 } from "./humanContribution";
 export const contributionCheckpointKey = "forge-knowledge-contribution-v1";
 export type ContributionCheckpoint = {
-  format: "forge.knowledge-contribution.v1" | "forge.knowledge-contribution.v2";
+  format:
+    | "forge.knowledge-contribution.v1"
+    | "forge.knowledge-contribution.v2"
+    | "forge.knowledge-contribution.v3";
   savedAt: string;
   state: HumanContributionState;
 };
@@ -31,6 +36,7 @@ export function parseContributionCheckpoint(
     ![
       "forge.knowledge-contribution.v1",
       "forge.knowledge-contribution.v2",
+      "forge.knowledge-contribution.v3",
     ].includes(value.format) ||
     !time(value.savedAt)
   )
@@ -39,7 +45,11 @@ export function parseContributionCheckpoint(
   if (
     !object(s, ["contributions", "commands"]) ||
     !Array.isArray(s.contributions) ||
-    ![1, 2].includes(s.contributions.length) ||
+    s.contributions.length < 1 ||
+    s.contributions.length >
+      (value.format === "forge.knowledge-contribution.v3"
+        ? maxContributionVersions
+        : 2) ||
     (s.commands !== undefined &&
       (!Array.isArray(s.commands) || s.commands.length > 100))
   )
@@ -82,7 +92,7 @@ export function parseContributionCheckpoint(
         d.input !== r.input ||
         (i === 0
           ? d.respondsTo !== undefined
-          : d.respondsTo !== "human-assessment-v1"))
+          : d.respondsTo !== revisionRequest(s.contributions[i - 1])?.id))
     )
       fail();
     if (
@@ -115,8 +125,8 @@ export function parseContributionCheckpoint(
       fail();
     if (
       c.reassessment &&
-      (value.format !== "forge.knowledge-contribution.v2" ||
-        i !== 1 ||
+      (value.format === "forge.knowledge-contribution.v1" ||
+        i === 0 ||
         !c.receipt ||
         !d ||
         !object(c.reassessment, [
@@ -128,7 +138,7 @@ export function parseContributionCheckpoint(
           "conclusion",
           "rationale",
         ]) ||
-        c.reassessment.id !== "human-reassessment-v2" ||
+        c.reassessment.id !== `human-reassessment-v${c.version}` ||
         c.reassessment.receiptId !== c.receipt.id ||
         c.reassessment.deliveryId !== d.id ||
         c.reassessment.assessor !== "Maya" ||
@@ -140,7 +150,7 @@ export function parseContributionCheckpoint(
         !c.reassessment.rationale.trim())
     )
       fail();
-    if (i === 1 && !s.contributions[0].assessment) fail();
+    if (i > 0 && !revisionRequest(s.contributions[i - 1])) fail();
   }
   const commands = s.commands ?? [];
   for (const [i, c] of commands.entries()) {
@@ -166,7 +176,9 @@ export function parseContributionCheckpoint(
       c.id !== `demo-command-${i + 1}` ||
       c.idempotencyKey !== `${c.id}-key` ||
       c.contract !== "human.contribution-submit.draft.v1" ||
-      ![1, 2].includes(c.version) ||
+      !Number.isInteger(c.version) ||
+      c.version < 1 ||
+      c.version > maxContributionVersions ||
       c.expectedRevision !== `demo-assignment-revision-${c.version}` ||
       c.assignment !== r.assignment ||
       c.subject !== r.subject ||
@@ -197,7 +209,7 @@ export function parseContributionCheckpoint(
       !contribution ||
       (c.version === 1
         ? c.respondsTo !== undefined
-        : c.respondsTo !== s.contributions[0].assessment?.id)
+        : c.respondsTo !== revisionRequest(s.contributions[c.version - 2])?.id)
     )
       fail();
     if (i && c.version < commands[i - 1].version) fail();
@@ -238,9 +250,12 @@ export function parseContributionCheckpoint(
 }
 export function encodeContributionCheckpoint(state: HumanContributionState) {
   const raw = JSON.stringify({
-    format: state.contributions.some((c) => c.reassessment)
-      ? "forge.knowledge-contribution.v2"
-      : "forge.knowledge-contribution.v1",
+    format:
+      state.contributions.length > 2
+        ? "forge.knowledge-contribution.v3"
+        : state.contributions.some((c) => c.reassessment)
+          ? "forge.knowledge-contribution.v2"
+          : "forge.knowledge-contribution.v1",
     savedAt: new Date().toISOString(),
     state,
   });

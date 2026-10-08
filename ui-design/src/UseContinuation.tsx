@@ -32,8 +32,9 @@ export function UseContinuation({
     return (
       <p>
         Cycle 2 is the final supported cycle in this exercise. Original cycle
-        remains in history; further cycles and content draft-03 are not
-        implemented.
+        remains in history. Further use cycles and use of changed content are
+        not implemented; content revisions are available in Leo’s contribution
+        workspace.
       </p>
     );
   if (!source)

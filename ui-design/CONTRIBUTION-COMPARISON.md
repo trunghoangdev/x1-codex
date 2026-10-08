@@ -17,3 +17,5 @@ Production build and nine distinct targeted checks passed across runs: text reco
 ## Iteration 119 verification
 
 Production build and ten related checks passed across targeted runs: insertion/deletion, empty/unchanged text, trailing newlines, repeated lines, separated changes with preserved middle context, bounded large-edit fallback, exact rendered text on desktop/320px, receiver visibility and version lineage, shared revision loops and Chromium/Firefox keyboard recovery. Comparison checks passed again after adding exact DOM text assertions. No participant or screen-reader session was conducted.
+
+Revision update · iteration 132: [content revisions](CONTRIBUTION-REVISIONS.md) now support draft-03 through draft-09 after an explicit revision request. Each has separate exact delivery/receipt/reassessment and comparison with its predecessor. Contribution checkpoints use v3 for three or more versions; v1/v2 remain readable. Use cycles still apply only to the same assessed draft-02; authorization does not transfer to changed material.

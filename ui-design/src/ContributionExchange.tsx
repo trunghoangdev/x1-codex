@@ -211,63 +211,59 @@ export function ContributionExchange({
               Request sample revision · draft-01
             </button>
           )}
-          {current.version === 2 &&
-            current.receipt &&
-            !current.reassessment && (
-              <section aria-label="Reassess draft-02">
-                <h3>Assess received draft-02</h3>
-                <p>
-                  Maya’s local sample judgement of {current.receipt.id} →{" "}
-                  {current.delivery.id}. Inspect the delivered text and
-                  comparison before recording. This does not authorize
-                  publication.
-                </p>
-                <label>
-                  Reassessment conclusion
-                  <select
-                    value={conclusion}
-                    onChange={(e) =>
-                      setConclusion(e.target.value as typeof conclusion)
-                    }
-                  >
-                    <option>Suitable for stated scope</option>
-                    <option>Further revision needed</option>
-                  </select>
-                </label>
-                <label>
-                  Reassessment rationale
-                  <textarea
-                    value={rationale}
-                    maxLength={3000}
-                    onChange={(e) => setRationale(e.target.value)}
-                  />
-                </label>
-                <button
-                  className="button secondary"
-                  disabled={!onChange || !rationale.trim()}
-                  onClick={() => {
-                    record(
-                      reassessContribution(
-                        state,
-                        conclusion,
-                        rationale,
-                        new Date().toISOString(),
-                      ),
-                    );
-                    setRationale("");
-                  }}
+          {current.version > 1 && current.receipt && !current.reassessment && (
+            <section aria-label={`Reassess draft-0${current.version}`}>
+              <h3>Assess received draft-0{current.version}</h3>
+              <p>
+                Maya’s local sample judgement of {current.receipt.id} →{" "}
+                {current.delivery.id}. Inspect the delivered text and comparison
+                before recording. This does not authorize publication.
+              </p>
+              <label>
+                Reassessment conclusion
+                <select
+                  value={conclusion}
+                  onChange={(e) =>
+                    setConclusion(e.target.value as typeof conclusion)
+                  }
                 >
-                  Record sample reassessment · draft-02
-                </button>
-                {!rationale.trim() && (
-                  <p>
-                    A rationale is required. Nothing is recorded until you
-                    submit.
-                  </p>
-                )}
-              </section>
-            )}
-          {current.version === 2 && !current.reassessment && (
+                  <option>Suitable for stated scope</option>
+                  <option>Further revision needed</option>
+                </select>
+              </label>
+              <label>
+                Reassessment rationale
+                <textarea
+                  value={rationale}
+                  maxLength={3000}
+                  onChange={(e) => setRationale(e.target.value)}
+                />
+              </label>
+              <button
+                className="button secondary"
+                disabled={!onChange || !rationale.trim()}
+                onClick={() => {
+                  record(
+                    reassessContribution(
+                      state,
+                      conclusion,
+                      rationale,
+                      new Date().toISOString(),
+                    ),
+                  );
+                  setRationale("");
+                }}
+              >
+                Record sample reassessment · draft-0{current.version}
+              </button>
+              {!rationale.trim() && (
+                <p>
+                  A rationale is required. Nothing is recorded until you submit.
+                </p>
+              )}
+            </section>
+          )}
+          {current.version > 1 && !current.reassessment && (
             <p>
               Reassessment remains pending. A receipt does not accept this
               revision.

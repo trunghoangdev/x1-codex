@@ -367,7 +367,8 @@ export function parseKnowledgeImport(raw: string): KnowledgeImport {
   const format = JSON.parse(raw)?.format;
   if (
     format === "forge.knowledge-contribution.v1" ||
-    format === "forge.knowledge-contribution.v2"
+    format === "forge.knowledge-contribution.v2" ||
+    format === "forge.knowledge-contribution.v3"
   ) {
     const c = parseContributionCheckpoint(raw);
     return { kind: "contribution", contribution: c.state, savedAt: c.savedAt };

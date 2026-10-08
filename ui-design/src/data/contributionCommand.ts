@@ -1,6 +1,7 @@
 import {
   contributionResponsibility,
   deliverContribution,
+  revisionRequest,
   type HumanContributionState,
 } from "./humanContribution";
 export type CommandPreview =
@@ -17,7 +18,7 @@ export type ContributionCommand = {
   expectedRevision: string;
   assignment: string;
   subject: string;
-  version: 1 | 2;
+  version: number;
   body: string;
   note: string;
   input: string;
@@ -49,7 +50,7 @@ export function submitContributionCommand(
     !current.body.trim() ||
     !current.note.trim() ||
     !current.citesInput ||
-    (current.version === 2 && !state.contributions[0].assessment)
+    (current.version > 1 && !revisionRequest(state.contributions.at(-2)))
   )
     return state;
   const id = `demo-command-${(state.commands?.length ?? 0) + 1}`;
@@ -72,8 +73,8 @@ export function submitContributionCommand(
     body: current.body,
     note: current.note,
     input: contributionResponsibility.input,
-    ...(current.version === 2
-      ? { respondsTo: state.contributions[0].assessment!.id }
+    ...(current.version > 1
+      ? { respondsTo: revisionRequest(state.contributions.at(-2))!.id }
       : {}),
     submittedAt: at,
     status,

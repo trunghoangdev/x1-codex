@@ -1,3 +1,7 @@
+import {
+  maxContributionVersions,
+  revisionRequest,
+} from "./data/humanContribution";
 import { ContributionComparison } from "./ContributionComparison";
 import { contributionView } from "./data/contributionView";
 import {
@@ -65,22 +69,23 @@ export function HumanContribution({
     const receiverChanged =
       previous.split(":")[5] !== focusStage.split(":")[5] ||
       previous.split(":")[6] !== focusStage.split(":")[6];
-    const commandChanged = !!command && (
-      previous.split(":")[2] !== command.id || previous.split(":")[3] !== command.status
-    );
+    const commandChanged =
+      !!command &&
+      (previous.split(":")[2] !== command.id ||
+        previous.split(":")[3] !== command.status);
     const target = versionChanged
       ? "human-contribution-body"
       : confirm
         ? "human-delivery-confirm-heading"
         : commandChanged
           ? "human-command-status-heading"
-        : previous.split(":")[1] === "true" && !locked && !current.delivery
-          ? "human-contribution-body"
-          : receiverChanged
-            ? "human-receiver-heading"
-            : command
-              ? "human-command-status-heading"
-              : "human-receiver-heading";
+          : previous.split(":")[1] === "true" && !locked && !current.delivery
+            ? "human-contribution-body"
+            : receiverChanged
+              ? "human-receiver-heading"
+              : command
+                ? "human-command-status-heading"
+                : "human-receiver-heading";
     document.getElementById(target)?.focus();
   }, [focusStage, current.version, confirm, locked, current.delivery, command]);
   const ready =
@@ -99,26 +104,91 @@ export function HumanContribution({
           </p>
         </div>
       </div>
-      {workspace && <section className="panel org-stream" aria-label="Current contribution task">
-        <h2>Current task · draft-0{current.version}</h2>
-        <p><strong>Deliverable:</strong> cited access-guide text plus a scope or revision note.</p>
-        <p role="status">{confirm && !locked && !current.delivery ? "Review the exact version and content below before recording a local delivery." : view.contributorNext}</p>
-        {!current.delivery && !locked && !confirm && <button className="button primary" onClick={() => document.getElementById("human-contribution-body")?.focus()}>Continue preparing · draft-0{current.version}</button>}
-        {locked && <button className="button secondary" onClick={() => document.getElementById("human-command-status-heading")?.focus()}>Inspect unresolved command</button>}
-      </section>}
-      {workspace && <section className="panel org-stream" aria-label="Contribution workspace context">
-        <h2>Knowledge Operations · Welcome guide</h2>
-        <details><summary>Assignment context</summary><p>K-01-H · Leo · preparation and revision. This sample assignment is separate from the authored researcher and distribution responsibilities.</p></details>
-        <button className="button secondary" onClick={workspace.onOrganization}>View Organization</button>{" "}
-        <button className="button secondary" onClick={workspace.onWorkstream}>View workstream · K-01</button>
-      </section>}
+      {workspace && (
+        <section
+          className="panel org-stream"
+          aria-label="Current contribution task"
+        >
+          <h2>Current task · draft-0{current.version}</h2>
+          <p>
+            <strong>Deliverable:</strong> cited access-guide text plus a scope
+            or revision note.
+          </p>
+          <p role="status">
+            {confirm && !locked && !current.delivery
+              ? "Review the exact version and content below before recording a local delivery."
+              : view.contributorNext}
+          </p>
+          {!current.delivery && !locked && !confirm && (
+            <button
+              className="button primary"
+              onClick={() =>
+                document.getElementById("human-contribution-body")?.focus()
+              }
+            >
+              Continue preparing · draft-0{current.version}
+            </button>
+          )}
+          {locked && (
+            <button
+              className="button secondary"
+              onClick={() =>
+                document.getElementById("human-command-status-heading")?.focus()
+              }
+            >
+              Inspect unresolved command
+            </button>
+          )}
+        </section>
+      )}
+      {workspace && (
+        <section
+          className="panel org-stream"
+          aria-label="Contribution workspace context"
+        >
+          <h2>Knowledge Operations · Welcome guide</h2>
+          <details>
+            <summary>Assignment context</summary>
+            <p>
+              K-01-H · Leo · preparation and revision. This sample assignment is
+              separate from the authored researcher and distribution
+              responsibilities.
+            </p>
+          </details>
+          <button
+            className="button secondary"
+            onClick={workspace.onOrganization}
+          >
+            View Organization
+          </button>{" "}
+          <button className="button secondary" onClick={workspace.onWorkstream}>
+            View workstream · K-01
+          </button>
+        </section>
+      )}
       <div className="org-banner contribution-session-note">
-        <p>Local demo · no upload or publication. Reload starts empty; recover a saved checkpoint explicitly.</p>
-        <details><summary>Session storage and demo boundaries</summary>
-          <p>Leaving this screen preserves this session. {workspace ? "Use Save or restore Knowledge contribution to save and explicitly restore a browser checkpoint. Demos continuity remains separate." : "Demo continuity does not save this exercise; reload clears it."} No real receiver or server admission is established.</p>
+        <p>
+          Local demo · no upload or publication. Reload starts empty; recover a
+          saved checkpoint explicitly.
+        </p>
+        <details>
+          <summary>Session storage and demo boundaries</summary>
+          <p>
+            Leaving this screen preserves this session.{" "}
+            {workspace
+              ? "Use Save or restore Knowledge contribution to save and explicitly restore a browser checkpoint. Demos continuity remains separate."
+              : "Demo continuity does not save this exercise; reload clears it."}{" "}
+            No real receiver or server admission is established.
+          </p>
         </details>
       </div>
-      {interruptedReview && <p role="status">Work changed after the delivery review. The previous confirmation is cancelled; inspect the current draft and review again. No command was submitted by that cancelled confirmation.</p>}
+      {interruptedReview && (
+        <p role="status">
+          Work changed after the delivery review. The previous confirmation is
+          cancelled; inspect the current draft and review again. No command was
+          submitted by that cancelled confirmation.
+        </p>
+      )}
       <section className="panel org-stream">
         <h2>Your responsibility</h2>
         <p>
@@ -129,17 +199,18 @@ export function HumanContribution({
           <br />
           Subject: {responsibility.subject} / draft-0{current.version}
         </p>
-        <details><summary>Responsibility and publication scope</summary>
-        <p>
-          Prepare a short onboarding guide with a clear next step and a citation
-          to the supplied brief. Deliver a text contribution plus a note
-          explaining its scope; for a revision, explain the response to the
-          assessment.
-        </p>
-        <p>
-          Scope: preparation and revision only. Publication permission and
-          verified cohort usefulness are not established.
-        </p>
+        <details>
+          <summary>Responsibility and publication scope</summary>
+          <p>
+            Prepare a short onboarding guide with a clear next step and a
+            citation to the supplied brief. Deliver a text contribution plus a
+            note explaining its scope; for a revision, explain the response to
+            the assessment.
+          </p>
+          <p>
+            Scope: preparation and revision only. Publication permission and
+            verified cohort usefulness are not established.
+          </p>
         </details>
         <details open>
           <summary>Inspect input · {responsibility.input}</summary>
@@ -149,10 +220,11 @@ export function HumanContribution({
       {!current.delivery && !locked && (
         <section className="panel org-stream">
           <h2>Prepare draft-0{current.version}</h2>
-          {current.version === 2 && (
+          {current.version > 1 && (
             <p>
-              Responding to {state.contributions[0].assessment?.id}. Earlier
-              content and decisions remain attached to draft-01.
+              Responding to {revisionRequest(state.contributions.at(-2))?.id}.
+              Earlier content and decisions remain attached to their original
+              versions.
             </p>
           )}
           <p id="human-contribution-requirement">
@@ -172,7 +244,7 @@ export function HumanContribution({
             }}
           />
           <label htmlFor="human-contribution-note">
-            {current.version === 2 ? "Revision response" : "Delivery note"}
+            {current.version > 1 ? "Revision response" : "Delivery note"}
           </label>
           <textarea
             id="human-contribution-note"
@@ -235,11 +307,17 @@ export function HumanContribution({
           </button>
           {!ready && (
             <p>
-              Still needed: {[
+              Still needed:{" "}
+              {[
                 !current.body.trim() && "contribution text",
-                !current.note.trim() && (current.version === 2 ? "revision response" : "delivery note"),
+                !current.note.trim() &&
+                  (current.version > 1 ? "revision response" : "delivery note"),
                 !current.citesInput && "supporting input citation",
-              ].filter(Boolean).join(", ")}. Your draft stays editable; no command has been submitted for this preparation.
+              ]
+                .filter(Boolean)
+                .join(", ")}
+              . Your draft stays editable; no command has been submitted for
+              this preparation.
             </p>
           )}
           {confirm && (
@@ -401,36 +479,50 @@ export function HumanContribution({
             <p role="status" aria-live="polite">
               Delivered locally: {current.delivery.id}. Receipt:{" "}
               {current.receipt?.id ?? "not recorded"}. Assessment:{" "}
-              {current.reassessment?.conclusion ?? current.assessment?.conclusion ?? "not recorded"}.
+              {current.reassessment?.conclusion ??
+                current.assessment?.conclusion ??
+                "not recorded"}
+              .
             </p>
-            {!workspace && <>
-            <h3>Receiver simulation · Maya</h3>
-            <p>
-              These explicit demo controls represent a separate receiver.
-              Delivery alone never creates receipt or assessment.
-            </p>
-            <button
-              className="button secondary"
-              disabled={!!current.receipt}
-              onClick={() =>
-                onChange(receiveContribution(state, new Date().toISOString()))
-              }
-            >
-              Simulate receiver receipt
-            </button>
-            {current.version === 1 && (
-              <button
-                className="button secondary"
-                disabled={!current.receipt || !!current.assessment}
-                onClick={() =>
-                  onChange(assessContribution(state, new Date().toISOString()))
-                }
-              >
-                Simulate revision request
-              </button>
+            {!workspace && (
+              <>
+                <h3>Receiver simulation · Maya</h3>
+                <p>
+                  These explicit demo controls represent a separate receiver.
+                  Delivery alone never creates receipt or assessment.
+                </p>
+                <button
+                  className="button secondary"
+                  disabled={!!current.receipt}
+                  onClick={() =>
+                    onChange(
+                      receiveContribution(state, new Date().toISOString()),
+                    )
+                  }
+                >
+                  Simulate receiver receipt
+                </button>
+                {current.version === 1 && (
+                  <button
+                    className="button secondary"
+                    disabled={!current.receipt || !!current.assessment}
+                    onClick={() =>
+                      onChange(
+                        assessContribution(state, new Date().toISOString()),
+                      )
+                    }
+                  >
+                    Simulate revision request
+                  </button>
+                )}
+              </>
             )}
-            </>}
-            {workspace && <p>Receiver actions are in Maya’s My Work. Switch sample persona to Maya to record a receipt or request a revision.</p>}
+            {workspace && (
+              <p>
+                Receiver actions are in Maya’s My Work. Switch sample persona to
+                Maya to record a receipt or request a revision.
+              </p>
+            )}
             {current.assessment && (
               <>
                 <p>{current.assessment.rationale}</p>
@@ -442,11 +534,46 @@ export function HumanContribution({
                 </button>
               </>
             )}
-            {current.reassessment && <p>Reassessment: {current.reassessment.id} → {current.reassessment.receiptId} → {current.reassessment.deliveryId} · {current.reassessment.assessor}. {current.reassessment.conclusion}: {current.reassessment.rationale}. Publication authority and outcome verification remain separate.</p>}
-            {current.version === 2 && !current.reassessment && (
+            {current.reassessment && (
               <p>
-                Reassessment is pending. Receipt does not accept draft-02,
-                authorize publication or verify the shared outcome.
+                Reassessment: {current.reassessment.id} →{" "}
+                {current.reassessment.receiptId} →{" "}
+                {current.reassessment.deliveryId} ·{" "}
+                {current.reassessment.assessor}.{" "}
+                {current.reassessment.conclusion}:{" "}
+                {current.reassessment.rationale}. Publication authority and
+                outcome verification remain separate.
+              </p>
+            )}
+            {current.reassessment?.conclusion === "Further revision needed" &&
+              current.version < maxContributionVersions && (
+                <button
+                  className="button primary"
+                  onClick={() => onChange(reviseContribution(state))}
+                >
+                  Prepare draft-0{current.version + 1}
+                </button>
+              )}
+            {current.version >= maxContributionVersions &&
+              current.reassessment?.conclusion ===
+                "Further revision needed" && (
+                <p>
+                  This local exercise supports up to draft-09. Coordinate
+                  further work separately.
+                </p>
+              )}
+            {current.version > 2 && (
+              <p>
+                Changed material requires its own assessment and use mandate.
+                Draft-02 use authorization does not apply to this revision; the
+                use exercise currently supports draft-02 only.
+              </p>
+            )}
+            {current.version > 1 && !current.reassessment && (
+              <p>
+                Reassessment is pending. Receipt does not accept draft-0
+                {current.version}, authorize publication or verify the shared
+                outcome.
               </p>
             )}
           </>
@@ -454,7 +581,9 @@ export function HumanContribution({
       </section>
       <ContributionComparison state={state} />
       <details className="panel org-stream" open={!workspace}>
-        <summary>Version history · {state.contributions.length} versions</summary>
+        <summary>
+          Version history · {state.contributions.length} versions
+        </summary>
         <h2>Version history</h2>
         {state.contributions.map((c) => (
           <article key={c.version}>
@@ -480,7 +609,14 @@ export function HumanContribution({
                     {c.receipt.at}
                   </p>
                 )}
-                {c.reassessment && <p>Reassessment: {c.reassessment.id} → {c.reassessment.receiptId} → {c.reassessment.deliveryId} · {c.reassessment.assessor} · {c.reassessment.at}. {c.reassessment.conclusion}: {c.reassessment.rationale}</p>}
+                {c.reassessment && (
+                  <p>
+                    Reassessment: {c.reassessment.id} →{" "}
+                    {c.reassessment.receiptId} → {c.reassessment.deliveryId} ·{" "}
+                    {c.reassessment.assessor} · {c.reassessment.at}.{" "}
+                    {c.reassessment.conclusion}: {c.reassessment.rationale}
+                  </p>
+                )}
                 {c.assessment && (
                   <p>
                     Assessment: {c.assessment.id} → {c.assessment.receiptId} ·{" "}

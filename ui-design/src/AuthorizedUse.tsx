@@ -189,8 +189,9 @@ export function AuthorizedUse({
         <p>
           Publication assessment requires revision. No authorization or
           execution was created. This exercise retains the decision; a new use
-          cycle requires its own scoped mandate. Content draft-03 remains
-          outside this exercise.
+          cycle requires its own scoped mandate. Content revisions are prepared
+          in Leo’s contribution workspace; use of changed material requires a
+          new mandate and is outside this use exercise.
         </p>
       )}
       {stage === "refused" && (

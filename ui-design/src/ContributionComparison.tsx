@@ -50,10 +50,12 @@ export function ContributionComparison({
   state: HumanContributionState;
   deliveredOnly?: boolean;
 }) {
-  const [first, second] = state.contributions;
+  const first = state.contributions.at(-2),
+    second = state.contributions.at(-1);
+  const request = first?.assessment ?? first?.reassessment;
   if (
     !first?.delivery ||
-    !first.assessment ||
+    !request ||
     !second ||
     (deliveredOnly && !second.delivery)
   )
@@ -82,7 +84,9 @@ export function ContributionComparison({
   };
   return (
     <details className="panel org-stream contribution-comparison">
-      <summary>Compare draft-01 and draft-02</summary>
+      <summary>
+        Compare draft-0{first.version} and draft-0{second.version}
+      </summary>
       <section aria-label="Contribution version comparison">
         <h2>Revision comparison</h2>
         <p>
@@ -93,7 +97,8 @@ export function ContributionComparison({
             : "Separate changes are marked; matching lines between them remain unmarked."}
         </p>
         <p>
-          draft-01 is the frozen delivery. draft-02 is{" "}
+          draft-0{first.version} is the frozen delivery. draft-0{second.version}{" "}
+          is{" "}
           {second.delivery
             ? "the frozen revised delivery"
             : "current preparation, not delivered"}
@@ -109,18 +114,18 @@ export function ContributionComparison({
             request has been satisfied.
           </p>
         </details>
-        <h3>Request attached to draft-01</h3>
+        <h3>Request attached to draft-0{first.version}</h3>
         <p>
-          {first.assessment.id} → {first.assessment.receiptId} → {before.id} ·
-          draft-01.
+          {request.id} → {request.receiptId} → {before.id} · draft-0
+          {first.version}.
         </p>
-        <p>{first.assessment.rationale}</p>
+        <p>{request.rationale}</p>
         <p>
-          draft-02{" "}
+          draft-0{second.version}{" "}
           {second.delivery
             ? `delivery responds to ${second.delivery.respondsTo}`
-            : `is being prepared in response to ${first.assessment.id}`}
-          . The original assessment does not assess draft-02.
+            : `is being prepared in response to ${request.id}`}
+          . The original assessment does not assess draft-0{second.version}.
         </p>
         <p>
           Text: {changed ? "changed" : "unchanged"}. Note:{" "}
@@ -132,15 +137,18 @@ export function ContributionComparison({
               : "Preparation can still change; no revised delivery or reassessment is recorded."}
         </p>
         <div className="contribution-comparison-columns">
-          <article aria-label="Comparison draft-01">
-            <h3>draft-01 · delivered</h3>
+          <article aria-label={`Comparison draft-0${first.version}`}>
+            <h3>draft-0{first.version} · delivered</h3>
             <pre className="human-contribution-text">{render(1)}</pre>
             <h4>Original scope note</h4>
             <p>{before.note}</p>
             <p>Input: {before.input}</p>
           </article>
-          <article aria-label="Comparison draft-02">
-            <h3>draft-02 · {second.delivery ? "delivered" : "preparation"}</h3>
+          <article aria-label={`Comparison draft-0${second.version}`}>
+            <h3>
+              draft-0{second.version} ·{" "}
+              {second.delivery ? "delivered" : "preparation"}
+            </h3>
             <pre className="human-contribution-text">{render(2)}</pre>
             <h4>Contributor revision response</h4>
             <p>{note.trim() ? note : "No revision response written yet."}</p>

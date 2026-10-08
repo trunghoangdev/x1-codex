@@ -100,6 +100,26 @@ export function ContributionProgress({
               : "Revised receipt not recorded. No reassessment or acceptance is established."}
           </p>
         </li>
+        {state.contributions.slice(2).map((c) => (
+          <li key={c.version}>
+            <strong>Leo → Maya · draft-0{c.version}</strong>
+            <p>
+              {c.delivery
+                ? `${c.delivery.id} · responds to ${c.delivery.respondsTo}`
+                : "Revision preparation; no delivery recorded."}
+            </p>
+            <p>
+              {c.receipt
+                ? `${c.receipt.id} → ${c.receipt.deliveryId}`
+                : "Receipt not recorded."}
+            </p>
+            <p>
+              {c.reassessment
+                ? `${c.reassessment.id} · ${c.reassessment.conclusion}: ${c.reassessment.rationale}`
+                : "Reassessment not recorded."}
+            </p>
+          </li>
+        ))}
       </ol>
       <button className="button secondary" onClick={onContributor}>
         Inspect contribution · Leo
