@@ -1,3 +1,4 @@
+import { goalRecords, openGoalTask, type GoalReview } from "./goalLoop";
 import {
   decisionRole,
   reviewOwner,
@@ -20,6 +21,7 @@ export type AuthorityRecord = UseRecord & {
   afterRecordId: string;
 };
 export type UseCycle = {
+  goalReviews?: GoalReview[];
   reviewHandoffs?: ReviewHandoffEvent[];
   authorityHistory?: AuthorityRecord[];
   subject: string;
@@ -68,6 +70,7 @@ export function latestUseTime(state: MaterialUse): number {
     state.continuation,
     ...(state.authorityHistory ?? []),
     ...(state.reviewHandoffs ?? []),
+    ...goalRecords(state),
   ]
     .filter(Boolean)
     .map((r) => Date.parse(r!.at));
@@ -84,6 +87,7 @@ export function startMaterialUse(
   const base = allocateUseMandate(subject, audience, rationale, at);
   if (
     !base ||
+    !!openGoalTask(state) ||
     !useVersion(state.subject) ||
     useVersion(subject)! <= useVersion(state.subject)! ||
     (state.previousMaterials?.length ?? 0) >= 7 ||
@@ -121,6 +125,7 @@ export function continueUse(
   const base = allocateUseMandate(subject, audience, rationale, at);
   if (
     !source ||
+    !!openGoalTask(state) ||
     subject !== state.subject ||
     !base ||
     Date.parse(at) < latestUseTime(state)

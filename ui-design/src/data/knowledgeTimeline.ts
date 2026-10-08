@@ -1,3 +1,4 @@
+import { goalActors } from "./goalLoop";
 import { reviewRoles, reviewPrincipals } from "./reviewHandoffs";
 import type { KnowledgeWorkspace } from "./knowledgeCheckpoint";
 import { contributorNames } from "./knowledgeHandoff";
@@ -11,6 +12,7 @@ export const timelineKinds = [
   "Use",
   "Workshop brief",
   "Workstream input",
+  "Goal follow-up",
 ] as const;
 export type TimelineKind = (typeof timelineKinds)[number];
 export type KnowledgeTimelineEvent = {
@@ -246,6 +248,72 @@ export function knowledgeTimeline(
       ["outcome", "Outcome review"],
     ] as const;
     const frozen = JSON.parse(u.subject);
+    for (const r of u.goalReviews ?? []) {
+      const common = {
+        ...base,
+        kind: "Goal follow-up" as const,
+        version: `draft-0${frozen.version} · use cycle ${n}`,
+        destination: "/organizations/knowledge/use/K-01",
+        frozenSubject: JSON.parse(r.source),
+      };
+      add({
+        ...common,
+        key: `goal:${r.id}`,
+        id: r.id,
+        title: `Goal decision · ${r.decision}`,
+        actor: goalActors.owner,
+        at: r.at,
+        detail: `${r.rationale} Limits: ${r.limitations}`,
+        references: [r.outcomeId, ...(r.previousId ? [r.previousId] : [])],
+        record: r,
+      });
+      const t = r.followUp;
+      if (t) {
+        add({
+          ...common,
+          key: `goal:${t.id}`,
+          id: t.id,
+          title: "Goal follow-up offered",
+          actor: goalActors.owner,
+          at: r.at,
+          detail: `${t.title} → ${goalActors[t.assignee]}. Expected: ${t.expectedResult}`,
+          references: [r.id, r.outcomeId],
+          record: t,
+        });
+        for (const event of [
+          t.response,
+          t.delivery,
+          t.review,
+          t.cancellation,
+        ]) {
+          if (!event) continue;
+          const title =
+            event === t.response
+              ? `Goal follow-up · ${t.response!.decision}`
+              : event === t.delivery
+                ? "Goal follow-up delivered"
+                : event === t.review
+                  ? `Goal follow-up result · ${t.review!.decision}`
+                  : "Goal follow-up cancelled";
+          add({
+            ...common,
+            key: `goal:${event.id}`,
+            id: event.id,
+            title,
+            actor: goalActors[event.actor],
+            at: event.at,
+            detail: "rationale" in event ? event.rationale : event.body,
+            references: [
+              t.id,
+              r.id,
+              ...(event === t.review && t.delivery ? [t.delivery.id] : []),
+            ],
+            record: event,
+          });
+        }
+      }
+    }
+
     for (const e of u.reviewHandoffs ?? [])
       add({
         ...base,

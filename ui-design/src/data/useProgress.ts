@@ -1,3 +1,4 @@
+import { goalProgress } from "./goalLoop";
 import {
   reviewOwner,
   reviewPrincipals,
@@ -104,8 +105,14 @@ export function useProgress(
     else if (stage === "outcome") actor = reviewOwner(state, "outcomeReview");
   }
   if (pending && !newMaterial) actor = pendingStale ? "owner" : pending.to;
-  const title =
-    pending && !newMaterial
+  const goal =
+    state && stage === "complete" && !pending && !stale && !newMaterial
+      ? goalProgress(state)
+      : undefined;
+  if (goal) actor = goal.actor;
+  const title = goal
+    ? goal.title
+    : pending && !newMaterial
       ? pendingStale
         ? "Cancel changed review handoff package"
         : "Respond to review responsibility handoff"
@@ -131,8 +138,9 @@ export function useProgress(
                     refused: "Bounded use refused",
                     complete: "Outcome review recorded",
                   }[stage];
-  const detail =
-    pending && !newMaterial
+  const detail = goal
+    ? goal.detail
+    : pending && !newMaterial
       ? pendingStale
         ? "Owner must cancel the changed package; acceptance cannot reuse changed input or work."
         : `${reviewPrincipals[pending.to]} must accept exact input, remaining work and bounded rights before responsibility transfers. ${reviewPrincipals[pending.from]} remains responsible until acceptance.`
@@ -159,12 +167,12 @@ export function useProgress(
       : "/organizations/knowledge/use/K-01";
   const need: CoordinationNeed | undefined =
     (subject || state) &&
-    (stale || canContinue || !!pending || stage !== "complete")
+    (stale || canContinue || !!pending || !!goal?.actor || stage !== "complete")
       ? {
           id: "local-use-next",
           source: "session",
           category: actor
-            ? stage === "outcome"
+            ? goal || stage === "outcome"
               ? "Outcome"
               : "Response"
             : "Responsibility",
@@ -172,15 +180,17 @@ export function useProgress(
           detail,
           owner: actor ? useActors[actor] : "Follow-up unallocated",
           responsibility: actor
-            ? `${useActors[actor]} · local ${canContinue ? "continuation planning" : scopeBlocked ? "scope applicability review" : stage} responsibility; no production membership or authority implied.`
+            ? `${useActors[actor]} · local ${goal ? "goal follow-up" : canContinue ? "continuation planning" : scopeBlocked ? "scope applicability review" : stage} responsibility; no production membership or authority implied.`
             : "No new responsible performer has been allocated.",
-          nextStep: canContinue
-            ? "Inspect prior result and explicitly plan cycle 2; no automatic retry."
-            : scopeBlocked
-              ? "Inspect adopted scope and record exact applicability before continuing use."
-              : actor
-                ? `Inspect exact source and record the separate ${stage}.`
-                : "Inspect the stopping condition and preserved records.",
+          nextStep: goal
+            ? "Inspect exact outcome and goal decision; accept, deliver or review the explicitly linked follow-up."
+            : canContinue
+              ? "Inspect prior result and explicitly plan cycle 2; no automatic retry."
+              : scopeBlocked
+                ? "Inspect adopted scope and record exact applicability before continuing use."
+                : actor
+                  ? `Inspect exact source and record the separate ${stage}.`
+                  : "Inspect the stopping condition and preserved records.",
           target: { kind: "workstream", id: "K-01" },
           destination,
         }

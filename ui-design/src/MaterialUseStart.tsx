@@ -1,3 +1,4 @@
+import { openGoalTask } from "./data/goalLoop";
 import { useEffect, useRef, useState } from "react";
 import {
   assessedUseSubject,
@@ -29,6 +30,13 @@ export function MaterialUseStart({
   }, [confirm]);
   if (!version || !old || version <= old) return null;
   const frozen = JSON.parse(subject!);
+  if (openGoalTask(state))
+    return (
+      <p role="alert">
+        Complete or explicitly cancel the open goal follow-up before starting a
+        new material mandate.
+      </p>
+    );
   return (
     <section
       className="panel org-stream material-use-start"

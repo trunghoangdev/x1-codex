@@ -1,3 +1,4 @@
+import { openGoalTask } from "./data/goalLoop";
 import { useEffect, useRef, useState } from "react";
 import {
   assessedUseSubject,
@@ -28,6 +29,13 @@ export function UseContinuation({
   useEffect(() => {
     if (confirm) preview.current?.focus();
   }, [confirm]);
+  if (openGoalTask(state))
+    return (
+      <p role="alert">
+        Complete or explicitly cancel the open goal follow-up before creating a
+        new use cycle.
+      </p>
+    );
   if (state.cycle === 2)
     return (
       <p>
