@@ -1,3 +1,5 @@
+import { AuthorizedUse } from "./AuthorizedUse";
+import type { AuthorizedUse as AuthorizedUseState } from "./data/authorizedUse";
 import type { AgreementAdoption } from "./data/agreementAdoption";
 import { BriefHandoff } from "./BriefHandoff";
 import { briefHandoffScenario, type BriefHandoffState } from "./data/briefHandoff";
@@ -63,11 +65,15 @@ export function ScenarioWorkspace({
   onMyWork,
   contribution,
   onContribution,
+  authorizedUse,
+  onAuthorizedUse,
   agreementAdoptions,
   onAgreementAdoptions,
   briefHandoff,
   onBriefHandoff,
 }: {
+  authorizedUse?: AuthorizedUseState;
+  onAuthorizedUse: (state: AuthorizedUseState) => void;
   agreementAdoptions: AgreementAdoption[];
   onAgreementAdoptions: (h: AgreementAdoption[]) => void;
   briefHandoff: BriefHandoffState;
@@ -229,6 +235,7 @@ export function ScenarioWorkspace({
         </p>
       </details>
       {scenario.id === "knowledge" && agreementAdoptions.length > 0 && suffix !== "/agreements/K-01" && <section className="panel" aria-label="Adopted K-01 scope"><h2>K-01 · adopted local scope</h2><p>{agreementAdoptions.at(-1)!.versionId} · {agreementAdoptions.at(-1)!.audience}</p><p>Record applicability remains unconfirmed; publication authority is separate.</p><button className="text-link" onClick={() => open("/agreements/K-01")}>Inspect adopted scope and impact</button></section>}
+      {scenario.id === "knowledge" && ["/workstreams/K-01", "/outcomes/K-01", "/decisions"].includes(suffix) && <AuthorizedUse contribution={contribution} state={authorizedUse} onChange={onAuthorizedUse} />}
       {scenario.id === "knowledge" && <ContributionRecovery state={contribution} onChange={onContribution} />}
       {scenario.id === "knowledge" && suffix === "/work" && ["leo", "maya"].includes(persona?.workerId ?? "") && <BriefHandoff state={briefHandoff} onChange={onBriefHandoff} persona={persona?.workerId} />}
       {suffix === "/contributions/K-01-H" ? (

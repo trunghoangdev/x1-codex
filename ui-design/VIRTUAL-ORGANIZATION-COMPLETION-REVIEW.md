@@ -59,7 +59,9 @@ Build on the existing agreement comparison. Represent one explicitly authored/lo
 
 Acceptance: adopted and proposed versions are unmistakable. Changing audience/scope identifies reviews that need reconsideration without automatically invalidating all evidence or granting publication authority. Relevant responsibilities and source records remain inspectable.
 
-### 5. Complete one assessed-result → authorized-use → observed-effect scenario
+### 5. Complete one assessed-result → authorized-use → observed-effect scenario — local slice implemented
+
+Iteration 125 connects exact suitable draft-02 to a scoped demo mandate, separate publication assessment/authorization, execution and reader observations, and criterion review. See [authorized use and outcome](AUTHORIZED-USE-OUTCOME.md). Production authority, durable execution and real outcome evidence remain unimplemented.
 
 After assessment, present a separate exact-version decision about permitted use, with explicit sample decision responsibility and bounded audience/environment. Record a distinct simulated execution observation, then review outcome evidence against its criterion. Keep refusal, execution failure and insufficient outcome evidence possible. A publication-review gap must be explicitly addressed in this scenario; never infer authority from Maya's editorial role.
 
