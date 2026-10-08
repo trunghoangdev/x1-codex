@@ -31,6 +31,10 @@ Captured from iteration 109 on 2026-10-07. These are fictional demo views, not p
 
 With Vite running on port 4173, reproduce from this directory using `node scripts/capture-current-demo.mjs`. Screenshots in other files retain their own historical checkpoint dates; see [development history](README-HISTORY.md).
 
+## Fresh authority for revised material · iteration 136
+
+Maya can request further content revision without overwriting a suitable assessment. After a new delivery, receipt and suitable reassessment, the owner can confirm a fresh mandate through draft-09. Publication assessment, authorization, execution and outcome start separately; earlier chains remain in history and the timeline. See [fresh material use](MATERIAL-USE-REVISIONS.md).
+
 ## Knowledge timeline · iteration 135
 
 **Open Knowledge timeline** follows retained local work from offers and handoffs through contribution, assessment, scope and bounded-use outcomes, plus K-02 brief history. Filter by workstream/stage or search, inspect exact records and follow their references. See [Knowledge timeline](KNOWLEDGE-TIMELINE.md).

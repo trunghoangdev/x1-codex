@@ -1,3 +1,4 @@
+import { useVersion } from "./data/authorizedUse";
 import type { ApplicabilityScope } from "./data/scopeApplicability";
 import { useProgress, useActors, type UseActor } from "./data/useProgress";
 import type { AuthorizedUse } from "./data/authorizedUse";
@@ -37,7 +38,8 @@ export function UseProgress({
           : "Bounded use · next responsibility"}
       </h2>
       <p>
-        Separate local exercise · human-guide-example · draft-02. Authored
+        Separate local exercise · human-guide-example · draft-0
+        {useVersion(state?.subject) ?? stateVersion(contribution)}. Authored
         assignment counts remain separate. Actor inspection does not grant
         permission.
       </p>
@@ -96,4 +98,8 @@ export function UseProgress({
       )}
     </section>
   );
+}
+
+function stateVersion(c: HumanContributionState) {
+  return c.contributions.at(-1)?.version ?? 2;
 }

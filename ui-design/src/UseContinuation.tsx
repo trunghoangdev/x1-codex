@@ -32,9 +32,9 @@ export function UseContinuation({
     return (
       <p>
         Cycle 2 is the final supported cycle in this exercise. Original cycle
-        remains in history. Further use cycles and use of changed content are
-        not implemented; content revisions are available in Leo’s contribution
-        workspace.
+        remains in history. Further retries for this exact material are not
+        implemented. A separately assessed later draft can receive its own new
+        material mandate.
       </p>
     );
   if (!source)
@@ -54,7 +54,7 @@ export function UseContinuation({
         Follow-up source: {source.id}. Creates cycle 2 for the same exact
         assessed material. Revise publication conditions/audience or attempt
         conditions in the rationale; material edits require a separately
-        assessed future draft and are outside this exercise.
+        assessed later draft with a separate new material mandate.
       </p>
       <p>
         New mandate, publication assessment and authorization are required.

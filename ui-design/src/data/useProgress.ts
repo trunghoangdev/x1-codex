@@ -5,6 +5,7 @@ import {
 import type { HumanContributionState } from "./humanContribution";
 import {
   assessedUseSubject,
+  useVersion,
   continuationSource,
   type AuthorizedUse,
 } from "./authorizedUse";
@@ -50,10 +51,13 @@ export function useProgress(
       )
     : undefined;
   const stale = !!state && state.subject !== subject;
-  const actor: UseActor | undefined =
-    stale ||
-    !subject ||
-    (!canContinue && ["blocked", "refused", "complete"].includes(stage))
+  const newMaterial =
+    !!state && !!subject && useVersion(subject)! > useVersion(state.subject)!;
+  const actor: UseActor | undefined = newMaterial
+    ? "owner"
+    : stale ||
+        !subject ||
+        (!canContinue && ["blocked", "refused", "complete"].includes(stage))
       ? undefined
       : canContinue
         ? "owner"
@@ -68,8 +72,9 @@ export function useProgress(
               : ["execution", "evidence"].includes(stage)
                 ? "leo"
                 : "maya";
-  const title =
-    canContinue && !stale
+  const title = newMaterial
+    ? "Plan mandate for new material version"
+    : canContinue && !stale
       ? "Plan next bounded-use cycle"
       : scopeBlocked && !stale
         ? "Scope applicability decision needed"
@@ -88,20 +93,21 @@ export function useProgress(
                 refused: "Bounded use refused",
                 complete: "Outcome review recorded",
               }[stage];
-  const detail =
-    canContinue && !stale
+  const detail = newMaterial
+    ? `Draft-0${useVersion(subject)} needs a fresh material mandate. Earlier material records are preserved; no authorization transfers.`
+    : canContinue && !stale
       ? "Demo owner can explicitly create cycle 2 for the same assessed material. Fresh publication assessment and authorization are required; prior decisions and failed attempts remain historical."
       : scopeBlocked && !stale
         ? scopeBlocked
         : stale
           ? "Inspect the frozen source and restored contribution. No replacement mandate or follow-up is allocated."
           : !subject
-            ? "Draft-02 needs exact delivery, receipt and a suitable Maya reassessment before bounded use."
+            ? "The current draft needs exact delivery, receipt and a suitable Maya reassessment without a pending revision request before bounded use."
             : stage === "blocked" || stage === "refused"
               ? "This cycle is stopped. Subsequent revision/retry and follow-up allocation are not represented."
               : stage === "complete"
                 ? `Conclusion: ${state?.outcome?.conclusion}. Simulated evidence does not verify real organizational outcomes.`
-                : `human-guide-example · draft-02 · ${state ? state.audience : "audience must be named in mandate"}. Separate ${stage} record pending.`;
+                : `human-guide-example · draft-0${useVersion(subject) ?? useVersion(state?.subject) ?? contribution.contributions.at(-1)?.version} · ${state ? state.audience : "audience must be named in mandate"}. Separate ${stage} record pending.`;
   const destination =
     scopeBlocked && !stale
       ? "/organizations/knowledge/agreements/K-01?persona=maya"

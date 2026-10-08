@@ -184,6 +184,24 @@ export function knowledgeTimeline(
         record: a,
       });
   }
+  for (const c of state.contribution.contributions)
+    if (c.revisionRequest) {
+      const q = c.revisionRequest;
+      add({
+        ...base,
+        key: `revision-request:${q.id}`,
+        id: q.id,
+        kind: "Editorial",
+        title: "Further content revision requested",
+        actor: q.requester,
+        at: q.at,
+        version: `draft-0${c.version}`,
+        detail: q.rationale,
+        references: [q.assessmentId, q.receiptId, q.deliveryId],
+        destination: mayaPath,
+        record: q,
+      });
+    }
   for (const a of state.adoptions)
     add({
       ...base,
@@ -256,23 +274,28 @@ export function knowledgeTimeline(
       });
     }
   };
-  if (use?.previousCycle) cycle(use.previousCycle, 1);
-  if (use?.continuation)
-    add({
-      ...base,
-      key: `use:${use.continuation.id}`,
-      id: use.continuation.id,
-      kind: "Use",
-      title: "Next use cycle planned",
-      actor: use.continuation.actor,
-      at: use.continuation.at,
-      version: "use cycle 2",
-      detail: use.continuation.rationale,
-      references: [use.continuation.sourceId],
-      destination: "/organizations/knowledge/use/K-01",
-      record: use.continuation,
-    });
-  if (use) cycle(use, use.cycle ?? 1);
+  for (const use of [
+    ...(state.use?.previousMaterials ?? []),
+    ...(state.use ? [state.use] : []),
+  ]) {
+    if (use?.previousCycle) cycle(use.previousCycle, 1);
+    if (use?.continuation)
+      add({
+        ...base,
+        key: `use:${use.continuation.id}`,
+        id: use.continuation.id,
+        kind: "Use",
+        title: "Next use cycle planned",
+        actor: use.continuation.actor,
+        at: use.continuation.at,
+        version: "use cycle 2",
+        detail: use.continuation.rationale,
+        references: [use.continuation.sourceId],
+        destination: "/organizations/knowledge/use/K-01",
+        record: use.continuation,
+      });
+    if (use) cycle(use, use.cycle ?? 1);
+  }
   for (const b of state.brief.versions) {
     const version = `brief-v${b.version}`,
       id = `workshop-brief-v${b.version}`;

@@ -23,6 +23,15 @@ export type Contribution = {
     performer?: ContributorActor;
   };
   receipt?: { id: string; deliveryId: string; at: string };
+  revisionRequest?: {
+    id: string;
+    at: string;
+    requester: "Maya";
+    rationale: string;
+    assessmentId: string;
+    receiptId: string;
+    deliveryId: string;
+  };
   reassessment?: {
     id: string;
     receiptId: string;
@@ -61,6 +70,7 @@ export const contributionResponsibility = {
 export const maxContributionVersions = 9;
 export function revisionRequest(c: Contribution | undefined) {
   return (
+    c?.revisionRequest ??
     c?.assessment ??
     (c?.reassessment?.conclusion === "Further revision needed"
       ? c.reassessment
@@ -212,6 +222,45 @@ export function reassessContribution(
             },
           }
         : c,
+    ),
+  };
+}
+
+export function requestContributionRevision(
+  state: HumanContributionState,
+  rationale: string,
+  at: string,
+): HumanContributionState {
+  const c = state.contributions.at(-1)!;
+  if (
+    c.version >= maxContributionVersions ||
+    c.reassessment?.conclusion !== "Suitable for stated scope" ||
+    !c.delivery ||
+    !c.receipt ||
+    c.revisionRequest ||
+    !rationale.trim() ||
+    rationale.length > 3000 ||
+    !Number.isFinite(Date.parse(at)) ||
+    Date.parse(at) < Date.parse(c.reassessment.at)
+  )
+    return state;
+  return {
+    ...state,
+    contributions: state.contributions.map((x) =>
+      x === c
+        ? {
+            ...x,
+            revisionRequest: {
+              id: `human-revision-request-v${c.version}`,
+              at,
+              requester: "Maya",
+              rationale: rationale.trim(),
+              assessmentId: c.reassessment!.id,
+              receiptId: c.receipt!.id,
+              deliveryId: c.delivery!.id,
+            },
+          }
+        : x,
     ),
   };
 }

@@ -13,7 +13,8 @@ export type ContributionCheckpoint = {
     | "forge.knowledge-contribution.v2"
     | "forge.knowledge-contribution.v3"
     | "forge.knowledge-contribution.v4"
-    | "forge.knowledge-contribution.v5";
+    | "forge.knowledge-contribution.v5"
+    | "forge.knowledge-contribution.v6";
   savedAt: string;
   state: HumanContributionState;
 };
@@ -43,6 +44,7 @@ export function parseContributionCheckpoint(
       "forge.knowledge-contribution.v3",
       "forge.knowledge-contribution.v4",
       "forge.knowledge-contribution.v5",
+      "forge.knowledge-contribution.v6",
     ].includes(value.format) ||
     !time(value.savedAt)
   )
@@ -57,6 +59,7 @@ export function parseContributionCheckpoint(
         "forge.knowledge-contribution.v3",
         "forge.knowledge-contribution.v4",
         "forge.knowledge-contribution.v5",
+        "forge.knowledge-contribution.v6",
       ].includes(value.format)
         ? maxContributionVersions
         : 2) ||
@@ -69,13 +72,20 @@ export function parseContributionCheckpoint(
       ![
         "forge.knowledge-contribution.v4",
         "forge.knowledge-contribution.v5",
+        "forge.knowledge-contribution.v6",
       ].includes(value.format)
     )
       fail();
     validateKnowledgeResponsibility(s.responsibility, s);
   }
   if (s.handoffs !== undefined) {
-    if (value.format !== "forge.knowledge-contribution.v5") fail();
+    if (
+      ![
+        "forge.knowledge-contribution.v5",
+        "forge.knowledge-contribution.v6",
+      ].includes(value.format)
+    )
+      fail();
     validateKnowledgeHandoffs(s);
   }
   for (const [i, c] of s.contributions.entries()) {
@@ -89,6 +99,7 @@ export function parseContributionCheckpoint(
         "receipt",
         "assessment",
         "reassessment",
+        "revisionRequest",
       ]) ||
       c.version !== i + 1 ||
       !text(c.body) ||
@@ -184,6 +195,33 @@ export function parseContributionCheckpoint(
         !c.reassessment.rationale.trim())
     )
       fail();
+    if (c.revisionRequest !== undefined) {
+      const q = c.revisionRequest;
+      if (
+        value.format !== "forge.knowledge-contribution.v6" ||
+        !object(q, [
+          "id",
+          "at",
+          "requester",
+          "rationale",
+          "assessmentId",
+          "receiptId",
+          "deliveryId",
+        ]) ||
+        c.version >= maxContributionVersions ||
+        c.reassessment?.conclusion !== "Suitable for stated scope" ||
+        q.id !== `human-revision-request-v${c.version}` ||
+        q.requester !== "Maya" ||
+        !text(q.rationale, 3000) ||
+        !q.rationale.trim() ||
+        !time(q.at) ||
+        Date.parse(q.at) < Date.parse(c.reassessment.at) ||
+        q.assessmentId !== c.reassessment.id ||
+        q.receiptId !== c.receipt?.id ||
+        q.deliveryId !== d?.id
+      )
+        fail();
+    }
     if (i > 0 && !revisionRequest(s.contributions[i - 1])) fail();
   }
   const commands = s.commands ?? [];
@@ -289,15 +327,17 @@ export function parseContributionCheckpoint(
 }
 export function encodeContributionCheckpoint(state: HumanContributionState) {
   const raw = JSON.stringify({
-    format: state.handoffs
-      ? "forge.knowledge-contribution.v5"
-      : state.responsibility
-        ? "forge.knowledge-contribution.v4"
-        : state.contributions.length > 2
-          ? "forge.knowledge-contribution.v3"
-          : state.contributions.some((c) => c.reassessment)
-            ? "forge.knowledge-contribution.v2"
-            : "forge.knowledge-contribution.v1",
+    format: state.contributions.some((c) => c.revisionRequest)
+      ? "forge.knowledge-contribution.v6"
+      : state.handoffs
+        ? "forge.knowledge-contribution.v5"
+        : state.responsibility
+          ? "forge.knowledge-contribution.v4"
+          : state.contributions.length > 2
+            ? "forge.knowledge-contribution.v3"
+            : state.contributions.some((c) => c.reassessment)
+              ? "forge.knowledge-contribution.v2"
+              : "forge.knowledge-contribution.v1",
     savedAt: new Date().toISOString(),
     state,
   });

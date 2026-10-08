@@ -344,7 +344,7 @@ for (const width of [390, 1440])
       }),
     ).toBeVisible();
     await page.reload();
-    await expect(panel).toContainText("Requires draft-02 delivery");
+    await expect(panel).toContainText("Requires exact delivery");
     await expect(
       panel.getByRole("heading", {
         name: "local-use-authorization",

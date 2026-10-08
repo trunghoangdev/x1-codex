@@ -74,7 +74,7 @@ export function handoffDraft(state: HumanContributionState) {
 }
 function requestId(state: HumanContributionState) {
   const c = state.contributions.at(-2);
-  return c?.assessment?.id ?? c?.reassessment?.id;
+  return c?.revisionRequest?.id ?? c?.assessment?.id ?? c?.reassessment?.id;
 }
 function unresolved(state: HumanContributionState) {
   return state.commands?.some((c) => c.status !== "rejected" && !c.projected);
@@ -250,7 +250,12 @@ export function validateKnowledgeHandoffs(state: HumanContributionState) {
     )
       fail();
     const prior = state.contributions[h.draft.version - 2];
-    if (h.requestId !== (prior?.assessment?.id ?? prior?.reassessment?.id))
+    if (
+      h.requestId !==
+      (prior?.revisionRequest?.id ??
+        prior?.assessment?.id ??
+        prior?.reassessment?.id)
+    )
       fail();
     previousAt = h.at;
     if (h.response) {

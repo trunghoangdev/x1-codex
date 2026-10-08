@@ -18,6 +18,8 @@ import {
 import { adoptAgreement, type AgreementAdoption } from "./agreementAdoption";
 import {
   continueUse,
+  useVersion,
+  latestUseTime,
   allocateUseMandate,
   assessedUseSubject,
   recordUseStep,
@@ -37,7 +39,8 @@ export type KnowledgeCheckpoint = {
     | "forge.knowledge-workspace.v2"
     | "forge.knowledge-workspace.v3"
     | "forge.knowledge-workspace.v4"
-    | "forge.knowledge-workspace.v5";
+    | "forge.knowledge-workspace.v5"
+    | "forge.knowledge-workspace.v6";
   savedAt: string;
   state: KnowledgeWorkspace;
 };
@@ -84,7 +87,7 @@ function validateSubject(raw: unknown): string {
   if (
     !shape(s, ["subject", "version", "delivery", "receipt", "assessment"]) ||
     s.subject !== "human-guide-example" ||
-    s.version !== 2 ||
+    !useVersion(raw) ||
     !shape(d, [
       "id",
       "at",
@@ -94,7 +97,7 @@ function validateSubject(raw: unknown): string {
       "respondsTo",
       "performer",
     ]) ||
-    d.id !== "human-delivery-v2" ||
+    d.id !== `human-delivery-v${s.version}` ||
     (d.performer !== undefined && !["leo", "delegate"].includes(d.performer)) ||
     !date(d.at) ||
     !text(d.body, 12000) ||
@@ -102,9 +105,14 @@ function validateSubject(raw: unknown): string {
     !text(d.note, 3000) ||
     !d.note.trim() ||
     d.input !== contributionResponsibility.input ||
-    d.respondsTo !== "human-assessment-v1" ||
+    (s.version === 2
+      ? d.respondsTo !== "human-assessment-v1"
+      : ![
+          `human-reassessment-v${s.version - 1}`,
+          `human-revision-request-v${s.version - 1}`,
+        ].includes(d.respondsTo)) ||
     !shape(r, ["id", "deliveryId", "at"]) ||
-    r.id !== "human-receipt-v2" ||
+    r.id !== `human-receipt-v${s.version}` ||
     r.deliveryId !== d.id ||
     !date(r.at) ||
     !shape(a, [
@@ -116,7 +124,7 @@ function validateSubject(raw: unknown): string {
       "conclusion",
       "rationale",
     ]) ||
-    a.id !== "human-reassessment-v2" ||
+    a.id !== `human-reassessment-v${s.version}` ||
     a.receiptId !== r.id ||
     a.deliveryId !== d.id ||
     a.assessor !== "Maya" ||
@@ -129,7 +137,7 @@ function validateSubject(raw: unknown): string {
   const expected = assessedUseSubject({
     contributions: [
       {
-        version: 2,
+        version: s.version,
         body: d.body,
         note: d.note,
         citesInput: true,
@@ -154,6 +162,7 @@ export function parseKnowledgeCheckpoint(raw: string): KnowledgeCheckpoint {
         "forge.knowledge-workspace.v3",
         "forge.knowledge-workspace.v4",
         "forge.knowledge-workspace.v5",
+        "forge.knowledge-workspace.v6",
       ].includes(x.format) ||
       !date(x.savedAt) ||
       !shape(x.state, [
@@ -172,10 +181,17 @@ export function parseKnowledgeCheckpoint(raw: string): KnowledgeCheckpoint {
       ![
         "forge.knowledge-workspace.v4",
         "forge.knowledge-workspace.v5",
+        "forge.knowledge-workspace.v6",
       ].includes(x.format)
     )
       throw Error();
-    if (s.contribution.handoffs && x.format !== "forge.knowledge-workspace.v5")
+    if (
+      s.contribution.handoffs &&
+      ![
+        "forge.knowledge-workspace.v5",
+        "forge.knowledge-workspace.v6",
+      ].includes(x.format)
+    )
       throw Error();
     if (
       !shape(s.brief, ["versions"]) ||
@@ -219,10 +235,19 @@ export function parseKnowledgeCheckpoint(raw: string): KnowledgeCheckpoint {
       );
     }
     if (!sameKnowledgeValue(adoptions, s.adoptions)) throw Error();
+    if (
+      (s.contribution.contributions.some((c: any) => c.revisionRequest) ||
+        (s.use &&
+          (useVersion(s.use.subject)! > 2 ||
+            s.use.previousMaterials !== undefined))) &&
+      x.format !== "forge.knowledge-workspace.v6"
+    )
+      throw Error();
     if (s.use !== undefined) {
       const u = s.use;
       if (
         !shape(u, [
+          "previousMaterials",
           "cycle",
           "previousCycle",
           "continuation",
@@ -242,6 +267,43 @@ export function parseKnowledgeCheckpoint(raw: string): KnowledgeCheckpoint {
       )
         throw Error();
       const subject = validateSubject(u.subject);
+      if (u.previousMaterials !== undefined) {
+        if (
+          x.format !== "forge.knowledge-workspace.v6" ||
+          !Array.isArray(u.previousMaterials) ||
+          !u.previousMaterials.length ||
+          u.previousMaterials.length > 7
+        )
+          throw Error();
+        let previousVersion = 1,
+          previousAt = 0;
+        for (const prior of [...u.previousMaterials, u]) {
+          const version = useVersion(prior.subject);
+          if (
+            !version ||
+            version <= previousVersion ||
+            Date.parse(prior.mandate?.at) < previousAt
+          )
+            throw Error();
+          if (prior !== u) {
+            if (prior.previousMaterials !== undefined) throw Error();
+            parseKnowledgeCheckpoint(
+              JSON.stringify({
+                format: "forge.knowledge-workspace.v6",
+                savedAt: x.savedAt,
+                state: {
+                  contribution: s.contribution,
+                  brief: { versions: [] },
+                  adoptions: [],
+                  use: prior,
+                },
+              }),
+            );
+          }
+          previousVersion = version;
+          previousAt = latestUseTime(prior);
+        }
+      }
       let rebuilt = allocateUseMandate(
         subject,
         u.audience,
@@ -258,6 +320,7 @@ export function parseKnowledgeCheckpoint(raw: string): KnowledgeCheckpoint {
             "forge.knowledge-workspace.v3",
             "forge.knowledge-workspace.v4",
             "forge.knowledge-workspace.v5",
+            "forge.knowledge-workspace.v6",
           ].includes(x.format) ||
           u.cycle !== 2 ||
           !shape(u.previousCycle, [
@@ -277,11 +340,14 @@ export function parseKnowledgeCheckpoint(raw: string): KnowledgeCheckpoint {
           throw Error();
         parseKnowledgeCheckpoint(
           JSON.stringify({
-            format: s.contribution.handoffs
-              ? "forge.knowledge-workspace.v5"
-              : s.contribution.responsibility
-                ? "forge.knowledge-workspace.v4"
-                : "forge.knowledge-workspace.v1",
+            format:
+              x.format === "forge.knowledge-workspace.v6"
+                ? x.format
+                : s.contribution.handoffs
+                  ? "forge.knowledge-workspace.v5"
+                  : s.contribution.responsibility
+                    ? "forge.knowledge-workspace.v4"
+                    : "forge.knowledge-workspace.v1",
             savedAt: x.savedAt,
             state: {
               contribution: s.contribution,
@@ -319,6 +385,8 @@ export function parseKnowledgeCheckpoint(raw: string): KnowledgeCheckpoint {
           );
         }
       }
+      if (u.previousMaterials)
+        rebuilt = { ...rebuilt, previousMaterials: u.previousMaterials };
       if (!sameKnowledgeValue(rebuilt, u)) throw Error();
       // A stale source is valid history: preserve it and let the shared projection block continuation.
     }
@@ -335,6 +403,7 @@ export function parseKnowledgeCheckpoint(raw: string): KnowledgeCheckpoint {
             "forge.knowledge-workspace.v3",
             "forge.knowledge-workspace.v4",
             "forge.knowledge-workspace.v5",
+            "forge.knowledge-workspace.v6",
           ].includes(x.format))
       )
         throw Error();
@@ -350,13 +419,16 @@ export function parseKnowledgeCheckpoint(raw: string): KnowledgeCheckpoint {
           throw Error();
         parseKnowledgeCheckpoint(
           JSON.stringify({
-            format: check.context.contribution?.handoffs
-              ? "forge.knowledge-workspace.v5"
-              : check.context.contribution?.responsibility
-                ? "forge.knowledge-workspace.v4"
-                : check.context.use?.cycle === 2
-                  ? "forge.knowledge-workspace.v3"
-                  : "forge.knowledge-workspace.v1",
+            format:
+              x.format === "forge.knowledge-workspace.v6"
+                ? x.format
+                : check.context.contribution?.handoffs
+                  ? "forge.knowledge-workspace.v5"
+                  : check.context.contribution?.responsibility
+                    ? "forge.knowledge-workspace.v4"
+                    : check.context.use?.cycle === 2
+                      ? "forge.knowledge-workspace.v3"
+                      : "forge.knowledge-workspace.v1",
             savedAt: x.savedAt,
             state: { ...check.context, brief: { versions: [] }, adoptions: [] },
           }),
@@ -386,20 +458,31 @@ export function encodeKnowledgeCheckpoint(state: KnowledgeWorkspace) {
   if (!state.applicability?.length) delete encodedState.applicability;
   const raw = JSON.stringify({
     format:
-      state.contribution.handoffs ||
-      state.applicability?.some((c) => c.context.contribution.handoffs)
-        ? "forge.knowledge-workspace.v5"
-        : state.contribution.responsibility ||
-            state.applicability?.some(
-              (c) => c.context.contribution.responsibility,
-            )
-          ? "forge.knowledge-workspace.v4"
-          : state.use?.cycle === 2 ||
-              state.applicability?.some((c) => c.context.use?.cycle === 2)
-            ? "forge.knowledge-workspace.v3"
-            : state.applicability?.length
-              ? "forge.knowledge-workspace.v2"
-              : "forge.knowledge-workspace.v1",
+      state.contribution.contributions.some((c) => c.revisionRequest) ||
+      (state.use &&
+        (useVersion(state.use.subject)! > 2 || state.use.previousMaterials)) ||
+      state.applicability?.some(
+        (c) =>
+          c.context.contribution.contributions.some((v) => v.revisionRequest) ||
+          (c.context.use &&
+            (useVersion(c.context.use.subject)! > 2 ||
+              c.context.use.previousMaterials)),
+      )
+        ? "forge.knowledge-workspace.v6"
+        : state.contribution.handoffs ||
+            state.applicability?.some((c) => c.context.contribution.handoffs)
+          ? "forge.knowledge-workspace.v5"
+          : state.contribution.responsibility ||
+              state.applicability?.some(
+                (c) => c.context.contribution.responsibility,
+              )
+            ? "forge.knowledge-workspace.v4"
+            : state.use?.cycle === 2 ||
+                state.applicability?.some((c) => c.context.use?.cycle === 2)
+              ? "forge.knowledge-workspace.v3"
+              : state.applicability?.length
+                ? "forge.knowledge-workspace.v2"
+                : "forge.knowledge-workspace.v1",
     savedAt: new Date().toISOString(),
     state: encodedState,
   });
@@ -414,7 +497,8 @@ export function parseKnowledgeImport(raw: string): KnowledgeImport {
     format === "forge.knowledge-contribution.v2" ||
     format === "forge.knowledge-contribution.v3" ||
     format === "forge.knowledge-contribution.v4" ||
-    format === "forge.knowledge-contribution.v5"
+    format === "forge.knowledge-contribution.v5" ||
+    format === "forge.knowledge-contribution.v6"
   ) {
     const c = parseContributionCheckpoint(raw);
     return { kind: "contribution", contribution: c.state, savedAt: c.savedAt };

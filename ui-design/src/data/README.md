@@ -69,3 +69,5 @@ This is an incremental boundary, not a finished data layer. Candidate, evidence,
 `knowledgeHandoff.ts` freezes exact contribution input/preparation, pending work and bounded authority for owner-proposed Leo/delegate transfers. Recipient acknowledgement changes the effective contributor; stale packages block acceptance and command/delivery performer links retain historical authors. Contribution/workspace v5 preserve packages. See `../../KNOWLEDGE-HANDOFF.md`.
 
 `knowledgeTimeline.ts` projects retained Knowledge workspace records into typed timeline rows with exact actors, versions, references and source destinations. Filters paginate twenty rows at a time; no independent event store or inferred transitions are introduced. See `../../KNOWLEDGE-TIMELINE.md`.
+
+Material update · iteration 136: [fresh material use](../../MATERIAL-USE-REVISIONS.md) supports separate mandates, assessments and authorizations through draft-09, retained earlier chains and checkpoint v6. Pending follow-up revision requests block current-source use; prior authority and applicability are never inherited.

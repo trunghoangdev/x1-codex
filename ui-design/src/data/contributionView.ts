@@ -89,6 +89,17 @@ function rawContributionView(state: HumanContributionState) {
         : current.version === 1
           ? "Inspect the received text and the authored revision guidance before requesting a sample revision."
           : "Reassessment remains pending; no acceptance or publication action is available.";
+  if (current.revisionRequest)
+    return {
+      version: current.version,
+      stage: "Revision requested",
+      summary: `draft-0${current.version}: follow-up revision requested; earlier assessment retained`,
+      contributorNext: `Inspect Maya’s follow-up request and prepare draft-0${current.version + 1}.`,
+      receiverNext:
+        "Revision request recorded separately from the earlier suitable assessment.",
+      attention: "revision",
+      locked,
+    };
   if (current.reassessment) {
     const needsRevision =
       current.reassessment.conclusion === "Further revision needed";

@@ -1,9 +1,11 @@
+import { MaterialUseStart } from "./MaterialUseStart";
 import { UseContinuation } from "./UseContinuation";
 import type { ApplicabilityScope } from "./data/scopeApplicability";
 import { useProgress } from "./data/useProgress";
 import { useEffect, useRef, useState } from "react";
 import {
   assessedUseSubject,
+  useVersion,
   allocateUseMandate,
   recordUseStep,
   type AuthorizedUse as UseState,
@@ -27,7 +29,7 @@ export function AuthorizedUse({
   const [audience, setAudience] = useState("");
   const [rationale, setRationale] = useState("");
   const [action, setAction] = useState<UseAction>("Suitable");
-  const [confirm, setConfirm] = useState(false);
+  const [reviewed, setReviewed] = useState<string>();
   const result = useRef<HTMLHeadingElement>(null);
   const confirmation = useRef<HTMLHeadingElement>(null);
   const { stale, stage, scopeBlocked } = useProgress(
@@ -35,6 +37,18 @@ export function AuthorizedUse({
     state,
     scope,
   );
+  const identity = JSON.stringify({
+    state,
+    subject,
+    scope,
+    stage,
+    audience,
+    rationale,
+    action,
+  });
+  const confirm = reviewed === identity;
+  const setConfirm = (value: boolean) =>
+    setReviewed(value ? identity : undefined);
   const choices: UseAction[] =
     stage === "assessment"
       ? ["Suitable", "Revision needed"]
@@ -72,6 +86,8 @@ export function AuthorizedUse({
     if (confirm) confirmation.current?.focus();
   }, [confirm]);
   const current = contribution.contributions.at(-1);
+  const currentVersion = current?.version ?? 2,
+    retainedVersion = useVersion(state?.subject) ?? currentVersion;
   const actionable =
     !!subject &&
     !stale &&
@@ -106,8 +122,8 @@ export function AuthorizedUse({
           : scopeBlocked
             ? "Scope applicability pending; authorization/execution controls are blocked."
             : !subject
-              ? "Requires draft-02 delivery, exact receipt and Maya reassessment: Suitable for stated scope."
-              : `Exact draft-02 assessment available · next stage: ${stage}.`}
+              ? "Requires exact delivery, receipt and a suitable Maya reassessment for the current draft, with no pending revision request."
+              : `Exact draft-0${currentVersion} assessment available · next stage: ${stage}.`}
       </p>
       <p>
         Applicability to adopted scope requires separate exact-record decisions.
@@ -116,8 +132,11 @@ export function AuthorizedUse({
       </p>
       {!!subject && (
         <details>
-          <summary>Inspect current assessed draft-02</summary>
-          <p>human-guide-example · human-delivery-v2 · human-reassessment-v2</p>
+          <summary>Inspect current assessed draft-0{currentVersion}</summary>
+          <p>
+            human-guide-example · {current?.delivery?.id} ·{" "}
+            {current?.reassessment?.id}
+          </p>
           <p style={{ whiteSpace: "pre-wrap", overflowWrap: "anywhere" }}>
             {current?.delivery?.body}
           </p>
@@ -129,8 +148,8 @@ export function AuthorizedUse({
         <>
           <h3>Cycle {state.cycle ?? 1} · frozen subject and audience</h3>
           <p>
-            human-guide-example · draft-02 · audience: {state.audience} ·
-            environment: fictional internal preview only
+            human-guide-example · draft-0{retainedVersion} · audience:{" "}
+            {state.audience} · environment: fictional internal preview only
           </p>
           <details>
             <summary>Inspect original exact source snapshot</summary>
@@ -164,12 +183,30 @@ export function AuthorizedUse({
                         ? String(record.result)
                         : "kind" in record!
                           ? String(record.kind)
-                          : "Scoped mandate: Sam reviews and authorizes exact draft-02 for this audience; Maya reviews outcome evidence."}
+                          : `Scoped mandate: Sam reviews and authorizes exact draft-0${retainedVersion} for this audience; Maya reviews outcome evidence.`}
                 </p>
               </article>
             ))}
         </>
       )}
+      {state && (
+        <MaterialUseStart
+          contribution={contribution}
+          state={state}
+          onChange={onChange}
+        />
+      )}
+      {state?.previousMaterials?.map((prior) => (
+        <details key={prior.mandate.id}>
+          <summary>
+            Earlier material · draft-0{useVersion(prior.subject)} · preserved
+            use records
+          </summary>
+          <pre style={{ whiteSpace: "pre-wrap", overflowWrap: "anywhere" }}>
+            {JSON.stringify(prior, null, 2)}
+          </pre>
+        </details>
+      ))}
       {state?.previousCycle && (
         <details>
           <summary>Original cycle 1 · preserved records</summary>
@@ -191,7 +228,7 @@ export function AuthorizedUse({
           execution was created. This exercise retains the decision; a new use
           cycle requires its own scoped mandate. Content revisions are prepared
           in Leo’s contribution workspace; use of changed material requires a
-          new mandate and is outside this use exercise.
+          new mandate after a fresh delivery, receipt and suitable assessment.
         </p>
       )}
       {stage === "refused" && (
@@ -295,8 +332,8 @@ export function AuthorizedUse({
             Confirm {stage} record
           </h3>
           <p>
-            Exact draft-02 · {state?.audience ?? audience} · fictional internal
-            preview only
+            Exact draft-0{currentVersion} · {state?.audience ?? audience} ·
+            fictional internal preview only
           </p>
           <p>
             {stage === "mandate"

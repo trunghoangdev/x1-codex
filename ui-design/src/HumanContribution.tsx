@@ -584,7 +584,8 @@ export function HumanContribution({
                 outcome verification remain separate.
               </p>
             )}
-            {current.reassessment?.conclusion === "Further revision needed" &&
+            {(current.reassessment?.conclusion === "Further revision needed" ||
+              !!current.revisionRequest) &&
               current.version < maxContributionVersions && (
                 <button
                   className="button primary"
@@ -602,11 +603,19 @@ export function HumanContribution({
                   further work separately.
                 </p>
               )}
+            {current.revisionRequest && (
+              <p>
+                Follow-up revision request: {current.revisionRequest.id} →{" "}
+                {current.revisionRequest.assessmentId}.{" "}
+                {current.revisionRequest.rationale}
+              </p>
+            )}
             {current.version > 2 && (
               <p>
                 Changed material requires its own assessment and use mandate.
                 Draft-02 use authorization does not apply to this revision; the
-                use exercise currently supports draft-02 only.
+                use exercise supports separately assessed versions through
+                draft-09 with a fresh mandate.
               </p>
             )}
             {current.version > 1 && !current.reassessment && (
@@ -647,6 +656,13 @@ export function HumanContribution({
                   <p>
                     Receipt: {c.receipt.id} → {c.receipt.deliveryId} ·{" "}
                     {c.receipt.at}
+                  </p>
+                )}
+                {c.revisionRequest && (
+                  <p>
+                    Follow-up request: {c.revisionRequest.id} →{" "}
+                    {c.revisionRequest.assessmentId} · {c.revisionRequest.at} ·{" "}
+                    {c.revisionRequest.rationale}
                   </p>
                 )}
                 {c.reassessment && (

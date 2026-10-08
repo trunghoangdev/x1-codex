@@ -1,3 +1,4 @@
+import { requestContributionRevision } from "./data/humanContribution";
 import {
   contributionPerformer,
   contributorNames,
@@ -33,7 +34,10 @@ export function ContributionExchange({
   const resultHeading = useRef<HTMLHeadingElement>(null);
   const pendingResult = useRef<string | undefined>(undefined);
   const resultId =
-    current.reassessment?.id ?? current.assessment?.id ?? current.receipt?.id;
+    current.revisionRequest?.id ??
+    current.reassessment?.id ??
+    current.assessment?.id ??
+    current.receipt?.id;
   useEffect(() => {
     if (
       receiver &&
@@ -48,7 +52,10 @@ export function ContributionExchange({
     if (!onChange || next === state) return;
     const changed = next.contributions.at(-1)!;
     pendingResult.current =
-      changed.reassessment?.id ?? changed.assessment?.id ?? changed.receipt?.id;
+      changed.revisionRequest?.id ??
+      changed.reassessment?.id ??
+      changed.assessment?.id ??
+      changed.receipt?.id;
     onChange(next);
   };
   return (
@@ -109,6 +116,13 @@ export function ContributionExchange({
                 <p>{current.assessment.rationale}</p>
               </details>
             </>
+          )}
+          {current.revisionRequest && (
+            <p>
+              Follow-up request: {current.revisionRequest.id} →{" "}
+              {current.revisionRequest.assessmentId}.{" "}
+              {current.revisionRequest.rationale}
+            </p>
           )}
           {current.reassessment && (
             <>
@@ -176,6 +190,12 @@ export function ContributionExchange({
                 : "not recorded"}
             </p>
             {c.assessment && <p>{c.assessment.rationale}</p>}
+            {c.revisionRequest && (
+              <p>
+                Follow-up request: {c.revisionRequest.id} ·{" "}
+                {c.revisionRequest.at} · {c.revisionRequest.rationale}
+              </p>
+            )}
             {c.reassessment && (
               <p>
                 Reassessment: {c.reassessment.id} → {c.reassessment.receiptId} →{" "}
@@ -269,6 +289,49 @@ export function ContributionExchange({
                 </p>
               )}
             </section>
+          )}
+          {current.reassessment?.conclusion === "Suitable for stated scope" &&
+            current.version < 9 &&
+            !current.revisionRequest && (
+              <section aria-label="Further content revision">
+                <h3>Request further content revision</h3>
+                <p>
+                  This records a new request against the assessed delivery.
+                  Earlier suitability and use records remain unchanged; further
+                  use is blocked until the next version is assessed.
+                </p>
+                <label>
+                  Further revision rationale
+                  <textarea
+                    value={rationale}
+                    maxLength={3000}
+                    onChange={(e) => setRationale(e.target.value)}
+                  />
+                </label>
+                <button
+                  className="button secondary"
+                  disabled={!rationale.trim()}
+                  onClick={() => {
+                    record(
+                      requestContributionRevision(
+                        state,
+                        rationale,
+                        new Date().toISOString(),
+                      ),
+                    );
+                    setRationale("");
+                  }}
+                >
+                  Record further revision request
+                </button>
+              </section>
+            )}
+          {current.revisionRequest && (
+            <p>
+              Follow-up request: {current.revisionRequest.id} ·{" "}
+              {current.revisionRequest.rationale}. Earlier suitable assessment
+              retained.
+            </p>
           )}
           {current.version > 1 && !current.reassessment && (
             <p>

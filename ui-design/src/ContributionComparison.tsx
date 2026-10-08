@@ -52,7 +52,8 @@ export function ContributionComparison({
 }) {
   const first = state.contributions.at(-2),
     second = state.contributions.at(-1);
-  const request = first?.assessment ?? first?.reassessment;
+  const request =
+    first?.revisionRequest ?? first?.assessment ?? first?.reassessment;
   if (
     !first?.delivery ||
     !request ||

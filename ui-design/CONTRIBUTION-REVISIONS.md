@@ -8,6 +8,6 @@ The comparison shows the latest two versions. Contributor preparation is visible
 
 Contribution checkpoint v3 supports up to nine consecutive versions and validates predecessor requests, command payloads and exact delivery/receipt/assessment links. Existing v1/v2 files remain readable. Whole Knowledge checkpoint and partial imports preserve the extended history without deleting other workspace slices.
 
-Publication and outcome remain separate. The bounded-use exercise supports assessed draft-02 only. Replacing its source with a new revision retains old use records as stale and blocks further execution; no mandate or authorization is inherited by changed material. A new use mandate for changed material remains future work.
+Publication and outcome remain separate. Assessed draft-02 through draft-09 can receive fresh material mandates; earlier authorization never transfers. See [fresh material use](MATERIAL-USE-REVISIONS.md).
 
 Validation covers repeated revisions through the limit, invalid lineage and mismatched receipts, checkpoint round trips, stale authorization blocking, and Leo/Maya interaction at phone and desktop widths. All records remain local samples; no backend or real participant result is claimed.

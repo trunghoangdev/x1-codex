@@ -26,11 +26,59 @@ export type UseCycle = {
     criterion: "K-01-goal";
   };
 };
-export type AuthorizedUse = UseCycle & {
+export type MaterialUse = UseCycle & {
   cycle?: 2;
   previousCycle?: UseCycle;
   continuation?: UseRecord;
 };
+export type AuthorizedUse = MaterialUse & { previousMaterials?: MaterialUse[] };
+export function useVersion(subject?: string): number | undefined {
+  try {
+    const v = JSON.parse(subject ?? "null")?.version;
+    return Number.isInteger(v) && v >= 2 && v <= 9 ? v : undefined;
+  } catch {
+    return undefined;
+  }
+}
+const recordId = (id: string, subject: string, cycle?: number) =>
+  `${id}${useVersion(subject)! > 2 ? `-draft-${useVersion(subject)}` : ""}${cycle === 2 ? "-cycle-2" : ""}`;
+export function latestUseTime(state: MaterialUse): number {
+  const times = [
+    state.mandate,
+    state.publicationAssessment,
+    state.authorization,
+    state.execution,
+    state.readerEvidence,
+    state.outcome,
+    state.continuation,
+  ]
+    .filter(Boolean)
+    .map((r) => Date.parse(r!.at));
+  if (state.previousCycle) times.push(latestUseTime(state.previousCycle));
+  return Math.max(...times);
+}
+export function startMaterialUse(
+  state: AuthorizedUse,
+  subject: string | undefined,
+  audience: string,
+  rationale: string,
+  at: string,
+): AuthorizedUse {
+  const base = allocateUseMandate(subject, audience, rationale, at);
+  if (
+    !base ||
+    !useVersion(state.subject) ||
+    useVersion(subject)! <= useVersion(state.subject)! ||
+    (state.previousMaterials?.length ?? 0) >= 7 ||
+    Date.parse(at) < latestUseTime(state)
+  )
+    return state;
+  const { previousMaterials, ...previous } = state;
+  return {
+    ...base,
+    previousMaterials: [...(previousMaterials ?? []), previous],
+  };
+}
 export function continuationSource(
   state: AuthorizedUse,
 ): UseRecord | undefined {
@@ -60,8 +108,9 @@ export function continueUse(
     Date.parse(at) < Date.parse(source.at)
   )
     return state;
+  const { previousMaterials, ...previous } = state;
   const continuation: UseRecord = {
-    id: "local-use-continuation-2",
+    id: recordId("local-use-continuation-2", subject!),
     sourceId: source.id,
     actor: "Demo organization owner",
     rationale: rationale.trim(),
@@ -70,11 +119,12 @@ export function continueUse(
   return {
     ...base,
     cycle: 2,
-    previousCycle: state,
+    previousCycle: previousMaterials ? previous : state,
+    ...(previousMaterials ? { previousMaterials } : {}),
     continuation,
     mandate: {
       ...base.mandate,
-      id: "local-publication-mandate-cycle-2",
+      id: recordId("local-publication-mandate", subject!, 2),
       sourceId: continuation.id,
     },
   };
@@ -84,7 +134,10 @@ export function assessedUseSubject(
 ): string | undefined {
   const c = state.contributions.at(-1);
   if (
-    c?.version !== 2 ||
+    !c ||
+    c.version < 2 ||
+    c.version > 9 ||
+    c.revisionRequest ||
     !c.delivery ||
     !c.receipt ||
     c.reassessment?.conclusion !== "Suitable for stated scope" ||
@@ -95,7 +148,7 @@ export function assessedUseSubject(
     return;
   return JSON.stringify({
     subject: "human-guide-example",
-    version: 2,
+    version: c.version,
     delivery: c.delivery,
     receipt: c.receipt,
     assessment: c.reassessment,
@@ -109,20 +162,40 @@ export function allocateUseMandate(
 ): AuthorizedUse | undefined {
   if (
     !subject ||
+    !useVersion(subject) ||
     !audience.trim() ||
     audience.length > 500 ||
     !valid(rationale, at)
+  )
+    return;
+  let source: any;
+  try {
+    source = JSON.parse(subject);
+  } catch {
+    return;
+  }
+  const version = useVersion(subject);
+  if (
+    source.subject !== "human-guide-example" ||
+    source.assessment?.conclusion !== "Suitable for stated scope" ||
+    source.assessment.id !== `human-reassessment-v${version}` ||
+    source.delivery?.id !== `human-delivery-v${version}` ||
+    source.receipt?.id !== `human-receipt-v${version}` ||
+    source.receipt.deliveryId !== source.delivery.id ||
+    source.assessment.deliveryId !== source.delivery.id ||
+    source.assessment.receiptId !== source.receipt.id ||
+    Date.parse(at) < Date.parse(source.assessment.at)
   )
     return;
   return {
     subject,
     audience: audience.trim(),
     mandate: {
-      id: "local-publication-mandate",
+      id: recordId("local-publication-mandate", subject),
       at,
       actor: "Demo organization owner",
       rationale: rationale.trim(),
-      sourceId: "human-reassessment-v2",
+      sourceId: `human-reassessment-v${useVersion(subject)}`,
     },
   };
 }
@@ -152,9 +225,14 @@ export function recordUseStep(
   rationale: string,
   at: string,
 ): AuthorizedUse {
-  if (subject !== state.subject || !valid(rationale, at)) return state;
+  if (
+    subject !== state.subject ||
+    !valid(rationale, at) ||
+    (useVersion(subject)! > 2 && Date.parse(at) < latestUseTime(state))
+  )
+    return state;
   const record = (id: string, actor: string, sourceId: string): UseRecord => ({
-    id: state.cycle === 2 ? `${id}-cycle-2` : id,
+    id: recordId(id, state.subject, state.cycle),
     actor,
     sourceId,
     rationale: rationale.trim(),

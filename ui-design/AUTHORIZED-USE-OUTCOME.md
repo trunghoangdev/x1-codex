@@ -30,3 +30,5 @@ Persistence update · iteration 128: [whole Knowledge workspace recovery](KNOWLE
 Scope update · iteration 129: [exact applicability decisions](SCOPE-APPLICABILITY.md) now connect represented records to adopted scope and guard pending use authorization/execution. Whole workspace checkpoints include this history in format v2; v1 remains readable. This supersedes earlier statements that record-by-record applicability is unimplemented.
 
 Continuation update · iteration 130: [cycle 2](USE-CONTINUATION.md) is now supported for the same exact assessed material, with a fresh mandate/assessment/authorization and preserved original history. Cycle-2 checkpoints use v3; v1/v2 remain readable. Content draft-03 and additional cycles are not implemented.
+
+Material update · iteration 136: [fresh material use](MATERIAL-USE-REVISIONS.md) supports separate mandates, assessments and authorizations through draft-09, retained earlier chains and checkpoint v6. Pending follow-up revision requests block current-source use; prior authority and applicability are never inherited.

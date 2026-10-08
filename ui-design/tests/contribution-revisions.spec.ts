@@ -188,7 +188,7 @@ test("recovery rejects skipped requests and reassigned receipts; changed materia
   let use = allocateUseMandate(subject, "October cohort", "Bounded scope", at)!;
   use = recordUseStep(use, subject, "Suitable", "Scope fits", at);
   use = recordUseStep(use, subject, "Allowed", "Bounded authority", at);
-  expect(assessedUseSubject(third)).toBeUndefined();
+  expect(JSON.parse(assessedUseSubject(third)!)).toMatchObject({ version: 3 });
   expect(useProgress(third, use).stale).toBe(true);
   expect(
     recordUseStep(
