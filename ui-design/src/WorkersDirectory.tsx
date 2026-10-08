@@ -1,3 +1,5 @@
+import { WorkerReadiness } from "./WorkerReadiness";
+import { workerReadinessSearch } from "./data/workerReadiness";
 import { WorkspaceContext } from "./WorkspaceContext";
 import {
   mainOrganization,
@@ -33,7 +35,7 @@ export function WorkersDirectory({
   const responsibilityGaps = scenario.gaps;
   const visible = workerDirectory.filter(
     ({ worker, type, bindings, assignmentIds }) =>
-      `${worker.id} ${worker.name} ${worker.type} ${bindings.map((b) => `${b.role} ${b.scope}`).join(" ")} ${assignmentIds.join(" ")}`
+      `${worker.id} ${worker.name} ${worker.type} ${workerReadinessSearch(scenario, worker.id)} ${bindings.map((b) => `${b.role} ${b.scope}`).join(" ")} ${assignmentIds.join(" ")}`
         .toLowerCase()
         .includes(filters.query.trim().toLowerCase()) &&
       (filters.type === "all" || type === filters.type) &&
@@ -107,7 +109,7 @@ export function WorkersDirectory({
             onChange={(e) =>
               changeFilters({ ...filters, query: e.target.value })
             }
-            placeholder="Name, role or scope"
+            placeholder="Name, role, scope, capability or availability"
           />
         </label>
         <label>
@@ -211,6 +213,11 @@ export function WorkersDirectory({
                   <strong>Explicit assignment links:</strong>{" "}
                   {assignmentIds.length}
                 </p>
+                <WorkerReadiness
+                  scenario={scenario}
+                  workerId={worker.id}
+                  compact
+                />
                 <details className="worker-record-details">
                   <summary>Bindings and assignment IDs</summary>
                   <ul>

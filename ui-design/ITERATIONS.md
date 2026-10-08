@@ -1160,3 +1160,10 @@ Case directory, shared attention/K-02 progress and relevant My Work entrances de
 - Source changes block pre-execution continuation; post-execution observations/review retain the historical source. Cancellation and fresh cycles preserve immutable history without inheriting old readiness or outcomes.
 - Added timeline Workshop delivery records and whole-workspace checkpoint v12 with replay validation and compatibility with v1–v11.
 - See [workshop operation and validation boundaries](WORKSHOP-DELIVERY.md).
+
+## Iteration 147 · Worker readiness for allocation
+
+- Added scoped authored Knowledge capability profiles with explicit basis, availability uncertainty and constraints, plus an adapter to existing main SF profiles that preserves historical/stale declarations.
+- Added capability/availability search, compact directory summaries and full worker profile inspection without inferring skills from roles or capacity from assignment counts.
+- Added K-02 facilitator candidate review with human requirement, capability declaration, availability confirmation and current assignment context. Profile inspection returns to workshop context; inspection creates no allocation or automatic ranking.
+- Read-only advisory data; no new workspace/checkpoint state, runtime feed or real availability verification. See [readiness boundaries](WORKER-READINESS.md).

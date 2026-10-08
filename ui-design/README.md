@@ -136,3 +136,5 @@ Iteration 144 audits navigation continuity: organization-aware invalid-link reco
 Iteration 145 adds a [local workshop-brief case lifecycle](CASE-LIFECYCLE.md): accepted follow-up, updates, exact-source resolution proposals, independent review and explicit reopening. Organization/My Work, timeline and whole-workspace checkpoint v11 retain its status and history; case closure does not verify workshop outcomes.
 
 Iteration 146 completes a [local K-02 workshop delivery loop](WORKSHOP-DELIVERY.md): facilitator offer/acceptance, preparation and independent readiness, simulated execution, separate observations and scoped outcome review. Shared/personal progress, scoped allocation, timeline and checkpoint v12 preserve exact source and cycle history.
+
+Iteration 147 adds [worker capabilities and availability](WORKER-READINESS.md) to directory cards, capability search and worker profiles. K-02 facilitator candidate review separates declared skills, scoped availability, assignment links and acceptance; existing SF historical declarations retain their stale status. All readiness data remains authored advisory context, not live capacity.
