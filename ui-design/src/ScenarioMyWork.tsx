@@ -19,6 +19,7 @@ export function ScenarioMyWork({
   onAssignment,
   onStream,
   onOrganization,
+  onBack,
   onWorker,
   filters,
   onFilters,
@@ -37,6 +38,7 @@ export function ScenarioMyWork({
   onAssignment: (id: string) => void;
   onStream: (id: string) => void;
   onOrganization: () => void;
+  onBack?: () => void;
   onWorker: (id: string) => void;
   onCase: (id: string) => void;
 }) {
@@ -70,8 +72,8 @@ export function ScenarioMyWork({
   };
   return (
     <div className="detail-page">
-      <DetailBackButton onClick={onOrganization}>
-        Back to Organization
+      <DetailBackButton onClick={onBack ?? onOrganization}>
+        {onBack ? "Back to scenario context" : "Back to Organization"}
       </DetailBackButton>
       <div className="page-heading">
         <div>

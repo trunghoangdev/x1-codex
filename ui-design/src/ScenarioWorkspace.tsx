@@ -127,7 +127,7 @@ export function ScenarioWorkspace({
   const contributionActor = params.get("contributionActor") === "delegate" ? "delegate" : "leo";
   const trailKey = `forge-scenario-return-v1:${scenario.id}:${persona?.workerId ?? ""}`;
   const getTrail = () => {
-    const key = persona?.workerId ?? "";
+    const key = `${scenario.id}:${persona?.workerId ?? ""}`;
     if (!origins.current[key]) {
       try {
         const saved: unknown = JSON.parse(
@@ -171,7 +171,16 @@ export function ScenarioWorkspace({
     saveTrail();
     onRoute(qualify(next));
   };
-  const openNeed = (item: CoordinationNeed) => item.destination ? onRoute(item.destination) : open(`/${item.target.kind === "workstream" ? "workstreams" : "assignments"}/${item.target.id}`);
+  const openNeed = (item: CoordinationNeed) => {
+    if (!item.destination) return open(`/${item.target.kind === "workstream" ? "workstreams" : "assignments"}/${item.target.id}`);
+    if (resolveScenario(item.destination)?.id === scenario.id && scenarioPersona(item.destination)?.workerId === persona?.workerId) {
+      const [destination, query] = item.destination.slice(base.length).split("?");
+      const nextParams = new URLSearchParams(query);
+      nextParams.delete("persona");
+      return open(destination + (nextParams.size ? `?${nextParams}` : ""));
+    }
+    onRoute(item.destination);
+  };
   const back = () => {
     const trail = getTrail();
     let index = trail.length - 1;
@@ -187,7 +196,7 @@ export function ScenarioWorkspace({
         suffix === `/patterns/${s.id}`,
     );
     const fallback =
-      suffix === "/walkthroughs/guide-cycle"
+      (suffix === "/walkthroughs/guide-cycle" || suffix === "/use/K-01")
         ? "/workstreams/K-01"
         : suffix === "/outcome-reviews/guide-review-01"
           ? "/outcomes/K-01"
@@ -268,7 +277,7 @@ export function ScenarioWorkspace({
       {scenario.id === "knowledge" && <KnowledgeRecovery state={{contribution,brief:briefHandoff,adoptions:agreementAdoptions,applicability:applicabilityChecks,...(authorizedUse ? {use:authorizedUse} : {})}} onChange={onKnowledgeWorkspace} />}
       {scenario.id === "knowledge" && <ContributionRecovery state={contribution} onChange={onContribution} replacementContext={incoming => `Brief, adoption and use history are retained. Resulting use status: ${useProgress(incoming, authorizedUse, useScope).title}. ${useProgress(incoming, authorizedUse, useScope).detail}`} />}
       {scenario.id === "knowledge" && suffix === "/work" && contributionActor !== "delegate" && !["owner", "sam", "reviewDelegate", "authorityDelegate", "outcomeDelegate"].includes(params.get("useActor") ?? "") && ["leo", "maya"].includes(persona?.workerId ?? "") && <BriefHandoff contribution={contribution} state={briefHandoff} onChange={onBriefHandoff} persona={persona?.workerId} />}
-      {suffix === "/use/K-01" ? <><DetailBackButton onClick={back}>Back to scenario context</DetailBackButton><h1 tabIndex={-1}>Bounded-use responsibility and records</h1><UseProgress contribution={contribution} state={authorizedUse} scope={useScope} inspectLabel="Back to K-01 workstream" onInspect={() => onRoute(base + "/workstreams/K-01")} onInbox={actor => onRoute(base + "/work?persona=" + (["leo","maya"].includes(actor) ? actor : "maya") + "&useActor=" + actor)} /><AuthorizedUse contribution={contribution} state={authorizedUse} scope={useScope} onChange={onAuthorizedUse} onScope={() => open("/agreements/K-01")} />{authorizedUse && <GoalLoop state={authorizedUse} subject={assessedUseSubject(contribution)} onChange={onAuthorizedUse} />}</> : suffix === "/work" && contributionActor === "delegate" ? <><h1 tabIndex={-1}>My Work · Demo delegate</h1><p>{contributionPerformer(contribution) === "delegate" ? "1 local contribution responsibility · K-01-H. Inspect the accepted handoff and continue contribution preparation above." : "No effective contribution responsibility. Inspect any pending handoff above; proposal alone does not transfer ownership."}</p><p>This local principal is separate from authored worker membership and counts.</p></> : suffix === "/work" && ["owner", "sam", "reviewDelegate", "authorityDelegate", "outcomeDelegate"].includes(params.get("useActor") ?? "") ? <><h1 tabIndex={-1}>My Work · {useActors[params.get("useActor") as UseActor]}</h1><p>Local demo principal only. This principal can inspect explicitly local offers and use responsibilities. No authored worker membership or production authority is inferred. Select Leo or Maya above to inspect their represented personal work.</p></> : suffix === "/contributions/K-01-H" ? (
+      {suffix === "/use/K-01" ? <><DetailBackButton onClick={back}>Back to scenario context</DetailBackButton><h1 tabIndex={-1}>Bounded-use responsibility and records</h1><UseProgress contribution={contribution} state={authorizedUse} scope={useScope} inspectLabel="Inspect K-01 workstream" onInspect={() => open("/workstreams/K-01")} onInbox={actor => onRoute(base + "/work?persona=" + (["leo","maya"].includes(actor) ? actor : "maya") + "&useActor=" + actor)} /><AuthorizedUse contribution={contribution} state={authorizedUse} scope={useScope} onChange={onAuthorizedUse} onScope={() => open("/agreements/K-01")} />{authorizedUse && <GoalLoop state={authorizedUse} subject={assessedUseSubject(contribution)} onChange={onAuthorizedUse} />}</> : suffix === "/work" && contributionActor === "delegate" ? <><DetailBackButton onClick={back}>Back to scenario context</DetailBackButton><h1 tabIndex={-1}>My Work · Demo delegate</h1><p>{contributionPerformer(contribution) === "delegate" ? "1 local contribution responsibility · K-01-H. Inspect the accepted handoff and continue contribution preparation above." : "No effective contribution responsibility. Inspect any pending handoff above; proposal alone does not transfer ownership."}</p><p>This local principal is separate from authored worker membership and counts.</p></> : suffix === "/work" && ["owner", "sam", "reviewDelegate", "authorityDelegate", "outcomeDelegate"].includes(params.get("useActor") ?? "") ? <><DetailBackButton onClick={back}>Back to scenario context</DetailBackButton><h1 tabIndex={-1}>My Work · {useActors[params.get("useActor") as UseActor]}</h1><p>Local demo principal only. This principal can inspect explicitly local offers and use responsibilities. No authored worker membership or production authority is inferred. Select Leo or Maya above to inspect their represented personal work.</p></> : suffix === "/contributions/K-01-H" ? (
         <HumanContribution state={contribution} onChange={onContribution} actor={contributionActor}
           onBack={() => onRoute(base + "/work?persona=leo" + (contributionActor === "delegate" ? "&contributionActor=delegate" : ""))}
           workspace={{ onOrganization: () => onRoute(qualify("")), onWorkstream: () => open("/workstreams/K-01") }} />
@@ -401,6 +410,7 @@ export function ScenarioWorkspace({
         />
       ) : suffix === "/work" ? (
         <ScenarioMyWork
+          onBack={back}
           onContribution={() => onRoute(qualify("/contributions/K-01-H"))}
           contribution={contribution}
           onContributionChange={onContribution}

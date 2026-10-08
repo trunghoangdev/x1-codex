@@ -147,7 +147,14 @@ for (const width of [390, 1440])
     await expect(
       page.getByRole("heading", { name: "My Work · Sam Rivera", exact: true }),
     ).toBeVisible();
-    await expect(page.locator(".org-overview-section[role=status]")).toHaveText(
+    await expect(
+      page
+        .getByRole("region", {
+          name: "Personal workspace context",
+          exact: true,
+        })
+        .getByRole("status"),
+    ).toHaveText(
       "2 assignments · 2 awaiting your response · 0 waiting for input",
     );
     await expect(

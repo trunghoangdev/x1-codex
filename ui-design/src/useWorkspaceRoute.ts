@@ -1,3 +1,4 @@
+import { resolveScenario, scenarioPersona } from "./data/scenarioRegistry";
 import type { CoordinationFilters } from "./data/coordinationOverview";
 import { mainOrganization } from "./data/organizationScenario";
 import { mainScopes } from "./data/roleScopes";
@@ -53,6 +54,7 @@ export type WorkspaceRoute = {
   largeOrganization?: boolean;
   tab: string;
   invalid?: boolean;
+  recoveryScenarioPath?: string;
   work?: WorkFilters;
 };
 const viewPaths: Record<WorkspaceView, string> = {
@@ -79,18 +81,20 @@ export function useWorkspaceRoute(ids: string[], tabs: string[]) {
         ? { view: "Demos", tab: "Overview", sfSnapshot: selected, sfSnapshotSource: retained ? "retained" : undefined }
         : { ...fallback, invalid: true };
     }
-    if (raw.startsWith("/organizations/"))
-      return validScenarioPath(raw)
-        ? {
-            view: (raw.split("?")[0].endsWith("/work") || raw.split("?")[0].includes("/contributions/"))
-              ? "My Work"
-              : raw.split("?")[0].endsWith("/evidence")
-                ? "Evidence"
-                : "Organization",
-            tab: "Overview",
-            scenarioPath: raw,
-          }
-        : { ...fallback, invalid: true };
+    if (raw.startsWith("/organizations/")) {
+      if (validScenarioPath(raw)) return {
+        view: (raw.split("?")[0].endsWith("/work") || raw.split("?")[0].includes("/contributions/"))
+          ? "My Work" : raw.split("?")[0].endsWith("/evidence") ? "Evidence" : "Organization",
+        tab: "Overview",
+        scenarioPath: raw,
+      };
+      const scenario = resolveScenario(raw);
+      const persona = scenarioPersona(raw);
+      return {
+        ...fallback, invalid: true,
+        ...(scenario ? { recoveryScenarioPath: `/organizations/${scenario.id}${persona ? `?persona=${persona.workerId}` : ""}` } : {}),
+      };
+    }
     const separator = raw.indexOf("?");
     fallback.work = readWorkFilters(
       separator < 0 ? "" : raw.slice(separator + 1),

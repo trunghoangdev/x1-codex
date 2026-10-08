@@ -190,7 +190,8 @@ function App() {
     view === "My Work" &&
     !route.scenarioPath &&
     !selected &&
-    !route.personalQueue;
+    !route.personalQueue &&
+    !route.invalid;
   const tab = route.tab;
   function setTab(next: string) {
     if (selected)
@@ -275,6 +276,17 @@ function App() {
   const [proposalGap, setProposalGap] = useState<string | null>(null);
   const [artifact, setArtifact] = useState<EvidenceArtifact | null>(null);
   const [mobile, setMobile] = useState(false);
+  useEffect(() => {
+    if (!mobile) return;
+    const dismiss = (event: KeyboardEvent) => {
+      if (event.key !== "Escape") return;
+      setMobile(false);
+      document.querySelector<HTMLButtonElement>('[aria-label="Toggle navigation"]')?.focus();
+    };
+    window.addEventListener("keydown", dismiss);
+    return () => window.removeEventListener("keydown", dismiss);
+  }, [mobile]);
+
   const [receipts, setReceipts] = useState<ResponseRecord[]>(
     savedDemo.snapshot?.receipts ?? [],
   );
@@ -910,17 +922,15 @@ function App() {
           )}
           {route.invalid && (
             <div className="route-warning" role="alert">
-              <strong>This link does not match an available screen.</strong>
-              <p>
-                Showing My Work. Select an assignment or return to a valid
-                workspace link.
-              </p>
-              <button
-                className="button secondary"
-                onClick={() => navigate("My Work")}
-              >
-                Open My Work
-              </button>
+              <h1 tabIndex={-1}>This link does not match an available screen.</h1>
+              <p>Open a valid organization or personal workspace to continue.</p>
+              {route.recoveryScenarioPath && (
+                <button className="button primary" onClick={() => changeRoute({view: "Organization", tab: "Overview", scenarioPath: route.recoveryScenarioPath})}>
+                  Return to organization overview
+                </button>
+              )}
+              <button className="button secondary" onClick={() => navigate("Organization")}>Open Software Factory overview</button>
+              <button className="button secondary" onClick={() => navigate("My Work")}>Open My Work</button>
             </div>
           )}
           {isMainInbox && (
@@ -2149,7 +2159,7 @@ function App() {
               />
             </>
           )}
-          {!route.scenarioPath && !selected && (view === "My Work" || (view === "Organization" && !route.attention && !route.organizationActivity && !route.decisions && !handoff && !outcome)) && <LocalResponsibilities onChange={setProposals} proposals={proposals} personal={view === "My Work"} workerId={worker?.id} streamId={stream?.id ?? route.workflowId} onInspect={setProposalGap} />}
+          {!route.invalid && !route.scenarioPath && !selected && (view === "My Work" || (view === "Organization" && !route.attention && !route.organizationActivity && !route.decisions && !handoff && !outcome)) && <LocalResponsibilities onChange={setProposals} proposals={proposals} personal={view === "My Work"} workerId={worker?.id} streamId={stream?.id ?? route.workflowId} onInspect={setProposalGap} />}
           {view === "Demos" && route.humanContribution && <HumanContribution state={humanContribution} onChange={setHumanContribution} onBack={() => navigate("Demos")} />}
           {view === "Demos" && route.largeOrganization && (
             <LargeOrganizationDemo onBack={() => navigate("Demos")} />
