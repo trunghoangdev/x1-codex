@@ -1,4 +1,10 @@
 import {
+  offerGuideInput,
+  respondGuideInput,
+  assessGuideInput,
+  type GuideHandoff,
+} from "./workstreamInputs";
+import {
   recordApplicability,
   type ApplicabilityCheck,
 } from "./scopeApplicability";
@@ -42,7 +48,8 @@ export type KnowledgeCheckpoint = {
     | "forge.knowledge-workspace.v4"
     | "forge.knowledge-workspace.v5"
     | "forge.knowledge-workspace.v6"
-    | "forge.knowledge-workspace.v7";
+    | "forge.knowledge-workspace.v7"
+    | "forge.knowledge-workspace.v8";
   savedAt: string;
   state: KnowledgeWorkspace;
 };
@@ -166,6 +173,7 @@ export function parseKnowledgeCheckpoint(raw: string): KnowledgeCheckpoint {
         "forge.knowledge-workspace.v5",
         "forge.knowledge-workspace.v6",
         "forge.knowledge-workspace.v7",
+        "forge.knowledge-workspace.v8",
       ].includes(x.format) ||
       !date(x.savedAt) ||
       !shape(x.state, [
@@ -186,6 +194,7 @@ export function parseKnowledgeCheckpoint(raw: string): KnowledgeCheckpoint {
         "forge.knowledge-workspace.v5",
         "forge.knowledge-workspace.v6",
         "forge.knowledge-workspace.v7",
+        "forge.knowledge-workspace.v8",
       ].includes(x.format)
     )
       throw Error();
@@ -195,32 +204,137 @@ export function parseKnowledgeCheckpoint(raw: string): KnowledgeCheckpoint {
         "forge.knowledge-workspace.v5",
         "forge.knowledge-workspace.v6",
         "forge.knowledge-workspace.v7",
+        "forge.knowledge-workspace.v8",
       ].includes(x.format)
     )
       throw Error();
     if (
-      !shape(s.brief, ["versions"]) ||
+      !shape(s.brief, ["versions", "guideHandoffs"]) ||
       !Array.isArray(s.brief.versions) ||
       s.brief.versions.length > 200 ||
       !Array.isArray(s.adoptions) ||
       s.adoptions.length > 200
     )
       throw Error();
+    let guideHandoffs: GuideHandoff[] = [];
+    if (s.brief.guideHandoffs !== undefined) {
+      if (
+        x.format !== "forge.knowledge-workspace.v8" ||
+        !Array.isArray(s.brief.guideHandoffs) ||
+        !s.brief.guideHandoffs.length ||
+        s.brief.guideHandoffs.length > 20
+      )
+        throw Error();
+      for (const h of s.brief.guideHandoffs) {
+        validateSubject(h.subject);
+        if (
+          !Number.isInteger(h.briefCount) ||
+          h.briefCount > s.brief.versions.length ||
+          (h.briefCount > 0 &&
+            Date.parse(h.at) <
+              Date.parse(s.brief.versions[h.briefCount - 1].deliveredAt))
+        )
+          throw Error();
+        guideHandoffs = offerGuideInput(
+          guideHandoffs,
+          h.subject,
+          h.rationale,
+          h.purpose,
+          h.at,
+          h.briefCount,
+        );
+        if (h.response)
+          guideHandoffs = respondGuideInput(
+            guideHandoffs,
+            h.id,
+            h.response.decision,
+            h.response.rationale,
+            h.response.at,
+          );
+        if (
+          h.applicability !== undefined &&
+          (!Array.isArray(h.applicability) ||
+            !h.applicability.length ||
+            h.applicability.length > 10)
+        )
+          throw Error();
+        for (const a of h.applicability ?? [])
+          guideHandoffs = assessGuideInput(
+            guideHandoffs,
+            h.id,
+            h.subject,
+            a.conclusion,
+            a.rationale,
+            a.at,
+          );
+      }
+      if (!sameKnowledgeValue(guideHandoffs, s.brief.guideHandoffs))
+        throw Error();
+    }
     let brief: BriefHandoffState = { versions: [] };
     for (const v of s.brief.versions) {
       if (
-        !shape(v, ["version", "body", "deliveredAt", "receipt"]) ||
+        !shape(v, [
+          "version",
+          "body",
+          "deliveredAt",
+          "receipt",
+          "guideInput",
+        ]) ||
         !text(v.body, 6000) ||
         !date(v.deliveredAt)
       )
         throw Error();
-      brief = deliverBrief(brief, v.body, v.deliveredAt);
+      if (v.guideInput) {
+        const input = v.guideInput;
+        if (
+          x.format !== "forge.knowledge-workspace.v8" ||
+          !Number.isInteger(input.handoffCount) ||
+          input.handoffCount < 1 ||
+          input.handoffCount > guideHandoffs.length ||
+          !Number.isInteger(input.decisionCount) ||
+          input.decisionCount < 1
+        )
+          throw Error();
+        const prefix = guideHandoffs.slice(0, input.handoffCount),
+          last = prefix.at(-1)!;
+        if (
+          input.decisionCount > (last.applicability?.length ?? 0) ||
+          last
+            .applicability!.slice(input.decisionCount)
+            .some((a) => Date.parse(a.at) < Date.parse(v.deliveredAt)) ||
+          last.briefCount > brief.versions.length ||
+          guideHandoffs
+            .slice(input.handoffCount)
+            .some((h) => h.briefCount <= brief.versions.length)
+        )
+          throw Error();
+        prefix[prefix.length - 1] = {
+          ...last,
+          applicability: last.applicability!.slice(0, input.decisionCount),
+        };
+        brief = deliverBrief(
+          { ...brief, guideHandoffs: prefix },
+          v.body,
+          v.deliveredAt,
+          input.subject,
+        );
+      } else {
+        if (
+          guideHandoffs.length &&
+          brief.versions.length >= guideHandoffs[0].briefCount
+        )
+          throw Error();
+        const { guideHandoffs: ignored, ...unlinked } = brief;
+        brief = deliverBrief(unlinked, v.body, v.deliveredAt);
+      }
       if (v.receipt) {
         if (!shape(v.receipt, ["id", "at"]) || !date(v.receipt.at))
           throw Error();
         brief = receiveBrief(brief, v.version, v.receipt.at);
       }
     }
+    if (guideHandoffs.length) brief = { ...brief, guideHandoffs };
     if (!sameKnowledgeValue(brief, s.brief)) throw Error();
     let adoptions: AgreementAdoption[] = [];
     for (const a of s.adoptions) {
@@ -248,6 +362,7 @@ export function parseKnowledgeCheckpoint(raw: string): KnowledgeCheckpoint {
       ![
         "forge.knowledge-workspace.v6",
         "forge.knowledge-workspace.v7",
+        "forge.knowledge-workspace.v8",
       ].includes(x.format)
     )
       throw Error();
@@ -281,6 +396,7 @@ export function parseKnowledgeCheckpoint(raw: string): KnowledgeCheckpoint {
           ![
             "forge.knowledge-workspace.v6",
             "forge.knowledge-workspace.v7",
+            "forge.knowledge-workspace.v8",
           ].includes(x.format) ||
           !Array.isArray(u.previousMaterials) ||
           !u.previousMaterials.length ||
@@ -334,6 +450,7 @@ export function parseKnowledgeCheckpoint(raw: string): KnowledgeCheckpoint {
             "forge.knowledge-workspace.v5",
             "forge.knowledge-workspace.v6",
             "forge.knowledge-workspace.v7",
+            "forge.knowledge-workspace.v8",
           ].includes(x.format) ||
           u.cycle !== 2 ||
           !shape(u.previousCycle, [
@@ -356,6 +473,7 @@ export function parseKnowledgeCheckpoint(raw: string): KnowledgeCheckpoint {
             format: [
               "forge.knowledge-workspace.v6",
               "forge.knowledge-workspace.v7",
+              "forge.knowledge-workspace.v8",
             ].includes(x.format)
               ? x.format
               : s.contribution.handoffs
@@ -382,7 +500,10 @@ export function parseKnowledgeCheckpoint(raw: string): KnowledgeCheckpoint {
       }
       if (
         u.authorityHistory !== undefined &&
-        (x.format !== "forge.knowledge-workspace.v7" ||
+        (![
+          "forge.knowledge-workspace.v7",
+          "forge.knowledge-workspace.v8",
+        ].includes(x.format) ||
           !Array.isArray(u.authorityHistory) ||
           !u.authorityHistory.length ||
           u.authorityHistory.length > 20)
@@ -438,6 +559,7 @@ export function parseKnowledgeCheckpoint(raw: string): KnowledgeCheckpoint {
             "forge.knowledge-workspace.v5",
             "forge.knowledge-workspace.v6",
             "forge.knowledge-workspace.v7",
+            "forge.knowledge-workspace.v8",
           ].includes(x.format))
       )
         throw Error();
@@ -456,6 +578,7 @@ export function parseKnowledgeCheckpoint(raw: string): KnowledgeCheckpoint {
             format: [
               "forge.knowledge-workspace.v6",
               "forge.knowledge-workspace.v7",
+              "forge.knowledge-workspace.v8",
             ].includes(x.format)
               ? x.format
               : check.context.contribution?.handoffs
@@ -494,37 +617,42 @@ export function encodeKnowledgeCheckpoint(state: KnowledgeWorkspace) {
   if (!state.applicability?.length) delete encodedState.applicability;
   const raw = JSON.stringify({
     format:
-      hasAuthorityHistory(state.use) ||
-      state.applicability?.some((c) => hasAuthorityHistory(c.context.use))
-        ? "forge.knowledge-workspace.v7"
-        : state.contribution.contributions.some((c) => c.revisionRequest) ||
-            (state.use &&
-              (useVersion(state.use.subject)! > 2 ||
-                state.use.previousMaterials)) ||
-            state.applicability?.some(
-              (c) =>
-                c.context.contribution.contributions.some(
-                  (v) => v.revisionRequest,
-                ) ||
-                (c.context.use &&
-                  (useVersion(c.context.use.subject)! > 2 ||
-                    c.context.use.previousMaterials)),
-            )
-          ? "forge.knowledge-workspace.v6"
-          : state.contribution.handoffs ||
-              state.applicability?.some((c) => c.context.contribution.handoffs)
-            ? "forge.knowledge-workspace.v5"
-            : state.contribution.responsibility ||
+      state.brief.guideHandoffs ||
+      state.brief.versions.some((v) => v.guideInput)
+        ? "forge.knowledge-workspace.v8"
+        : hasAuthorityHistory(state.use) ||
+            state.applicability?.some((c) => hasAuthorityHistory(c.context.use))
+          ? "forge.knowledge-workspace.v7"
+          : state.contribution.contributions.some((c) => c.revisionRequest) ||
+              (state.use &&
+                (useVersion(state.use.subject)! > 2 ||
+                  state.use.previousMaterials)) ||
+              state.applicability?.some(
+                (c) =>
+                  c.context.contribution.contributions.some(
+                    (v) => v.revisionRequest,
+                  ) ||
+                  (c.context.use &&
+                    (useVersion(c.context.use.subject)! > 2 ||
+                      c.context.use.previousMaterials)),
+              )
+            ? "forge.knowledge-workspace.v6"
+            : state.contribution.handoffs ||
                 state.applicability?.some(
-                  (c) => c.context.contribution.responsibility,
+                  (c) => c.context.contribution.handoffs,
                 )
-              ? "forge.knowledge-workspace.v4"
-              : state.use?.cycle === 2 ||
-                  state.applicability?.some((c) => c.context.use?.cycle === 2)
-                ? "forge.knowledge-workspace.v3"
-                : state.applicability?.length
-                  ? "forge.knowledge-workspace.v2"
-                  : "forge.knowledge-workspace.v1",
+              ? "forge.knowledge-workspace.v5"
+              : state.contribution.responsibility ||
+                  state.applicability?.some(
+                    (c) => c.context.contribution.responsibility,
+                  )
+                ? "forge.knowledge-workspace.v4"
+                : state.use?.cycle === 2 ||
+                    state.applicability?.some((c) => c.context.use?.cycle === 2)
+                  ? "forge.knowledge-workspace.v3"
+                  : state.applicability?.length
+                    ? "forge.knowledge-workspace.v2"
+                    : "forge.knowledge-workspace.v1",
     savedAt: new Date().toISOString(),
     state: encodedState,
   });

@@ -1,3 +1,4 @@
+import { WorkstreamInputs } from "./WorkstreamInputs";
 import { KnowledgeTimeline } from "./KnowledgeTimeline";
 import { KnowledgeHandoff } from "./KnowledgeHandoff";
 import { contributionPerformer } from "./data/knowledgeHandoff";
@@ -104,7 +105,7 @@ export function ScenarioWorkspace({
   const origins = useRef<
     Record<string, { destination: string; source: string }[]>
   >({});
-  const scenario = briefHandoffScenario(resolveScenario(path)!, briefHandoff);
+  const scenario = briefHandoffScenario(resolveScenario(path)!, briefHandoff, contribution);
   const useScope = {adoptions:agreementAdoptions,checks:applicabilityChecks};
   const useView = useProgress(contribution, authorizedUse, useScope);
   const needs = [...(scenario.id === "knowledge" && useView.need ? [useView.need] : []), ...actionableAttention(scenario, contribution)];
@@ -258,11 +259,12 @@ export function ScenarioWorkspace({
       {scenario.id === "knowledge" && ["", "/work", "/workstreams/K-01", "/workstreams/K-02", "/activity", "/attention", "/contributions/K-01-H"].includes(suffix) && <button className="button secondary" onClick={() => open("/timeline")}>Open Knowledge timeline</button>}
       {scenario.id === "knowledge" && agreementAdoptions.length > 0 && suffix !== "/agreements/K-01" && <section className="panel" aria-label="Adopted K-01 scope"><h2>K-01 · adopted local scope</h2><p>{agreementAdoptions.at(-1)!.versionId} · {agreementAdoptions.at(-1)!.audience}</p><p>Applicability is record-specific; inspect current decisions before reuse. Publication authority is separate.</p><button className="text-link" onClick={() => open("/agreements/K-01")}>Inspect adopted scope and impact</button></section>}
       {scenario.id === "knowledge" && ["", "/workstreams/K-01", "/workflows/K-01", "/outcomes/K-01", "/decisions"].includes(suffix) && <UseProgress contribution={contribution} state={authorizedUse} scope={useScope} onInspect={() => open("/use/K-01")} onInbox={actor => onRoute(base + "/work?persona=" + (["leo","maya"].includes(actor) ? actor : "maya") + "&useActor=" + actor)} />}
+      {scenario.id === "knowledge" && (suffix === "" || suffix === "/work" || suffix === "/workstreams/K-01" || suffix === "/workstreams/K-02") && <WorkstreamInputs state={briefHandoff} contribution={contribution} onChange={onBriefHandoff} persona={persona?.workerId} />}
       {scenario.id === "knowledge" && suffix === "/work" && contributionActor !== "delegate" && <UseProgress contribution={contribution} state={authorizedUse} scope={useScope} actor={(params.get("useActor") ?? persona?.workerId ?? "maya") as UseActor} onActor={actor => onRoute(base + "/work?persona=" + (["leo","maya"].includes(actor) ? actor : "maya") + "&useActor=" + actor)} onInspect={() => open("/use/K-01")} />}
 
       {scenario.id === "knowledge" && <KnowledgeRecovery state={{contribution,brief:briefHandoff,adoptions:agreementAdoptions,applicability:applicabilityChecks,...(authorizedUse ? {use:authorizedUse} : {})}} onChange={onKnowledgeWorkspace} />}
       {scenario.id === "knowledge" && <ContributionRecovery state={contribution} onChange={onContribution} replacementContext={incoming => `Brief, adoption and use history are retained. Resulting use status: ${useProgress(incoming, authorizedUse, useScope).title}. ${useProgress(incoming, authorizedUse, useScope).detail}`} />}
-      {scenario.id === "knowledge" && suffix === "/work" && contributionActor !== "delegate" && !["owner", "sam"].includes(params.get("useActor") ?? "") && ["leo", "maya"].includes(persona?.workerId ?? "") && <BriefHandoff state={briefHandoff} onChange={onBriefHandoff} persona={persona?.workerId} />}
+      {scenario.id === "knowledge" && suffix === "/work" && contributionActor !== "delegate" && !["owner", "sam"].includes(params.get("useActor") ?? "") && ["leo", "maya"].includes(persona?.workerId ?? "") && <BriefHandoff contribution={contribution} state={briefHandoff} onChange={onBriefHandoff} persona={persona?.workerId} />}
       {suffix === "/use/K-01" ? <><DetailBackButton onClick={back}>Back to scenario context</DetailBackButton><h1 tabIndex={-1}>Bounded-use responsibility and records</h1><UseProgress contribution={contribution} state={authorizedUse} scope={useScope} inspectLabel="Back to K-01 workstream" onInspect={() => onRoute(base + "/workstreams/K-01")} onInbox={actor => onRoute(base + "/work?persona=" + (["leo","maya"].includes(actor) ? actor : "maya") + "&useActor=" + actor)} /><AuthorizedUse contribution={contribution} state={authorizedUse} scope={useScope} onChange={onAuthorizedUse} onScope={() => open("/agreements/K-01")} /></> : suffix === "/work" && contributionActor === "delegate" ? <><h1 tabIndex={-1}>My Work · Demo delegate</h1><p>{contributionPerformer(contribution) === "delegate" ? "1 local contribution responsibility · K-01-H. Inspect the accepted handoff and continue contribution preparation above." : "No effective contribution responsibility. Inspect any pending handoff above; proposal alone does not transfer ownership."}</p><p>This local principal is separate from authored worker membership and counts.</p></> : suffix === "/work" && ["owner", "sam"].includes(params.get("useActor") ?? "") ? <><h1 tabIndex={-1}>My Work · {useActors[params.get("useActor") as UseActor]}</h1><p>Local demo principal only. This principal can inspect explicitly local offers and use responsibilities. No authored worker membership or production authority is inferred. Select Leo or Maya above to inspect their represented personal work.</p></> : suffix === "/contributions/K-01-H" ? (
         <HumanContribution state={contribution} onChange={onContribution} actor={contributionActor}
           onBack={() => onRoute(base + "/work?persona=leo" + (contributionActor === "delegate" ? "&contributionActor=delegate" : ""))}
@@ -628,7 +630,7 @@ export function ScenarioWorkspace({
                   ))}
                 </ol>
                 {links(stream.assignmentIds)}
-                {scenario.id === "knowledge" && stream.id === "K-02" && <BriefHandoff state={briefHandoff} onChange={onBriefHandoff} persona={persona?.workerId} />}
+                {scenario.id === "knowledge" && stream.id === "K-02" && <BriefHandoff contribution={contribution} state={briefHandoff} onChange={onBriefHandoff} persona={persona?.workerId} />}
                 <CoordinationInputs
                   scenario={scenario}
                   streamId={stream.id}
@@ -688,7 +690,7 @@ export function ScenarioWorkspace({
                 {scenario.workers.find((w) => w.id === assignment.workerId)
                   ?.name ?? "Unassigned"}
               </p>
-              {scenario.id === "knowledge" && ["K-02-C", "K-02-E"].includes(assignment.id) && <BriefHandoff state={briefHandoff} onChange={onBriefHandoff} persona={persona?.workerId} />}
+              {scenario.id === "knowledge" && ["K-02-C", "K-02-E"].includes(assignment.id) && <BriefHandoff contribution={contribution} state={briefHandoff} onChange={onBriefHandoff} persona={persona?.workerId} />}
               <CoordinationInputs
                 scenario={scenario}
                 assignmentId={assignment.id}

@@ -41,3 +41,5 @@ Handoff update · iteration 134: [exact input and bounded authority handoffs](KN
 Material update · iteration 136: [fresh material use](MATERIAL-USE-REVISIONS.md) supports separate mandates, assessments and authorizations through draft-09, retained earlier chains and checkpoint v6. Pending follow-up revision requests block current-source use; prior authority and applicability are never inherited.
 
 Authority update · iteration 137: [suspension and revocation](AUTHORITY-CONTROL.md) preserve the original grant, block future execution, require explicit verification to resume a suspension, and retain control history in timeline and whole-workspace checkpoint v7. Revocation cannot be resumed.
+
+Iteration 138 adds [K-01 → K-02 input handoffs](CROSS-WORKSTREAM-INPUTS.md), separate receiver applicability, frozen downstream brief links and source-change gating. Whole-workspace checkpoint v8 retains this history; earlier formats remain readable. Contribution-only replacement preserves packages and briefs while current-source mismatch blocks reuse.

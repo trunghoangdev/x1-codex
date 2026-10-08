@@ -11,3 +11,5 @@ Newest recorded times appear first. Equal timestamps retain deterministic displa
 Unsent preparation, inferred missing steps, recovery operations and unrecorded transitions are not emitted. Authored activity examples remain accessible separately. Workshop delivery identifiers are derived from retained brief versions, not backend-generated event IDs. This timeline is a local record projection, not a production audit log, live stream or proof of outcome.
 
 Validation covers exact actor/reference projection, both use cycles, stale source history, deterministic recovery, uncertain commands, filters/pagination, related-record/source navigation, phone/desktop layout and explicit whole-workspace restoration.
+
+Iteration 138 adds [K-01 → K-02 input handoffs](CROSS-WORKSTREAM-INPUTS.md), separate receiver applicability, frozen downstream brief links and source-change gating. Whole-workspace checkpoint v8 retains this history; earlier formats remain readable. Contribution-only replacement preserves packages and briefs while current-source mismatch blocks reuse.

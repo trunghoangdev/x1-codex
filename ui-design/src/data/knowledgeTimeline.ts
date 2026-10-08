@@ -9,6 +9,7 @@ export const timelineKinds = [
   "Scope",
   "Use",
   "Workshop brief",
+  "Workstream input",
 ] as const;
 export type TimelineKind = (typeof timelineKinds)[number];
 export type KnowledgeTimelineEvent = {
@@ -313,6 +314,51 @@ export function knowledgeTimeline(
       });
     if (use) cycle(use, use.cycle ?? 1);
   }
+  for (const h of state.brief.guideHandoffs ?? []) {
+    const source = JSON.parse(h.subject);
+    const common = {
+      stream: "K-02" as const,
+      kind: "Workstream input" as const,
+      version: `K-01 → K-02 · draft-0${source.version}`,
+      destination: "/organizations/knowledge/workstreams/K-02?persona=leo",
+      frozenSubject: source,
+    };
+    add({
+      ...common,
+      key: `guide-input:${h.id}`,
+      id: h.id,
+      title: "Guide input offered to workshop",
+      actor: h.sender,
+      at: h.at,
+      detail: `${h.purpose}. ${h.rationale}`,
+      references: [source.delivery.id, source.receipt.id, source.assessment.id],
+      record: h,
+    });
+    if (h.response)
+      add({
+        ...common,
+        key: `guide-input:${h.response.id}`,
+        id: h.response.id,
+        title: `Guide input · ${h.response.decision}`,
+        actor: h.response.actor,
+        at: h.response.at,
+        detail: h.response.rationale,
+        references: [h.id],
+        record: h.response,
+      });
+    for (const a of h.applicability ?? [])
+      add({
+        ...common,
+        key: `guide-input:${a.id}`,
+        id: a.id,
+        title: `Workshop input · ${a.conclusion}`,
+        actor: a.actor,
+        at: a.at,
+        detail: a.rationale,
+        references: [a.sourceId, h.id],
+        record: a,
+      });
+  }
   for (const b of state.brief.versions) {
     const version = `brief-v${b.version}`,
       id = `workshop-brief-v${b.version}`;
@@ -326,9 +372,16 @@ export function knowledgeTimeline(
       at: b.deliveredAt,
       version,
       detail: b.body,
-      references: [],
+      references: b.guideInput
+        ? [b.guideInput.handoffId, b.guideInput.applicabilityId]
+        : [],
       destination: "/organizations/knowledge/workstreams/K-02?persona=leo",
-      record: { version: b.version, body: b.body, deliveredAt: b.deliveredAt },
+      record: {
+        version: b.version,
+        body: b.body,
+        deliveredAt: b.deliveredAt,
+        ...(b.guideInput ? { guideInput: b.guideInput } : {}),
+      },
     });
     if (b.receipt)
       add({

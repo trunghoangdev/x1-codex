@@ -1,6 +1,9 @@
+import { currentGuideSubject, guideInputStatus } from "./data/workstreamInputs";
+import type { HumanContributionState } from "./data/humanContribution";
 import { useRef, useState } from "react";
 import {
   briefInputSummary,
+  briefGuideIsCurrent,
   deliverBrief,
   receiveBrief,
   receivedBrief,
@@ -10,11 +13,18 @@ export function BriefHandoff({
   state,
   onChange,
   persona,
+  contribution,
 }: {
   state: BriefHandoffState;
   onChange: (s: BriefHandoffState) => void;
   persona?: string;
+  contribution?: HumanContributionState;
 }) {
+  const guideSubject = contribution
+    ? currentGuideSubject(contribution)
+    : undefined;
+  const guide = guideInputStatus(state.guideHandoffs ?? [], guideSubject);
+  const guideBlocked = !!state.guideHandoffs?.length && !guide.ready;
   const [body, setBody] = useState("");
   const [selected, setSelected] = useState<number>();
   const result = useRef<HTMLHeadingElement>(null);
@@ -35,23 +45,34 @@ export function BriefHandoff({
       <h2>Workshop brief · exact version handoff</h2>
       <p>
         Local session demo · workshop-brief-input · Leo / K-02-C → Maya /
-        K-02-E. Reload starts an empty session; save and explicitly restore a whole Knowledge workspace checkpoint to recover this exchange. Contribution-only checkpoints exclude it. Persona selection is a demonstration, not authentication.
+        K-02-E. Reload starts an empty session; save and explicitly restore a
+        whole Knowledge workspace checkpoint to recover this exchange.
+        Contribution-only checkpoints exclude it. Persona selection is a
+        demonstration, not authentication.
       </p>
       <h3 ref={result} tabIndex={-1}>
         Receiving review input
       </h3>
-      <p role="status">{briefInputSummary(state)}</p>
+      <p role="status">{briefInputSummary(state, contribution)}</p>
       <p>
         Receipt records input availability only. It does not complete the
         review, approve the workshop or resolve the facilitator gap. Earlier
         reviews retain their original input version; review migration and
         applicability assessment are not implemented.
       </p>
+      {state.guideHandoffs?.length ? (
+        <p role="status">K-01 → K-02: {guide.reason}</p>
+      ) : null}
       {persona === "leo" && (
         <form
           onSubmit={(e) => {
             e.preventDefault();
-            const next = deliverBrief(state, body, new Date().toISOString());
+            const next = deliverBrief(
+              state,
+              body,
+              new Date().toISOString(),
+              guideSubject,
+            );
             if (next !== state) {
               finish(next);
               setBody("");
@@ -67,7 +88,10 @@ export function BriefHandoff({
               onChange={(e) => setBody(e.target.value)}
             />
           </label>
-          <button className="button primary" disabled={!body.trim()}>
+          <button
+            className="button primary"
+            disabled={!body.trim() || guideBlocked}
+          >
             Deliver brief-v{state.versions.length + 1} locally
           </button>
         </form>
@@ -88,6 +112,16 @@ export function BriefHandoff({
           <p style={{ whiteSpace: "pre-wrap", overflowWrap: "anywhere" }}>
             {v.body}
           </p>
+          {v.guideInput && (
+            <p>
+              Guide input frozen: {v.guideInput.handoffId} ·{" "}
+              {v.guideInput.applicabilityId} · draft-0
+              {JSON.parse(v.guideInput.subject).version}.{" "}
+              {!briefGuideIsCurrent(state, v, contribution)
+                ? "Source or handoff decision changed; this brief retains its historical input. New briefs require current handoff and applicability."
+                : "Current assessed guide."}
+            </p>
+          )}
           <p>
             {v.receipt
               ? `Maya receipt · ${v.receipt.id} · ${v.receipt.at}`
