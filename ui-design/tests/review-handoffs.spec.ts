@@ -608,6 +608,11 @@ for (const width of [320, 1440])
     await expect(handoff).toContainText(
       "Outcome review: Demo outcome reviewer",
     );
+    await chain
+      .getByText("Current cycle · evidence and decision history", {
+        exact: true,
+      })
+      .click();
     await expect(
       chain.getByRole("heading", {
         name: "local-use-outcome-review",

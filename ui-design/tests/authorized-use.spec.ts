@@ -284,6 +284,11 @@ for (const width of [390, 1440])
       })
       .click();
     await step("assessment", "Suitable");
+    await panel
+      .getByText("Current cycle · evidence and decision history", {
+        exact: true,
+      })
+      .click();
     await expect(
       panel.getByRole("heading", {
         name: "local-use-authorization",

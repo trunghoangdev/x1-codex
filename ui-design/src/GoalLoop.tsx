@@ -119,18 +119,25 @@ export function GoalLoop({
         This exercise evaluates one exact material, audience and use cycle; it
         does not establish organization-wide or real-world success.
       </p>
-      <p>
-        Outcome source: {state.outcome.id} · {state.outcome.conclusion} ·
-        reviewer {state.outcome.actor}. Audience: {state.audience}.
-      </p>
-      <h3>{progress.title}</h3>
-      <p role="status">{progress.detail}</p>
-      <p>
-        Next responsible person:{" "}
-        {progress.actor ? goalActors[progress.actor] : "No pending goal action"}
-        . Decisions, work offers and results remain separate. Maximum ten goal
-        reviews per cycle.
-      </p>
+      <details className="use-context">
+        <summary>Outcome context and audience</summary>
+        <p>
+          Outcome source: {state.outcome.id} · {state.outcome.conclusion} ·
+          reviewer {state.outcome.actor}. Audience: {state.audience}.
+        </p>
+      </details>
+      <div className="use-next-action">
+        <h3>{progress.title}</h3>
+        <p role="status">{progress.detail}</p>
+        <p>
+          Next responsible person:{" "}
+          {progress.actor
+            ? goalActors[progress.actor]
+            : "No pending goal action"}
+          . Decisions, work offers and results remain separate. Maximum ten goal
+          reviews per cycle.
+        </p>
+      </div>
       {!current && (
         <p role="alert">
           Source changed or is under revision. New goal decisions, acceptance
@@ -138,29 +145,12 @@ export function GoalLoop({
           starting a new material or use cycle; historical records remain.
         </p>
       )}
-      <details>
-        <summary>Exact outcome, material and evidence</summary>
-        <pre>
-          {JSON.stringify(
-            {
-              subject: JSON.parse(state.subject),
-              outcome: state.outcome,
-              execution: state.execution,
-              readerEvidence: state.readerEvidence,
-            },
-            null,
-            2,
-          )}
-        </pre>
-      </details>
       {task && (
         <article className="org-stream-assignment">
           <h3>
             {task.title} · {status}
           </h3>
-          <p>
-            {task.id} · offered to {goalActors[task.assignee]}
-          </p>
+          <p>Offered to {goalActors[task.assignee]}</p>
           <p>Expected result / acceptance criterion: {task.expectedResult}</p>
           {task.response && (
             <p>
@@ -401,6 +391,21 @@ export function GoalLoop({
           </button>
         </section>
       )}
+      <details>
+        <summary>Exact outcome, material and evidence</summary>
+        <pre>
+          {JSON.stringify(
+            {
+              subject: JSON.parse(state.subject),
+              outcome: state.outcome,
+              execution: state.execution,
+              readerEvidence: state.readerEvidence,
+            },
+            null,
+            2,
+          )}
+        </pre>
+      </details>
       {!!state.goalReviews?.length && (
         <details>
           <summary>

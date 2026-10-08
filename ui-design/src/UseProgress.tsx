@@ -37,12 +37,6 @@ export function UseProgress({
           ? "Local use responsibilities"
           : "Bounded use · next responsibility"}
       </h2>
-      <p>
-        Separate local exercise · human-guide-example · draft-0
-        {useVersion(state?.subject) ?? stateVersion(contribution)}. Authored
-        assignment counts remain separate. Actor inspection does not grant
-        permission.
-      </p>
       {personal && (
         <label>
           Local responsibility actor
@@ -96,6 +90,15 @@ export function UseProgress({
           Open local inbox · {useActors[view.actor]}
         </button>
       )}
+      <details className="use-context">
+        <summary>Exercise scope and simulation limits</summary>
+        <p>
+          Separate local exercise · human-guide-example · draft-0
+          {useVersion(state?.subject) ?? stateVersion(contribution)}. Authored
+          assignment counts remain separate. Actor inspection does not grant
+          permission.
+        </p>
+      </details>
     </section>
   );
 }

@@ -425,6 +425,25 @@ for (const width of [320, 1440])
       name: "Goal outcome and follow-up",
       exact: true,
     });
+    const history = page.getByText(
+      "Current cycle · evidence and decision history",
+      { exact: true },
+    );
+    await expect(history.locator("..")).not.toHaveAttribute("open", "");
+    const evidence = loop.getByText("Exact outcome, material and evidence", {
+      exact: true,
+    });
+    await expect(evidence.locator("..")).not.toHaveAttribute("open", "");
+    await evidence.click();
+    await expect(loop.locator("pre").first()).toContainText("readerEvidence");
+    await evidence.click();
+    expect(
+      await loop
+        .getByLabel("Goal loop actor", { exact: true })
+        .evaluate(
+          (el) => el.getBoundingClientRect().width <= window.innerWidth,
+        ),
+    ).toBe(true);
     await expect(
       loop.getByRole("option", { name: "Goal met in simulation", exact: true }),
     ).toHaveAttribute("disabled", "");

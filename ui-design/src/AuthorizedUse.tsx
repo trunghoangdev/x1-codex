@@ -162,51 +162,6 @@ export function AuthorizedUse({
         </details>
       )}
       {state && (
-        <>
-          <h3>Cycle {state.cycle ?? 1} · frozen subject and audience</h3>
-          <p>
-            human-guide-example · draft-0{retainedVersion} · audience:{" "}
-            {state.audience} · environment: fictional internal preview only
-          </p>
-          <details>
-            <summary>Inspect original exact source snapshot</summary>
-            <pre style={{ whiteSpace: "pre-wrap", overflowWrap: "anywhere" }}>
-              {state.subject}
-            </pre>
-          </details>
-          {[
-            state.continuation,
-            state.mandate,
-            state.publicationAssessment,
-            state.authorization,
-            state.execution,
-            state.readerEvidence,
-            state.outcome,
-          ]
-            .filter(Boolean)
-            .map((record) => (
-              <article className="org-stream-assignment" key={record!.id}>
-                <h3>{record!.id}</h3>
-                <p>
-                  {record!.actor} · {record!.at} · source: {record!.sourceId}
-                </p>
-                <p>{record!.rationale}</p>
-                <p>
-                  {"conclusion" in record!
-                    ? String(record.conclusion)
-                    : "decision" in record!
-                      ? String(record.decision)
-                      : "result" in record!
-                        ? String(record.result)
-                        : "kind" in record!
-                          ? String(record.kind)
-                          : `Scoped mandate: Sam reviews and authorizes exact draft-0${retainedVersion} for this audience; Maya reviews outcome evidence.`}
-                </p>
-              </article>
-            ))}
-        </>
-      )}
-      {state && (
         <MaterialUseStart
           contribution={contribution}
           state={state}
@@ -430,6 +385,52 @@ export function AuthorizedUse({
             Cancel record
           </button>
         </section>
+      )}
+      {state && (
+        <details className="use-record-history">
+          <summary>Current cycle · evidence and decision history</summary>
+          <h3>Cycle {state.cycle ?? 1} · frozen subject and audience</h3>
+          <p>
+            human-guide-example · draft-0{retainedVersion} · audience:{" "}
+            {state.audience} · environment: fictional internal preview only
+          </p>
+          <details>
+            <summary>Inspect original exact source snapshot</summary>
+            <pre style={{ whiteSpace: "pre-wrap", overflowWrap: "anywhere" }}>
+              {state.subject}
+            </pre>
+          </details>
+          {[
+            state.continuation,
+            state.mandate,
+            state.publicationAssessment,
+            state.authorization,
+            state.execution,
+            state.readerEvidence,
+            state.outcome,
+          ]
+            .filter(Boolean)
+            .map((record) => (
+              <article className="org-stream-assignment" key={record!.id}>
+                <h3>{record!.id}</h3>
+                <p>
+                  {record!.actor} · {record!.at} · source: {record!.sourceId}
+                </p>
+                <p>{record!.rationale}</p>
+                <p>
+                  {"conclusion" in record!
+                    ? String(record.conclusion)
+                    : "decision" in record!
+                      ? String(record.decision)
+                      : "result" in record!
+                        ? String(record.result)
+                        : "kind" in record!
+                          ? String(record.kind)
+                          : `Scoped mandate: Sam reviews and authorizes exact draft-0${retainedVersion} for this audience; Maya reviews outcome evidence.`}
+                </p>
+              </article>
+            ))}
+        </details>
       )}
     </section>
   );

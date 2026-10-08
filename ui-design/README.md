@@ -124,3 +124,5 @@ Knowledge repeated operation: [one explicit subsequent bounded-use cycle](USE-CO
 Main local allocations: [performer acceptance and confirmed reassignment](RESPONSIBILITY-ACCEPTANCE.md).
 
 Authority update · iteration 137: [suspension and revocation](AUTHORITY-CONTROL.md) preserve the original grant, block future execution, require explicit verification to resume a suspension, and retain control history in timeline and whole-workspace checkpoint v7. Revocation cannot be resumed.
+
+Iteration 141 simplifies Knowledge use and goal follow-up reading order: current status and responsible person first, action fields visible, exact evidence and retained cycle history available in disclosures. See [iteration notes](ITERATIONS.md).

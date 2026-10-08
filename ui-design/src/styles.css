@@ -3820,3 +3820,19 @@ main h3,
 .knowledge-timeline h1 { margin-block: 20px; }
 .material-use-start label { display: grid; gap: 6px; min-width: 0; margin-block: 12px; }
 .material-use-start input, .material-use-start textarea { width: 100%; min-width: 0; max-width: 100%; }
+
+/* Keep the next action ahead of retained technical context. */
+.use-next-action { border-left: 3px solid var(--accent, #496b50); padding: 8px 16px; margin-block: 16px; background: #f4f7f4; }
+.use-context, .use-record-history { margin-block: 18px; }
+.use-context summary, .use-record-history summary { cursor: pointer; padding-block: 10px; font-weight: 600; }
+[aria-label="Assessed result to outcome"] label,
+[aria-label="Goal outcome and follow-up"] label { display: grid; gap: 6px; min-width: 0; margin-block: 12px; }
+[aria-label="Assessed result to outcome"] select,
+[aria-label="Goal outcome and follow-up"] select { width: 100%; min-width: 0; max-width: 100%; }
+[aria-label="Goal outcome and follow-up"] pre { white-space: pre-wrap; overflow-wrap: anywhere; }
+[aria-label="Goal outcome and follow-up"] input[type="checkbox"] { width: auto; justify-self: start; }
+@media (max-width: 600px) {
+  [aria-label="Goal outcome and follow-up"] h2,
+  [aria-label="Assessed result to outcome"] h2 { overflow-wrap: anywhere; }
+  .use-next-action { padding-inline: 12px; }
+}
