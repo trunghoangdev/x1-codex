@@ -1,3 +1,7 @@
+import {
+  contributionAcceptanceBlocked,
+  type KnowledgeResponsibility,
+} from "./knowledgeResponsibility";
 import type { ContributionCommand } from "./contributionCommand";
 export type Contribution = {
   version: number;
@@ -33,6 +37,7 @@ export type Contribution = {
 export type HumanContributionState = {
   contributions: Contribution[];
   commands?: ContributionCommand[];
+  responsibility?: KnowledgeResponsibility;
 };
 export const emptyContribution = (): HumanContributionState => ({
   contributions: [{ version: 1, body: "", note: "", citesInput: false }],
@@ -61,6 +66,7 @@ export function deliverContribution(
 ): HumanContributionState {
   const current = state.contributions.at(-1)!;
   if (
+    contributionAcceptanceBlocked(state, at) ||
     current.delivery ||
     !current.body.trim() ||
     !current.note.trim() ||

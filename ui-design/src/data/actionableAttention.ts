@@ -35,6 +35,28 @@ export function actionableAttention(
   if (scenario.id !== "knowledge") return authored;
   const current = contribution.contributions.at(-1)!;
   const view = contributionView(contribution);
+  if (view.attention === "allocation") {
+    const pending = view.stage === "Acceptance pending";
+    return [
+      {
+        id: "local-K-01-H-allocation",
+        source: "session",
+        category: "Responsibility",
+        title: "Guide contribution · responsibility response",
+        owner: pending ? "Leo · sample contributor" : "Demo organization owner",
+        responsibility: pending
+          ? "Leo must respond to the exact local offer."
+          : "Owner must resolve clarification or decline before issuing a new offer.",
+        detail: view.summary,
+        nextStep: view.contributorNext,
+        target: { kind: "assignment", id: "K-01-H" },
+        destination: pending
+          ? "/organizations/knowledge/work?persona=leo"
+          : "/organizations/knowledge/work?persona=leo&useActor=owner",
+      },
+      ...authored,
+    ];
+  }
   const receiver = view.attention === "receipt";
   const revision = view.attention === "revision";
   const unsettled = view.attention === "command";

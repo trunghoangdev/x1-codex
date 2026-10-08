@@ -13,16 +13,19 @@ export function ContributionProgress({
   const view = contributionView(state);
   const [first, second] = state.contributions;
   const next =
-    view.attention === "receipt"
-      ? "Maya · inspect the delivered version and record its sample receipt"
-      : view.attention === "revision" ||
-          view.attention === "command" ||
-          view.attention === "correction" ||
-          !state.contributions.at(-1)?.delivery
-        ? `Leo · ${view.contributorNext}`
-        : state.contributions.at(-1)?.reassessment
-          ? view.contributorNext
-          : "No further action owner is established by the current records; assessment remains separate.";
+    view.attention === "allocation"
+      ? view.contributorNext
+      : view.attention === "receipt"
+        ? "Maya · inspect the delivered version and record its sample receipt"
+        : view.attention === "allocation" ||
+            view.attention === "revision" ||
+            view.attention === "command" ||
+            view.attention === "correction" ||
+            !state.contributions.at(-1)?.delivery
+          ? `Leo · ${view.contributorNext}`
+          : state.contributions.at(-1)?.reassessment
+            ? view.contributorNext
+            : "No further action owner is established by the current records; assessment remains separate.";
   return (
     <section
       className="panel org-stream"

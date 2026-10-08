@@ -1,3 +1,4 @@
+import { contributionAcceptanceBlocked } from "./knowledgeResponsibility";
 import {
   contributionResponsibility,
   deliverContribution,
@@ -45,6 +46,7 @@ export function submitContributionCommand(
 ): HumanContributionState {
   const current = state.contributions.at(-1)!;
   if (
+    contributionAcceptanceBlocked(state, at) ||
     current.delivery ||
     commandBlocksEditing(state) ||
     !current.body.trim() ||

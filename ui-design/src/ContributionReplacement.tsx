@@ -1,3 +1,4 @@
+import { knowledgeResponsibilityStatus } from "./data/knowledgeResponsibility";
 import type { HumanContributionState } from "./data/humanContribution";
 import { contributionView } from "./data/contributionView";
 
@@ -51,6 +52,15 @@ export function ContributionReplacement({
       <p>
         <strong>Next step after replacement:</strong> {after.contributorNext}
       </p>
+      <p>
+        Responsibility: {knowledgeResponsibilityStatus(current)} →{" "}
+        {knowledgeResponsibilityStatus(incoming)}. Responsibility history is{" "}
+        {identity(current.responsibility) === identity(incoming.responsibility)
+          ? "unchanged"
+          : "replaced"}
+        ; importing a legacy contribution can remove local offers and
+        acceptance.
+      </p>
       <ul>
         {versions.map((version) => {
           const old = current.contributions.find((c) => c.version === version);
@@ -103,6 +113,11 @@ export function ContributionReplacement({
       ).map(([label, state]) => (
         <details key={label}>
           <summary>Inspect {label.toLowerCase()}</summary>
+          {state.responsibility?.events.map((e) => (
+            <p key={e.id}>
+              {e.id} · {e.actor} · {e.action} · {e.rationale} · {e.at}
+            </p>
+          ))}
           {state.contributions.map((c) => (
             <article
               key={c.version}

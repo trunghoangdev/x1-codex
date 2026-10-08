@@ -1,3 +1,4 @@
+import { contributionAcceptanceBlocked } from "./data/knowledgeResponsibility";
 import {
   maxContributionVersions,
   revisionRequest,
@@ -89,7 +90,10 @@ export function HumanContribution({
     document.getElementById(target)?.focus();
   }, [focusStage, current.version, confirm, locked, current.delivery, command]);
   const ready =
-    !!current.body.trim() && !!current.note.trim() && current.citesInput;
+    !contributionAcceptanceBlocked(state) &&
+    !!current.body.trim() &&
+    !!current.note.trim() &&
+    current.citesInput;
   return (
     <div className="detail-page human-contribution-page">
       <button className="button secondary" onClick={onBack}>
@@ -217,6 +221,13 @@ export function HumanContribution({
           <p>{responsibility.inputText}</p>
         </details>
       </section>
+      {contributionAcceptanceBlocked(state) && (
+        <p role="status">
+          Submission is blocked until Leo accepts the local responsibility
+          offer. Inspect the responsibility panel above; your preparation is
+          retained.
+        </p>
+      )}
       {!current.delivery && !locked && (
         <section className="panel org-stream">
           <h2>Prepare draft-0{current.version}</h2>
@@ -309,6 +320,8 @@ export function HumanContribution({
             <p>
               Still needed:{" "}
               {[
+                contributionAcceptanceBlocked(state) &&
+                  "accepted responsibility",
                 !current.body.trim() && "contribution text",
                 !current.note.trim() &&
                   (current.version > 1 ? "revision response" : "delivery note"),

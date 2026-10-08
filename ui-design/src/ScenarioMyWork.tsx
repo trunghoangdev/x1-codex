@@ -39,7 +39,7 @@ export function ScenarioMyWork({
   onCase: (id: string) => void;
 }) {
   const contributionStatus = contributionView(contribution);
-  const personalScenario = scenario.id === "knowledge" ? {...scenario, assignments: scenario.assignments.map(a => a.id === "K-01-H" ? {...a, state:contributionStatus.stage, responseNeeded: contributionStatus.attention === "revision" || contributionStatus.attention === "command" || contributionStatus.stage === "Submission rejected"} : a)} : scenario;
+  const personalScenario = scenario.id === "knowledge" ? {...scenario, assignments: scenario.assignments.map(a => a.id === "K-01-H" ? {...a, state:contributionStatus.stage, responseNeeded: contributionStatus.stage === "Acceptance pending" || contributionStatus.attention === "revision" || contributionStatus.attention === "command" || contributionStatus.stage === "Submission rejected"} : a)} : scenario;
   const worker = scenario.workers.find((w) => w.id === workerId)!;
   const {
     allocated: mine,

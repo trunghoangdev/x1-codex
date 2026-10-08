@@ -1,3 +1,4 @@
+import { knowledgeResponsibilityStatus } from "./data/knowledgeResponsibility";
 import { useEffect, useRef, useState } from "react";
 import {
   encodeKnowledgeCheckpoint,
@@ -93,10 +94,11 @@ export function KnowledgeRecovery({
           Knowledge workspace checkpoint
         </h2>
         <p>
-          Includes contribution, K-02 brief delivery/receipt, scope
-          applicability and K-01 agreement decisions and exact bounded-use
-          records. Local browser/file recovery only; no shared backend storage
-          or automatic restore. Main software snapshots remain separate.
+          Includes contribution and local responsibility offers/responses, K-02
+          brief delivery/receipt, scope applicability and K-01 agreement
+          decisions and exact bounded-use records. Local browser/file recovery
+          only; no shared backend storage or automatic restore. Main software
+          snapshots remain separate.
         </p>
         {error && <p role="alert">{error}</p>}
         {notice && <p role="status">{notice}</p>}
@@ -258,7 +260,7 @@ export function KnowledgeRecovery({
             <p>
               {incoming.kind === "workspace"
                 ? "Replaces all Knowledge slices together. No merge or automatic save."
-                : "Replaces contribution only. Brief, adopted scope and use-chain history are retained; exact-source mismatch can block continuation."}
+                : "Replaces contribution and its local responsibility history. Brief, adopted scope and use-chain history are retained; exact-source mismatch can block continuation."}
             </p>
             {(
               [
@@ -279,6 +281,13 @@ export function KnowledgeRecovery({
             <p>
               Current use: {stage(state).title}. Incoming use:{" "}
               {stage(next).title}. {stage(next).detail}
+            </p>
+            <p>
+              Responsibility:{" "}
+              {knowledgeResponsibilityStatus(state.contribution)} →{" "}
+              {knowledgeResponsibilityStatus(next.contribution)}. Legacy
+              replacements can remove local offers and acceptance; inspect exact
+              history below.
             </p>
             <p>Incoming review input: {briefInputSummary(next.brief)}</p>
             <p>

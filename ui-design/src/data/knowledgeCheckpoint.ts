@@ -35,7 +35,8 @@ export type KnowledgeCheckpoint = {
   format:
     | "forge.knowledge-workspace.v1"
     | "forge.knowledge-workspace.v2"
-    | "forge.knowledge-workspace.v3";
+    | "forge.knowledge-workspace.v3"
+    | "forge.knowledge-workspace.v4";
   savedAt: string;
   state: KnowledgeWorkspace;
 };
@@ -141,6 +142,7 @@ export function parseKnowledgeCheckpoint(raw: string): KnowledgeCheckpoint {
         "forge.knowledge-workspace.v1",
         "forge.knowledge-workspace.v2",
         "forge.knowledge-workspace.v3",
+        "forge.knowledge-workspace.v4",
       ].includes(x.format) ||
       !date(x.savedAt) ||
       !shape(x.state, [
@@ -154,6 +156,11 @@ export function parseKnowledgeCheckpoint(raw: string): KnowledgeCheckpoint {
       throw Error();
     const s = x.state;
     parseContributionCheckpoint(encodeContributionCheckpoint(s.contribution));
+    if (
+      s.contribution.responsibility &&
+      x.format !== "forge.knowledge-workspace.v4"
+    )
+      throw Error();
     if (
       !shape(s.brief, ["versions"]) ||
       !Array.isArray(s.brief.versions) ||
@@ -231,7 +238,10 @@ export function parseKnowledgeCheckpoint(raw: string): KnowledgeCheckpoint {
         u.continuation !== undefined
       ) {
         if (
-          x.format !== "forge.knowledge-workspace.v3" ||
+          ![
+            "forge.knowledge-workspace.v3",
+            "forge.knowledge-workspace.v4",
+          ].includes(x.format) ||
           u.cycle !== 2 ||
           !shape(u.previousCycle, [
             "subject",
@@ -250,7 +260,9 @@ export function parseKnowledgeCheckpoint(raw: string): KnowledgeCheckpoint {
           throw Error();
         parseKnowledgeCheckpoint(
           JSON.stringify({
-            format: "forge.knowledge-workspace.v1",
+            format: s.contribution.responsibility
+              ? "forge.knowledge-workspace.v4"
+              : "forge.knowledge-workspace.v1",
             savedAt: x.savedAt,
             state: {
               contribution: s.contribution,
@@ -302,6 +314,7 @@ export function parseKnowledgeCheckpoint(raw: string): KnowledgeCheckpoint {
           ![
             "forge.knowledge-workspace.v2",
             "forge.knowledge-workspace.v3",
+            "forge.knowledge-workspace.v4",
           ].includes(x.format))
       )
         throw Error();
@@ -317,8 +330,9 @@ export function parseKnowledgeCheckpoint(raw: string): KnowledgeCheckpoint {
           throw Error();
         parseKnowledgeCheckpoint(
           JSON.stringify({
-            format:
-              check.context.use?.cycle === 2
+            format: check.context.contribution?.responsibility
+              ? "forge.knowledge-workspace.v4"
+              : check.context.use?.cycle === 2
                 ? "forge.knowledge-workspace.v3"
                 : "forge.knowledge-workspace.v1",
             savedAt: x.savedAt,
@@ -350,12 +364,15 @@ export function encodeKnowledgeCheckpoint(state: KnowledgeWorkspace) {
   if (!state.applicability?.length) delete encodedState.applicability;
   const raw = JSON.stringify({
     format:
-      state.use?.cycle === 2 ||
-      state.applicability?.some((c) => c.context.use?.cycle === 2)
-        ? "forge.knowledge-workspace.v3"
-        : state.applicability?.length
-          ? "forge.knowledge-workspace.v2"
-          : "forge.knowledge-workspace.v1",
+      state.contribution.responsibility ||
+      state.applicability?.some((c) => c.context.contribution.responsibility)
+        ? "forge.knowledge-workspace.v4"
+        : state.use?.cycle === 2 ||
+            state.applicability?.some((c) => c.context.use?.cycle === 2)
+          ? "forge.knowledge-workspace.v3"
+          : state.applicability?.length
+            ? "forge.knowledge-workspace.v2"
+            : "forge.knowledge-workspace.v1",
     savedAt: new Date().toISOString(),
     state: encodedState,
   });
@@ -368,7 +385,8 @@ export function parseKnowledgeImport(raw: string): KnowledgeImport {
   if (
     format === "forge.knowledge-contribution.v1" ||
     format === "forge.knowledge-contribution.v2" ||
-    format === "forge.knowledge-contribution.v3"
+    format === "forge.knowledge-contribution.v3" ||
+    format === "forge.knowledge-contribution.v4"
   ) {
     const c = parseContributionCheckpoint(raw);
     return { kind: "contribution", contribution: c.state, savedAt: c.savedAt };

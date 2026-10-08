@@ -1,0 +1,13 @@
+# Knowledge contribution allocation and acceptance
+
+Organization, K-01 and My Work expose a local responsibility panel for K-01-H. **Inspect allocation · demo owner** opens the owner’s local inbox. The owner reviews and confirms an offer to Leo for the existing Coordinator role’s guide contribution, against `input-access-brief-v1`, with Maya as receiver/editor. A rationale is required. The offer is not acceptance, permission, proof of available capacity or delivery.
+
+Leo’s My Work offers three responses: **Accept responsibility**, **Request clarification**, and **Decline responsibility**. Each requires a rationale, an exact preview and explicit confirmation. Clarification or decline returns the next responsibility to the owner. The owner must issue a new offer before Leo can respond again; the earlier offer and response remain immutable history. Acceptance enables contribution submission, while delivery, Maya’s receipt, assessment and publication authority remain separate.
+
+Preparation stays editable while an offer is unresolved. UI and model guards block submission, including simulated command admission, until acceptance. Offers can only start before any submission; they cannot retrospectively rewrite delivered or unresolved command history. Accepted responsibility remains attached throughout later content revisions. Reassignment, other Knowledge roles and capacity planning are outside this slice.
+
+The panel and shared attention show the same current state and next actor. Leo’s assignment status and response flag include a pending offer; other authored assignments/counts remain distinct. Owner and Leo routes are sample-persona inspection, not authentication or effective authorization.
+
+Existing contribution exercises without local allocation remain readable and usable as explicitly authored assignments; the UI does not infer acceptance for them. Starting a local offer activates the gate. Contribution checkpoint v4 and whole Knowledge workspace v4 preserve exact scope and event history, while older formats remain readable. Validators replay actor/state transitions, reject unknown fields and wrong scope, and reject submitted work with unaccepted responsibility. Replacement previews explain that importing older state can remove offers/acceptance; replacement is explicit and is not a history merge.
+
+Model and phone/desktop browser checks cover owner offer, clarification, decline, a fresh offer, acceptance, blocked/allowed submission, immutable history, malformed recovery and whole-workspace restoration. Narrow personal views also constrain actor selectors and recovery file inputs. These are local demo records; no backend or participant result is claimed.

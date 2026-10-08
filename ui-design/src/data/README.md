@@ -63,3 +63,5 @@ This is an incremental boundary, not a finished data layer. Candidate, evidence,
 `contributionCommand.ts` is a local draft intent/status model for the independent human exercise. It freezes submitted payloads, blocks duplicate submission during uncertainty, preserves command history through edits and separates admission from delivery projection. No real permission/concurrency check or durable idempotency store is implemented. See `../../CONTRIBUTION-COMMAND-CONTRACT.md`.
 
 `../integration/contributionPort.ts` is an isolated local-checkpoint adapter example with validated reads, cancellation and superseded-response handling. Backend operations explicitly return unsupported. It is not wired into screens and does not define an approved server API. See [integration plan](../../BACKEND-INTEGRATION-PLAN.md).
+
+`knowledgeResponsibility.ts` adds an optional local K-01-H offer/response history to the contribution exercise. Exact scope and actor/state replay validation back contribution/workspace v4 recovery; unresolved offers gate submission without rewriting authored assignments. See `../../KNOWLEDGE-RESPONSIBILITY.md`.

@@ -1,4 +1,8 @@
 import {
+  contributionAcceptanceBlocked,
+  knowledgeResponsibilityStatus,
+} from "./knowledgeResponsibility";
+import {
   maxContributionVersions,
   revisionRequest,
   type HumanContributionState,
@@ -8,6 +12,22 @@ import { commandBlocksEditing } from "./contributionCommand";
 // Presentation derived from the same session records, including restored/imported state.
 export function contributionView(state: HumanContributionState) {
   const current = state.contributions.at(-1)!;
+  if (contributionAcceptanceBlocked(state)) {
+    const status = knowledgeResponsibilityStatus(state);
+    return {
+      version: current.version,
+      stage: status,
+      summary: `K-01-H · Leo · ${status.toLowerCase()} · no delivery recorded`,
+      contributorNext:
+        status === "Acceptance pending"
+          ? "Inspect the local responsibility offer in My Work. Accept, request clarification or decline before submission."
+          : "The organization owner needs to resolve the response and issue a new offer before submission.",
+      receiverNext:
+        "Wait for accepted responsibility and a separately delivered contribution.",
+      attention: "allocation",
+      locked: false,
+    };
+  }
   const command = state.commands?.at(-1);
   const active = command?.version === current.version ? command : undefined;
   const locked = commandBlocksEditing(state);

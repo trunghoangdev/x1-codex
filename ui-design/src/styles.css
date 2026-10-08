@@ -3778,3 +3778,24 @@ main h3,
 
 .contribution-session-note { display: block; }
 .contribution-session-note details { margin-top: 8px; }
+
+/* Keep local responsibility and recovery controls within narrow personal pages. */
+[aria-label="Knowledge contribution responsibility"] label,
+[aria-label="Local use responsibility inbox"] label,
+[aria-label="Knowledge workspace recovery"] label,
+[aria-label="Knowledge contribution recovery"] label {
+  display: grid;
+  min-width: 0;
+  max-width: 100%;
+  gap: 6px;
+  margin-block: 12px;
+}
+[aria-label="Knowledge contribution responsibility"] textarea,
+[aria-label="Knowledge contribution responsibility"] select,
+[aria-label="Local use responsibility inbox"] select,
+[aria-label="Knowledge workspace recovery"] input[type="file"],
+[aria-label="Knowledge contribution recovery"] input[type="file"] {
+  min-width: 0;
+  width: 100%;
+  max-width: 100%;
+}

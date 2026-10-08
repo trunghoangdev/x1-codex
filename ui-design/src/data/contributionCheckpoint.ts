@@ -1,3 +1,4 @@
+import { validateKnowledgeResponsibility } from "./knowledgeResponsibility";
 import {
   contributionResponsibility as r,
   type HumanContributionState,
@@ -9,7 +10,8 @@ export type ContributionCheckpoint = {
   format:
     | "forge.knowledge-contribution.v1"
     | "forge.knowledge-contribution.v2"
-    | "forge.knowledge-contribution.v3";
+    | "forge.knowledge-contribution.v3"
+    | "forge.knowledge-contribution.v4";
   savedAt: string;
   state: HumanContributionState;
 };
@@ -37,23 +39,31 @@ export function parseContributionCheckpoint(
       "forge.knowledge-contribution.v1",
       "forge.knowledge-contribution.v2",
       "forge.knowledge-contribution.v3",
+      "forge.knowledge-contribution.v4",
     ].includes(value.format) ||
     !time(value.savedAt)
   )
     fail();
   const s = value.state;
   if (
-    !object(s, ["contributions", "commands"]) ||
+    !object(s, ["contributions", "commands", "responsibility"]) ||
     !Array.isArray(s.contributions) ||
     s.contributions.length < 1 ||
     s.contributions.length >
-      (value.format === "forge.knowledge-contribution.v3"
+      ([
+        "forge.knowledge-contribution.v3",
+        "forge.knowledge-contribution.v4",
+      ].includes(value.format)
         ? maxContributionVersions
         : 2) ||
     (s.commands !== undefined &&
       (!Array.isArray(s.commands) || s.commands.length > 100))
   )
     fail();
+  if (s.responsibility !== undefined) {
+    if (value.format !== "forge.knowledge-contribution.v4") fail();
+    validateKnowledgeResponsibility(s.responsibility, s);
+  }
   for (const [i, c] of s.contributions.entries()) {
     if (
       !object(c, [
@@ -250,8 +260,9 @@ export function parseContributionCheckpoint(
 }
 export function encodeContributionCheckpoint(state: HumanContributionState) {
   const raw = JSON.stringify({
-    format:
-      state.contributions.length > 2
+    format: state.responsibility
+      ? "forge.knowledge-contribution.v4"
+      : state.contributions.length > 2
         ? "forge.knowledge-contribution.v3"
         : state.contributions.some((c) => c.reassessment)
           ? "forge.knowledge-contribution.v2"
