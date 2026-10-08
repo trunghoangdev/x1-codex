@@ -1,3 +1,5 @@
+import { useEffect, useState } from "react";
+import { OrganizationAtGlance } from "./OrganizationAtGlance";
 import type { AttentionItem } from "./data/organizationAttention";
 import type { ReactNode } from "react";
 import {
@@ -18,6 +20,7 @@ export function OrganizationOverview({
   scenario = mainOrganization,
   attentionItems,
   coordination,
+  coordinationExpanded = false,
   operatingContext,
   coordinationNeeds,
   exchangeHistory,
@@ -41,6 +44,7 @@ export function OrganizationOverview({
   scenario?: OrganizationScenario;
   attentionItems?: AttentionItem[];
   coordination?: ReactNode;
+  coordinationExpanded?: boolean;
   operatingContext?: ReactNode;
   coordinationNeeds?: ReactNode;
   exchangeHistory?: ReactNode;
@@ -61,6 +65,11 @@ export function OrganizationOverview({
   onActivity: () => void;
   onAttention: (category: AttentionCategory | "All") => void;
 }) {
+  const [coordinationOpen, setCoordinationOpen] =
+    useState(coordinationExpanded);
+  useEffect(() => {
+    if (coordinationExpanded) setCoordinationOpen(true);
+  }, [coordinationExpanded]);
   const {
     workers,
     bindings: roleBindings,
@@ -104,9 +113,15 @@ export function OrganizationOverview({
           )}
         </div>
       </div>
+      <OrganizationAtGlance
+        scenario={scenario}
+        onWorkstream={onWorkstream}
+        onDirectory={onDirectory}
+      />
       <AttentionSummary
         attentionItems={
-          attentionItems ?? (scenario.readOnly ? scenarioAttention(scenario) : undefined)
+          attentionItems ??
+          (scenario.readOnly ? scenarioAttention(scenario) : undefined)
         }
         completed={completed}
         readiness={readiness}
@@ -128,7 +143,8 @@ export function OrganizationOverview({
               const heading = document.getElementById(id);
               let ancestor = heading?.parentElement;
               while (ancestor) {
-                if (ancestor instanceof HTMLDetailsElement) ancestor.open = true;
+                if (ancestor instanceof HTMLDetailsElement)
+                  ancestor.open = true;
                 ancestor = ancestor.parentElement;
               }
               heading?.focus({ preventScroll: true });
@@ -140,61 +156,68 @@ export function OrganizationOverview({
         ))}
       </nav>
       {coordinationNeeds}
-      {coordination ?? (
-        <>
-          <section
-            aria-label="Organization workstreams"
-            className="org-overview-section"
-          >
-            <h2 id="org-goals" tabIndex={-1}>
-              Goals & workstreams
-            </h2>
-            <p>
-              These streams run alongside each other. A recorded response does
-              not establish that a goal has been achieved.
-            </p>
-            <div className="org-stream-grid">
-              {workstreams.map((stream) => (
-                <article
-                  className="panel org-stream"
-                  key={stream.id}
-                  aria-label={stream.name}
-                >
-                  <span className="section-label">
-                    {stream.id} · {stream.project}
-                  </span>
-                  <h3>{stream.name}</h3>
-                  <button
-                    className="text-link"
-                    onClick={() => onWorkstream(stream.id)}
+      <details
+        className="organization-disclosure org-overview-section"
+        open={coordinationOpen}
+        onToggle={(event) => setCoordinationOpen(event.currentTarget.open)}
+      >
+        <summary>Inspect detailed workstream coordination</summary>
+        {coordination ?? (
+          <>
+            <section
+              aria-label="Organization workstreams"
+              className="org-overview-section"
+            >
+              <h2 id="org-goals" tabIndex={-1}>
+                Goals & workstreams
+              </h2>
+              <p>
+                These streams run alongside each other. A recorded response does
+                not establish that a goal has been achieved.
+              </p>
+              <div className="org-stream-grid">
+                {workstreams.map((stream) => (
+                  <article
+                    className="panel org-stream"
+                    key={stream.id}
+                    aria-label={stream.name}
                   >
-                    Explore workstream · {stream.id}
-                  </button>
-                  <p>
-                    <strong>Goal</strong>
-                    <br />
-                    {stream.goal}
-                  </p>
-                  <p>
-                    {stream.assignmentIds.length} linked assignment · inspect
-                    details in the workstream
-                  </p>
-                  <p className="org-outcome">
-                    <strong>Outcome</strong>
-                    <br />
-                    {stream.outcome}
-                  </p>
-                </article>
-              ))}
-            </div>
-            <p>
-              <button className="button secondary" onClick={onDirectory}>
-                Browse workstreams
-              </button>
-            </p>
-          </section>
-        </>
-      )}
+                    <span className="section-label">
+                      {stream.id} · {stream.project}
+                    </span>
+                    <h3>{stream.name}</h3>
+                    <button
+                      className="text-link"
+                      onClick={() => onWorkstream(stream.id)}
+                    >
+                      Explore workstream · {stream.id}
+                    </button>
+                    <p>
+                      <strong>Goal</strong>
+                      <br />
+                      {stream.goal}
+                    </p>
+                    <p>
+                      {stream.assignmentIds.length} linked assignment · inspect
+                      details in the workstream
+                    </p>
+                    <p className="org-outcome">
+                      <strong>Outcome</strong>
+                      <br />
+                      {stream.outcome}
+                    </p>
+                  </article>
+                ))}
+              </div>
+              <p>
+                <button className="button secondary" onClick={onDirectory}>
+                  Browse workstreams
+                </button>
+              </p>
+            </section>
+          </>
+        )}
+      </details>
       {onCases && (
         <p>
           <button className="button secondary" onClick={onCases}>
@@ -214,14 +237,18 @@ export function OrganizationOverview({
           View organization activity
         </button>
       </p>
-      {exchangeHistory && <details className="organization-disclosure org-overview-section">
-        <summary>Contribution exchange history · K-01-H</summary>
-        {exchangeHistory}
-      </details>}
-      {operatingContext && <details className="organization-disclosure org-overview-section">
-        <summary>Inspect agreements, reviews & policy</summary>
-        {operatingContext}
-      </details>}
+      {exchangeHistory && (
+        <details className="organization-disclosure org-overview-section">
+          <summary>Contribution exchange history · K-01-H</summary>
+          {exchangeHistory}
+        </details>
+      )}
+      {operatingContext && (
+        <details className="organization-disclosure org-overview-section">
+          <summary>Inspect agreements, reviews & policy</summary>
+          {operatingContext}
+        </details>
+      )}
       {scenario.id === "main" && (
         <details className="organization-disclosure org-overview-section">
           <summary>Other organization work · 3 assignments</summary>

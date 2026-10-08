@@ -740,6 +740,7 @@ export function ScenarioWorkspace({
             </section>
           ) : (
             <OrganizationOverview
+              coordinationExpanded={params.has("coordQ") || params.has("coordSignal") || params.has("coordPage")}
               onCases={
                 scenario.id === "knowledge" ? () => open("/cases") : undefined
               }

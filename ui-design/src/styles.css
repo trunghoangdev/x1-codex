@@ -3836,3 +3836,10 @@ main h3,
   [aria-label="Assessed result to outcome"] h2 { overflow-wrap: anywhere; }
   .use-next-action { padding-inline: 12px; }
 }
+
+.organization-glance { margin-block: 24px; }
+.glance-card { min-width: 0; display: flex; flex-direction: column; overflow-wrap: anywhere; }
+.glance-card > button { margin-top: auto; align-self: flex-start; }
+.glance-next { border-left: 3px solid #496b50; padding-inline: 14px; background: #f4f7f4; margin-bottom: 12px; }
+.glance-gap { font-size: 0.875rem; }
+@media (max-width: 600px) { .organization-glance .org-stream-grid { grid-template-columns: minmax(0, 1fr); } }

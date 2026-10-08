@@ -72,6 +72,9 @@ for (const width of [390, 1440]) {
     const errors: string[] = [];
     page.on("pageerror", (e) => errors.push(e.message));
     await page.goto("/#/organizations/knowledge?persona=maya");
+    await page
+      .getByText("Inspect detailed workstream coordination", { exact: true })
+      .click();
     await expect(
       page.getByRole("combobox", { name: "Sample persona", exact: true }),
     ).toHaveCount(1);
@@ -108,13 +111,18 @@ for (const width of [390, 1440]) {
       .getByRole("button", { name: "Back to scenario context", exact: true })
       .click();
     await page
+      .getByText("Inspect detailed workstream coordination", { exact: true })
+      .click();
+    await page
       .getByRole("combobox", { name: "Coordination need", exact: true })
       .selectOption("input");
     await page
       .getByRole("searchbox", { name: "Search coordination", exact: true })
       .fill("workshop");
     await expect(cards).toHaveCount(1);
-    await expect(page.getByRole("status")).toContainText("1 of 2 workstreams");
+    await expect(page.locator("#coordination-results")).toContainText(
+      "1 of 2 workstreams",
+    );
     const source = page.url();
     await expect(cards).toContainText("Maya Patel waits for");
     await expect(cards).toContainText("Leo Rivera");
@@ -205,6 +213,9 @@ for (const width of [390, 1440]) {
   }) => {
     await page.setViewportSize({ width, height: 1000 });
     await page.goto("/#/organizations/large?persona=sam");
+    await page
+      .getByText("Inspect detailed workstream coordination", { exact: true })
+      .click();
     const cards = page
       .getByRole("region", { name: "Organization workstreams" })
       .getByRole("article");

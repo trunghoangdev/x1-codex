@@ -2012,6 +2012,8 @@ function App() {
             !route.attention && (
               <>
                 <OrganizationOverview
+                  scenario={mainCoordinationScenario(completed, readiness)}
+                  coordinationExpanded={!!route.coordination}
                   onDecisions={() => {
                     decisionOrigin.current = route;
                     changeRoute({

@@ -126,3 +126,5 @@ Main local allocations: [performer acceptance and confirmed reassignment](RESPON
 Authority update · iteration 137: [suspension and revocation](AUTHORITY-CONTROL.md) preserve the original grant, block future execution, require explicit verification to resume a suspension, and retain control history in timeline and whole-workspace checkpoint v7. Revocation cannot be resumed.
 
 Iteration 141 simplifies Knowledge use and goal follow-up reading order: current status and responsible person first, action fields visible, exact evidence and retained cycle history available in disclosures. See [iteration notes](ITERATIONS.md).
+
+Iteration 142 adds a concise organization overview scan of workstream goals, recorded outcomes, inspection cues and known responsible people. Detailed coordination is expandable and opens automatically for filtered links. The scan is bounded to four streams with access to the complete directory; it is not a live health or completion score.
