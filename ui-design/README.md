@@ -74,3 +74,5 @@ TMPDIR=../.cache/tmp npm test
 Use [participant tasks](INTEGRATED-PARTICIPANT-WALKTHROUGH.md) and the [blank session record](PARTICIPANT-SESSION-RECORD.md) for actual feedback. Participant and screen-reader sessions have not been conducted. Technical browser checks are not usability evidence or accessibility certification.
 
 [Iterations](ITERATIONS.md) record completed increments. [Historical customer tour](CUSTOMER-WALKTHROUGH.md) and [software review walkthrough](SF-REVIEW-WALKTHROUGH.md) remain supplemental domain examples.
+
+Workshop input exchange: [exact-version Knowledge K-02 brief handoff](BRIEF-HANDOFF.md) (local session demo).

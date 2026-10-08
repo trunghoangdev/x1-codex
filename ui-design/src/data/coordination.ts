@@ -8,6 +8,7 @@ export type InputDependency = {
   receiverAssignmentId: string;
   availability: "missing" | "represented";
   receipt: "unconfirmed";
+  localExchange?: { summary: string; received: boolean };
   description: string;
   returnPath?: string;
 };
@@ -56,7 +57,9 @@ export function inputAttention(
         id: d.id,
         category: "Input",
         title: `Waiting input · ${d.input}`,
-        detail: `${receiver.id} waits for ${d.input} from ${name}. Input is not represented; delivery and receipt remain unconfirmed.`,
+        detail:
+          d.localExchange?.summary ??
+          `${receiver.id} waits for ${d.input} from ${name}. Input is not represented; delivery and receipt remain unconfirmed.`,
         owner:
           scenario.workers.find((w) => w.id === receiver.workerId)?.name ??
           "Unassigned receiver",

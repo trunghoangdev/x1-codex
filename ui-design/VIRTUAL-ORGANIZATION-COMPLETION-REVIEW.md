@@ -43,7 +43,9 @@ Extend the existing proposal/plan distinction with a separate explicit local all
 
 Acceptance: approving a plan alone changes no queue. A subsequent recorded allocation creates one exact responsibility in the selected person's My Work and links it from Organization/role/workstream views. Repeating the operation does not duplicate the assignment; rejecting/cancelling leaves it unchanged. This is local simulation until backend allocation contracts exist.
 
-### 3. Make one input handoff operational across responsibilities
+### 3. Make one input handoff operational across responsibilities — local slice implemented
+
+Iteration 123 implements versioned delivery and exact receipt for Knowledge K-02. See [brief handoff](BRIEF-HANDOFF.md). Actual review applicability decisions and durable backend exchange remain outside this slice.
 
 Use Knowledge K-02's existing explicit Leo brief→Maya review dependency. Record a versioned brief delivery and a separate receiver receipt against that dependency. Show which exact input a receiving assignment can use and which later revision has not yet been received. Do not infer a handoff from card order, a contribution receipt or task completion.
 

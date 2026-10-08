@@ -1,3 +1,5 @@
+import { BriefHandoff } from "./BriefHandoff";
+import { briefHandoffScenario, type BriefHandoffState } from "./data/briefHandoff";
 import { ContributionProgress } from "./ContributionProgress";
 import { contributionView } from "./data/contributionView";
 import { ContributionRecovery } from "./ContributionRecovery";
@@ -60,7 +62,11 @@ export function ScenarioWorkspace({
   onMyWork,
   contribution,
   onContribution,
+  briefHandoff,
+  onBriefHandoff,
 }: {
+  briefHandoff: BriefHandoffState;
+  onBriefHandoff: (state: BriefHandoffState) => void;
   contribution: HumanContributionState;
   onContribution: (state: HumanContributionState) => void;
   path: string;
@@ -71,7 +77,7 @@ export function ScenarioWorkspace({
   const origins = useRef<
     Record<string, { destination: string; source: string }[]>
   >({});
-  const scenario = resolveScenario(path)!;
+  const scenario = briefHandoffScenario(resolveScenario(path)!, briefHandoff);
   const needs = actionableAttention(scenario, contribution);
   const base = `/organizations/${scenario.id}`;
   const persona = scenarioPersona(path);
@@ -218,6 +224,7 @@ export function ScenarioWorkspace({
         </p>
       </details>
       {scenario.id === "knowledge" && <ContributionRecovery state={contribution} onChange={onContribution} />}
+      {scenario.id === "knowledge" && suffix === "/work" && ["leo", "maya"].includes(persona?.workerId ?? "") && <BriefHandoff state={briefHandoff} onChange={onBriefHandoff} persona={persona?.workerId} />}
       {suffix === "/contributions/K-01-H" ? (
         <HumanContribution state={contribution} onChange={onContribution}
           onBack={() => onRoute(qualify("/work"))}
@@ -576,6 +583,7 @@ export function ScenarioWorkspace({
                   ))}
                 </ol>
                 {links(stream.assignmentIds)}
+                {scenario.id === "knowledge" && stream.id === "K-02" && <BriefHandoff state={briefHandoff} onChange={onBriefHandoff} persona={persona?.workerId} />}
                 <CoordinationInputs
                   scenario={scenario}
                   streamId={stream.id}
@@ -635,6 +643,7 @@ export function ScenarioWorkspace({
                 {scenario.workers.find((w) => w.id === assignment.workerId)
                   ?.name ?? "Unassigned"}
               </p>
+              {scenario.id === "knowledge" && ["K-02-C", "K-02-E"].includes(assignment.id) && <BriefHandoff state={briefHandoff} onChange={onBriefHandoff} persona={persona?.workerId} />}
               <CoordinationInputs
                 scenario={scenario}
                 assignmentId={assignment.id}

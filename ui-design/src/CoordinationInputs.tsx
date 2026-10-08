@@ -36,8 +36,8 @@ export function CoordinationInputs({
     >
       <h2>Dependencies & input exchange</h2>
       <p>
-        Explicit authored relationships. List order and shared project names do
-        not establish dependencies.
+        Explicit relationships; local exchange records are labeled separately.
+        List order and shared project names do not establish dependencies.
       </p>
       {dependencies.map((d) => {
         const receiver = scenario.assignments.find(
@@ -119,10 +119,18 @@ export function CoordinationInputs({
             </div>
             <p>
               <strong>Input availability:</strong>{" "}
-              {d.availability === "missing"
-                ? "Not represented"
-                : "Represented in sample"}
-              . <strong>Delivery / receipt:</strong> Unconfirmed.
+              {d.localExchange
+                ? d.localExchange.summary
+                : d.availability === "missing"
+                  ? "Not represented"
+                  : "Represented in sample"}
+              . <strong>Delivery / receipt:</strong>{" "}
+              {d.localExchange
+                ? d.localExchange.received
+                  ? "Exact receipt recorded locally"
+                  : "Delivered locally · receipt pending"
+                : "Unconfirmed"}
+              .
             </p>
             {(completed[receiver.id] || (source && completed[source.id])) && (
               <p className="coordination-response">

@@ -1,3 +1,4 @@
+import { emptyBriefHandoff } from "./data/briefHandoff";
 import { LocalResponsibilities } from "./LocalResponsibilities";
 import { localAllocationScenario } from "./data/localAllocationScenario";
 import { recordLocalAllocation } from "./data/responsibilityProposals";
@@ -153,6 +154,7 @@ const HandoffDetail = deferredScreen(() =>
   import("./HandoffDetail").then((m) => ({ default: m.HandoffDetail })),
 );
 function App() {
+  const [briefHandoff, setBriefHandoff] = useState(emptyBriefHandoff);
   const [knowledgeContribution, setKnowledgeContribution] = useState<HumanContributionState>(emptyContribution);
   const [humanContribution, setHumanContribution] = useState<HumanContributionState>(emptyContribution);
   const { route, navigate: changeRoute } = useWorkspaceRoute(
@@ -1955,6 +1957,8 @@ function App() {
           )}
           {route.scenarioPath && (
             <ScenarioWorkspace
+              briefHandoff={briefHandoff}
+              onBriefHandoff={setBriefHandoff}
               contribution={knowledgeContribution}
               onContribution={setKnowledgeContribution}
               key={activeScenario?.id}
