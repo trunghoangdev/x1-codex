@@ -76,7 +76,7 @@ for (const width of [390, 1440])
     await page
       .getByRole("combobox", { name: "Proposed brief version", exact: true })
       .selectOption("brief-v1");
-    await expect(page.getByRole("status")).toContainText(
+    await expect(page.getByRole("status", { name: "Agreement selection" })).toContainText(
       "No authored predecessor",
     );
     await expect(

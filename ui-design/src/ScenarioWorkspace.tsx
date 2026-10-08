@@ -1,3 +1,4 @@
+import type { AgreementAdoption } from "./data/agreementAdoption";
 import { BriefHandoff } from "./BriefHandoff";
 import { briefHandoffScenario, type BriefHandoffState } from "./data/briefHandoff";
 import { ContributionProgress } from "./ContributionProgress";
@@ -62,9 +63,13 @@ export function ScenarioWorkspace({
   onMyWork,
   contribution,
   onContribution,
+  agreementAdoptions,
+  onAgreementAdoptions,
   briefHandoff,
   onBriefHandoff,
 }: {
+  agreementAdoptions: AgreementAdoption[];
+  onAgreementAdoptions: (h: AgreementAdoption[]) => void;
   briefHandoff: BriefHandoffState;
   onBriefHandoff: (state: BriefHandoffState) => void;
   contribution: HumanContributionState;
@@ -223,6 +228,7 @@ export function ScenarioWorkspace({
           verified outcomes. Main software records remain separate.
         </p>
       </details>
+      {scenario.id === "knowledge" && agreementAdoptions.length > 0 && suffix !== "/agreements/K-01" && <section className="panel" aria-label="Adopted K-01 scope"><h2>K-01 · adopted local scope</h2><p>{agreementAdoptions.at(-1)!.versionId} · {agreementAdoptions.at(-1)!.audience}</p><p>Record applicability remains unconfirmed; publication authority is separate.</p><button className="text-link" onClick={() => open("/agreements/K-01")}>Inspect adopted scope and impact</button></section>}
       {scenario.id === "knowledge" && <ContributionRecovery state={contribution} onChange={onContribution} />}
       {scenario.id === "knowledge" && suffix === "/work" && ["leo", "maya"].includes(persona?.workerId ?? "") && <BriefHandoff state={briefHandoff} onChange={onBriefHandoff} persona={persona?.workerId} />}
       {suffix === "/contributions/K-01-H" ? (
@@ -254,6 +260,9 @@ export function ScenarioWorkspace({
         />
       ) : suffix === "/agreements/K-01" ? (
         <WorkstreamAgreement
+          adoptions={agreementAdoptions}
+          onAdoptions={onAgreementAdoptions}
+          persona={persona?.workerId}
           scenario={scenario}
           versionId={params.get("agreementVersion") ?? "brief-v2"}
           compare={params.get("compare") === "yes"}

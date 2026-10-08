@@ -1018,3 +1018,9 @@ Main continuity supports v2 allocation-bearing snapshots and retains v1 compatib
 Knowledge K-02 now connects Leo's supplying assignment to Maya's receiving review through explicit frozen brief deliveries and separate exact-version receipts. Personal My Work, assignment and workstream views share session state and projected receiving input. New deliveries preserve the last received version and expose applicability checking; original history stays unchanged. Receipt does not assess the outline, allocate facilitation or establish outcomes.
 
 Build and targeted model/browser checks passed. Session state is deliberately excluded from contribution checkpoints and main snapshots and clears on reload. See [brief handoff](BRIEF-HANDOFF.md). Existing bundle-size advisory remains; no backend or participant result is claimed.
+
+## 124 — Adopted workstream scope and impact inspection
+
+Knowledge K-01 agreements now support explicit local adoption by the demo workstream coordinator, with a named audience, rationale, confirmation and immutable supersession history. Selecting a proposal does not replace the adopted version. Shared Knowledge context identifies adopted scope; linked impact checks cover scoped assignments, source inputs, contribution assessments and missing outcome evidence while retaining unknown applicability and separate publication authority.
+
+Build and six targeted model/browser checks passed across phone and desktop. Existing comparison tests now address the named agreement-selection status to distinguish concurrent status regions. State remains session-only, outside checkpoints. See [agreement adoption](AGREEMENT-ADOPTION.md). Existing bundle-size advisory remains; no production or participant result is claimed.

@@ -76,3 +76,5 @@ Use [participant tasks](INTEGRATED-PARTICIPANT-WALKTHROUGH.md) and the [blank se
 [Iterations](ITERATIONS.md) record completed increments. [Historical customer tour](CUSTOMER-WALKTHROUGH.md) and [software review walkthrough](SF-REVIEW-WALKTHROUGH.md) remain supplemental domain examples.
 
 Workshop input exchange: [exact-version Knowledge K-02 brief handoff](BRIEF-HANDOFF.md) (local session demo).
+
+Knowledge K-01: [local agreement adoption and scope impact](AGREEMENT-ADOPTION.md) (session-only simulation).

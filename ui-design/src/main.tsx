@@ -1,3 +1,4 @@
+import type { AgreementAdoption } from "./data/agreementAdoption";
 import { emptyBriefHandoff } from "./data/briefHandoff";
 import { LocalResponsibilities } from "./LocalResponsibilities";
 import { localAllocationScenario } from "./data/localAllocationScenario";
@@ -154,6 +155,7 @@ const HandoffDetail = deferredScreen(() =>
   import("./HandoffDetail").then((m) => ({ default: m.HandoffDetail })),
 );
 function App() {
+  const [agreementAdoptions, setAgreementAdoptions] = useState<AgreementAdoption[]>([]);
   const [briefHandoff, setBriefHandoff] = useState(emptyBriefHandoff);
   const [knowledgeContribution, setKnowledgeContribution] = useState<HumanContributionState>(emptyContribution);
   const [humanContribution, setHumanContribution] = useState<HumanContributionState>(emptyContribution);
@@ -1957,6 +1959,8 @@ function App() {
           )}
           {route.scenarioPath && (
             <ScenarioWorkspace
+              agreementAdoptions={agreementAdoptions}
+              onAgreementAdoptions={setAgreementAdoptions}
               briefHandoff={briefHandoff}
               onBriefHandoff={setBriefHandoff}
               contribution={knowledgeContribution}

@@ -51,7 +51,9 @@ Use Knowledge K-02's existing explicit Leo brief→Maya review dependency. Recor
 
 Acceptance: Leo delivers the brief, Maya receives that exact version, and the relevant input signal updates in My Work and shared coordination. Unrelated facilitator allocation and outcome evidence gaps remain. A replaced input makes applicability visible instead of silently rewriting an earlier review.
 
-### 4. Adopt a workstream agreement and inspect change impact
+### 4. Adopt a workstream agreement and inspect change impact — local slice implemented
+
+Iteration 124 adds explicit local scope adoption, retained decision history and linked impact checks. See [agreement adoption](AGREEMENT-ADOPTION.md). Production authority and record-by-record applicability decisions remain unimplemented.
 
 Build on the existing agreement comparison. Represent one explicitly authored/local adoption decision with adopter responsibility, adopted version and scope. A newer proposal must not automatically replace it. Compare applicability of assignments, inputs, assessments and evidence to the adopted scope, preserving unknown mappings.
 

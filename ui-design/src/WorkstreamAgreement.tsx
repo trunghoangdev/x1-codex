@@ -1,8 +1,13 @@
+import { AgreementAdoption } from "./AgreementAdoption";
+import type { AgreementAdoption as Adoption } from "./data/agreementAdoption";
 import type { OrganizationScenario } from "./data/organizationScenario";
 import { agreementVersions } from "./data/workstreamAgreements";
 import { DetailBackButton } from "./DetailPresentation";
 
 export function WorkstreamAgreement({
+  adoptions,
+  onAdoptions,
+  persona,
   scenario,
   versionId,
   compare,
@@ -10,6 +15,9 @@ export function WorkstreamAgreement({
   onBack,
   onSource,
 }: {
+  adoptions: Adoption[];
+  onAdoptions: (h: Adoption[]) => void;
+  persona?: string;
   scenario: OrganizationScenario;
   versionId: string;
   compare: boolean;
@@ -29,7 +37,11 @@ export function WorkstreamAgreement({
       <div className="page-heading">
         <div>
           <div className="eyebrow">KNOWLEDGE OPERATIONS · K-01</div>
-          <h1 tabIndex={-1}>Proposed workstream agreement</h1>
+          <h1 tabIndex={-1}>
+            {adoptions.length
+              ? "Workstream agreement"
+              : "Proposed workstream agreement"}
+          </h1>
           <p>
             Clarify the audience and scope before treating a guide as accepted
             or ready to publish.
@@ -38,7 +50,11 @@ export function WorkstreamAgreement({
       </div>
       <div className="org-banner">
         <div>
-          <h2>Proposed · adoption not recorded</h2>
+          <h2>
+            {adoptions.length
+              ? `Local adoption recorded · ${adoptions.at(-1)!.versionId}`
+              : "Proposed · adoption not recorded"}
+          </h2>
           <p>
             Two independently authored design briefs. Neither changes existing
             assignments, evidence or authority. A brief version identifies this
@@ -46,6 +62,13 @@ export function WorkstreamAgreement({
           </p>
         </div>
       </div>
+      <AgreementAdoption
+        history={adoptions}
+        onChange={onAdoptions}
+        versionId={selected.id}
+        persona={persona}
+        onSource={onSource}
+      />
       <div className="stream-directory-filters panel">
         <label>
           Proposed brief version
@@ -71,7 +94,7 @@ export function WorkstreamAgreement({
           </select>
         </label>
       </div>
-      <p role="status">
+      <p role="status" aria-label="Agreement selection">
         Selected proposal: {selected.id}.{" "}
         {compare
           ? previous
@@ -112,7 +135,12 @@ export function WorkstreamAgreement({
             key={v.id}
             aria-label={`Scope ${v.id}`}
           >
-            <div className="eyebrow">{v.id} · AUTHORED PROPOSAL</div>
+            <div className="eyebrow">
+              {v.id} ·{" "}
+              {adoptions.at(-1)?.versionId === v.id
+                ? "ADOPTED LOCALLY"
+                : "AUTHORED PROPOSAL"}
+            </div>
             <h2>{v.title}</h2>
             <h3>Beneficiaries and audience</h3>
             <p>{v.audience}</p>
@@ -149,9 +177,10 @@ export function WorkstreamAgreement({
             remains the existing K-01 goal.
           </p>
           <p>
-            No scope-change approval is recorded. An earlier cohort receipt or
-            assessment would need an explicit subject/version/audience
-            applicability record before supporting the expanded brief.
+            Selecting a version does not record scope-change approval. An
+            earlier cohort receipt or assessment would need an explicit
+            subject/version/audience applicability record before supporting the
+            expanded brief.
           </p>
         </section>
       )}
@@ -166,9 +195,10 @@ export function WorkstreamAgreement({
           invalidation or completion.
         </p>
         <p>
-          No guide delivery, receipt, assessment or reader observations are
-          represented for either brief. The workshop's brief-v0 exchange history
-          belongs to K-02 and is not guide evidence.
+          No delivery, receipt or assessment has a declared applicability
+          mapping to either brief; local contribution records are separate.
+          Reader observations are not represented. The workshop's brief-v0
+          exchange history belongs to K-02 and is not guide evidence.
         </p>
         {stream.assignmentIds.map((id) => (
           <p key={id}>
