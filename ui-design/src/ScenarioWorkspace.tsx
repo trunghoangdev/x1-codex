@@ -383,6 +383,7 @@ export function ScenarioWorkspace({
         />
       ) : suffix.startsWith("/outcomes/") ? (
         <OutcomeReview
+          onStream={() => open(`/workstreams/${suffix.split("/")[2]}`)}
           scenario={scenario}
           stream={scenario.streams.find((s) => suffix === `/outcomes/${s.id}`)!}
           outcome={scenario.outcomes.find(

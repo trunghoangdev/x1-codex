@@ -1,3 +1,4 @@
+import { WorkspaceContext } from "./WorkspaceContext";
 import { DetailBackButton } from "./DetailPresentation";
 import type { EvidenceArtifact } from "./data/evidence";
 import {
@@ -17,6 +18,7 @@ export function OutcomeReview({
   onOpen,
   onInspect,
   onBack,
+  onStream,
   onReviewRecord,
 }: {
   scenario?: OrganizationScenario;
@@ -27,6 +29,7 @@ export function OutcomeReview({
   onOpen: (id: string, tab?: string) => void;
   onInspect?: (artifact: EvidenceArtifact) => void;
   onBack: () => void;
+  onStream: () => void;
   onReviewRecord?: () => void;
 }) {
   return (
@@ -39,17 +42,33 @@ export function OutcomeReview({
           <p>{stream.goal}</p>
         </div>
       </div>
-      <div className="org-banner">
-        <div>
-          <h2>Not verified</h2>
-          <p>Goal-level review result: not represented.</p>
-          <p>{stream.outcome}</p>
+      <WorkspaceContext
+        label="Outcome workspace context"
+        status={
+          <>
+            <h3>Not verified</h3>
+            <p>Goal-level review result: not represented.</p>
+            <p>{stream.outcome}</p>
+          </>
+        }
+        responsibility={
           <p>
             Outcome reviewer: not assigned in this sample. Worker role bindings
             do not allocate this goal-level review.
           </p>
-        </div>
-      </div>
+        }
+        next={
+          <p>
+            Inspect the evidence requirements below and the workstream's
+            responsibility gaps before allocating a goal-level review.
+          </p>
+        }
+        action={
+          <button className="button secondary" onClick={onStream}>
+            Inspect workstream context
+          </button>
+        }
+      />
       {onReviewRecord && (
         <section
           className="panel org-stream org-overview-section"

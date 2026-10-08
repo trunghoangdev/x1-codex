@@ -1,3 +1,4 @@
+import { WorkspaceContext } from "./WorkspaceContext";
 import type { ApplicabilityCheck } from "./data/scopeApplicability";
 import { useActors, type UseActor } from "./data/useProgress";
 import type { AuthorizedUse } from "./data/authorizedUse";
@@ -940,21 +941,25 @@ function App() {
                   <span>Demo day</span>
                 </div>
               </div>
-              <p className="org-overview-section">
-                <button
-                  className="button secondary"
-                  onClick={() =>
-                    changeRoute({
+              <WorkspaceContext
+                label="Personal workspace context"
+                status={<p>{active.length} assignments awaiting attention in Alex's sample workspace. Recorded responses do not establish completed effects.</p>}
+                responsibility={<p>Alex · inspect the named responsibility and scope of each assignment. These sample controls do not establish production permissions.</p>}
+                next={<p>Open the response queue to inspect required responses, or select an assignment below for its exact context.</p>}
+                action={
+                  <button
+                    className="button secondary"
+                    onClick={() => changeRoute({
                       view: "My Work",
                       personalQueue: true,
                       tab: "Overview",
                       work: route.work,
-                    })
-                  }
-                >
-                  View response queue · Alex
-                </button>
-              </p>
+                    })}
+                  >
+                    View response queue · Alex
+                  </button>
+                }
+              />
               <div className="stat-grid">
                 {(
                   [
@@ -1816,6 +1821,12 @@ function App() {
           )}
           {view === "Organization" && outcome && outcomeStream && (
             <OutcomeReview
+              onStream={() => changeRoute({
+                view: "Organization",
+                workstreamId: outcome.streamId,
+                tab: "Overview",
+                work: route.work,
+              })}
               backLabel={
                 outcomeSources.current[outcome.streamId]
                   ? outcomeSources.current[outcome.streamId].workflowId

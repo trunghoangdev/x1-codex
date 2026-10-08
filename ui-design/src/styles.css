@@ -3843,3 +3843,12 @@ main h3,
 .glance-next { border-left: 3px solid #496b50; padding-inline: 14px; background: #f4f7f4; margin-bottom: 12px; }
 .glance-gap { font-size: 0.875rem; }
 @media (max-width: 600px) { .organization-glance .org-stream-grid { grid-template-columns: minmax(0, 1fr); } }
+
+/* Shared orientation across organization directories, reviews and personal work. */
+.workspace-context { display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 24px; margin-block: 20px 28px; }
+.workspace-context > div { min-width: 0; overflow-wrap: anywhere; }
+.workspace-context h2 { font-size: 1rem; margin-top: 0; }
+.workspace-context h3 { font-size: 1.1rem; }
+.workspace-context p { line-height: 1.6; }
+.workspace-context button { max-width: 100%; white-space: normal; text-align: left; }
+@media (max-width: 850px) { .workspace-context { grid-template-columns: minmax(0, 1fr); gap: 16px; } .workspace-context > div + div { border-top: 1px solid #dde3df; padding-top: 16px; } }

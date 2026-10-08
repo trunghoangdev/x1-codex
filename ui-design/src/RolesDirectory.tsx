@@ -1,3 +1,4 @@
+import { WorkspaceContext } from "./WorkspaceContext";
 import { BoundedRecords } from "./BoundedRecords";
 import { RoleScopeCoverage } from "./RoleScopeCoverage";
 import {
@@ -71,11 +72,43 @@ export function RolesDirectory({
           <p>Explore responsibilities across workers and workstreams.</p>
         </div>
       </div>
-      <p>
-        {scenario.name} · Authored role catalog. Bindings, assignments and known
-        scope gaps are separate records. A binding does not establish authority,
-        capacity or an assignment.
-      </p>
+      <WorkspaceContext
+        label="Role workspace context"
+        status={
+          <p>
+            {scenario.name} · {rows.length} roles in the authored catalog.
+          </p>
+        }
+        responsibility={
+          <p>
+            Bindings, assignments and known scope gaps are separate records. A
+            binding does not establish authority, capacity or an assignment.
+          </p>
+        }
+        next={
+          <p>
+            Inspect the scoped bindings and gaps for the workstream before
+            allocating responsibility.
+          </p>
+        }
+        action={
+          <button
+            className="button secondary"
+            onClick={() =>
+              onFilters({
+                query: "",
+                coverage: "all",
+                view: "scope",
+                scope:
+                  scenario.scopes.find((s) => s.kind === "workstream")?.id ??
+                  "All",
+              })
+            }
+          >
+            Inspect scoped role coverage
+          </button>
+        }
+      />
       <nav className="organization-sections" aria-label="Role views">
         <button
           className="button secondary"

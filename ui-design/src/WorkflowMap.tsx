@@ -1,3 +1,4 @@
+import { WorkspaceContext } from "./WorkspaceContext";
 import type { ReactNode } from "react";
 import type { OrganizationScenario } from "./data/organizationScenario";
 import { workflowMap } from "./data/workflowMap";
@@ -47,6 +48,35 @@ export function WorkflowMap({
           <p>{map.stream.goal}</p>
         </div>
       </div>
+      <WorkspaceContext
+        label="Workflow boundary"
+        status={
+          <>
+            <h3>Expected collaboration</h3>
+            <p>{map.stream.coordination}</p>
+          </>
+        }
+        responsibility={
+          <p>
+            {map.assignments.length} represented assignments · {map.gaps.length}{" "}
+            explicit responsibility gaps. Cards show responsibilities, not a
+            step sequence. Only explicit input relationships connect provider
+            and receiver.
+          </p>
+        }
+        next={
+          <p>
+            Inspect the workstream and the provider/receiver records below.
+            Assignment state is sample context; delivery, receipt and execution
+            history are not established.
+          </p>
+        }
+        action={
+          <button className="button secondary" onClick={onStream}>
+            Inspect workstream context
+          </button>
+        }
+      />
       {localProgress}
       {onPattern && (
         <p>
@@ -62,18 +92,6 @@ export function WorkflowMap({
           </button>
         </p>
       )}
-      <section className="org-banner" aria-label="Workflow boundary">
-        <div>
-          <h2>Expected collaboration</h2>
-          <p>{map.stream.coordination}</p>
-          <p>
-            Cards show responsibilities, not a step sequence. Only explicit
-            input relationships connect provider and receiver. Assignment state
-            is sample context; delivery, receipt and execution history are not
-            established.
-          </p>
-        </div>
-      </section>
       <section
         className="org-overview-section"
         aria-label="Workflow responsibilities"

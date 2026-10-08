@@ -1,3 +1,4 @@
+import { WorkspaceContext } from "./WorkspaceContext";
 import {
   mainOrganization,
   scenarioWorkerRows,
@@ -67,12 +68,33 @@ export function WorkersDirectory({
           </p>
         </div>
       </div>
-      <p className="org-overview-section">
-        {scenario.name} · {workerDirectory.length} workers. Bindings describe
-        authored responsibilities; they do not establish live permissions or
-        capacity. No linked assignments does not mean a worker is idle or
-        available.
-      </p>
+      <WorkspaceContext
+        label="Worker workspace context"
+        status={
+          <p>
+            {scenario.name} · {workerDirectory.length} workers in the authored
+            directory.
+          </p>
+        }
+        responsibility={
+          <p>
+            Bindings describe authored responsibilities; they do not establish
+            live permissions or capacity. No linked assignments does not mean a
+            worker is idle or available.
+          </p>
+        }
+        next={
+          <p>
+            Inspect a worker's scope and assignment links, or review the
+            organization's attention signals.
+          </p>
+        }
+        action={
+          <button className="button secondary" onClick={onAttention}>
+            Inspect organization attention
+          </button>
+        }
+      />
       <section
         className="panel stream-directory-filters"
         aria-label="Worker filters"

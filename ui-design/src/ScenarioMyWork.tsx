@@ -1,3 +1,4 @@
+import { WorkspaceContext } from "./WorkspaceContext";
 import { contributionPerformer } from "./data/knowledgeHandoff";
 import { contributionView } from "./data/contributionView";
 import { ContributionExchange } from "./ContributionExchange";
@@ -82,11 +83,14 @@ export function ScenarioMyWork({
           </p>
         </div>
       </div>
+      <WorkspaceContext
+        label="Personal workspace context"
+        status={<p role="status">{mine.length} assignments · {response} awaiting your response · {waiting} waiting for input</p>}
+        responsibility={<p>{worker.name} · explicitly allocated assignments and case follow-up. Role bindings alone do not allocate work.</p>}
+        next={<p>Inspect an assignment's expected response and inputs before acting. Use your worker record to check represented scope.</p>}
+        action={<button className="button secondary" onClick={() => onWorker(workerId)}>Inspect my responsibility scope</button>}
+      />
       {scenario.id === "knowledge" && workerId === "maya" && <ContributionExchange state={contribution} receiver onChange={onContributionChange} />}
-      <p className="org-overview-section" role="status">
-        {mine.length} assignments · {response} awaiting your response ·{" "}
-        {waiting} waiting for input
-      </p>
       {scenario.id === "knowledge" && workerId === "leo" && <p>K-01-H status and response flags follow the local contribution records, including restored/imported work. Other assignment flags remain authored context. Receiver receipt is not a missing input.</p>}
       <details className="personal-queue-note directory-record-details">
         <summary>How assignment counts work</summary>

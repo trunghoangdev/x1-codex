@@ -128,3 +128,5 @@ Authority update · iteration 137: [suspension and revocation](AUTHORITY-CONTROL
 Iteration 141 simplifies Knowledge use and goal follow-up reading order: current status and responsible person first, action fields visible, exact evidence and retained cycle history available in disclosures. See [iteration notes](ITERATIONS.md).
 
 Iteration 142 adds a concise organization overview scan of workstream goals, recorded outcomes, inspection cues and known responsible people. Detailed coordination is expandable and opens automatically for filtered links. The scan is bounded to four streams with access to the complete directory; it is not a live health or completion score.
+
+Iteration 143 aligns Roles, Workers, Workflow, Outcome and My Work with a common Current state / Responsibility / Next step summary. Facts and actions remain specific to each screen; narrow screens stack the same reading order vertically.
