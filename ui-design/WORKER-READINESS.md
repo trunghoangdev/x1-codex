@@ -1,5 +1,7 @@
 # Worker capabilities and availability · iteration 147
 
+Current update: [iteration 151](WORKSHOP-ALLOCATION.md) supersedes the original Leo-only allocation limit with explicit candidate/reviewer selection and pre-execution handoff.
+
 Worker discovery now separates declared capability, scoped availability, linked assignments and authority. A role binding is not a skills assessment; an assignment count is not measured workload or free time.
 
 ## Inspect and allocate

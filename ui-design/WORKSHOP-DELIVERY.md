@@ -1,5 +1,7 @@
 # K-02 workshop delivery · iteration 146
 
+Current update: [iteration 151](WORKSHOP-ALLOCATION.md) supersedes the original Leo-only allocation limit with explicit candidate/reviewer selection and pre-execution handoff.
+
 The Knowledge sample now has a separate local operational loop for its member learning workshop. Organization is the shared view; My Work shows the next responsible actor. Open **K-02 → Open workshop delivery**, or `/organizations/knowledge/workshop/K-02?persona=leo`.
 
 ## Run the loop

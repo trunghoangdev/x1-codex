@@ -76,6 +76,7 @@ export function patternWork(
           source: JSON.stringify({
             id: e.id,
             cycle: e.cycle,
+            ...(e.allocation ? { allocation: e.allocation } : {}),
             source: e.source,
             body: e.body,
             at: e.at,

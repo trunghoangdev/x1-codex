@@ -73,9 +73,9 @@ export function FacilitatorCandidates({
       </p>
       <p>
         These profiles are authored examples, not worker self-reports or
-        verified competencies. The current delivery loop supports an explicit
-        offer to Leo only; another person requires a separate supported
-        allocation and reviewer arrangement.
+        verified competencies. Choose Leo or Maya explicitly in the delivery
+        form. Reviewer independence and separate acceptance are required;
+        declarations do not verify capability or availability.
       </p>
       <div className="org-stream-grid">
         {scenario.workers.map((w) => {

@@ -523,8 +523,15 @@ export function knowledgeTimeline(
       actor: workshopActors[event.actor],
       at: event.at,
       version: `Local cycle ${event.cycle}`,
-      detail: event.body,
-      references: [...(event.previousId ? [event.previousId] : [])],
+      detail:
+        event.body +
+        (event.allocation
+          ? ` Target: ${workshopActors[event.allocation.facilitator]}; independent reviewer: ${workshopActors[event.allocation.reviewer]}.`
+          : ""),
+      references: [
+        ...(event.previousId ? [event.previousId] : []),
+        ...(event.handoffId ? [event.handoffId] : []),
+      ],
       destination:
         "/organizations/knowledge/workshop/K-02?persona=" +
         (event.actor === "leo" ? "leo" : "maya"),

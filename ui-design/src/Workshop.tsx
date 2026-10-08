@@ -8,6 +8,7 @@ import {
   type WorkshopAction,
   type WorkshopContext,
   type WorkshopEvent,
+  type WorkshopAllocation,
 } from "./data/workshop";
 export function Workshop({
   events,
@@ -20,6 +21,8 @@ export function Workshop({
 }) {
   const [actor, setActor] = useState<WorkshopActor>("owner");
   const [action, setAction] = useState<WorkshopAction>("Offer facilitation");
+  const [facilitator, setFacilitator] = useState<"leo" | "maya">("leo");
+  const [reviewer, setReviewer] = useState<WorkshopActor>("maya");
   const [body, setBody] = useState("");
   const [preview, setPreview] = useState<{
     identity: string;
@@ -28,13 +31,33 @@ export function Workshop({
   const p = workshopProgress(events, context),
     options = availableWorkshopActions(events, context, actor);
   const selected = options.includes(action) ? action : options[0];
-  const identity = JSON.stringify({ events, context, actor, selected, body });
+  const allocation: WorkshopAllocation | undefined =
+    selected === "Offer facilitation"
+      ? { facilitator, reviewer }
+      : selected === "Propose facilitator handoff"
+        ? { facilitator, reviewer: p.reviewer }
+        : undefined;
+  const eligible =
+    !allocation ||
+    (allocation.facilitator !== allocation.reviewer &&
+      (selected !== "Propose facilitator handoff" ||
+        allocation.facilitator !== p.facilitator));
+  const identity = JSON.stringify({
+    events,
+    context,
+    actor,
+    selected,
+    body,
+    allocation,
+  });
   const brief =
     p.cycle[0]?.context.brief.versions.at(-1) ?? context.brief.versions.at(-1);
-  const preparation = [...p.cycle]
+  const preparation = [...p.activeRecords]
     .reverse()
     .find((e) => e.action === "Submit preparation");
-  const observations = p.cycle.find((e) => e.action === "Record observations");
+  const observations = p.activeRecords.find(
+    (e) => e.action === "Record observations",
+  );
   return (
     <section className="panel org-stream" aria-label="Local workshop lifecycle">
       <h2>{p.status}</h2>
@@ -43,8 +66,9 @@ export function Workshop({
         Local simulation only. Selecting an actor is a demo control, not
         authentication. No invitations, scheduling, external execution or real
         participant results are created. Leo’s Coordinator role does not confer
-        facilitation; acceptance creates a separate K-02 responsibility. Maya
-        reviews independently.
+        facilitation; acceptance creates a separate K-02 responsibility. The
+        chosen reviewer must remain independent from every facilitator accepted
+        in this cycle.
       </p>
       <p>
         Criterion: members demonstrate applying the welcome guide in the
@@ -138,6 +162,77 @@ export function Workshop({
           resolution before offering facilitation.
         </p>
       )}
+      <p>
+        Current facilitator:{" "}
+        {p.accepted ? workshopActors[p.facilitator] : "Not accepted"}. Reviewer:{" "}
+        {workshopActors[p.reviewer]}.{" "}
+        {p.pending
+          ? `Pending recipient: ${workshopActors[p.pending.allocation!.facilitator]}. Responsibility has not transferred.`
+          : ""}
+      </p>
+      {(selected === "Offer facilitation" ||
+        selected === "Propose facilitator handoff") && (
+        <>
+          <label>
+            Proposed facilitator
+            <select
+              aria-label="Proposed facilitator"
+              value={facilitator}
+              onChange={(e) => {
+                setFacilitator(e.target.value as "leo" | "maya");
+                setPreview(undefined);
+              }}
+            >
+              <option value="leo">Leo</option>
+              <option value="maya">Maya</option>
+            </select>
+          </label>
+          {selected === "Offer facilitation" ? (
+            <label>
+              Independent workshop reviewer
+              <select
+                aria-label="Independent workshop reviewer"
+                value={reviewer}
+                onChange={(e) => {
+                  setReviewer(e.target.value as WorkshopActor);
+                  setPreview(undefined);
+                }}
+              >
+                <option value="maya">Maya</option>
+                <option value="leo">Leo</option>
+                <option value="owner">
+                  Demo organization owner · local reviewer
+                </option>
+              </select>
+            </label>
+          ) : (
+            <p>
+              Reviewer stays {workshopActors[p.reviewer]}. The target cannot be
+              the reviewer or the current facilitator.
+            </p>
+          )}
+          <p>
+            Review candidate capability, availability and constraints above.
+            Maya has no declared facilitation capability and only a review
+            availability example; an offer is a local proposal requiring
+            explicit rationale and acceptance, not verified readiness.
+          </p>
+          {!eligible && (
+            <p role="status">
+              Choose a distinct facilitator and reviewer. For handoff between
+              Leo and Maya, start a cycle with the demo owner as independent
+              reviewer.
+            </p>
+          )}
+        </>
+      )}
+      {p.accepted && !p.execution && p.reviewer !== "owner" && (
+        <p>
+          Current reviewer is the other human candidate. Handoff to that
+          reviewer is blocked; cancel and offer a fresh cycle with an
+          independent reviewer if needed.
+        </p>
+      )}
       <label>
         Evidence and rationale
         <textarea
@@ -153,7 +248,7 @@ export function Workshop({
       </label>
       <button
         className="button secondary"
-        disabled={!selected || !body.trim() || events.length >= 40}
+        disabled={!selected || !body.trim() || !eligible || events.length >= 40}
         onClick={() => {
           const next = recordWorkshopEvent(
             events,
@@ -162,6 +257,7 @@ export function Workshop({
             selected,
             body,
             new Date().toISOString(),
+            allocation,
           );
           if (next !== events) setPreview({ identity, events: next });
         }}
@@ -175,6 +271,13 @@ export function Workshop({
             {workshopActors[actor]} · {selected}
           </p>
           <p>{body}</p>
+          {allocation && (
+            <p>
+              Offer to {workshopActors[allocation.facilitator]} · independent
+              reviewer {workshopActors[allocation.reviewer]}. No transfer until
+              acceptance.
+            </p>
+          )}
           <p>
             Cycle {preview.events.at(-1)!.cycle} · {preview.events.at(-1)!.id}
           </p>
@@ -239,7 +342,7 @@ export function WorkshopStatus({
       <p>{p.nextStep}</p>
       <p>
         {p.accepted
-          ? "Leo accepted a separate local facilitator allocation."
+          ? `${workshopActors[p.facilitator]} accepted a separate local facilitator allocation.`
           : "No accepted facilitator allocation in this cycle."}{" "}
         Session and outcome remain separate records.
       </p>

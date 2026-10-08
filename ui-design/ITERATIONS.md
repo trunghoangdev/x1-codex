@@ -1189,3 +1189,11 @@ Case directory, shared attention/K-02 progress and relevant My Work entrances de
 - Separated execution, observations, criterion review and scoped goal decisions; showed exact source/audience/cycle, evidence IDs/actors/times, gaps and next operational responsibility without inferring organization-level accountability.
 - Preserved historical source/cycle boundaries and unallocated follow-up; current positive simulation decisions do not automatically establish organization-wide success.
 - Reused existing restored workspace state without new mutation or checkpoint schema. Added source/outcome navigation with persona and contextual return. See [goal-map operation and boundaries](ORGANIZATION-GOALS.md).
+
+## Iteration 151 · Multi-candidate allocation and handoff
+
+- Extended K-02 offers to Leo/Maya with explicit independent reviewer choice and separate named-recipient acceptance/decline. Scoped bindings and personal assignment links follow accepted allocation.
+- Added pre-execution facilitator handoff with exact recipient/reviewer/source, response references, pending operational pause, acceptance-only transfer, and new preparation/readiness after acceptance.
+- Fixed reviewer identity throughout each cycle; rejected self-review, reviewer-as-recipient, stale sources, closed cycles and post-execution handoffs. Decline/cancel retains the original facilitator and stage.
+- Preserved legacy default Leo/Maya replay; added checkpoint v14 including newer workshop snapshots nested in pattern history. Timeline and pattern birth identity retain explicit allocation.
+- See [allocation operation, compatibility and limits](WORKSHOP-ALLOCATION.md).

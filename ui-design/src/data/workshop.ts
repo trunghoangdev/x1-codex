@@ -9,8 +9,8 @@ import type { OrganizationScenario } from "./organizationScenario";
 export type WorkshopContext = CaseContext & { caseEvents: CaseEvent[] };
 export const workshopActors = {
   owner: "Demo organization owner",
-  leo: "Leo · facilitator",
-  maya: "Maya · workshop reviewer",
+  leo: "Leo",
+  maya: "Maya",
 };
 export type WorkshopActor = keyof typeof workshopActors;
 export const workshopActions = [
@@ -27,8 +27,16 @@ export const workshopActions = [
   "Insufficient evidence",
   "Criterion not met",
   "Cancel workshop",
+  "Propose facilitator handoff",
+  "Accept facilitator handoff",
+  "Decline facilitator handoff",
+  "Cancel facilitator handoff",
 ] as const;
 export type WorkshopAction = (typeof workshopActions)[number];
+export type WorkshopAllocation = {
+  facilitator: "leo" | "maya";
+  reviewer: WorkshopActor;
+};
 export type WorkshopEvent = {
   id: string;
   cycle: number;
@@ -37,6 +45,8 @@ export type WorkshopEvent = {
   body: string;
   at: string;
   previousId?: string;
+  allocation?: WorkshopAllocation;
+  handoffId?: string;
   source: string;
   context: WorkshopContext;
 };
@@ -67,44 +77,73 @@ export function workshopProgress(
   );
   const closed = !!last && terminal(last.action);
   const stale = !!last && last.source !== workshopSource(context);
-  const accepted =
-    cycle.some((e) => e.action === "Accept facilitation") &&
-    !["Cancel workshop", "Decline facilitation"].includes(last?.action ?? "");
+  let facilitator: "leo" | "maya" = cycle[0]?.allocation?.facilitator ?? "leo";
+  const reviewer = cycle[0]?.allocation?.reviewer ?? "maya";
+  let accepted = false,
+    stage: WorkshopAction = "Offer facilitation",
+    pending: WorkshopEvent | undefined;
+  let activeStart = 0;
+  for (const [index, e] of cycle.entries()) {
+    if (e.action === "Propose facilitator handoff") pending = e;
+    else if (e.action === "Accept facilitator handoff") {
+      facilitator = pending!.allocation!.facilitator;
+      pending = undefined;
+      stage = "Accept facilitation";
+      activeStart = index;
+    } else if (
+      ["Decline facilitator handoff", "Cancel facilitator handoff"].includes(
+        e.action,
+      )
+    )
+      pending = undefined;
+    else {
+      stage = e.action;
+      if (stage === "Accept facilitation") accepted = true;
+    }
+  }
+  if (["Cancel workshop", "Decline facilitation"].includes(stage))
+    accepted = false;
   const actor: WorkshopActor | undefined = closed
     ? undefined
-    : !last
+    : !last || (stale && !execution)
       ? "owner"
-      : stale && !execution
-        ? "owner"
-        : last.action === "Offer facilitation"
-          ? "leo"
-          : last.action === "Submit preparation" ||
-              last.action === "Record observations" ||
-              last.action === "Session failed"
-            ? "maya"
-            : "leo";
+      : pending
+        ? pending.allocation!.facilitator
+        : stage === "Offer facilitation"
+          ? facilitator
+          : [
+                "Submit preparation",
+                "Record observations",
+                "Session failed",
+              ].includes(stage)
+            ? reviewer
+            : facilitator;
   const status = !last
     ? "Facilitator allocation pending"
     : closed
       ? last.action
       : stale && !execution
         ? "Source changed · cancel and allocate again"
-        : last.action;
+        : pending
+          ? "Facilitation handoff pending"
+          : stage;
   const nextStep = closed
     ? "No pending workshop action. The owner may explicitly offer a new cycle with fresh acceptance and preparation."
-    : actor === "owner"
-      ? !last || closed
-        ? "Offer Leo a new scoped facilitator responsibility against the resolved current brief."
+    : actor === "owner" && ((stale && !execution) || !last)
+      ? !last
+        ? "Select a facilitator and independent reviewer against the resolved current brief."
         : "Cancel this cycle; resolve the changed brief before a new allocation."
-      : last?.action === "Offer facilitation"
-        ? "Leo accepts or declines the exact allocation; an offer creates no binding."
-        : last?.action === "Submit preparation"
-          ? "Maya reviews the exact plan, audience, practical exercise and success criterion."
-          : last?.action === "Preparation ready"
-            ? "Leo records the simulated session result; readiness does not establish execution."
-            : execution
-              ? "Record observations separately, then assess the stated criterion with explicit limitations."
-              : "Leo submits a preparation plan with audience, exercise, criterion and constraints.";
+      : pending
+        ? `${workshopActors[pending.allocation!.facilitator]} accepts or declines the exact handoff. ${workshopActors[facilitator]} retains responsibility until acceptance; operational steps pause.`
+        : stage === "Offer facilitation"
+          ? `${workshopActors[facilitator]} accepts or declines the exact allocation; an offer creates no binding.`
+          : stage === "Submit preparation"
+            ? `${workshopActors[reviewer]} independently reviews the exact plan, audience, exercise and criterion.`
+            : stage === "Preparation ready"
+              ? `${workshopActors[facilitator]} records the simulated session result; readiness does not establish execution.`
+              : execution
+                ? "Record observations separately, then independently assess the stated criterion with explicit limitations."
+                : `${workshopActors[facilitator]} submits a fresh preparation plan. Accepted handoffs never inherit earlier readiness.`;
   return {
     last,
     cycle,
@@ -115,6 +154,11 @@ export function workshopProgress(
     actor,
     status,
     nextStep,
+    facilitator,
+    reviewer,
+    pending,
+    stage,
+    activeRecords: cycle.slice(activeStart),
   };
 }
 export function availableWorkshopActions(
@@ -127,27 +171,54 @@ export function availableWorkshopActions(
     return actor === "owner" && workshopSource(context)
       ? ["Offer facilitation"]
       : [];
-  if (actor === "owner") return ["Cancel workshop"];
-  if (p.stale && !p.execution) return [];
-  const a = p.last.action;
-  if (actor === "leo") {
+  const options: WorkshopAction[] =
+    actor === "owner" ? ["Cancel workshop"] : [];
+  if (p.stale && !p.execution) return options;
+  if (p.pending) {
+    if (actor === "owner") options.push("Cancel facilitator handoff");
+    if (actor === p.pending.allocation!.facilitator)
+      options.push("Accept facilitator handoff", "Decline facilitator handoff");
+    return options;
+  }
+  if (
+    actor === "owner" &&
+    p.accepted &&
+    !p.execution &&
+    ["leo", "maya"].some((id) => id !== p.facilitator && id !== p.reviewer)
+  )
+    options.push("Propose facilitator handoff");
+  const a = p.stage;
+  if (actor === p.facilitator) {
     if (a === "Offer facilitation")
-      return ["Accept facilitation", "Decline facilitation"];
+      options.push("Accept facilitation", "Decline facilitation");
     if (["Accept facilitation", "Preparation changes needed"].includes(a))
-      return ["Submit preparation"];
+      options.push("Submit preparation");
     if (a === "Preparation ready")
-      return ["Session succeeded", "Session failed"];
-    if (a === "Session succeeded") return ["Record observations"];
+      options.push("Session succeeded", "Session failed");
+    if (a === "Session succeeded") options.push("Record observations");
   }
-  if (actor === "maya") {
+  if (actor === p.reviewer) {
     if (a === "Submit preparation")
-      return ["Preparation ready", "Preparation changes needed"];
+      options.push("Preparation ready", "Preparation changes needed");
     if (a === "Session failed")
-      return ["Insufficient evidence", "Criterion not met"];
-    if (a === "Record observations") return [...outcomes];
+      options.push("Insufficient evidence", "Criterion not met");
+    if (a === "Record observations") options.push(...outcomes);
   }
-  return [];
+  return options.sort(
+    (a, b) =>
+      (a === "Cancel workshop"
+        ? 3
+        : a === "Propose facilitator handoff"
+          ? 2
+          : 0) -
+      (b === "Cancel workshop"
+        ? 3
+        : b === "Propose facilitator handoff"
+          ? 2
+          : 0),
+  );
 }
+
 function latestTime(value: unknown): number {
   if (!value || typeof value !== "object") return 0;
   return Math.max(
@@ -166,6 +237,7 @@ export function recordWorkshopEvent(
   action: WorkshopAction,
   body: string,
   at: string,
+  allocation?: WorkshopAllocation,
 ): WorkshopEvent[] {
   const last = events.at(-1);
   if (
@@ -183,6 +255,35 @@ export function recordWorkshopEvent(
     !availableWorkshopActions(events, context, actor).includes(action)
   )
     return events;
+  const p = workshopProgress(events, context);
+  if (
+    allocation &&
+    Object.keys(allocation).some(
+      (key) => !["facilitator", "reviewer"].includes(key),
+    )
+  )
+    return events;
+  if (
+    action === "Offer facilitation" ||
+    action === "Propose facilitator handoff"
+  ) {
+    const choice =
+      allocation ??
+      (action === "Offer facilitation"
+        ? { facilitator: "leo", reviewer: "maya" }
+        : undefined);
+    if (
+      !choice ||
+      !["leo", "maya"].includes(choice.facilitator) ||
+      !["leo", "maya", "owner"].includes(choice.reviewer) ||
+      choice.facilitator === choice.reviewer ||
+      (action === "Propose facilitator handoff" &&
+        (choice.facilitator === p.facilitator ||
+          choice.reviewer !== p.reviewer))
+    )
+      return events;
+    if (action === "Propose facilitator handoff") allocation = choice;
+  } else if (allocation) return events;
   const cycle =
     action === "Offer facilitation" ? (last?.cycle ?? 0) + 1 : last!.cycle;
   return [
@@ -200,6 +301,14 @@ export function recordWorkshopEvent(
           ? workshopSource(context)!
           : last!.source,
       context: structuredClone(context),
+      ...(allocation ? { allocation: structuredClone(allocation) } : {}),
+      ...([
+        "Accept facilitator handoff",
+        "Decline facilitator handoff",
+        "Cancel facilitator handoff",
+      ].includes(action)
+        ? { handoffId: p.pending!.id }
+        : {}),
     },
   ];
 }
@@ -229,9 +338,9 @@ export function workshopScenario(
       a.id === "K-02-F"
         ? {
             ...a,
-            workerId: p.accepted ? "leo" : undefined,
+            workerId: p.accepted ? p.facilitator : undefined,
             state: `Local simulation · ${p.status}`,
-            responseNeeded: !p.closed && p.actor === "leo",
+            responseNeeded: !p.closed && p.actor === p.facilitator,
             input: `Exact allocation source: ${p.cycle[0].id}. ${p.stale ? "Historical source; no transfer to the current brief." : "Current resolved brief."}`,
             expectedResponse: p.nextStep,
           }
@@ -244,7 +353,7 @@ export function workshopScenario(
             {
               id: bindingId,
               scopeIds: ["scope-K-02"],
-              workerId: "leo",
+              workerId: p.facilitator,
               role: "Facilitator",
               scope: `K-02 · local cycle ${p.last!.cycle}`,
               permission:
@@ -287,7 +396,7 @@ export function workshopScenario(
             criteria: o.criteria.map((c) => ({
               ...c,
               available: p.execution
-                ? `Simulated execution: ${p.execution.body}. ${p.cycle.find((e) => e.action === "Record observations")?.body ?? "No separate observations."}`
+                ? `Simulated execution: ${p.execution.body}. ${p.activeRecords.find((e) => e.action === "Record observations")?.body ?? "No separate observations."}`
                 : c.available,
               gap:
                 p.closed && outcomes.includes(p.last!.action)
