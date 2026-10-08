@@ -110,3 +110,5 @@ Knowledge scope governance: [exact source applicability decisions](SCOPE-APPLICA
 Knowledge repeated operation: [one explicit subsequent bounded-use cycle](USE-CONTINUATION.md).
 
 Main local allocations: [performer acceptance and confirmed reassignment](RESPONSIBILITY-ACCEPTANCE.md).
+
+Authority update · iteration 137: [suspension and revocation](AUTHORITY-CONTROL.md) preserve the original grant, block future execution, require explicit verification to resume a suspension, and retain control history in timeline and whole-workspace checkpoint v7. Revocation cannot be resumed.

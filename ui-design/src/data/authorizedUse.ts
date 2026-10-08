@@ -6,7 +6,14 @@ export type UseRecord = {
   rationale: string;
   sourceId: string;
 };
+export type AuthorityAction = "Suspend" | "Resume" | "Revoke";
+export type AuthorityRecord = UseRecord & {
+  action: AuthorityAction;
+  conditions: string;
+  afterRecordId: string;
+};
 export type UseCycle = {
+  authorityHistory?: AuthorityRecord[];
   subject: string;
   audience: string;
   mandate: UseRecord;
@@ -51,6 +58,7 @@ export function latestUseTime(state: MaterialUse): number {
     state.readerEvidence,
     state.outcome,
     state.continuation,
+    ...(state.authorityHistory ?? []),
   ]
     .filter(Boolean)
     .map((r) => Date.parse(r!.at));
@@ -82,7 +90,8 @@ export function startMaterialUse(
 export function continuationSource(
   state: AuthorizedUse,
 ): UseRecord | undefined {
-  if (state.cycle || state.previousCycle) return;
+  if (authorityStatus(state) !== "Active" || state.cycle || state.previousCycle)
+    return;
   if (state.publicationAssessment?.conclusion === "Revision needed")
     return state.publicationAssessment;
   if (state.authorization?.decision === "Refused") return state.authorization;
@@ -228,7 +237,8 @@ export function recordUseStep(
   if (
     subject !== state.subject ||
     !valid(rationale, at) ||
-    (useVersion(subject)! > 2 && Date.parse(at) < latestUseTime(state))
+    ((useVersion(subject)! > 2 || state.authorityHistory) &&
+      Date.parse(at) < latestUseTime(state))
   )
     return state;
   const record = (id: string, actor: string, sourceId: string): UseRecord => ({
@@ -271,6 +281,7 @@ export function recordUseStep(
     };
   if (
     state.authorization?.decision === "Allowed" &&
+    authorityStatus(state) === "Active" &&
     !state.execution &&
     ["Succeeded", "Failed"].includes(action)
   )
@@ -329,4 +340,60 @@ export function recordUseStep(
       },
     };
   return state;
+}
+
+export function authorityStatus(
+  state: UseCycle,
+): "Active" | "Suspended" | "Revoked" {
+  const last = state.authorityHistory?.at(-1)?.action;
+  return last === "Revoke"
+    ? "Revoked"
+    : last === "Suspend"
+      ? "Suspended"
+      : "Active";
+}
+export function controlAuthority(
+  state: AuthorizedUse,
+  action: AuthorityAction,
+  rationale: string,
+  conditions: string,
+  at: string,
+): AuthorizedUse {
+  const status = authorityStatus(state);
+  if (
+    state.authorization?.decision !== "Allowed" ||
+    !valid(rationale, at) ||
+    !conditions.trim() ||
+    conditions.length > 3000 ||
+    Date.parse(at) < latestUseTime(state) ||
+    (state.authorityHistory?.length ?? 0) >= 20 ||
+    status === "Revoked" ||
+    (action === "Resume"
+      ? status !== "Suspended"
+      : action === "Suspend"
+        ? status !== "Active"
+        : action !== "Revoke")
+  )
+    return state;
+  const after =
+    state.outcome ??
+    state.readerEvidence ??
+    state.execution ??
+    state.authorization;
+  return {
+    ...state,
+    authorityHistory: [
+      ...(state.authorityHistory ?? []),
+      {
+        id: `${state.authorization.id}-control-${(state.authorityHistory?.length ?? 0) + 1}`,
+        sourceId: state.authorityHistory?.at(-1)?.id ?? state.authorization.id,
+        afterRecordId: after.id,
+        actor: "Sam · demo bounded-use authorizer",
+        at,
+        action,
+        rationale: rationale.trim(),
+        conditions: conditions.trim(),
+      },
+    ],
+  };
 }

@@ -244,6 +244,23 @@ export function knowledgeTimeline(
       ["outcome", "Outcome review"],
     ] as const;
     const frozen = JSON.parse(u.subject);
+    for (const r of u.authorityHistory ?? [])
+      add({
+        ...base,
+        key: `use:${r.id}`,
+        id: r.id,
+        kind: "Use",
+        title: `Use authority · ${r.action}`,
+        actor: r.actor,
+        at: r.at,
+        version: `draft-0${frozen.version} · use cycle ${n}`,
+        detail: `${r.rationale} Conditions / verification: ${r.conditions}`,
+        references: [r.sourceId, r.afterRecordId],
+        destination: "/organizations/knowledge/use/K-01",
+        record: r,
+        frozenSubject: frozen,
+      });
+
     for (const [field, title] of fields) {
       const r = u[field];
       if (!r) continue;

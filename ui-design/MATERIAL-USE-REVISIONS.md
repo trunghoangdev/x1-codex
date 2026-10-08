@@ -17,3 +17,5 @@ The previous chain, including both use cycles when present, is archived without 
 Contribution and whole-workspace checkpoint v6 preserve follow-up requests and material use history while reading earlier supported formats. Validation checks exact request lineage, assessment/receipt/delivery references, ordered version histories and use-stage links. Malformed imports leave the session unchanged. Contribution-only recovery does not include use records.
 
 This is a local UI simulation. Publication, execution, actor identity and permissions are not connected to a production service. No customer usage or reader outcome is claimed.
+
+Authority update · iteration 137: [suspension and revocation](AUTHORITY-CONTROL.md) preserve the original grant, block future execution, require explicit verification to resume a suspension, and retain control history in timeline and whole-workspace checkpoint v7. Revocation cannot be resumed.

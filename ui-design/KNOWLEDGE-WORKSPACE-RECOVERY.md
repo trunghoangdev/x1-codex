@@ -39,3 +39,5 @@ Responsibility update · iteration 133: [Knowledge offers and performer response
 Handoff update · iteration 134: [exact input and bounded authority handoffs](KNOWLEDGE-HANDOFF.md) now support Leo ↔ Demo delegate after an accepted responsibility offer. Effective contribution ownership changes only after exact-package acceptance. Contribution/workspace v5 retain handoff history and contributor identities while reading earlier formats; explicit legacy replacement can remove this history.
 
 Material update · iteration 136: [fresh material use](MATERIAL-USE-REVISIONS.md) supports separate mandates, assessments and authorizations through draft-09, retained earlier chains and checkpoint v6. Pending follow-up revision requests block current-source use; prior authority and applicability are never inherited.
+
+Authority update · iteration 137: [suspension and revocation](AUTHORITY-CONTROL.md) preserve the original grant, block future execution, require explicit verification to resume a suspension, and retain control history in timeline and whole-workspace checkpoint v7. Revocation cannot be resumed.

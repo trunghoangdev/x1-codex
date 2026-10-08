@@ -4,6 +4,7 @@ import {
 } from "./scopeApplicability";
 import type { HumanContributionState } from "./humanContribution";
 import {
+  authorityStatus,
   assessedUseSubject,
   useVersion,
   continuationSource,
@@ -29,7 +30,9 @@ export function useChainStage(state?: AuthorizedUse) {
           : state.authorization.decision === "Refused"
             ? "refused"
             : !state.execution
-              ? "execution"
+              ? authorityStatus(state) === "Active"
+                ? "execution"
+                : "authorityStopped"
               : state.execution.result === "Succeeded" && !state.readerEvidence
                 ? "evidence"
                 : !state.outcome
@@ -44,7 +47,11 @@ export function useProgress(
   const subject = assessedUseSubject(contribution);
   const stage = useChainStage(state);
   const canContinue = !!state && !!continuationSource(state);
-  const scopeBlocked = ["authorization", "execution"].includes(stage)
+  const scopeBlocked = [
+    "authorization",
+    "execution",
+    "authorityStopped",
+  ].includes(stage)
     ? applicabilityGuard(
         { contribution, ...(state ? { use: state } : {}) },
         scope,
@@ -53,25 +60,28 @@ export function useProgress(
   const stale = !!state && state.subject !== subject;
   const newMaterial =
     !!state && !!subject && useVersion(subject)! > useVersion(state.subject)!;
-  const actor: UseActor | undefined = newMaterial
-    ? "owner"
-    : stale ||
-        !subject ||
-        (!canContinue && ["blocked", "refused", "complete"].includes(stage))
-      ? undefined
-      : canContinue
+  const actor: UseActor | undefined =
+    stage === "authorityStopped" && !newMaterial
+      ? "sam"
+      : newMaterial
         ? "owner"
-        : scopeBlocked
-          ? scopeBlocked.startsWith("assessment ")
-            ? "maya"
-            : "sam"
-          : stage === "mandate"
+        : stale ||
+            !subject ||
+            (!canContinue && ["blocked", "refused", "complete"].includes(stage))
+          ? undefined
+          : canContinue
             ? "owner"
-            : ["assessment", "authorization"].includes(stage)
-              ? "sam"
-              : ["execution", "evidence"].includes(stage)
-                ? "leo"
-                : "maya";
+            : scopeBlocked
+              ? scopeBlocked.startsWith("assessment ")
+                ? "maya"
+                : "sam"
+              : stage === "mandate"
+                ? "owner"
+                : ["assessment", "authorization"].includes(stage)
+                  ? "sam"
+                  : ["execution", "evidence"].includes(stage)
+                    ? "leo"
+                    : "maya";
   const title = newMaterial
     ? "Plan mandate for new material version"
     : canContinue && !stale
@@ -83,6 +93,7 @@ export function useProgress(
           : !subject
             ? "Editorial suitability prerequisite missing"
             : {
+                authorityStopped: "Use authority suspended or revoked",
                 mandate: "Allocate bounded publication responsibility",
                 assessment: "Assess publication scope",
                 authorization: "Decide bounded use",
@@ -93,21 +104,24 @@ export function useProgress(
                 refused: "Bounded use refused",
                 complete: "Outcome review recorded",
               }[stage];
-  const detail = newMaterial
-    ? `Draft-0${useVersion(subject)} needs a fresh material mandate. Earlier material records are preserved; no authorization transfers.`
-    : canContinue && !stale
-      ? "Demo owner can explicitly create cycle 2 for the same assessed material. Fresh publication assessment and authorization are required; prior decisions and failed attempts remain historical."
-      : scopeBlocked && !stale
-        ? scopeBlocked
-        : stale
-          ? "Inspect the frozen source and restored contribution. No replacement mandate or follow-up is allocated."
-          : !subject
-            ? "The current draft needs exact delivery, receipt and a suitable Maya reassessment without a pending revision request before bounded use."
-            : stage === "blocked" || stage === "refused"
-              ? "This cycle is stopped. Subsequent revision/retry and follow-up allocation are not represented."
-              : stage === "complete"
-                ? `Conclusion: ${state?.outcome?.conclusion}. Simulated evidence does not verify real organizational outcomes.`
-                : `human-guide-example · draft-0${useVersion(subject) ?? useVersion(state?.subject) ?? contribution.contributions.at(-1)?.version} · ${state ? state.audience : "audience must be named in mandate"}. Separate ${stage} record pending.`;
+  const detail =
+    stage === "authorityStopped" && !newMaterial
+      ? `Authority is ${authorityStatus(state!)}. Execution is blocked. Suspension requires Sam’s explicit resume decision and evidence that conditions are met; revocation cannot be resumed. Changed material needs a fresh mandate.`
+      : newMaterial
+        ? `Draft-0${useVersion(subject)} needs a fresh material mandate. Earlier material records are preserved; no authorization transfers.`
+        : canContinue && !stale
+          ? "Demo owner can explicitly create cycle 2 for the same assessed material. Fresh publication assessment and authorization are required; prior decisions and failed attempts remain historical."
+          : scopeBlocked && !stale
+            ? scopeBlocked
+            : stale
+              ? "Inspect the frozen source and restored contribution. No replacement mandate or follow-up is allocated."
+              : !subject
+                ? "The current draft needs exact delivery, receipt and a suitable Maya reassessment without a pending revision request before bounded use."
+                : stage === "blocked" || stage === "refused"
+                  ? "This cycle is stopped. Subsequent revision/retry and follow-up allocation are not represented."
+                  : stage === "complete"
+                    ? `Conclusion: ${state?.outcome?.conclusion}. Simulated evidence does not verify real organizational outcomes.`
+                    : `human-guide-example · draft-0${useVersion(subject) ?? useVersion(state?.subject) ?? contribution.contributions.at(-1)?.version} · ${state ? state.audience : "audience must be named in mandate"}. Separate ${stage} record pending.`;
   const destination =
     scopeBlocked && !stale
       ? "/organizations/knowledge/agreements/K-01?persona=maya"

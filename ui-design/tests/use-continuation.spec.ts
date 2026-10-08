@@ -201,13 +201,11 @@ for (const width of [390, 1440])
     await recovery
       .getByText("Save or restore whole Knowledge workspace", { exact: true })
       .click();
-    await recovery
-      .getByLabel("Import Knowledge checkpoint")
-      .setInputFiles({
-        name: "failed.json",
-        mimeType: "application/json",
-        buffer: Buffer.from(encodeKnowledgeCheckpoint(fixture())),
-      });
+    await recovery.getByLabel("Import Knowledge checkpoint").setInputFiles({
+      name: "failed.json",
+      mimeType: "application/json",
+      buffer: Buffer.from(encodeKnowledgeCheckpoint(fixture())),
+    });
     await recovery
       .getByRole("button", {
         name: "Confirm workspace replacement",
@@ -248,6 +246,7 @@ for (const width of [390, 1440])
         .selectOption(choice);
       await use
         .getByRole("textbox")
+        .last()
         .fill(`New ${stage} conditions verified in simulation`);
       await use
         .getByRole("button", { name: `Prepare ${stage} record`, exact: true })

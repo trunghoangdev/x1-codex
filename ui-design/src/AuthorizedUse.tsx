@@ -1,5 +1,7 @@
+import { AuthorityControls } from "./AuthorityControls";
 import { MaterialUseStart } from "./MaterialUseStart";
 import { UseContinuation } from "./UseContinuation";
+import { applicabilityGuard } from "./data/scopeApplicability";
 import type { ApplicabilityScope } from "./data/scopeApplicability";
 import { useProgress } from "./data/useProgress";
 import { useEffect, useRef, useState } from "react";
@@ -92,7 +94,7 @@ export function AuthorizedUse({
     !!subject &&
     !stale &&
     !scopeBlocked &&
-    !["blocked", "refused", "complete"].includes(stage);
+    !["blocked", "refused", "complete", "authorityStopped"].includes(stage);
   return (
     <section
       className="panel org-stream"
@@ -242,6 +244,15 @@ export function AuthorizedUse({
           Outcome review recorded. All observations are simulated, not customer
           or reader evidence. No automatic organization-wide success is claimed.
         </p>
+      )}
+      {state && (
+        <AuthorityControls
+          state={state}
+          onChange={onChange}
+          canResume={
+            !stale && !applicabilityGuard({ contribution, use: state }, scope)
+          }
+        />
       )}
       {actionable && !confirm && (
         <form

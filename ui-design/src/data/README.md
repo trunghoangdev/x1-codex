@@ -71,3 +71,5 @@ This is an incremental boundary, not a finished data layer. Candidate, evidence,
 `knowledgeTimeline.ts` projects retained Knowledge workspace records into typed timeline rows with exact actors, versions, references and source destinations. Filters paginate twenty rows at a time; no independent event store or inferred transitions are introduced. See `../../KNOWLEDGE-TIMELINE.md`.
 
 Material update · iteration 136: [fresh material use](../../MATERIAL-USE-REVISIONS.md) supports separate mandates, assessments and authorizations through draft-09, retained earlier chains and checkpoint v6. Pending follow-up revision requests block current-source use; prior authority and applicability are never inherited.
+
+Iteration 137 adds append-only authorization control history, execution gating and whole-workspace checkpoint v7 replay at exact use-stage anchors. See [authority control](../../AUTHORITY-CONTROL.md).
