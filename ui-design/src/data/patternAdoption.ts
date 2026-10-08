@@ -1,6 +1,9 @@
 import { patternVersions, type OperatingPattern } from "./operatingPatterns";
 import type { KnowledgeWorkspace } from "./knowledgeCheckpoint";
-export type PatternContext = Omit<KnowledgeWorkspace, "patternEvents">;
+export type PatternContext = Omit<
+  KnowledgeWorkspace,
+  "patternEvents" | "exceptionEvents"
+>;
 export type PatternWork = {
   id: string;
   label: string;
@@ -153,7 +156,11 @@ export function recordPatternEvent(
         : true
   )
     return events;
-  const { patternEvents: ignored, ...snapshot } = context as KnowledgeWorkspace;
+  const {
+    patternEvents: ignored,
+    exceptionEvents: ignoredExceptions,
+    ...snapshot
+  } = context as KnowledgeWorkspace;
   return [
     ...events,
     {

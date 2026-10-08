@@ -18,6 +18,7 @@ export const timelineKinds = [
   "Coordination case",
   "Workshop delivery",
   "Operating pattern",
+  "Exception follow-up",
 ] as const;
 export type TimelineKind = (typeof timelineKinds)[number];
 export type KnowledgeTimelineEvent = {
@@ -537,6 +538,26 @@ export function knowledgeTimeline(
         (event.actor === "leo" ? "leo" : "maya"),
       record: event,
       frozenSubject: JSON.parse(event.source),
+    });
+  for (const event of state.exceptionEvents ?? [])
+    add({
+      key: `exception:${event.id}`,
+      id: event.id,
+      stream: "K-02",
+      kind: "Exception follow-up",
+      title: event.action,
+      actor: workshopActors[event.actor],
+      at: event.at,
+      version: event.ticketId,
+      detail: event.body,
+      references: [
+        event.ticketId,
+        ...(event.source ? [event.source.id] : []),
+        ...(event.proposalId ? [event.proposalId] : []),
+      ],
+      destination: "/organizations/knowledge/exceptions",
+      record: event,
+      frozenSubject: event.context,
     });
   for (const event of state.patternEvents ?? [])
     add({

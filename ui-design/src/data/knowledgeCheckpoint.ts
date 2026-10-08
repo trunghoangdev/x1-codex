@@ -1,3 +1,4 @@
+import { recordException, type ExceptionEvent } from "./exceptionLoop";
 import { recordPatternEvent, type PatternEvent } from "./patternAdoption";
 import { recordWorkshopEvent, type WorkshopEvent } from "./workshop";
 import {
@@ -62,6 +63,7 @@ export type KnowledgeWorkspace = {
   caseEvents?: CaseEvent[];
   workshopEvents?: WorkshopEvent[];
   patternEvents?: PatternEvent[];
+  exceptionEvents?: ExceptionEvent[];
 };
 export type KnowledgeCheckpoint = {
   format:
@@ -78,7 +80,8 @@ export type KnowledgeCheckpoint = {
     | "forge.knowledge-workspace.v11"
     | "forge.knowledge-workspace.v12"
     | "forge.knowledge-workspace.v13"
-    | "forge.knowledge-workspace.v14";
+    | "forge.knowledge-workspace.v14"
+    | "forge.knowledge-workspace.v15";
   savedAt: string;
   state: KnowledgeWorkspace;
 };
@@ -209,6 +212,7 @@ export function parseKnowledgeCheckpoint(raw: string): KnowledgeCheckpoint {
         "forge.knowledge-workspace.v12",
         "forge.knowledge-workspace.v13",
         "forge.knowledge-workspace.v14",
+        "forge.knowledge-workspace.v15",
       ].includes(x.format) ||
       !date(x.savedAt) ||
       !shape(x.state, [
@@ -220,6 +224,7 @@ export function parseKnowledgeCheckpoint(raw: string): KnowledgeCheckpoint {
         "caseEvents",
         "workshopEvents",
         "patternEvents",
+        "exceptionEvents",
       ])
     )
       throw Error();
@@ -239,6 +244,7 @@ export function parseKnowledgeCheckpoint(raw: string): KnowledgeCheckpoint {
         "forge.knowledge-workspace.v12",
         "forge.knowledge-workspace.v13",
         "forge.knowledge-workspace.v14",
+        "forge.knowledge-workspace.v15",
       ].includes(x.format)
     )
       throw Error();
@@ -255,6 +261,7 @@ export function parseKnowledgeCheckpoint(raw: string): KnowledgeCheckpoint {
         "forge.knowledge-workspace.v12",
         "forge.knowledge-workspace.v13",
         "forge.knowledge-workspace.v14",
+        "forge.knowledge-workspace.v15",
       ].includes(x.format)
     )
       throw Error();
@@ -277,6 +284,7 @@ export function parseKnowledgeCheckpoint(raw: string): KnowledgeCheckpoint {
           "forge.knowledge-workspace.v12",
           "forge.knowledge-workspace.v13",
           "forge.knowledge-workspace.v14",
+          "forge.knowledge-workspace.v15",
         ].includes(x.format) ||
         !Array.isArray(s.brief.guideHandoffs) ||
         !s.brief.guideHandoffs.length ||
@@ -354,6 +362,7 @@ export function parseKnowledgeCheckpoint(raw: string): KnowledgeCheckpoint {
             "forge.knowledge-workspace.v12",
             "forge.knowledge-workspace.v13",
             "forge.knowledge-workspace.v14",
+            "forge.knowledge-workspace.v15",
           ].includes(x.format) ||
           !Number.isInteger(input.handoffCount) ||
           input.handoffCount < 1 ||
@@ -435,6 +444,7 @@ export function parseKnowledgeCheckpoint(raw: string): KnowledgeCheckpoint {
         "forge.knowledge-workspace.v12",
         "forge.knowledge-workspace.v13",
         "forge.knowledge-workspace.v14",
+        "forge.knowledge-workspace.v15",
       ].includes(x.format)
     )
       throw Error();
@@ -477,6 +487,7 @@ export function parseKnowledgeCheckpoint(raw: string): KnowledgeCheckpoint {
             "forge.knowledge-workspace.v12",
             "forge.knowledge-workspace.v13",
             "forge.knowledge-workspace.v14",
+            "forge.knowledge-workspace.v15",
           ].includes(x.format) ||
           !Array.isArray(u.previousMaterials) ||
           !u.previousMaterials.length ||
@@ -537,6 +548,7 @@ export function parseKnowledgeCheckpoint(raw: string): KnowledgeCheckpoint {
             "forge.knowledge-workspace.v12",
             "forge.knowledge-workspace.v13",
             "forge.knowledge-workspace.v14",
+            "forge.knowledge-workspace.v15",
           ].includes(x.format) ||
           u.cycle !== 2 ||
           !shape(u.previousCycle, [
@@ -569,6 +581,7 @@ export function parseKnowledgeCheckpoint(raw: string): KnowledgeCheckpoint {
               "forge.knowledge-workspace.v12",
               "forge.knowledge-workspace.v13",
               "forge.knowledge-workspace.v14",
+              "forge.knowledge-workspace.v15",
             ].includes(x.format)
               ? x.format
               : s.contribution.handoffs
@@ -604,6 +617,7 @@ export function parseKnowledgeCheckpoint(raw: string): KnowledgeCheckpoint {
           "forge.knowledge-workspace.v12",
           "forge.knowledge-workspace.v13",
           "forge.knowledge-workspace.v14",
+          "forge.knowledge-workspace.v15",
         ].includes(x.format) ||
           !Array.isArray(u.authorityHistory) ||
           !u.authorityHistory.length ||
@@ -619,6 +633,7 @@ export function parseKnowledgeCheckpoint(raw: string): KnowledgeCheckpoint {
           "forge.knowledge-workspace.v12",
           "forge.knowledge-workspace.v13",
           "forge.knowledge-workspace.v14",
+          "forge.knowledge-workspace.v15",
         ].includes(x.format) ||
           !Array.isArray(u.reviewHandoffs) ||
           !u.reviewHandoffs.length ||
@@ -701,6 +716,7 @@ export function parseKnowledgeCheckpoint(raw: string): KnowledgeCheckpoint {
             "forge.knowledge-workspace.v12",
             "forge.knowledge-workspace.v13",
             "forge.knowledge-workspace.v14",
+            "forge.knowledge-workspace.v15",
           ].includes(x.format) ||
           !Array.isArray(u.goalReviews) ||
           !u.goalReviews.length ||
@@ -785,6 +801,7 @@ export function parseKnowledgeCheckpoint(raw: string): KnowledgeCheckpoint {
             "forge.knowledge-workspace.v12",
             "forge.knowledge-workspace.v13",
             "forge.knowledge-workspace.v14",
+            "forge.knowledge-workspace.v15",
           ].includes(x.format))
       )
         throw Error();
@@ -810,6 +827,7 @@ export function parseKnowledgeCheckpoint(raw: string): KnowledgeCheckpoint {
               "forge.knowledge-workspace.v12",
               "forge.knowledge-workspace.v13",
               "forge.knowledge-workspace.v14",
+              "forge.knowledge-workspace.v15",
             ].includes(x.format)
               ? x.format
               : check.context.contribution?.handoffs
@@ -843,6 +861,7 @@ export function parseKnowledgeCheckpoint(raw: string): KnowledgeCheckpoint {
           "forge.knowledge-workspace.v12",
           "forge.knowledge-workspace.v13",
           "forge.knowledge-workspace.v14",
+          "forge.knowledge-workspace.v15",
         ].includes(x.format) ||
         !Array.isArray(s.caseEvents) ||
         !s.caseEvents.length ||
@@ -882,6 +901,7 @@ export function parseKnowledgeCheckpoint(raw: string): KnowledgeCheckpoint {
           "forge.knowledge-workspace.v12",
           "forge.knowledge-workspace.v13",
           "forge.knowledge-workspace.v14",
+          "forge.knowledge-workspace.v15",
         ].includes(x.format) ||
         !Array.isArray(s.workshopEvents) ||
         !s.workshopEvents.length ||
@@ -892,7 +912,10 @@ export function parseKnowledgeCheckpoint(raw: string): KnowledgeCheckpoint {
       for (const e of s.workshopEvents) {
         if (
           (e.allocation || e.handoffId) &&
-          x.format !== "forge.knowledge-workspace.v14"
+          ![
+            "forge.knowledge-workspace.v14",
+            "forge.knowledge-workspace.v15",
+          ].includes(x.format)
         )
           throw Error();
         if (
@@ -941,6 +964,7 @@ export function parseKnowledgeCheckpoint(raw: string): KnowledgeCheckpoint {
         ![
           "forge.knowledge-workspace.v13",
           "forge.knowledge-workspace.v14",
+          "forge.knowledge-workspace.v15",
         ].includes(x.format) ||
         !Array.isArray(s.patternEvents) ||
         !s.patternEvents.length ||
@@ -953,7 +977,10 @@ export function parseKnowledgeCheckpoint(raw: string): KnowledgeCheckpoint {
           e.context.workshopEvents?.some(
             (w: any) => w.allocation || w.handoffId,
           ) &&
-          x.format !== "forge.knowledge-workspace.v14"
+          ![
+            "forge.knowledge-workspace.v14",
+            "forge.knowledge-workspace.v15",
+          ].includes(x.format)
         )
           throw Error();
         if (
@@ -991,6 +1018,72 @@ export function parseKnowledgeCheckpoint(raw: string): KnowledgeCheckpoint {
       }
       if (!sameKnowledgeValue(events, s.patternEvents)) throw Error();
     }
+    if (s.exceptionEvents !== undefined) {
+      if (
+        x.format !== "forge.knowledge-workspace.v15" ||
+        !Array.isArray(s.exceptionEvents) ||
+        !s.exceptionEvents.length ||
+        s.exceptionEvents.length > 40
+      )
+        throw Error();
+      let events: ExceptionEvent[] = [];
+      for (const e of s.exceptionEvents) {
+        if (
+          !shape(e.context, [
+            "brief",
+            "contribution",
+            "caseEvents",
+            "workshopEvents",
+          ]) ||
+          !Array.isArray(e.context.caseEvents) ||
+          !Array.isArray(e.context.workshopEvents) ||
+          !text(e.body) ||
+          !date(e.at)
+        )
+          throw Error();
+        parseKnowledgeCheckpoint(
+          JSON.stringify({
+            format: "forge.knowledge-workspace.v15",
+            savedAt: x.savedAt,
+            state: {
+              brief: e.context.brief,
+              contribution: e.context.contribution,
+              adoptions: [],
+              ...(e.context.caseEvents.length
+                ? { caseEvents: e.context.caseEvents }
+                : {}),
+              ...(e.context.workshopEvents.length
+                ? { workshopEvents: e.context.workshopEvents }
+                : {}),
+            },
+          }),
+        );
+        if (
+          !retainsBriefs(e.context.brief, s.brief) ||
+          !sameKnowledgeValue(
+            e.context.caseEvents,
+            (s.caseEvents ?? []).slice(0, e.context.caseEvents.length),
+          ) ||
+          !sameKnowledgeValue(
+            e.context.workshopEvents,
+            (s.workshopEvents ?? []).slice(0, e.context.workshopEvents.length),
+          )
+        )
+          throw Error();
+        events = recordException(
+          events,
+          e.context,
+          e.actor,
+          e.action,
+          e.ticketId,
+          e.body,
+          e.at,
+          e.source?.id,
+          e.assignee,
+        );
+      }
+      if (!sameKnowledgeValue(events, s.exceptionEvents)) throw Error();
+    }
     return x;
   } catch {
     throw Error(
@@ -1004,70 +1097,75 @@ export function encodeKnowledgeCheckpoint(state: KnowledgeWorkspace) {
   if (!state.caseEvents?.length) delete encodedState.caseEvents;
   if (!state.workshopEvents?.length) delete encodedState.workshopEvents;
   if (!state.patternEvents?.length) delete encodedState.patternEvents;
+  if (!state.exceptionEvents?.length) delete encodedState.exceptionEvents;
   const raw = JSON.stringify({
-    format: [
-      ...(state.workshopEvents ?? []),
-      ...(state.patternEvents ?? []).flatMap(
-        (e) => e.context.workshopEvents ?? [],
-      ),
-    ].some((e) => e.allocation || e.handoffId)
-      ? "forge.knowledge-workspace.v14"
-      : state.patternEvents?.length
-        ? "forge.knowledge-workspace.v13"
-        : state.workshopEvents?.length
-          ? "forge.knowledge-workspace.v12"
-          : state.caseEvents?.length
-            ? "forge.knowledge-workspace.v11"
-            : hasGoalReviews(state.use) ||
-                state.applicability?.some((c) => hasGoalReviews(c.context.use))
-              ? "forge.knowledge-workspace.v10"
-              : hasReviewHandoffs(state.use) ||
+    format: state.exceptionEvents?.length
+      ? "forge.knowledge-workspace.v15"
+      : [
+            ...(state.workshopEvents ?? []),
+            ...(state.patternEvents ?? []).flatMap(
+              (e) => e.context.workshopEvents ?? [],
+            ),
+          ].some((e) => e.allocation || e.handoffId)
+        ? "forge.knowledge-workspace.v14"
+        : state.patternEvents?.length
+          ? "forge.knowledge-workspace.v13"
+          : state.workshopEvents?.length
+            ? "forge.knowledge-workspace.v12"
+            : state.caseEvents?.length
+              ? "forge.knowledge-workspace.v11"
+              : hasGoalReviews(state.use) ||
                   state.applicability?.some((c) =>
-                    hasReviewHandoffs(c.context.use),
+                    hasGoalReviews(c.context.use),
                   )
-                ? "forge.knowledge-workspace.v9"
-                : state.brief.guideHandoffs ||
-                    state.brief.versions.some((v) => v.guideInput)
-                  ? "forge.knowledge-workspace.v8"
-                  : hasAuthorityHistory(state.use) ||
-                      state.applicability?.some((c) =>
-                        hasAuthorityHistory(c.context.use),
-                      )
-                    ? "forge.knowledge-workspace.v7"
-                    : state.contribution.contributions.some(
-                          (c) => c.revisionRequest,
-                        ) ||
-                        (state.use &&
-                          (useVersion(state.use.subject)! > 2 ||
-                            state.use.previousMaterials)) ||
-                        state.applicability?.some(
-                          (c) =>
-                            c.context.contribution.contributions.some(
-                              (v) => v.revisionRequest,
-                            ) ||
-                            (c.context.use &&
-                              (useVersion(c.context.use.subject)! > 2 ||
-                                c.context.use.previousMaterials)),
+                ? "forge.knowledge-workspace.v10"
+                : hasReviewHandoffs(state.use) ||
+                    state.applicability?.some((c) =>
+                      hasReviewHandoffs(c.context.use),
+                    )
+                  ? "forge.knowledge-workspace.v9"
+                  : state.brief.guideHandoffs ||
+                      state.brief.versions.some((v) => v.guideInput)
+                    ? "forge.knowledge-workspace.v8"
+                    : hasAuthorityHistory(state.use) ||
+                        state.applicability?.some((c) =>
+                          hasAuthorityHistory(c.context.use),
                         )
-                      ? "forge.knowledge-workspace.v6"
-                      : state.contribution.handoffs ||
+                      ? "forge.knowledge-workspace.v7"
+                      : state.contribution.contributions.some(
+                            (c) => c.revisionRequest,
+                          ) ||
+                          (state.use &&
+                            (useVersion(state.use.subject)! > 2 ||
+                              state.use.previousMaterials)) ||
                           state.applicability?.some(
-                            (c) => c.context.contribution.handoffs,
+                            (c) =>
+                              c.context.contribution.contributions.some(
+                                (v) => v.revisionRequest,
+                              ) ||
+                              (c.context.use &&
+                                (useVersion(c.context.use.subject)! > 2 ||
+                                  c.context.use.previousMaterials)),
                           )
-                        ? "forge.knowledge-workspace.v5"
-                        : state.contribution.responsibility ||
+                        ? "forge.knowledge-workspace.v6"
+                        : state.contribution.handoffs ||
                             state.applicability?.some(
-                              (c) => c.context.contribution.responsibility,
+                              (c) => c.context.contribution.handoffs,
                             )
-                          ? "forge.knowledge-workspace.v4"
-                          : state.use?.cycle === 2 ||
+                          ? "forge.knowledge-workspace.v5"
+                          : state.contribution.responsibility ||
                               state.applicability?.some(
-                                (c) => c.context.use?.cycle === 2,
+                                (c) => c.context.contribution.responsibility,
                               )
-                            ? "forge.knowledge-workspace.v3"
-                            : state.applicability?.length
-                              ? "forge.knowledge-workspace.v2"
-                              : "forge.knowledge-workspace.v1",
+                            ? "forge.knowledge-workspace.v4"
+                            : state.use?.cycle === 2 ||
+                                state.applicability?.some(
+                                  (c) => c.context.use?.cycle === 2,
+                                )
+                              ? "forge.knowledge-workspace.v3"
+                              : state.applicability?.length
+                                ? "forge.knowledge-workspace.v2"
+                                : "forge.knowledge-workspace.v1",
     savedAt: new Date().toISOString(),
     state: encodedState,
   });

@@ -146,3 +146,7 @@ Iteration 149 adds [versioned operating guidance](PATTERN-VERSIONING.md): explic
 Iteration 150 adds an [organization goal and evidence map](ORGANIZATION-GOALS.md) for Knowledge: explicit purpose-to-workstream links, scoped evidence/decisions, source and cycle boundaries, remaining gaps and next operational responsibility. Scoped simulation results never automatically establish an organization-wide outcome; organization-level accountability remains explicitly unallocated.
 
 Iteration 151 adds [multi-candidate K-02 allocation](WORKSHOP-ALLOCATION.md): explicit Leo/Maya offers, independent reviewer choice, acceptance-only pre-execution handoff, fresh recipient preparation/readiness and replay-validated checkpoint v14. Candidate profiles remain advisory; reviewer conflicts and post-execution transfers are blocked.
+
+## Exception handling · iteration 152
+
+[Explicit K-02 exception follow-up](EXCEPTION-HANDLING.md) connects observed issues, accepted handling, exact remedies and independent review, with shared/personal responsibilities and checkpoint recovery.

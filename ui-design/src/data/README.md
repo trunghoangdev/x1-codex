@@ -93,3 +93,7 @@ Iteration 140 adds the [goal outcome loop](../../GOAL-OUTCOME-LOOP.md): scoped o
 `organizationGoals.ts` defines the explicit Knowledge goal-map-v1 and derives workstream evidence/conclusions from existing use/goal and workshop records. It separates scoped simulation decisions from organization-level attainment, retains source/cycle boundaries, and does not infer goal ownership from operational roles. This read-only view adds no checkpoint state. See [organization goals](../../ORGANIZATION-GOALS.md).
 
 Iteration 151 extends `workshop.ts` with explicit facilitator/reviewer allocation and acceptance-only handoff before execution. Reviewer identity stays fixed; accepted transfers reset active preparation. New fields replay through checkpoint v14, including frozen workshop history within pattern contexts; v12/v13 defaults remain compatible. See [multi-candidate allocation](../../WORKSHOP-ALLOCATION.md).
+
+## Exception follow-up · iteration 152
+
+`exceptionLoop.ts` derives supported K-02 incident conditions and validates explicit ticket transitions, named handling acceptance, exact remedy evidence and independent owner closure. `knowledgeCheckpoint.ts` v15 replays the bounded history; `knowledgeTimeline.ts` exposes retained records. Pattern snapshots exclude exception history. See [boundaries](../../EXCEPTION-HANDLING.md).

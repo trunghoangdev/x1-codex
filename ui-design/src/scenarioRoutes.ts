@@ -30,6 +30,7 @@ export function validScenarioPath(raw: string) {
         ? [
             "/use/K-01",
             "/workshop/K-02",
+            "/exceptions",
             "/impact",
             "/goals",
             "/timeline",

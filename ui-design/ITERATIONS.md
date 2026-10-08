@@ -1197,3 +1197,10 @@ Case directory, shared attention/K-02 progress and relevant My Work entrances de
 - Fixed reviewer identity throughout each cycle; rejected self-review, reviewer-as-recipient, stale sources, closed cycles and post-execution handoffs. Decline/cancel retains the original facilitator and stage.
 - Preserved legacy default Leo/Maya replay; added checkpoint v14 including newer workshop snapshots nested in pattern history. Timeline and pattern birth identity retain explicit allocation.
 - See [allocation operation, compatibility and limits](WORKSHOP-ALLOCATION.md).
+
+## Iteration 152 · Closed-loop exception handling
+
+- Added explicit K-02 tickets for missing brief, declined allocation and failed simulated session, with offers, named-recipient responses, resolution submission, independent owner review, cancellation and reopening.
+- Required exact operational remedies and blocked changed-evidence closure; exceptions never substitute for execution or outcome decisions.
+- Added shared/personal responsibility summaries, Attention follow-up and timeline records; preserved authored assignment counts.
+- Added checkpoint v15 replay and retained v1–v14 compatibility, including nested workshop allocation records. See [operation and limits](EXCEPTION-HANDLING.md).
