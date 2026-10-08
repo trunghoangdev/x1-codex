@@ -1,3 +1,4 @@
+import { timelineKinds } from "./data/knowledgeTimeline";
 import { resolveScenario } from "./data/scenarioRegistry";
 import { coordinationCases } from "./data/coordinationCases";
 import { agreementVersions } from "./data/workstreamAgreements";
@@ -28,6 +29,7 @@ export function validScenarioPath(raw: string) {
       ...(scenario.id === "knowledge"
         ? [
             "/use/K-01",
+            "/timeline",
             "/cases",
             "/contributions/K-01-H",
             "/walkthroughs/guide-cycle",
@@ -50,6 +52,24 @@ export function validScenarioPath(raw: string) {
   if (suffix === "/contributions/K-01-H" && params.get("persona") !== "leo")
     return false;
   return (
+    (![
+      "timelineStream",
+      "timelineKind",
+      "timelineQ",
+      "timelinePage",
+      "timelineEvent",
+    ].some((k) => params.has(k)) ||
+      (scenario.id === "knowledge" &&
+        suffix === "/timeline" &&
+        ["all", "K-01", "K-02"].includes(
+          params.get("timelineStream") ?? "all",
+        ) &&
+        ["all", ...timelineKinds].includes(
+          params.get("timelineKind") ?? "all",
+        ) &&
+        (params.get("timelineQ") ?? "").length <= 500 &&
+        validDirectoryPage(params.get("timelinePage")) &&
+        (params.get("timelineEvent") ?? "").length <= 200)) &&
     (!params.has("contributionActor") ||
       (scenario.id === "knowledge" &&
         ["/work", "/contributions/K-01-H"].includes(suffix) &&

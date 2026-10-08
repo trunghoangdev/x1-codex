@@ -1,3 +1,4 @@
+import { KnowledgeTimeline } from "./KnowledgeTimeline";
 import { KnowledgeHandoff } from "./KnowledgeHandoff";
 import { contributionPerformer } from "./data/knowledgeHandoff";
 import { KnowledgeResponsibility } from "./KnowledgeResponsibility";
@@ -254,6 +255,7 @@ export function ScenarioWorkspace({
       </details>
       {scenario.id === "knowledge" && ["", "/work", "/contributions/K-01-H", "/assignments/K-01-H", "/workstreams/K-01", "/workflows/K-01", "/attention"].includes(suffix) && <KnowledgeResponsibility state={contribution} onChange={onContribution} actor={suffix === "/work" ? (params.get("useActor") ?? params.get("contributionActor") ?? persona?.workerId) : suffix === "/contributions/K-01-H" ? contributionActor : undefined} onActor={actor => onRoute(base + "/work?persona=leo" + (actor === "owner" ? "&useActor=owner" : ""))} />}
       {scenario.id === "knowledge" && ["", "/work", "/contributions/K-01-H", "/assignments/K-01-H", "/workstreams/K-01", "/workflows/K-01", "/attention"].includes(suffix) && <KnowledgeHandoff state={contribution} onChange={onContribution} actor={suffix === "/work" ? (params.get("useActor") ?? params.get("contributionActor") ?? persona?.workerId) : suffix === "/contributions/K-01-H" ? contributionActor : undefined} onActor={actor => onRoute(base + "/work?persona=leo" + (actor === "owner" ? "&useActor=owner" : actor === "delegate" ? "&contributionActor=delegate" : ""))} onContribution={actor => onRoute(base + "/contributions/K-01-H?persona=leo" + (actor === "delegate" ? "&contributionActor=delegate" : ""))} />}
+      {scenario.id === "knowledge" && ["", "/work", "/workstreams/K-01", "/workstreams/K-02", "/activity", "/attention", "/contributions/K-01-H"].includes(suffix) && <button className="button secondary" onClick={() => open("/timeline")}>Open Knowledge timeline</button>}
       {scenario.id === "knowledge" && agreementAdoptions.length > 0 && suffix !== "/agreements/K-01" && <section className="panel" aria-label="Adopted K-01 scope"><h2>K-01 · adopted local scope</h2><p>{agreementAdoptions.at(-1)!.versionId} · {agreementAdoptions.at(-1)!.audience}</p><p>Applicability is record-specific; inspect current decisions before reuse. Publication authority is separate.</p><button className="text-link" onClick={() => open("/agreements/K-01")}>Inspect adopted scope and impact</button></section>}
       {scenario.id === "knowledge" && ["", "/workstreams/K-01", "/workflows/K-01", "/outcomes/K-01", "/decisions"].includes(suffix) && <UseProgress contribution={contribution} state={authorizedUse} scope={useScope} onInspect={() => open("/use/K-01")} onInbox={actor => onRoute(base + "/work?persona=" + (["leo","maya"].includes(actor) ? actor : "maya") + "&useActor=" + actor)} />}
       {scenario.id === "knowledge" && suffix === "/work" && contributionActor !== "delegate" && <UseProgress contribution={contribution} state={authorizedUse} scope={useScope} actor={(params.get("useActor") ?? persona?.workerId ?? "maya") as UseActor} onActor={actor => onRoute(base + "/work?persona=" + (["leo","maya"].includes(actor) ? actor : "maya") + "&useActor=" + actor)} onInspect={() => open("/use/K-01")} />}
@@ -328,6 +330,8 @@ export function ScenarioWorkspace({
           onCase={(id) => open(`/cases/${id}`)}
           onSource={open}
         />
+      ) : suffix === "/timeline" ? (
+        <KnowledgeTimeline state={{contribution,brief:briefHandoff,adoptions:agreementAdoptions,applicability:applicabilityChecks,...(authorizedUse?{use:authorizedUse}:{})}} filters={{stream:params.get("timelineStream")??"all",kind:params.get("timelineKind")??"all",query:params.get("timelineQ")??"",page:Number(params.get("timelinePage")??1),event:params.get("timelineEvent")??undefined}} onFilters={f=>filter("timeline",{timelineStream:f.stream,timelineKind:f.kind,timelineQ:f.query,timelinePage:f.page>1?String(f.page):"",timelineEvent:f.event??""})} onSource={p=>onRoute(p)} onBack={back}/>
       ) : suffix === "/activity" ? (
         <ExchangeActivity
           scenario={scenario}

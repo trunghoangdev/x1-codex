@@ -67,3 +67,5 @@ This is an incremental boundary, not a finished data layer. Candidate, evidence,
 `knowledgeResponsibility.ts` adds an optional local K-01-H offer/response history to the contribution exercise. Exact scope and actor/state replay validation back contribution/workspace v4 recovery; unresolved offers gate submission without rewriting authored assignments. See `../../KNOWLEDGE-RESPONSIBILITY.md`.
 
 `knowledgeHandoff.ts` freezes exact contribution input/preparation, pending work and bounded authority for owner-proposed Leo/delegate transfers. Recipient acknowledgement changes the effective contributor; stale packages block acceptance and command/delivery performer links retain historical authors. Contribution/workspace v5 preserve packages. See `../../KNOWLEDGE-HANDOFF.md`.
+
+`knowledgeTimeline.ts` projects retained Knowledge workspace records into typed timeline rows with exact actors, versions, references and source destinations. Filters paginate twenty rows at a time; no independent event store or inferred transitions are introduced. See `../../KNOWLEDGE-TIMELINE.md`.
