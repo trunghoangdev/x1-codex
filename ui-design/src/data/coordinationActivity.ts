@@ -2,7 +2,7 @@ import type { ResponsibilityProposal } from "./responsibilityProposals";
 import { responsibilityGaps } from "./workerDetails";
 export type CoordinationRecord = {
   id: string;
-  kind: "proposals" | "decisions";
+  kind: "proposals" | "decisions" | "allocations";
   gapId: string;
   streamId: string;
   title: string;
@@ -53,8 +53,20 @@ export function coordinationActivity(
           recordedAt: proposal.decision.recordedAt,
           boundary:
             proposal.decision.outcome === "Accepted"
-              ? "Allocation pending · no binding, assignment or permission was created. Responsibility remains open."
+              ? "Allocation pending at plan acceptance; the decision itself created no binding, assignment or permission."
               : "Plan rejected · no allocation creation is planned. Responsibility remains open.",
+        });
+      if (proposal.allocation)
+        records.push({
+          ...common,
+          id: proposal.allocation.id,
+          kind: "allocations",
+          title: `Local allocation recorded · ${gap.title}`,
+          actor: proposal.allocation.allocator,
+          rationale: `${proposal.allocation.assignmentId} · binding ${proposal.allocation.bindingId} (${proposal.allocation.bindingMode}) · source ${proposal.id}`,
+          recordedAt: proposal.allocation.recordedAt,
+          boundary:
+            "Local responsibility allocated; prerequisites, performer acceptance and effective permissions remain unverified. Original gap is retained with a local resolution reference.",
         });
       return records;
     })

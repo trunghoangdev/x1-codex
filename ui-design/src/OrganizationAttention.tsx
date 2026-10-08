@@ -94,6 +94,7 @@ export function OrganizationAttention({
               </p>
               <p><strong>Why it needs attention:</strong> {item.detail}</p>
               <p><strong>Affected subject:</strong> {item.target.id}</p>
+              {proposals[item.id]?.allocation && <p>Original authored gap retained · local resolution: {proposals[item.id].allocation!.id} → {proposals[item.id].allocation!.assignmentId}. Allocation recorded locally; prerequisites, performer acceptance and effective permission remain unverified.</p>}
               <p><strong>Suggested next step:</strong> {item.category === "Responsibility" ? "Inspect the scoped gap before proposing responsibility." : item.category === "Outcome" ? "Inspect the evidence and remaining effect or outcome gaps." : "Inspect the requested response and its prerequisites."}</p>
               <p>Follow-up ownership is not separately recorded. Inspect the subject before assigning a next action.</p>
               <button

@@ -35,7 +35,9 @@ Allow an explicit sample reassessment of draft-02 after its exact receipt. Recor
 
 Acceptance: Maya receives draft-02 and records a reassessment; Leo sees the conclusion, Organization shows only the remaining represented need, and original draft-01 assessment is unchanged. Comparison, local progress, history, checkpoint validation and restore/import agree. Assessment suitability is distinct from authorization to use and observed outcome.
 
-### 2. Demonstrate actual local responsibility allocation
+### 2. Demonstrate actual local responsibility allocation — local slice completed at iteration 122
+
+See [local allocation](LOCAL-RESPONSIBILITY-ALLOCATION.md). Original acceptance scope follows; production allocation and performer acceptance remain unverified.
 
 Extend the existing proposal/plan distinction with a separate explicit local allocation record. Name the exact scoped binding and assignment created or reused, and the performer accepting responsibility where that is represented. Preserve the original gap and its resolution reference rather than deleting its history. Capacity and permission remain unverified unless separately supplied.
 

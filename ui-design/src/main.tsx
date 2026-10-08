@@ -1,3 +1,6 @@
+import { LocalResponsibilities } from "./LocalResponsibilities";
+import { localAllocationScenario } from "./data/localAllocationScenario";
+import { recordLocalAllocation } from "./data/responsibilityProposals";
 import { emptyContribution, type HumanContributionState } from "./data/humanContribution";
 import { deferredScreen } from "./ScreenLoadBoundary";
 import { readSavedDemo, type DemoSnapshot } from "./data/demoSnapshot";
@@ -1863,6 +1866,7 @@ function App() {
           )}
           {view === "Organization" && route.roleDirectory && (
             <RolesDirectory
+              scenario={localAllocationScenario(mainOrganization, proposals)}
               filters={route.roleDirectory}
               completed={completed}
               onFilters={(filters) =>
@@ -1893,6 +1897,8 @@ function App() {
                 });
               }}
               onAssignment={(id) => {
+                const allocated = Object.values(proposals).find(p => p.allocation?.assignmentId === id);
+                if (allocated) { setProposalGap(allocated.gapId); return; }
                 const a = assignments.find((a) => a.id === id);
                 if (a) open(a);
               }}
@@ -2110,6 +2116,7 @@ function App() {
               />
             </>
           )}
+          {!route.scenarioPath && !selected && (view === "My Work" || (view === "Organization" && !route.attention && !route.organizationActivity && !route.decisions && !handoff && !outcome)) && <LocalResponsibilities proposals={proposals} personal={view === "My Work"} workerId={worker?.id} streamId={stream?.id ?? route.workflowId} onInspect={setProposalGap} />}
           {view === "Demos" && route.humanContribution && <HumanContribution state={humanContribution} onChange={setHumanContribution} onBack={() => navigate("Demos")} />}
           {view === "Demos" && route.largeOrganization && (
             <LargeOrganizationDemo onBack={() => navigate("Demos")} />
@@ -2170,7 +2177,7 @@ function App() {
                 <DemoContinuity
                 current={{
                   format: "forge-ui-demo",
-                  version: 1,
+                  version: Object.values(proposals).some(p => p.allocation) ? 2 : 1,
                   scope: "main-sample",
                   drafts: responseDraft.snapshot,
                   receipts,
@@ -2434,7 +2441,9 @@ function App() {
                 return { ...old, [proposalGap]: { ...current, decision } };
               })
             }
+            onAllocate={() => setProposals(old => recordLocalAllocation(old, proposalGap, new Date().toISOString()))}
             onRemove={() => {
+              if (proposals[proposalGap]?.allocation) return;
               setProposals((old) => {
                 const next = { ...old };
                 delete next[proposalGap];

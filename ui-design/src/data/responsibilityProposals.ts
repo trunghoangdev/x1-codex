@@ -7,6 +7,7 @@ export type ResponsibilityProposal = {
   rationale: string;
   proposer: string;
   recordedAt: string;
+  allocation?: LocalAllocation;
   decision?: {
     outcome: "Accepted" | "Rejected";
     rationale: string;
@@ -47,4 +48,59 @@ export function allocationPreview(proposal: ResponsibilityProposal) {
       ? "Await agreed criteria and a bounded implementation scope before starting."
       : "Await agreed criteria, an identifiable candidate and attached checks before starting.",
   };
+}
+
+export type LocalAllocation = {
+  id: string;
+  proposalId: string;
+  assignmentId: string;
+  bindingId: string;
+  bindingMode: "created" | "reused";
+  workerId: string;
+  role: string;
+  scope: string;
+  gapId: string;
+  streamId: "WS-02";
+  recordedAt: string;
+  allocator: "Jamie · demo planner";
+};
+export function allocationFor(
+  proposal: ResponsibilityProposal,
+  at: string,
+): LocalAllocation {
+  const reused =
+    proposal.gapId === "invitation-assessment" && proposal.workerId === "alex";
+  return {
+    id: `local-allocation-${proposal.gapId}`,
+    proposalId: proposal.id,
+    assignmentId: `local-assignment-${proposal.gapId}`,
+    bindingId: reused ? "mb-reviewer" : `local-binding-${proposal.gapId}`,
+    bindingMode: reused ? "reused" : "created",
+    workerId: proposal.workerId,
+    role: proposal.role,
+    scope: proposal.scope,
+    gapId: proposal.gapId,
+    streamId: "WS-02",
+    recordedAt: at,
+    allocator: "Jamie · demo planner",
+  };
+}
+export function recordLocalAllocation(
+  proposals: Record<string, ResponsibilityProposal>,
+  gapId: string,
+  at: string,
+) {
+  const p = proposals[gapId];
+  const requirement = proposalRequirements[gapId];
+  if (
+    !p ||
+    !requirement ||
+    p.decision?.outcome !== "Accepted" ||
+    p.allocation ||
+    !requirement.workerIds.includes(p.workerId) ||
+    p.role !== requirement.role ||
+    p.scope !== requirement.scope
+  )
+    return proposals;
+  return { ...proposals, [gapId]: { ...p, allocation: allocationFor(p, at) } };
 }

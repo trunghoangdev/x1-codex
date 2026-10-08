@@ -45,6 +45,8 @@ Assessment, authorization, execution observations and verified outcomes remain d
 
 Maya can reassess received draft-02 with a reasoned local conclusion. Suitability, publication authority and verified outcome remain separate. See [reassessment](CONTRIBUTION-REASSESSMENT.md), including checkpoint v1/v2 compatibility.
 
+The main software sample also supports [explicit local responsibility allocation](LOCAL-RESPONSIBILITY-ALLOCATION.md), separate from accepting an allocation plan. New responsibilities appear in a separate local inbox and organizational views.
+
 ## Save, recover and move work
 
 Knowledge's visible save status distinguishes current work from its browser checkpoint. **Save or restore Knowledge contribution** supports explicit save, validated preview/restore and JSON export/import between machines. Reload starts Knowledge empty; recover explicitly. Unsaved work is not recovered. Import replaces the current exercise and does not automatically update the checkpoint. See [contribution recovery](CONTRIBUTION-RECOVERY.md).

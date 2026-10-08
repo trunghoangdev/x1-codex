@@ -104,6 +104,7 @@ export function OrganizationActivity({
               <option value="evidence">Sample evidence</option>
               <option value="proposals">Responsibility proposals</option>
               <option value="decisions">Allocation-plan decisions</option>
+              <option value="allocations">Local allocations</option>
             </select>
           </label>
           <button
@@ -116,14 +117,16 @@ export function OrganizationActivity({
           </button>
         </div>
         <p role="status">{count} matching records</p>
-        {["all", "proposals", "decisions"].includes(type) && (
+        {["all", "proposals", "decisions", "allocations"].includes(type) && (
           <section aria-label="Organization coordination records">
             <h2>Local coordination · newest first</h2>
             <p>
-              Local demo proposal and plan-decision records. Accepting a plan
-              does not create an allocation. Removing a proposal removes its
-              current records. Reload restores only the last explicitly saved
-              snapshot. This is not a permanent audit log.
+              Local demo proposal, plan-decision and allocation records.
+              Accepting a plan does not create an allocation. Unallocated
+              proposals can be removed; allocated proposals are retained until
+              an explicit continuity reset or replacement. Reload restores only
+              the last explicitly saved snapshot. This is not a permanent audit
+              log.
             </p>
             {coordination.map((record) => (
               <article

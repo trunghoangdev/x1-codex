@@ -14,12 +14,14 @@ export function ResponsibilityProposal({
   onRecord,
   onDecide,
   onRemove,
+  onAllocate,
 }: {
   gapId: string;
   proposal?: Proposal;
   onRecord: (proposal: Proposal) => void;
   onDecide: (decision: NonNullable<Proposal["decision"]>) => void;
   onRemove: () => void;
+  onAllocate: () => void;
 }) {
   const receiptHeading = useRef<HTMLHeadingElement>(null);
   useEffect(() => {
@@ -29,6 +31,11 @@ export function ResponsibilityProposal({
   }, [proposal]);
   const gap = responsibilityGaps.find((gap) => gap.id === gapId)!;
   const requirement = proposalRequirements[gapId];
+  const [confirmAllocation, setConfirmAllocation] = useState(false);
+  const allocationHeading = useRef<HTMLHeadingElement>(null);
+  useEffect(() => {
+    if (confirmAllocation) allocationHeading.current?.focus();
+  }, [confirmAllocation]);
   const [reviewing, setReviewing] = useState(false);
   const [decisionReason, setDecisionReason] = useState("");
   const [decisionOutcome, setDecisionOutcome] = useState<
@@ -64,9 +71,11 @@ export function ResponsibilityProposal({
       {proposal ? (
         <section aria-label="Recorded responsibility proposal">
           <h3 ref={receiptHeading} tabIndex={-1}>
-            {proposal.decision
-              ? `${proposal.decision.outcome} locally · ${proposal.decision.outcome === "Accepted" ? "allocation pending" : "no allocation planned"}`
-              : "Proposal recorded · awaiting allocation"}
+            {proposal.allocation
+              ? "Allocation recorded locally · work prerequisites pending"
+              : proposal.decision
+                ? `${proposal.decision.outcome} locally · ${proposal.decision.outcome === "Accepted" ? "allocation pending" : "no allocation planned"}`
+                : "Proposal recorded · awaiting allocation"}
           </h3>
           <p>
             {workers.find((w) => w.id === proposal.workerId)?.name} ·{" "}
@@ -95,10 +104,75 @@ export function ResponsibilityProposal({
               </p>
             </>
           )}
-          <p>
-            No worker binding, assignment or permission was changed. The
-            responsibility gap remains open.
-          </p>
+          {proposal.allocation ? (
+            <section aria-label="Recorded local allocation">
+              <h4>Local responsibility allocated</h4>
+              <p>
+                {proposal.allocation.id} · from {proposal.allocation.proposalId}
+              </p>
+              <p>
+                Assignment: {proposal.allocation.assignmentId} ·{" "}
+                {proposal.workerId} · {proposal.role} · {proposal.scope}.
+              </p>
+              <p>
+                Binding: {proposal.allocation.bindingId} ·{" "}
+                {proposal.allocation.bindingMode} ·{" "}
+                {proposal.allocation.recordedAt} ·{" "}
+                {proposal.allocation.allocator}.
+              </p>
+              <p>
+                The original gap is preserved with this local resolution
+                reference. Performer acceptance, capability, capacity and
+                effective permission remain unverified. Work prerequisites still
+                apply.
+              </p>
+            </section>
+          ) : (
+            <p>
+              No worker binding, assignment or permission was changed. The
+              responsibility gap remains open.
+            </p>
+          )}
+          {proposal.decision?.outcome === "Accepted" &&
+            !proposal.allocation &&
+            (!confirmAllocation ? (
+              <button
+                className="button primary"
+                onClick={() => setConfirmAllocation(true)}
+              >
+                Prepare local allocation
+              </button>
+            ) : (
+              <section aria-label="Confirm local allocation">
+                <h4 ref={allocationHeading} tabIndex={-1}>
+                  Confirm separate allocation
+                </h4>
+                <p>
+                  Create one local assignment for {proposal.workerId} in WS-02.{" "}
+                  {allocationPreview(proposal).binding} This does not start
+                  execution or establish performer acceptance. It will appear in
+                  local responsibilities and role/workstream views.
+                </p>
+                <button
+                  className="button primary"
+                  onClick={() => {
+                    onAllocate();
+                    setConfirmAllocation(false);
+                  }}
+                >
+                  Record local allocation
+                </button>{" "}
+                <button
+                  className="button secondary"
+                  onClick={() => {
+                    setConfirmAllocation(false);
+                    receiptHeading.current?.focus();
+                  }}
+                >
+                  Cancel allocation
+                </button>
+              </section>
+            ))}
           {proposal.decision ? (
             <section aria-label="Allocation decision receipt">
               <h4>Local allocation decision</h4>
@@ -112,9 +186,11 @@ export function ResponsibilityProposal({
                 </time>
               </p>
               <p>
-                {proposal.decision.outcome === "Accepted"
-                  ? "The plan was accepted in this demo. Binding and assignment creation remain pending; the worker has not been allocated."
-                  : "The plan was rejected in this demo. No binding or assignment creation is planned."}
+                {proposal.allocation
+                  ? "This plan was accepted earlier; a separate local allocation is now recorded. The decision alone did not create it."
+                  : proposal.decision.outcome === "Accepted"
+                    ? "The plan was accepted in this demo. Binding and assignment creation remain pending; the worker has not been allocated."
+                    : "The plan was rejected in this demo. No binding or assignment creation is planned."}
               </p>
             </section>
           ) : !reviewing ? (
@@ -150,9 +226,9 @@ export function ResponsibilityProposal({
                 <dd>{allocationPreview(proposal).prerequisites}</dd>
               </dl>
               <p>
-                No assignment ID is reserved. Validation and allocation would be
-                separate steps; accepting this plan does not create work or
-                close the gap.
+                {proposal.allocation
+                  ? "The allocation record above names the created assignment; this section retains the original plan."
+                  : "No assignment ID is reserved. Validation and allocation would be separate steps; accepting this plan does not create work or close the gap."}
               </p>
             </section>
           )}
@@ -217,10 +293,16 @@ export function ResponsibilityProposal({
               </div>
             </form>
           )}
-          <button className="button secondary" onClick={onRemove}>
-            {proposal.decision
-              ? "Remove local proposal and decision"
-              : "Remove local proposal"}
+          <button
+            className="button secondary"
+            disabled={!!proposal.allocation}
+            onClick={onRemove}
+          >
+            {proposal.allocation
+              ? "Allocated proposal retained"
+              : proposal.decision
+                ? "Remove local proposal and decision"
+                : "Remove local proposal"}
           </button>
         </section>
       ) : (

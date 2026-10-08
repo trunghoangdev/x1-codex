@@ -18,7 +18,7 @@ const empty = {
 test("snapshot validation rejects foreign versions, malformed structured drafts and unknown assignments", () => {
   expect(parseDemoSnapshot(JSON.stringify(empty))).toEqual(empty);
   for (const value of [
-    { ...empty, version: 2 },
+    { ...empty, version: 99 },
     { ...empty, scope: "knowledge" },
     {
       ...empty,

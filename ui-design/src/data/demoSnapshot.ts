@@ -1,14 +1,14 @@
 import { evidenceFor } from "./evidence";
 import { reviewRequirements } from "./requirements";
 import { assignments } from "./assignments";
-import { proposalRequirements } from "./responsibilityProposals";
+import { allocationFor, proposalRequirements } from "./responsibilityProposals";
 import type { ResponsibilityProposal } from "./responsibilityProposals";
 import type { ResponseRecord } from "./models";
 import type { DraftSnapshot } from "../useResponseDrafts";
 export const demoStorageKey = "forge-ui-demo-snapshot-v1";
 export type DemoSnapshot = {
   format: "forge-ui-demo";
-  version: 1;
+  version: 1 | 2;
   scope: "main-sample";
   savedAt: string;
   drafts: DraftSnapshot;
@@ -86,7 +86,7 @@ export function parseDemoSnapshot(raw: string): DemoSnapshot {
       "proposals",
     ]) ||
     x.format !== "forge-ui-demo" ||
-    x.version !== 1 ||
+    ![1, 2].includes(x.version) ||
     x.scope !== "main-sample" ||
     !date(x.savedAt)
   )
@@ -258,6 +258,7 @@ export function parseDemoSnapshot(raw: string): DemoSnapshot {
         "proposer",
         "recordedAt",
         "decision",
+        "allocation",
       ]) ||
       p.gapId !== gap ||
       !requirement.workerIds.includes(p.workerId) ||
@@ -277,6 +278,25 @@ export function parseDemoSnapshot(raw: string): DemoSnapshot {
         !date(p.decision.recordedAt))
     )
       return fail();
+  }
+  for (const p of Object.values(x.proposals) as ResponsibilityProposal[]) {
+    if (p.allocation !== undefined) {
+      if (
+        x.version !== 2 ||
+        p.decision?.outcome !== "Accepted" ||
+        !obj(p.allocation) ||
+        !date(p.allocation.recordedAt)
+      )
+        return fail();
+      const expected = allocationFor(p, p.allocation.recordedAt);
+      if (
+        !keys(p.allocation, Object.keys(expected)) ||
+        Object.entries(expected).some(
+          ([k, value]) => (p.allocation as any)[k] !== value,
+        )
+      )
+        return fail();
+    }
   }
   return x as DemoSnapshot;
 }
