@@ -1,3 +1,7 @@
+import {
+  contributionPerformer,
+  contributorNames,
+} from "./data/knowledgeHandoff";
 import type { HumanContributionState } from "./data/humanContribution";
 import { contributionView } from "./data/contributionView";
 
@@ -11,6 +15,9 @@ export function ContributionProgress({
   onReceiver: () => void;
 }) {
   const view = contributionView(state);
+  const contributor = contributorNames[contributionPerformer(state)];
+  const name = (c?: HumanContributionState["contributions"][number]) =>
+    c?.delivery ? contributorNames[c.delivery.performer ?? "leo"] : contributor;
   const [first, second] = state.contributions;
   const next =
     view.attention === "allocation"
@@ -22,7 +29,7 @@ export function ContributionProgress({
             view.attention === "command" ||
             view.attention === "correction" ||
             !state.contributions.at(-1)?.delivery
-          ? `Leo · ${view.contributorNext}`
+          ? `${contributor} · ${view.contributorNext}`
           : state.contributions.at(-1)?.reassessment
             ? view.contributorNext
             : "No further action owner is established by the current records; assessment remains separate.";
@@ -31,7 +38,9 @@ export function ContributionProgress({
       className="panel org-stream"
       aria-label="Local contribution progress"
     >
-      <div className="eyebrow">LOCAL EXERCISE · K-01-H · LEO → MAYA</div>
+      <div className="eyebrow">
+        LOCAL EXERCISE · K-01-H · {contributor.toUpperCase()} → MAYA
+      </div>
       <h2>Contribution progress · Welcome guide</h2>
       <p>
         This lane follows local contribution records, including explicit
@@ -46,7 +55,7 @@ export function ContributionProgress({
       </p>
       <ol>
         <li>
-          <strong>Leo · prepare draft-01</strong>
+          <strong>{name(first)} · prepare draft-01</strong>
           <p>
             {first.delivery
               ? "Frozen in the original delivery below."
@@ -56,7 +65,7 @@ export function ContributionProgress({
           </p>
         </li>
         <li>
-          <strong>Leo → Maya · deliver draft-01</strong>
+          <strong>{name(first)} → Maya · deliver draft-01</strong>
           <p>
             {first.delivery
               ? `${first.delivery.id} · ${first.delivery.at}`
@@ -72,7 +81,7 @@ export function ContributionProgress({
           </p>
         </li>
         <li>
-          <strong>Maya → Leo · request revision</strong>
+          <strong>Maya → {name(first)} · request revision</strong>
           <p>
             {first.assessment
               ? `${first.assessment.id} → ${first.assessment.receiptId} · ${first.assessment.at}`
@@ -86,7 +95,7 @@ export function ContributionProgress({
           )}
         </li>
         <li>
-          <strong>Leo · prepare and deliver draft-02</strong>
+          <strong>{name(second)} · prepare and deliver draft-02</strong>
           <p>
             {second?.delivery
               ? `${second.delivery.id} · responds to ${second.delivery.respondsTo} · ${second.delivery.at}`
@@ -105,7 +114,9 @@ export function ContributionProgress({
         </li>
         {state.contributions.slice(2).map((c) => (
           <li key={c.version}>
-            <strong>Leo → Maya · draft-0{c.version}</strong>
+            <strong>
+              {name(c)} → Maya · draft-0{c.version}
+            </strong>
             <p>
               {c.delivery
                 ? `${c.delivery.id} · responds to ${c.delivery.respondsTo}`
@@ -125,7 +136,7 @@ export function ContributionProgress({
         ))}
       </ol>
       <button className="button secondary" onClick={onContributor}>
-        Inspect contribution · Leo
+        Inspect contribution · {contributor}
       </button>{" "}
       <button className="button secondary" onClick={onReceiver}>
         Inspect receiver inbox · Maya

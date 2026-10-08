@@ -3799,3 +3799,16 @@ main h3,
   width: 100%;
   max-width: 100%;
 }
+.knowledge-handoff label {
+  display: grid;
+  gap: 6px;
+  min-width: 0;
+  margin-block: 12px;
+}
+.knowledge-handoff textarea,
+.knowledge-handoff select {
+  width: 100%;
+  min-width: 0;
+  max-width: 100%;
+}
+.knowledge-handoff input[type="checkbox"] { width: auto; justify-self: start; }

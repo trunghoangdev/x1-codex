@@ -1,3 +1,4 @@
+import { validateKnowledgeHandoffs } from "./knowledgeHandoff";
 import { validateKnowledgeResponsibility } from "./knowledgeResponsibility";
 import {
   contributionResponsibility as r,
@@ -11,7 +12,8 @@ export type ContributionCheckpoint = {
     | "forge.knowledge-contribution.v1"
     | "forge.knowledge-contribution.v2"
     | "forge.knowledge-contribution.v3"
-    | "forge.knowledge-contribution.v4";
+    | "forge.knowledge-contribution.v4"
+    | "forge.knowledge-contribution.v5";
   savedAt: string;
   state: HumanContributionState;
 };
@@ -40,19 +42,21 @@ export function parseContributionCheckpoint(
       "forge.knowledge-contribution.v2",
       "forge.knowledge-contribution.v3",
       "forge.knowledge-contribution.v4",
+      "forge.knowledge-contribution.v5",
     ].includes(value.format) ||
     !time(value.savedAt)
   )
     fail();
   const s = value.state;
   if (
-    !object(s, ["contributions", "commands", "responsibility"]) ||
+    !object(s, ["contributions", "commands", "responsibility", "handoffs"]) ||
     !Array.isArray(s.contributions) ||
     s.contributions.length < 1 ||
     s.contributions.length >
       ([
         "forge.knowledge-contribution.v3",
         "forge.knowledge-contribution.v4",
+        "forge.knowledge-contribution.v5",
       ].includes(value.format)
         ? maxContributionVersions
         : 2) ||
@@ -61,8 +65,18 @@ export function parseContributionCheckpoint(
   )
     fail();
   if (s.responsibility !== undefined) {
-    if (value.format !== "forge.knowledge-contribution.v4") fail();
+    if (
+      ![
+        "forge.knowledge-contribution.v4",
+        "forge.knowledge-contribution.v5",
+      ].includes(value.format)
+    )
+      fail();
     validateKnowledgeResponsibility(s.responsibility, s);
+  }
+  if (s.handoffs !== undefined) {
+    if (value.format !== "forge.knowledge-contribution.v5") fail();
+    validateKnowledgeHandoffs(s);
   }
   for (const [i, c] of s.contributions.entries()) {
     if (
@@ -91,7 +105,15 @@ export function parseContributionCheckpoint(
     const d = c.delivery;
     if (
       d &&
-      (!object(d, ["id", "at", "body", "note", "input", "respondsTo"]) ||
+      (!object(d, [
+        "id",
+        "at",
+        "body",
+        "note",
+        "input",
+        "respondsTo",
+        "performer",
+      ]) ||
         d.id !== `human-delivery-v${c.version}` ||
         !time(d.at) ||
         d.body !== c.body ||
@@ -100,6 +122,8 @@ export function parseContributionCheckpoint(
         !c.note.trim() ||
         !c.citesInput ||
         d.input !== r.input ||
+        (d.performer !== undefined &&
+          (!s.handoffs || !["leo", "delegate"].includes(d.performer))) ||
         (i === 0
           ? d.respondsTo !== undefined
           : d.respondsTo !== revisionRequest(s.contributions[i - 1])?.id))
@@ -182,10 +206,13 @@ export function parseContributionCheckpoint(
         "rejection",
         "admittedAt",
         "projected",
+        "performer",
       ]) ||
       c.id !== `demo-command-${i + 1}` ||
       c.idempotencyKey !== `${c.id}-key` ||
       c.contract !== "human.contribution-submit.draft.v1" ||
+      (c.performer !== undefined &&
+        (!s.handoffs || !["leo", "delegate"].includes(c.performer))) ||
       !Number.isInteger(c.version) ||
       c.version < 1 ||
       c.version > maxContributionVersions ||
@@ -232,7 +259,9 @@ export function parseContributionCheckpoint(
         fail();
       if (
         c.projected
-          ? !contribution.delivery || contribution.delivery.at !== c.admittedAt
+          ? !contribution.delivery ||
+            contribution.delivery.at !== c.admittedAt ||
+            contribution.delivery.performer !== c.performer
           : i !== commands.length - 1 ||
             contribution.delivery ||
             c.version !== s.contributions.length
@@ -260,13 +289,15 @@ export function parseContributionCheckpoint(
 }
 export function encodeContributionCheckpoint(state: HumanContributionState) {
   const raw = JSON.stringify({
-    format: state.responsibility
-      ? "forge.knowledge-contribution.v4"
-      : state.contributions.length > 2
-        ? "forge.knowledge-contribution.v3"
-        : state.contributions.some((c) => c.reassessment)
-          ? "forge.knowledge-contribution.v2"
-          : "forge.knowledge-contribution.v1",
+    format: state.handoffs
+      ? "forge.knowledge-contribution.v5"
+      : state.responsibility
+        ? "forge.knowledge-contribution.v4"
+        : state.contributions.length > 2
+          ? "forge.knowledge-contribution.v3"
+          : state.contributions.some((c) => c.reassessment)
+            ? "forge.knowledge-contribution.v2"
+            : "forge.knowledge-contribution.v1",
     savedAt: new Date().toISOString(),
     state,
   });

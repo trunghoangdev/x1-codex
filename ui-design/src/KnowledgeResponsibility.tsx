@@ -1,3 +1,7 @@
+import {
+  contributionPerformer,
+  contributorNames,
+} from "./data/knowledgeHandoff";
 import { useEffect, useRef, useState } from "react";
 import type { HumanContributionState } from "./data/humanContribution";
 import {
@@ -65,10 +69,11 @@ export function KnowledgeResponsibility({
       </h2>
       <p role="status">{status}</p>
       <p>
-        Coordinator role · guide contribution: Leo → receiver/editor: Maya.
-        Input: input-access-brief-v1. Scope: prepare the fictional cohort’s
-        access guide; assessment, publication authority and outcome remain
-        separate.
+        Coordinator role · guide contribution:{" "}
+        {contributorNames[contributionPerformer(state)]} → receiver/editor:
+        Maya. Input: input-access-brief-v1. Scope: prepare the fictional
+        cohort’s access guide; assessment, publication authority and outcome
+        remain separate.
       </p>
       <p>
         <strong>Next responsibility:</strong>{" "}
@@ -80,7 +85,7 @@ export function KnowledgeResponsibility({
               ].includes(status)
             ? "Demo organization owner · resolve the response and issue a new offer."
             : status === "Accepted locally"
-              ? "Leo · prepare the contribution; Maya receives and assesses each delivered version separately."
+              ? `${contributorNames[contributionPerformer(state)]} · prepare the contribution; Maya receives and assesses each delivered version separately.`
               : "Demo organization owner · issue a local offer before starting the allocation exercise."}
       </p>
       {!state.responsibility && (

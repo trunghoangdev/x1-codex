@@ -50,6 +50,11 @@ export function validScenarioPath(raw: string) {
   if (suffix === "/contributions/K-01-H" && params.get("persona") !== "leo")
     return false;
   return (
+    (!params.has("contributionActor") ||
+      (scenario.id === "knowledge" &&
+        ["/work", "/contributions/K-01-H"].includes(suffix) &&
+        params.get("persona") === "leo" &&
+        ["leo", "delegate"].includes(params.get("contributionActor")!))) &&
     (!params.has("useActor") ||
       (scenario.id === "knowledge" &&
         suffix === "/work" &&

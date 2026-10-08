@@ -31,6 +31,10 @@ Captured from iteration 109 on 2026-10-07. These are fictional demo views, not p
 
 With Vite running on port 4173, reproduce from this directory using `node scripts/capture-current-demo.mjs`. Screenshots in other files retain their own historical checkpoint dates; see [development history](README-HISTORY.md).
 
+## Input and authority handoff · iteration 134
+
+K-01-H now supports owner-proposed handoffs between Leo and a local demo delegate. The recipient reviews exact input, frozen draft, remaining work and bounded contribution rights before accepting. Ownership stays with the original contributor until acceptance; stale packages block acceptance. See [Knowledge handoff](KNOWLEDGE-HANDOFF.md).
+
 ## Knowledge responsibility · iteration 133
 
 Before submission, the demo owner can offer K-01-H to Leo. Leo accepts, requests clarification or declines; unresolved offers block submission. Organization, attention and My Work show the next responsible actor. Checkpoints preserve offers and responses. See [Knowledge responsibility](KNOWLEDGE-RESPONSIBILITY.md).

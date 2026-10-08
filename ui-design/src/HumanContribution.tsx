@@ -1,3 +1,8 @@
+import {
+  contributionPerformer,
+  contributorNames,
+  type ContributorActor,
+} from "./data/knowledgeHandoff";
 import { contributionAcceptanceBlocked } from "./data/knowledgeResponsibility";
 import {
   maxContributionVersions,
@@ -22,19 +27,25 @@ import {
 } from "./data/humanContribution";
 export function HumanContribution({
   state,
-  onChange,
+  onChange: applyChange,
+  actor = "leo",
   onBack,
   workspace,
 }: {
   state: HumanContributionState;
+  actor?: ContributorActor;
   onChange: (state: HumanContributionState) => void;
   onBack: () => void;
   workspace?: { onOrganization: () => void; onWorkstream: () => void };
 }) {
+  const canOperate = actor === contributionPerformer(state);
+  const onChange = (next: HumanContributionState) => {
+    if (canOperate) applyChange(next);
+  };
   const [reviewed, setReviewed] = useState<string>();
   const [preview, setPreview] = useState<CommandPreview>("projected");
   // A confirmation authorizes only the exact state and simulation reviewed.
-  const reviewIdentity = JSON.stringify({ state, preview });
+  const reviewIdentity = JSON.stringify({ state, preview, actor });
   const confirm = reviewed === reviewIdentity;
   const setConfirm = (value: boolean) => {
     setReviewed(value ? reviewIdentity : undefined);
@@ -52,7 +63,7 @@ export function HumanContribution({
   const locked = commandBlocksEditing(state);
   const current = state.contributions.at(-1)!;
   const update = (fields: Partial<typeof current>) => {
-    if (!current.delivery && !locked)
+    if (canOperate && !current.delivery && !locked)
       onChange({
         ...state,
         contributions: state.contributions.map((c) =>
@@ -90,6 +101,7 @@ export function HumanContribution({
     document.getElementById(target)?.focus();
   }, [focusStage, current.version, confirm, locked, current.delivery, command]);
   const ready =
+    canOperate &&
     !contributionAcceptanceBlocked(state) &&
     !!current.body.trim() &&
     !!current.note.trim() &&
@@ -97,8 +109,17 @@ export function HumanContribution({
   return (
     <div className="detail-page human-contribution-page">
       <button className="button secondary" onClick={onBack}>
-        {workspace ? "Back to My Work · Leo" : "Back to Demos"}
+        {workspace
+          ? `Back to My Work · ${contributorNames[actor]}`
+          : "Back to Demos"}
       </button>
+      {!canOperate && (
+        <p role="status">
+          Read-only contributor view. Current responsibility belongs to{" "}
+          {contributorNames[contributionPerformer(state)]}; use Open current
+          contributor in the handoff panel.
+        </p>
+      )}
       <div className="page-heading">
         <div>
           <div className="eyebrow">HUMAN WORK · INTERACTIVE DEMO</div>
@@ -154,9 +175,9 @@ export function HumanContribution({
           <details>
             <summary>Assignment context</summary>
             <p>
-              K-01-H · Leo · preparation and revision. This sample assignment is
-              separate from the authored researcher and distribution
-              responsibilities.
+              K-01-H · {contributorNames[contributionPerformer(state)]} ·
+              preparation and revision. This sample assignment is separate from
+              the authored researcher and distribution responsibilities.
             </p>
           </details>
           <button
@@ -244,6 +265,7 @@ export function HumanContribution({
           </p>
           <label htmlFor="human-contribution-body">Contribution text</label>
           <textarea
+            disabled={!canOperate}
             id="human-contribution-body"
             aria-describedby="human-contribution-requirement"
             rows={8}
@@ -258,6 +280,7 @@ export function HumanContribution({
             {current.version > 1 ? "Revision response" : "Delivery note"}
           </label>
           <textarea
+            disabled={!canOperate}
             id="human-contribution-note"
             aria-describedby="human-contribution-requirement"
             rows={3}
@@ -271,6 +294,7 @@ export function HumanContribution({
           <label>
             <input
               type="checkbox"
+              disabled={!canOperate}
               checked={current.citesInput}
               onChange={(e) => {
                 setConfirm(false);
@@ -356,6 +380,7 @@ export function HumanContribution({
                       state,
                       preview,
                       new Date().toISOString(),
+                      actor,
                     ),
                   );
                   setConfirm(false);
@@ -541,6 +566,7 @@ export function HumanContribution({
                 <p>{current.assessment.rationale}</p>
                 <button
                   className="button primary"
+                  disabled={!canOperate}
                   onClick={() => onChange(reviseContribution(state))}
                 >
                   Prepare draft-02
@@ -562,6 +588,7 @@ export function HumanContribution({
               current.version < maxContributionVersions && (
                 <button
                   className="button primary"
+                  disabled={!canOperate}
                   onClick={() => onChange(reviseContribution(state))}
                 >
                   Prepare draft-0{current.version + 1}

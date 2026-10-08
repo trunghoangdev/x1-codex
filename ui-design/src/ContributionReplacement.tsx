@@ -1,3 +1,7 @@
+import {
+  contributionPerformer,
+  contributorNames,
+} from "./data/knowledgeHandoff";
 import { knowledgeResponsibilityStatus } from "./data/knowledgeResponsibility";
 import type { HumanContributionState } from "./data/humanContribution";
 import { contributionView } from "./data/contributionView";
@@ -60,6 +64,16 @@ export function ContributionReplacement({
           : "replaced"}
         ; importing a legacy contribution can remove local offers and
         acceptance.
+      </p>
+      <p>
+        Handoff history:{" "}
+        {identity(current.handoffs) === identity(incoming.handoffs)
+          ? "unchanged"
+          : "replaced"}
+        . Current contributor:{" "}
+        {contributorNames[contributionPerformer(current)]} →{" "}
+        {contributorNames[contributionPerformer(incoming)]}. Legacy replacement
+        can remove accepted handoffs.
       </p>
       <ul>
         {versions.map((version) => {

@@ -1,3 +1,9 @@
+import {
+  contributionPerformer,
+  contributorNames,
+  pendingKnowledgeHandoff,
+  handoffIsCurrent,
+} from "./knowledgeHandoff";
 import { contributionView } from "./contributionView";
 import { scenarioAttention } from "./scenarioAttention";
 import type { OrganizationScenario } from "./organizationScenario";
@@ -33,6 +39,33 @@ export function actionableAttention(
             : "Inspect outcome requirements and evidence gaps.",
   }));
   if (scenario.id !== "knowledge") return authored;
+  const handoff = pendingKnowledgeHandoff(contribution);
+  const transfer: CoordinationNeed[] = handoff
+    ? [
+        {
+          id: "local-K-01-H-handoff",
+          source: "session",
+          category: "Responsibility",
+          title: "Contribution input and authority handoff",
+          owner: handoffIsCurrent(contribution, handoff)
+            ? contributorNames[handoff.to]
+            : "Demo organization owner",
+          responsibility: `${contributorNames[handoff.from]} retains contribution responsibility until exact-package acceptance.`,
+          detail: `${handoff.id} · input ${handoff.input.id} · draft-0${handoff.draft.version} · ${handoffIsCurrent(contribution, handoff) ? "recipient response pending" : "stale package; acceptance blocked"}`,
+          nextStep: handoffIsCurrent(contribution, handoff)
+            ? "Inspect input, remaining work and bounded authority before accepting or declining."
+            : "Cancel the stale package and prepare a new handoff.",
+          target: { kind: "assignment", id: "K-01-H" },
+          destination:
+            "/organizations/knowledge/work?persona=leo" +
+            (!handoffIsCurrent(contribution, handoff)
+              ? "&useActor=owner"
+              : handoff.to === "delegate"
+                ? "&contributionActor=delegate"
+                : ""),
+        },
+      ]
+    : [];
   const current = contribution.contributions.at(-1)!;
   const view = contributionView(contribution);
   if (view.attention === "allocation") {
@@ -62,16 +95,19 @@ export function actionableAttention(
   const unsettled = view.attention === "command";
   const correction = view.attention === "correction";
   // Only represented transitions create signals. No delivery does not imply a missed deadline.
-  if (!receiver && !revision && !unsettled && !correction) return authored;
+  if (!receiver && !revision && !unsettled && !correction)
+    return [...transfer, ...authored];
   const local: CoordinationNeed = {
     id: "local-K-01-H",
     source: "session",
     category: "Response",
     title: "Access-guide contribution · K-01-H",
-    owner: receiver ? "Maya · sample receiver" : "Leo · sample contributor",
+    owner: receiver
+      ? "Maya · sample receiver"
+      : `${contributorNames[contributionPerformer(contribution)]} · sample contributor`,
     responsibility: receiver
       ? "Receipt responsibility: Maya. No separate escalation owner is recorded."
-      : "Contribution responsibility: Leo. No separate escalation owner is recorded.",
+      : `Contribution responsibility: ${contributorNames[contributionPerformer(contribution)]}. No separate escalation owner is recorded.`,
     detail: receiver
       ? `draft-0${current.version} delivered locally; receiver receipt is not recorded.`
       : revision
@@ -93,7 +129,10 @@ export function actionableAttention(
     target: { kind: "assignment", id: "K-01-H" },
     destination: receiver
       ? "/organizations/knowledge/work?persona=maya"
-      : "/organizations/knowledge/contributions/K-01-H?persona=leo",
+      : "/organizations/knowledge/contributions/K-01-H?persona=leo" +
+        (contributionPerformer(contribution) === "delegate"
+          ? "&contributionActor=delegate"
+          : ""),
   };
-  return [local, ...authored];
+  return [...transfer, local, ...authored];
 }

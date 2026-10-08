@@ -1,3 +1,4 @@
+import { contributorCanAct, type ContributorActor } from "./knowledgeHandoff";
 import { contributionAcceptanceBlocked } from "./knowledgeResponsibility";
 import {
   contributionResponsibility,
@@ -20,6 +21,7 @@ export type ContributionCommand = {
   assignment: string;
   subject: string;
   version: number;
+  performer?: ContributorActor;
   body: string;
   note: string;
   input: string;
@@ -43,9 +45,11 @@ export function submitContributionCommand(
   state: HumanContributionState,
   preview: CommandPreview,
   at: string,
+  actor: ContributorActor = "leo",
 ): HumanContributionState {
   const current = state.contributions.at(-1)!;
   if (
+    !contributorCanAct(state, actor, at) ||
     contributionAcceptanceBlocked(state, at) ||
     current.delivery ||
     commandBlocksEditing(state) ||
@@ -72,6 +76,7 @@ export function submitContributionCommand(
     assignment: contributionResponsibility.assignment,
     subject: contributionResponsibility.subject,
     version: current.version,
+    ...(state.handoffs ? { performer: actor } : {}),
     body: current.body,
     note: current.note,
     input: contributionResponsibility.input,
@@ -132,7 +137,11 @@ export function projectContributionCommand(
     !current.citesInput
   )
     return state;
-  const delivered = deliverContribution(state, command.admittedAt!);
+  const delivered = deliverContribution(
+    state,
+    command.admittedAt!,
+    command.performer ?? "leo",
+  );
   return {
     ...delivered,
     commands: state.commands!.map((c) =>

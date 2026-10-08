@@ -1,3 +1,7 @@
+import {
+  contributionPerformer,
+  contributorNames,
+} from "./data/knowledgeHandoff";
 import { useEffect, useRef, useState } from "react";
 import { ContributionComparison } from "./ContributionComparison";
 import { contributionView } from "./data/contributionView";
@@ -59,7 +63,10 @@ export function ContributionExchange({
       <h2>
         {receiver ? "Contribution for Maya" : "Contribution exchange · K-01-H"}
       </h2>
-      <p>Knowledge Operations · K-01 · Leo → Maya · local demo.</p>
+      <p>
+        Knowledge Operations · K-01 ·{" "}
+        {contributorNames[contributionPerformer(state)]} → Maya · local demo.
+      </p>
       <details>
         <summary>Source, recovery and outcome boundaries</summary>
         <p>

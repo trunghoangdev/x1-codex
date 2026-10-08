@@ -1,4 +1,9 @@
 import {
+  contributorCanAct,
+  type ContributorActor,
+  type KnowledgeHandoff,
+} from "./knowledgeHandoff";
+import {
   contributionAcceptanceBlocked,
   type KnowledgeResponsibility,
 } from "./knowledgeResponsibility";
@@ -15,6 +20,7 @@ export type Contribution = {
     note: string;
     input: string;
     respondsTo?: string;
+    performer?: ContributorActor;
   };
   receipt?: { id: string; deliveryId: string; at: string };
   reassessment?: {
@@ -38,6 +44,7 @@ export type HumanContributionState = {
   contributions: Contribution[];
   commands?: ContributionCommand[];
   responsibility?: KnowledgeResponsibility;
+  handoffs?: KnowledgeHandoff[];
 };
 export const emptyContribution = (): HumanContributionState => ({
   contributions: [{ version: 1, body: "", note: "", citesInput: false }],
@@ -63,9 +70,11 @@ export function revisionRequest(c: Contribution | undefined) {
 export function deliverContribution(
   state: HumanContributionState,
   at: string,
+  actor: ContributorActor = "leo",
 ): HumanContributionState {
   const current = state.contributions.at(-1)!;
   if (
+    !contributorCanAct(state, actor, at) ||
     contributionAcceptanceBlocked(state, at) ||
     current.delivery ||
     !current.body.trim() ||
@@ -87,6 +96,7 @@ export function deliverContribution(
               body: c.body,
               note: c.note,
               input: contributionResponsibility.input,
+              ...(state.handoffs ? { performer: actor } : {}),
               ...(c.version > 1 ? { respondsTo } : {}),
             },
           }

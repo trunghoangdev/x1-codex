@@ -1,3 +1,4 @@
+import { contributionPerformer, contributorNames } from "./knowledgeHandoff";
 import {
   contributionAcceptanceBlocked,
   knowledgeResponsibilityStatus,
@@ -10,7 +11,7 @@ import {
 import { commandBlocksEditing } from "./contributionCommand";
 
 // Presentation derived from the same session records, including restored/imported state.
-export function contributionView(state: HumanContributionState) {
+function rawContributionView(state: HumanContributionState) {
   const current = state.contributions.at(-1)!;
   if (contributionAcceptanceBlocked(state)) {
     const status = knowledgeResponsibilityStatus(state);
@@ -113,5 +114,15 @@ export function contributionView(state: HumanContributionState) {
     receiverNext,
     attention,
     locked,
+  };
+}
+
+export function contributionView(state: HumanContributionState) {
+  const view = rawContributionView(state),
+    name = contributorNames[contributionPerformer(state)];
+  return {
+    ...view,
+    contributorNext: view.contributorNext.replaceAll("Leo", name),
+    receiverNext: view.receiverNext.replaceAll("Leo", name),
   };
 }

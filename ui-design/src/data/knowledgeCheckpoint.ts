@@ -36,7 +36,8 @@ export type KnowledgeCheckpoint = {
     | "forge.knowledge-workspace.v1"
     | "forge.knowledge-workspace.v2"
     | "forge.knowledge-workspace.v3"
-    | "forge.knowledge-workspace.v4";
+    | "forge.knowledge-workspace.v4"
+    | "forge.knowledge-workspace.v5";
   savedAt: string;
   state: KnowledgeWorkspace;
 };
@@ -84,8 +85,17 @@ function validateSubject(raw: unknown): string {
     !shape(s, ["subject", "version", "delivery", "receipt", "assessment"]) ||
     s.subject !== "human-guide-example" ||
     s.version !== 2 ||
-    !shape(d, ["id", "at", "body", "note", "input", "respondsTo"]) ||
+    !shape(d, [
+      "id",
+      "at",
+      "body",
+      "note",
+      "input",
+      "respondsTo",
+      "performer",
+    ]) ||
     d.id !== "human-delivery-v2" ||
+    (d.performer !== undefined && !["leo", "delegate"].includes(d.performer)) ||
     !date(d.at) ||
     !text(d.body, 12000) ||
     !d.body.trim() ||
@@ -143,6 +153,7 @@ export function parseKnowledgeCheckpoint(raw: string): KnowledgeCheckpoint {
         "forge.knowledge-workspace.v2",
         "forge.knowledge-workspace.v3",
         "forge.knowledge-workspace.v4",
+        "forge.knowledge-workspace.v5",
       ].includes(x.format) ||
       !date(x.savedAt) ||
       !shape(x.state, [
@@ -158,8 +169,13 @@ export function parseKnowledgeCheckpoint(raw: string): KnowledgeCheckpoint {
     parseContributionCheckpoint(encodeContributionCheckpoint(s.contribution));
     if (
       s.contribution.responsibility &&
-      x.format !== "forge.knowledge-workspace.v4"
+      ![
+        "forge.knowledge-workspace.v4",
+        "forge.knowledge-workspace.v5",
+      ].includes(x.format)
     )
+      throw Error();
+    if (s.contribution.handoffs && x.format !== "forge.knowledge-workspace.v5")
       throw Error();
     if (
       !shape(s.brief, ["versions"]) ||
@@ -241,6 +257,7 @@ export function parseKnowledgeCheckpoint(raw: string): KnowledgeCheckpoint {
           ![
             "forge.knowledge-workspace.v3",
             "forge.knowledge-workspace.v4",
+            "forge.knowledge-workspace.v5",
           ].includes(x.format) ||
           u.cycle !== 2 ||
           !shape(u.previousCycle, [
@@ -260,9 +277,11 @@ export function parseKnowledgeCheckpoint(raw: string): KnowledgeCheckpoint {
           throw Error();
         parseKnowledgeCheckpoint(
           JSON.stringify({
-            format: s.contribution.responsibility
-              ? "forge.knowledge-workspace.v4"
-              : "forge.knowledge-workspace.v1",
+            format: s.contribution.handoffs
+              ? "forge.knowledge-workspace.v5"
+              : s.contribution.responsibility
+                ? "forge.knowledge-workspace.v4"
+                : "forge.knowledge-workspace.v1",
             savedAt: x.savedAt,
             state: {
               contribution: s.contribution,
@@ -315,6 +334,7 @@ export function parseKnowledgeCheckpoint(raw: string): KnowledgeCheckpoint {
             "forge.knowledge-workspace.v2",
             "forge.knowledge-workspace.v3",
             "forge.knowledge-workspace.v4",
+            "forge.knowledge-workspace.v5",
           ].includes(x.format))
       )
         throw Error();
@@ -330,11 +350,13 @@ export function parseKnowledgeCheckpoint(raw: string): KnowledgeCheckpoint {
           throw Error();
         parseKnowledgeCheckpoint(
           JSON.stringify({
-            format: check.context.contribution?.responsibility
-              ? "forge.knowledge-workspace.v4"
-              : check.context.use?.cycle === 2
-                ? "forge.knowledge-workspace.v3"
-                : "forge.knowledge-workspace.v1",
+            format: check.context.contribution?.handoffs
+              ? "forge.knowledge-workspace.v5"
+              : check.context.contribution?.responsibility
+                ? "forge.knowledge-workspace.v4"
+                : check.context.use?.cycle === 2
+                  ? "forge.knowledge-workspace.v3"
+                  : "forge.knowledge-workspace.v1",
             savedAt: x.savedAt,
             state: { ...check.context, brief: { versions: [] }, adoptions: [] },
           }),
@@ -364,15 +386,20 @@ export function encodeKnowledgeCheckpoint(state: KnowledgeWorkspace) {
   if (!state.applicability?.length) delete encodedState.applicability;
   const raw = JSON.stringify({
     format:
-      state.contribution.responsibility ||
-      state.applicability?.some((c) => c.context.contribution.responsibility)
-        ? "forge.knowledge-workspace.v4"
-        : state.use?.cycle === 2 ||
-            state.applicability?.some((c) => c.context.use?.cycle === 2)
-          ? "forge.knowledge-workspace.v3"
-          : state.applicability?.length
-            ? "forge.knowledge-workspace.v2"
-            : "forge.knowledge-workspace.v1",
+      state.contribution.handoffs ||
+      state.applicability?.some((c) => c.context.contribution.handoffs)
+        ? "forge.knowledge-workspace.v5"
+        : state.contribution.responsibility ||
+            state.applicability?.some(
+              (c) => c.context.contribution.responsibility,
+            )
+          ? "forge.knowledge-workspace.v4"
+          : state.use?.cycle === 2 ||
+              state.applicability?.some((c) => c.context.use?.cycle === 2)
+            ? "forge.knowledge-workspace.v3"
+            : state.applicability?.length
+              ? "forge.knowledge-workspace.v2"
+              : "forge.knowledge-workspace.v1",
     savedAt: new Date().toISOString(),
     state: encodedState,
   });
@@ -386,7 +413,8 @@ export function parseKnowledgeImport(raw: string): KnowledgeImport {
     format === "forge.knowledge-contribution.v1" ||
     format === "forge.knowledge-contribution.v2" ||
     format === "forge.knowledge-contribution.v3" ||
-    format === "forge.knowledge-contribution.v4"
+    format === "forge.knowledge-contribution.v4" ||
+    format === "forge.knowledge-contribution.v5"
   ) {
     const c = parseContributionCheckpoint(raw);
     return { kind: "contribution", contribution: c.state, savedAt: c.savedAt };
