@@ -38,7 +38,9 @@ Extend the agreement impact checklist with explicit checks linking an exact sour
 
 Acceptance: changing cohort/team scope identifies the specific assessments and inputs requiring reconsideration. Unknown mappings stay unknown; records applicable to the earlier scope remain intact. Any downstream use guard explains the precise missing scope mapping rather than claiming all evidence is invalid. A suitable editorial assessment alone does not authorize publication.
 
-### 4. Continue after revision, refusal or execution failure
+### 4. Continue after revision, refusal or execution failure — bounded use continuation implemented at iteration 130
+
+See [use continuation](USE-CONTINUATION.md). The local slice supports one subsequent use cycle for the same assessed material after use-condition revision/refusal or reviewed unsuccessful outcome. Actual content draft-03, general repeated versioning and additional cycles remain unimplemented; the broader original criteria follow.
 
 Support a bounded subsequent cycle with new version/attempt/decision identities and explicit links to the previous result. The contribution model currently supports only drafts 01/02; use records currently have fixed single-cycle IDs. Extend those deliberately rather than overwriting the prior cycle or adding a reset disguised as retry.
 

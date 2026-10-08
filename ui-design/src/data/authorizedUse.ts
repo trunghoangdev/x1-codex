@@ -6,7 +6,7 @@ export type UseRecord = {
   rationale: string;
   sourceId: string;
 };
-export type AuthorizedUse = {
+export type UseCycle = {
   subject: string;
   audience: string;
   mandate: UseRecord;
@@ -26,6 +26,59 @@ export type AuthorizedUse = {
     criterion: "K-01-goal";
   };
 };
+export type AuthorizedUse = UseCycle & {
+  cycle?: 2;
+  previousCycle?: UseCycle;
+  continuation?: UseRecord;
+};
+export function continuationSource(
+  state: AuthorizedUse,
+): UseRecord | undefined {
+  if (state.cycle || state.previousCycle) return;
+  if (state.publicationAssessment?.conclusion === "Revision needed")
+    return state.publicationAssessment;
+  if (state.authorization?.decision === "Refused") return state.authorization;
+  if (
+    state.outcome &&
+    state.outcome.conclusion !== "Criterion met in simulation"
+  )
+    return state.outcome;
+}
+export function continueUse(
+  state: AuthorizedUse,
+  subject: string | undefined,
+  audience: string,
+  rationale: string,
+  at: string,
+): AuthorizedUse {
+  const source = continuationSource(state);
+  const base = allocateUseMandate(subject, audience, rationale, at);
+  if (
+    !source ||
+    subject !== state.subject ||
+    !base ||
+    Date.parse(at) < Date.parse(source.at)
+  )
+    return state;
+  const continuation: UseRecord = {
+    id: "local-use-continuation-2",
+    sourceId: source.id,
+    actor: "Demo organization owner",
+    rationale: rationale.trim(),
+    at,
+  };
+  return {
+    ...base,
+    cycle: 2,
+    previousCycle: state,
+    continuation,
+    mandate: {
+      ...base.mandate,
+      id: "local-publication-mandate-cycle-2",
+      sourceId: continuation.id,
+    },
+  };
+}
 export function assessedUseSubject(
   state: HumanContributionState,
 ): string | undefined {
@@ -101,7 +154,7 @@ export function recordUseStep(
 ): AuthorizedUse {
   if (subject !== state.subject || !valid(rationale, at)) return state;
   const record = (id: string, actor: string, sourceId: string): UseRecord => ({
-    id,
+    id: state.cycle === 2 ? `${id}-cycle-2` : id,
     actor,
     sourceId,
     rationale: rationale.trim(),

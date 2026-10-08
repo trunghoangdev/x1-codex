@@ -1,3 +1,4 @@
+import { UseContinuation } from "./UseContinuation";
 import type { ApplicabilityScope } from "./data/scopeApplicability";
 import { useProgress } from "./data/useProgress";
 import { useEffect, useRef, useState } from "react";
@@ -126,7 +127,7 @@ export function AuthorizedUse({
       )}
       {state && (
         <>
-          <h3>Frozen subject and audience</h3>
+          <h3>Cycle {state.cycle ?? 1} · frozen subject and audience</h3>
           <p>
             human-guide-example · draft-02 · audience: {state.audience} ·
             environment: fictional internal preview only
@@ -138,6 +139,7 @@ export function AuthorizedUse({
             </pre>
           </details>
           {[
+            state.continuation,
             state.mandate,
             state.publicationAssessment,
             state.authorization,
@@ -168,11 +170,27 @@ export function AuthorizedUse({
             ))}
         </>
       )}
+      {state?.previousCycle && (
+        <details>
+          <summary>Original cycle 1 · preserved records</summary>
+          <pre style={{ whiteSpace: "pre-wrap", overflowWrap: "anywhere" }}>
+            {JSON.stringify(state.previousCycle, null, 2)}
+          </pre>
+        </details>
+      )}
+      {state && (
+        <UseContinuation
+          state={state}
+          contribution={contribution}
+          onChange={onChange}
+        />
+      )}
       {stage === "blocked" && (
         <p>
           Publication assessment requires revision. No authorization or
-          execution was created. This exercise retains the decision; a new
-          revision and mandate require a future cycle.
+          execution was created. This exercise retains the decision; a new use
+          cycle requires its own scoped mandate. Content draft-03 remains
+          outside this exercise.
         </p>
       )}
       {stage === "refused" && (

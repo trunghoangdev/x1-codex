@@ -29,3 +29,5 @@ Invalid files, blocked storage and quota errors leave the current session unchan
 Eighteen distinct targeted checks passed across runs, covering whole/partial recovery, source changes, invalid lineage/fields/formats, phone/desktop save/export/reload/restore/cancel/remove, storage failures and existing contribution/brief/agreement/use paths. Production build and diff checks passed; the existing bundle-size advisory remains. No backend or participant result is claimed.
 
 Scope update · iteration 129: [exact applicability decisions](SCOPE-APPLICABILITY.md) now connect represented records to adopted scope and guard pending use authorization/execution. Whole workspace checkpoints include this history in format v2; v1 remains readable. This supersedes earlier statements that record-by-record applicability is unimplemented.
+
+Continuation update · iteration 130: [cycle 2](USE-CONTINUATION.md) is now supported for the same exact assessed material, with a fresh mandate/assessment/authorization and preserved original history. Cycle-2 checkpoints use v3; v1/v2 remain readable. Content draft-03 and additional cycles are not implemented.

@@ -27,3 +27,5 @@ Validation checks every decision's referenced adoption and replays the decision 
 ## Validation
 
 Build, diff checks and eighteen targeted model/browser checks passed across exact matching, history, unknown and reassessment outcomes, explicit authorization separation, v1/v2 validation, phone/desktop scope guards, saved-history recovery and prior agreement/use/recovery flows. Existing bundle-size advisory remains. No backend enforcement or participant result is claimed.
+
+Continuation update · iteration 130: [cycle 2](USE-CONTINUATION.md) is now supported for the same exact assessed material, with a fresh mandate/assessment/authorization and preserved original history. Cycle-2 checkpoints use v3; v1/v2 remain readable. Content draft-03 and additional cycles are not implemented.

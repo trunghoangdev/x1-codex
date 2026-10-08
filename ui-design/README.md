@@ -86,3 +86,5 @@ Knowledge bounded-use flow: [shared and personal next responsibilities](USE-RESP
 Knowledge continuity: [whole workspace checkpoint, export and explicit recovery](KNOWLEDGE-WORKSPACE-RECOVERY.md).
 
 Knowledge scope governance: [exact source applicability decisions](SCOPE-APPLICABILITY.md).
+
+Knowledge repeated operation: [one explicit subsequent bounded-use cycle](USE-CONTINUATION.md).

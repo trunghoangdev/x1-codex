@@ -17,6 +17,7 @@ import {
 } from "./briefHandoff";
 import { adoptAgreement, type AgreementAdoption } from "./agreementAdoption";
 import {
+  continueUse,
   allocateUseMandate,
   assessedUseSubject,
   recordUseStep,
@@ -31,7 +32,10 @@ export type KnowledgeWorkspace = {
   applicability?: ApplicabilityCheck[];
 };
 export type KnowledgeCheckpoint = {
-  format: "forge.knowledge-workspace.v1" | "forge.knowledge-workspace.v2";
+  format:
+    | "forge.knowledge-workspace.v1"
+    | "forge.knowledge-workspace.v2"
+    | "forge.knowledge-workspace.v3";
   savedAt: string;
   state: KnowledgeWorkspace;
 };
@@ -136,6 +140,7 @@ export function parseKnowledgeCheckpoint(raw: string): KnowledgeCheckpoint {
       ![
         "forge.knowledge-workspace.v1",
         "forge.knowledge-workspace.v2",
+        "forge.knowledge-workspace.v3",
       ].includes(x.format) ||
       !date(x.savedAt) ||
       !shape(x.state, [
@@ -195,6 +200,9 @@ export function parseKnowledgeCheckpoint(raw: string): KnowledgeCheckpoint {
       const u = s.use;
       if (
         !shape(u, [
+          "cycle",
+          "previousCycle",
+          "continuation",
           "subject",
           "audience",
           "mandate",
@@ -217,6 +225,49 @@ export function parseKnowledgeCheckpoint(raw: string): KnowledgeCheckpoint {
         u.mandate.rationale,
         u.mandate.at,
       )!;
+      if (
+        u.cycle !== undefined ||
+        u.previousCycle !== undefined ||
+        u.continuation !== undefined
+      ) {
+        if (
+          x.format !== "forge.knowledge-workspace.v3" ||
+          u.cycle !== 2 ||
+          !shape(u.previousCycle, [
+            "subject",
+            "audience",
+            "mandate",
+            "publicationAssessment",
+            "authorization",
+            "execution",
+            "readerEvidence",
+            "outcome",
+          ]) ||
+          !object(u.continuation) ||
+          !text(u.continuation.rationale) ||
+          !date(u.continuation.at)
+        )
+          throw Error();
+        parseKnowledgeCheckpoint(
+          JSON.stringify({
+            format: "forge.knowledge-workspace.v1",
+            savedAt: x.savedAt,
+            state: {
+              contribution: s.contribution,
+              brief: { versions: [] },
+              adoptions: [],
+              use: u.previousCycle,
+            },
+          }),
+        );
+        rebuilt = continueUse(
+          u.previousCycle,
+          subject,
+          u.audience,
+          u.continuation.rationale,
+          u.continuation.at,
+        );
+      }
       for (const [key, field] of [
         ["publicationAssessment", "conclusion"],
         ["authorization", "decision"],
@@ -247,7 +298,11 @@ export function parseKnowledgeCheckpoint(raw: string): KnowledgeCheckpoint {
       if (
         !Array.isArray(s.applicability) ||
         s.applicability.length > 100 ||
-        (s.applicability.length && x.format !== "forge.knowledge-workspace.v2")
+        (s.applicability.length &&
+          ![
+            "forge.knowledge-workspace.v2",
+            "forge.knowledge-workspace.v3",
+          ].includes(x.format))
       )
         throw Error();
       let checks: ApplicabilityCheck[] = [];
@@ -262,7 +317,10 @@ export function parseKnowledgeCheckpoint(raw: string): KnowledgeCheckpoint {
           throw Error();
         parseKnowledgeCheckpoint(
           JSON.stringify({
-            format: "forge.knowledge-workspace.v1",
+            format:
+              check.context.use?.cycle === 2
+                ? "forge.knowledge-workspace.v3"
+                : "forge.knowledge-workspace.v1",
             savedAt: x.savedAt,
             state: { ...check.context, brief: { versions: [] }, adoptions: [] },
           }),
@@ -291,9 +349,13 @@ export function encodeKnowledgeCheckpoint(state: KnowledgeWorkspace) {
   const encodedState = { ...state };
   if (!state.applicability?.length) delete encodedState.applicability;
   const raw = JSON.stringify({
-    format: state.applicability?.length
-      ? "forge.knowledge-workspace.v2"
-      : "forge.knowledge-workspace.v1",
+    format:
+      state.use?.cycle === 2 ||
+      state.applicability?.some((c) => c.context.use?.cycle === 2)
+        ? "forge.knowledge-workspace.v3"
+        : state.applicability?.length
+          ? "forge.knowledge-workspace.v2"
+          : "forge.knowledge-workspace.v1",
     savedAt: new Date().toISOString(),
     state: encodedState,
   });
