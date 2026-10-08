@@ -1,119 +1,59 @@
-# Virtual organization review after iteration 70
+# Virtual organization review after iteration 125
 
-Reviewed on 2026-10-04. This review inspects the current prototype’s code, contracts and six overview browser views. It is a frontend/product design review, not customer research or verification of a real organization runtime. The preceding five-item sequence is complete; the proposals below form a new backlog and are not implemented capabilities.
+Reviewed 2026-10-07 through source and local design documentation. This is not a new runtime, participant or production assessment. This sequence supersedes the iteration-120 backlog for future planning; it does not change the implementation status of earlier slices.
 
 ## Assessment
 
-The workspace now represents a useful organizational foundation across software and knowledge operations: shared purpose, workstreams, explicit role catalogs, heterogeneous workers, scoped responsibility, assignments, input dependencies, personal queues and scenario-isolated navigation. My Work is a personal entry; Organization should support coordination across those entries.
+The UI now demonstrates explicit local allocation, versioned input delivery and receipt, revised contribution reassessment, agreement adoption, and an assessed-result-to-bounded-use/outcome chain. These are substantial interaction building blocks for a virtual organization.
 
-An organization need not follow one linear process. Different workstreams can use different collaboration expectations, run parallel responsibilities, exchange inputs and return work for revision. Organization/project/environment/subject responsibilities can also sit outside a particular workstream. The UI already preserves these distinctions. Its next improvement should make the operating relationships easier to inspect and act on, while retaining unknowns where the records are incomplete.
+They do not yet form one continuous organizational operation. Main-sample allocation and Knowledge exercises remain separate. The latest use chain is a panel on selected shared views, not a set of allocated personal responsibilities. Sam and the demo organization owner are named simulated actors, not connected worker identities. Scope impact is a checklist with unknown applicability. Several new state slices clear on reload and are not included in existing checkpoints.
 
-Today a coordinator still moves among attention categories, streams, role coverage and individual assignments to understand a coordination question. Shared outcome verification, decision responsibility and chronological coordination records are less developed than the software sample’s individual response screens.
+The next work should connect the existing records, identities and responsibilities before adding more screens or domain breadth. Organization remains the shared entrance; My Work should expose only the selected person's represented next responsibilities. A domain may coordinate parallel work rather than follow one global linear process.
 
-## 1. Organization coordination overview — recommended first
+## Proposed sequence
 
-Evidence: `OrganizationOverview.tsx` has an attention summary, but stream cards show goal/outcome prose and all streams/workers render in the overview. Workers/Workstreams/Roles directories are paged; Overview remains unbounded. Scenario switcher, boundary and persona panels also repeat context above the actual organization heading. `AttentionSummary` groups by category rather than showing related signals together by workstream.
+### 1. Connect local next responsibilities to Organization and My Work
 
-Proposed slice: consolidate organization/persona context, then add compact workstream summaries showing independently represented responsibility gaps, waiting inputs, pending responses and outcome evidence needs. Each signal should open its exact source and expected next coordination context. Show a short bounded set of streams with filters and a full-directory link; replace the full worker roster with a short responsibility summary and directory entry points. Preserve other organization work as a distinct section.
+Create one derived presentation of the Knowledge use chain's current stage, exact subject, responsible demo principal, blocking condition and destination. Represent the demo owner and Sam explicitly within local actor context; do not silently identify Sam as Maya or invent a production membership. Route actions through inspectable source records. Reuse the projection for shared attention, the K-01 progress lane and appropriate personal entries, instead of copying stage logic into each screen.
 
-Data work: explicitly link signals to stream/assignment/dependency/criterion IDs, retaining unattributed signals instead of forcing them into a stream. Main attention must retain its existing local response/readiness projection: the shared main adapter currently labels every assignment `Awaiting response` and cannot replace that projection. Counts describe independent records/categories, not an additive total of blocked work. An allocation gap, missing input, pending response and missing outcome evidence are different conditions. Do not rank urgency from record counts or infer a coordination owner from a Planner binding; priority/owner can remain unspecified unless authored.
+Acceptance: after editorial suitability, scope allocation/publication assessment/use authorization/execution/reader observation/outcome review each has an explicit next responsibility. A completed decision leaves its queue; refusal/revision/failure shows its real boundary without automatically assigning unsupported follow-up work. Missing/changed source blocks continuation consistently. Existing authored counters remain separately labelled. Persona switching remains a simulation, not authorization.
 
-Acceptance: from Knowledge overview identify K-02’s missing coordinator brief, inspect Leo’s K-02-C supplying assignment and return to the same filtered overview. K-01’s publication-review gap stays separate. In the main sample, recording an assessment changes only the represented response signal; it does not deliver an input or verify the outcome. Mobile users reach the coordination summary without scrolling through repeated sample explanations or every worker.
+This closes a partial acceptance gap from iteration 125: its chain is connected internally, but Organization/My Work do not yet connect the next participant at every boundary.
 
-First unit: compact shared context and workstream coordination projection using the existing Knowledge records, then adapt main and larger software with explicit references. No new runtime or allocation action is required.
+### 2. Recover the whole Knowledge workspace coherently
 
-## 2. Shared outcome review across organization domains
+Extend explicit local recovery to include contribution, K-02 brief handoff, K-01 agreement adoption and authorized-use chain together, with a versioned format and exact-link validation. Preserve compatibility with existing contribution-only checkpoints; make partial versus whole-workspace replacement clear. Preview what is replaced, retained and made stale. Do not silently auto-merge unrelated scopes or accept broken references.
 
-Evidence: `OutcomeReview.tsx` imports main assignments/evidence and displays an unassigned reviewer/Not verified banner. Read-only scenario stream details show only `needed` and `gap` text, omitting the richer criterion title, available context and boundary. `OutcomeReview` data has criteria/evidence links/boundary, but no explicit review allocation or reviewed-result record. `scenarioAttention` emits an Outcome signal for every stream; that is an authored sample convention, not a general verification classifier.
+Acceptance: export/reload/explicit restore reproduces the same stage, input version, adopted scope, decisions and history. Invalid or incompatible data leaves current state intact. Cancel preserves current work. A contribution-only import shows its impact on dependent use records. Main software snapshots remain independently scoped. This is local recovery, not shared durable multi-user storage.
 
-Proposed slice: a shared read-only outcome screen driven by scenario records. Show criterion, required observation, available context, exact evidence links, subject/environment boundary and explicitly represented review responsibility. Retain Unknown/not reviewed when a review result or reviewer allocation is absent. Start by showing existing fixtures consistently; introduce typed reviewed conclusions only when an authored review record is supplied.
+### 3. Record actual scope applicability decisions
 
-Acceptance: Knowledge guide distinguishes publication work from evidence that members can find answers. The workshop requires participant observations. Neither receives a success label because an editor/coordinator responded. Main payment review still distinguishes candidate assessment, staging observation and production behavior. Evidence links stay in the selected scenario, including empty/unavailable records.
+Extend the agreement impact checklist with explicit checks linking an exact source record/version to the exact adoption record and audience. Support applicable, needs reassessment and insufficient information with reviewer responsibility and rationale. Keep workstream agreement and bounded-use audience distinct until an explicit mapping is recorded. A newer agreement leaves earlier applicability decisions historical; it does not automatically grant use permission.
 
-First unit: share criterion/context/boundary inspection without adding an outcome decision form. A future allocated reviewer must be modeled explicitly rather than inferred from a Reviewer binding.
+Acceptance: changing cohort/team scope identifies the specific assessments and inputs requiring reconsideration. Unknown mappings stay unknown; records applicable to the earlier scope remain intact. Any downstream use guard explains the precise missing scope mapping rather than claiming all evidence is invalid. A suitable editorial assessment alone does not authorize publication.
 
-## 3. Shared workflow and exchange map
+### 4. Continue after revision, refusal or execution failure
 
-Evidence: read-only `ScenarioWorkspace` renders `flows` as an ordered list. Knowledge flow records are projected from assignments; array order is not a dependency contract. Main `WorkstreamFlow` is richer but imports fixed software data. Shared `dependencies` and `parallelWork` are explicit; revision expectations remain prose (`returnPath`), not confirmed revision edges or execution history.
+Support a bounded subsequent cycle with new version/attempt/decision identities and explicit links to the previous result. The contribution model currently supports only drafts 01/02; use records currently have fixed single-cycle IDs. Extend those deliberately rather than overwriting the prior cycle or adding a reset disguised as retry.
 
-Proposed slice: a scenario-driven operating map of role responsibilities, assigned workers, input providers/receivers and explicitly authored parallel groups. Keep expected collaboration, present assignment state and observed events visually distinct. Use existing dependency IDs for exchange connections. Show unallocated roles as requirements/gaps, never as invented tasks. Add a revision connection only with an explicit authored relationship.
+Acceptance: a failed simulated execution can receive a separately authorized subsequent attempt; changed material requires its own delivery/receipt/assessment as appropriate. Refusal and revision decisions remain inspectable. Retry does not duplicate an already recorded action or reuse authority for a changed version. Recovery and stale-source protection cover both cycles. Define which follow-up is actually supported before offering controls.
 
-Acceptance: Knowledge K-01 shows research/editorial criteria as parallel; K-02 links Leo’s brief to Maya’s review while facilitation stays unallocated. Main software represents the developer as a provider worker where no developer assignment exists. Adjacent flow steps or a shared project do not create arrows. Opening a node returns to the same map/filter.
+### 5. Add performer acceptance and explicit reassignment continuity
 
-First unit: the Knowledge workshop and parallel guide branch. Keep an accessible textual list alongside any diagram. Versioned reusable workflow templates can follow once the explicit instance relationships are clear; do not start with a general visual workflow editor.
+Build on recorded local allocation with the selected performer's separate acceptance, clarification or decline. For reassignment, distinguish a proposal from an effective responsibility change and record the exact pending work and input/decision history transferred. Represent availability as unknown unless supplied. Do not treat a worker selection as consent, permission or capacity.
 
-## 4. Decision responsibility and escalation
+Acceptance: planner allocation alone does not claim acceptance. A decline leaves an explicit coordination need. An effective reassignment updates both personal entrances while preserving earlier ownership and records. Any publication mandate or exact input that cannot transfer automatically is flagged for review. Keep this local until backend allocation/authority contracts exist.
 
-Evidence: bindings and scoped requirements explain responsibility, but do not establish an actual decision request, effective authority, escalation recipient or deadline. Main software has specialized release/allocation decision previews. Knowledge publication review is an explicit gap, while Distributor applicability remains unknown. The shared organization contract has no decision-request/escalation records.
+## Ordering and supporting layout work
 
-Proposed slice: a read-only decision directory with explicitly authored requests: subject/scope, decision question, requester, allocated decision role/person (or unknown/unassigned), required evidence and escalation contact only when declared. Distinguish assessment, approval, allocation planning and actual execution. Attach concise role mandates explaining what responsibility covers, with references to the specific request/scope.
+Start with item 1: it makes the existing capability understandable as organizational work instead of isolated exercise panels. Then item 2 protects continuity. Items 3–5 improve governed change, repeated operation and responsibility transitions.
 
-Acceptance: a contributor can distinguish who assesses a guide from who, if anyone, is allocated to authorize publication. The Distributor binding does not fabricate that authority. Missing decision ownership remains a visible coordination question. Main production-release authorization stays separate from staging reconciliation. Unknown policy and missing allocation are different states.
+During item 1, show a concise shared status and next action, with detailed use-chain forms/history opened from the relevant responsibility. Currently the full authorized-use exercise is rendered before the main workstream/outcome/decision content, and agreement banners appear across Knowledge views. Reduce repeated top-level panels as the common projection becomes available. This is supporting layout work, not another screen backlog.
 
-First unit: describe the existing main release subject and one separately authored Knowledge decision requirement. A publication approval policy must be supplied/authored explicitly; it cannot be deduced from the current publication-review gap. No permissions, deadlines or escalation chain are invented from names.
+## Production boundary
 
-## 5. Shared coordination activity and exchange records
+Frontend work cannot supply authenticated organization membership, policy enforcement, durable shared commands, concurrency/idempotency, live worker dispatch or observed customer outcomes. Keep that integration track explicit. Real participant testing remains deferred by the user. None of these proposals requires reading the excluded `x1` repository or using unavailable architecture canon.
 
-Evidence: `OrganizationActivity.tsx` combines main response/proposal/plan-decision records and evidence. Read-only Activity correctly has no records. `InputDependency.receipt` is currently restricted to `unconfirmed`; an assignment response does not confirm delivery or receipt. The shared contract has no dated activity/exchange record collection.
+## Sources inspected
 
-Proposed slice: a shared read-only activity projection with typed authored sample events, actors, subjects, source references and timestamps when actually provided. Separate assignment response, input delivery, receiver acknowledgment, revision request, decision and outcome review. Keep untimed expectations/evidence outside chronological history. Introduce a small Knowledge event fixture only with explicit sample labeling and independent event semantics.
-
-Acceptance: recording or representing Leo’s response does not establish that Maya received the brief. A separately authored receipt refers to a specific input/version and recipient. A revision event identifies the originating assessment and returning work. Other scenarios’ records never appear, and missing history remains an honest empty state.
-
-First unit: shared record inspection with a small authored Knowledge exchange history and unchanged main records. Interactive cross-domain response simulation should follow a settled receipt/event contract, rather than auto-advancing workflow steps.
-
-## Priority and dependencies
-
-| Order | Customer question | Initial scope |
-| --- | --- | --- |
-| 1 | Where does this organization need coordination now? | Compact overview and source-linked workstream signals |
-| 2 | What evidence would establish that the goal was achieved? | Shared read-only outcome requirements/context |
-| 3 | How do roles and workers collaborate on this goal? | Explicit workflow/exchange map |
-| 4 | Who is allocated to decide, and where does an unresolved request go? | Authored decision responsibility/unknowns |
-| 5 | What actually happened between these responsibilities? | Typed shared activity and separate exchange records |
-
-Deliver each as an incremental unit with URL/context return and desktop/mobile inspection. Item 1 should link to existing detail views before depending on later screens. Items 2–3 can reuse current criteria/dependency fixtures; items 4–5 need new explicitly authored records. They remain feasible frontend work without a live SF deployment.
-
-For later real integration, dev data would be most useful in five areas: authoritative signal/assignment state and membership; workflow/exchange IDs and receipt semantics; decision subject/authority/escalation records; outcome reviewer/conclusion/evidence links; and event ordering/timestamps. The current missing contracts do not block the proposed read-only sample slices. Runtime availability/capacity, tenant access, assignment creation, execution and durable audit remain separate work.
-
-## Browser observations
-
-Inspected current Overview for all three scenarios at 1440px and 390px, height 1000px. All six views loaded without observed page JavaScript errors or horizontal document overflow. These measurements describe this fixture/layout and do not establish usability failure or a required height target.
-
-| Scenario | Desktop document height | Mobile document height | Stream cards | Worker cards |
-| --- | ---: | ---: | ---: | ---: |
-| Main software | 2,408px | 4,268px | 2 | 4 |
-| Knowledge | 2,666px | 4,627px | 2 | 4 |
-| Larger software | 4,003px | 7,254px | 6 | 9 |
-
-Visually inspected Knowledge desktop and larger software mobile captures. The repeated context panels and full worker roster motivate item 1’s shorter overview. Measurements and capture script are reproducible with `scripts/review-organization.mjs` against local port 4173. Captures: `previews/67-review-knowledge-overview.png`, `previews/68-review-large-overview-mobile.png`.
-
-No application behavior changed during this review. Build/tests were not rerun for documentation/capture changes; browser checks above were performed on the current prototype. No customer or live-runtime evidence was collected.
-
-## Item 1 started — iteration 72
-
-Delivered Knowledge-first coordination by workstream with explicit gap/input/response/criterion references, provider/receiver links, URL filters, bounded stream summaries and source-return context. Knowledge sample/persona context is consolidated; workers are short bounded summaries and mobile attention counts use two columns. Exact gap/criterion identities are inspectable in stream detail. Build and twenty related checks passed. See [COORDINATION-OVERVIEW.md](COORDINATION-OVERVIEW.md). Item 1 remains in progress: next adapt main local response/readiness/outside-stream records and larger software through the shared coordination view. Items 2–5 remain proposed.
-
-## Item 1 completed — iterations 72–74
-
-All three samples now use coordination by workstream. Main response-needed signals come from its interactive attention projection; response recording does not verify outcomes. Release/staging/onboarding remain outside modeled workstreams. Main URL filters survive overview refresh and in-session source inspection/return; main detail return references remain in memory. Read-only return trails retain their session storage behavior. Larger software exercises four/two paging, with full directories behind three worker summaries. Build and related desktop/mobile checks passed; see COORDINATION-OVERVIEW.md for validation and limits. Items 2–5 remain proposed; shared outcome review is next.
-
-## Item 2 completed — iteration 75
-
-Shared outcome inspection now presents existing scenario criteria, available context, exact evidence references, assignment context and scope boundaries. Absent goal-review result/allocation remains explicit; responses and role bindings do not verify goals. Scoped read-only outcome routes preserve persona and refreshed source return; main evidence dialog and in-memory source return retain their established boundaries. Build and nineteen related checks passed. See [SHARED-OUTCOME-REVIEW.md](SHARED-OUTCOME-REVIEW.md). Items 3–5 remain proposed; shared workflow/exchange map is next.
-
-## Item 3 started — iteration 76
-
-Knowledge workshop and guide now have scoped workflow/exchange map routes. Responsibility cards, separate gaps, explicit brief provider/receiver and declared research/editorial parallel work reuse existing fixtures. Source return survives refresh; no task, transfer event or dependency is invented. Build and eighteen related tests passed. See [WORKFLOW-MAP.md](WORKFLOW-MAP.md). Main/larger adaptation is the next item 3 unit; items 4–5 remain proposed.
-
-## Item 3 completed — iterations 76–77
-
-All three organizations now have reference-based workflow/exchange map inspection with workstream entry points and source return. Main preserves session response/receipt/outcome boundaries and worker-only provider representation; larger keeps its missing dependency records explicit. Main map exit restores the original filtered workstream source; read-only routes retain persona-scoped refreshed trails. Build and nineteen related checks passed in the final unit. See [WORKFLOW-MAP.md](WORKFLOW-MAP.md). Items 4–5 remain proposed; decision responsibility/escalation is next.
-
-## Item 4 inspection delivered — iteration 78
-
-Shared decision directory presents exact main production release subject/allocation and one newly authored Knowledge responsibility-clarification requirement. Publication authorization policy/owner are unknown and separate from the missing assessment responsibility. No requester, deadline or escalation chain is invented. Larger has an honest empty record collection. Build and fifteen related checks passed. See [DECISION-RESPONSIBILITY.md](DECISION-RESPONSIBILITY.md). This completes the bounded read-only inspection slice; real escalation/approval requires explicit policy and allocation records. Item 5 remains proposed.
-
-## Item 5 inspection delivered — iteration 79
-
-Read-only Activity now projects typed scoped exchange history, with five explicitly authored Knowledge events for an earlier incomplete brief version. Response, delivery, acknowledgment, assessment and revision are distinct; related versions/recipients/sources are validated. Current brief availability/receipt and main records remain unchanged. Larger stays empty. URL filters/exact records, refreshed source return and workflow entry are tested. Build and sixteen distinct related checks passed; see [EXCHANGE-ACTIVITY.md](EXCHANGE-ACTIVITY.md). All five proposed bounded inspection slices are now delivered; actual execution, live integration and durable activity recording remain separate.
+`ScenarioWorkspace.tsx`, root state in `main.tsx`, `actionableAttention.ts`, `scenarioWork.ts`, `exchangeActivity.ts`, `authorizedUse.ts`, `agreementAdoption.ts`, `demoSnapshot.ts`, iteration history and the implementation guides for local allocation, brief handoff, agreement adoption and authorized use. Review only; no application behavior changed or new browser tests run.

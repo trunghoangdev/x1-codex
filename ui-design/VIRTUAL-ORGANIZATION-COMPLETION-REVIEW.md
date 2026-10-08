@@ -84,3 +84,7 @@ Frontend demonstration can establish the interaction model. Only authenticated, 
 ## Sources inspected
 
 `OrganizationScenario`, `humanContribution`, `responsibilityProposals`, the backend integration inventory, customer product vision, and existing allocation/shared-outcome/operating-pattern/workstream-agreement reviews. No implementation changes or new browser checks were made for this review.
+
+## Follow-up after iteration 125
+
+The five bounded local slices above are implemented; their existence does not establish a complete operational organization. The [iteration-126 review and next sequence](VIRTUAL-ORGANIZATION-NEXT-REVIEW.md) supersedes this historical backlog. In particular, the use chain still needs next-responsibility integration into personal queues/shared attention, and new session state needs coherent recovery.
