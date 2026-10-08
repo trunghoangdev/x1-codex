@@ -89,7 +89,7 @@ export function OrganizationOverview({
             responsible.
           </p>
         </div>
-        {(!coordination || !scenario.readOnly) && (
+        {(!coordination || !scenario.readOnly || scenario.id === "knowledge") && (
           <button className="button secondary" onClick={onMyWork}>
             {myWorkLabel ??
               `Open My Work · Alex${scenario.readOnly ? " (main sample)" : ""}`}

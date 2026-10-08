@@ -266,7 +266,7 @@ for (const width of [320, 1440])
       })
       .click();
     await page
-      .getByRole("button", { name: "Open Knowledge timeline", exact: true })
+      .getByRole("button", { name: "View activity timeline", exact: true })
       .click();
     await expect(
       page.getByRole("heading", { level: 1, name: "Knowledge timeline" }),

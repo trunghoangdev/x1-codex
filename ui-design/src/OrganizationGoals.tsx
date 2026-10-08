@@ -13,7 +13,7 @@ export function OrganizationGoalSummary({
   const view = organizationGoals(scenario, state);
   if (!view) return null;
   return (
-    <section className="panel" aria-label="Organization goal summary">
+    <section className="panel organization-goal-summary" aria-label="Organization goal summary">
       <h2>Purpose → workstream results</h2>
       <h3>{view.goal.title}</h3>
       <p>

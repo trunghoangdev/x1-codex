@@ -1204,3 +1204,10 @@ Case directory, shared attention/K-02 progress and relevant My Work entrances de
 - Required exact operational remedies and blocked changed-evidence closure; exceptions never substitute for execution or outcome decisions.
 - Added shared/personal responsibility summaries, Attention follow-up and timeline records; preserved authored assignment counts.
 - Added checkpoint v15 replay and retained v1–v14 compatibility, including nested workshop allocation records. See [operation and limits](EXCEPTION-HANDLING.md).
+
+## Iteration 153 · Organization-first workspace layout
+
+- Moved primary organization/personal/detail content ahead of operational panels and recovery controls.
+- Grouped Knowledge overview operational panels in a collapsed disclosure with a keyboard-focused shortcut; kept personal/detail actions expanded.
+- Added the Knowledge personal inbox entrance and a direct timeline shortcut. Preserved primary Attention signals, source navigation and recovery workflows.
+- See [layout and scope](WORKSPACE-LAYOUT.md).

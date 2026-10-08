@@ -150,3 +150,7 @@ Iteration 151 adds [multi-candidate K-02 allocation](WORKSHOP-ALLOCATION.md): ex
 ## Exception handling · iteration 152
 
 [Explicit K-02 exception follow-up](EXCEPTION-HANDLING.md) connects observed issues, accepted handling, exact remedies and independent review, with shared/personal responsibilities and checkpoint recovery.
+
+## Workspace layout · iteration 153
+
+[Organization-first layout](WORKSPACE-LAYOUT.md) prioritizes purpose, goals and coordination, with operating tools on demand and personal/detail actions expanded below the main content.

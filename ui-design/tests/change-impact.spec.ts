@@ -324,6 +324,9 @@ for (const width of [390, 1280])
       })
       .click();
     await page
+      .getByRole("button", { name: "Open operating tools", exact: true })
+      .click();
+    await page
       .getByRole("button", {
         name: "Inspect source and scope impact",
         exact: true,
