@@ -12,7 +12,9 @@ The next work should connect the existing records, identities and responsibiliti
 
 ## Proposed sequence
 
-### 1. Connect local next responsibilities to Organization and My Work
+### 1. Connect local next responsibilities to Organization and My Work — local slice implemented at iteration 127
+
+See [use responsibilities](USE-RESPONSIBILITIES.md). The following retains the original acceptance scope; production membership, authority and shared durable queues remain outside this local slice.
 
 Create one derived presentation of the Knowledge use chain's current stage, exact subject, responsible demo principal, blocking condition and destination. Represent the demo owner and Sam explicitly within local actor context; do not silently identify Sam as Maya or invent a production membership. Route actions through inspectable source records. Reuse the projection for shared attention, the K-01 progress lane and appropriate personal entries, instead of copying stage logic into each screen.
 

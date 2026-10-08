@@ -80,3 +80,5 @@ Workshop input exchange: [exact-version Knowledge K-02 brief handoff](BRIEF-HAND
 Knowledge K-01: [local agreement adoption and scope impact](AGREEMENT-ADOPTION.md) (session-only simulation).
 
 Knowledge K-01: [assessed draft to bounded use and outcome review](AUTHORIZED-USE-OUTCOME.md) (session-only simulation, no publication executed).
+
+Knowledge bounded-use flow: [shared and personal next responsibilities](USE-RESPONSIBILITIES.md).

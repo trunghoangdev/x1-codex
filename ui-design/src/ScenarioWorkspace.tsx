@@ -1,3 +1,5 @@
+import { UseProgress } from "./UseProgress";
+import { useProgress, useActors, type UseActor } from "./data/useProgress";
 import { AuthorizedUse } from "./AuthorizedUse";
 import type { AuthorizedUse as AuthorizedUseState } from "./data/authorizedUse";
 import type { AgreementAdoption } from "./data/agreementAdoption";
@@ -89,7 +91,8 @@ export function ScenarioWorkspace({
     Record<string, { destination: string; source: string }[]>
   >({});
   const scenario = briefHandoffScenario(resolveScenario(path)!, briefHandoff);
-  const needs = actionableAttention(scenario, contribution);
+  const useView = useProgress(contribution, authorizedUse);
+  const needs = [...(scenario.id === "knowledge" && useView.need ? [useView.need] : []), ...actionableAttention(scenario, contribution)];
   const base = `/organizations/${scenario.id}`;
   const persona = scenarioPersona(path);
   const person = scenario.workers.find((w) => w.id === persona?.workerId);
@@ -235,10 +238,12 @@ export function ScenarioWorkspace({
         </p>
       </details>
       {scenario.id === "knowledge" && agreementAdoptions.length > 0 && suffix !== "/agreements/K-01" && <section className="panel" aria-label="Adopted K-01 scope"><h2>K-01 · adopted local scope</h2><p>{agreementAdoptions.at(-1)!.versionId} · {agreementAdoptions.at(-1)!.audience}</p><p>Record applicability remains unconfirmed; publication authority is separate.</p><button className="text-link" onClick={() => open("/agreements/K-01")}>Inspect adopted scope and impact</button></section>}
-      {scenario.id === "knowledge" && ["/workstreams/K-01", "/outcomes/K-01", "/decisions"].includes(suffix) && <AuthorizedUse contribution={contribution} state={authorizedUse} onChange={onAuthorizedUse} />}
+      {scenario.id === "knowledge" && ["", "/workstreams/K-01", "/workflows/K-01", "/outcomes/K-01", "/decisions"].includes(suffix) && <UseProgress contribution={contribution} state={authorizedUse} onInspect={() => open("/use/K-01")} onInbox={actor => onRoute(base + "/work?persona=" + (["leo","maya"].includes(actor) ? actor : "maya") + "&useActor=" + actor)} />}
+      {scenario.id === "knowledge" && suffix === "/work" && <UseProgress contribution={contribution} state={authorizedUse} actor={(params.get("useActor") ?? persona?.workerId ?? "maya") as UseActor} onActor={actor => onRoute(base + "/work?persona=" + (["leo","maya"].includes(actor) ? actor : "maya") + "&useActor=" + actor)} onInspect={() => open("/use/K-01")} />}
+
       {scenario.id === "knowledge" && <ContributionRecovery state={contribution} onChange={onContribution} />}
-      {scenario.id === "knowledge" && suffix === "/work" && ["leo", "maya"].includes(persona?.workerId ?? "") && <BriefHandoff state={briefHandoff} onChange={onBriefHandoff} persona={persona?.workerId} />}
-      {suffix === "/contributions/K-01-H" ? (
+      {scenario.id === "knowledge" && suffix === "/work" && !["owner", "sam"].includes(params.get("useActor") ?? "") && ["leo", "maya"].includes(persona?.workerId ?? "") && <BriefHandoff state={briefHandoff} onChange={onBriefHandoff} persona={persona?.workerId} />}
+      {suffix === "/use/K-01" ? <><DetailBackButton onClick={back}>Back to scenario context</DetailBackButton><h1 tabIndex={-1}>Bounded-use responsibility and records</h1><UseProgress contribution={contribution} state={authorizedUse} inspectLabel="Back to K-01 workstream" onInspect={() => onRoute(base + "/workstreams/K-01")} onInbox={actor => onRoute(base + "/work?persona=" + (["leo","maya"].includes(actor) ? actor : "maya") + "&useActor=" + actor)} /><AuthorizedUse contribution={contribution} state={authorizedUse} onChange={onAuthorizedUse} /></> : suffix === "/work" && ["owner", "sam"].includes(params.get("useActor") ?? "") ? <><h1 tabIndex={-1}>My Work · {useActors[params.get("useActor") as UseActor]}</h1><p>Local demo principal only. No authored worker membership, assignment allocation or production authority is inferred. Select Leo or Maya above to inspect their represented personal work.</p></> : suffix === "/contributions/K-01-H" ? (
         <HumanContribution state={contribution} onChange={onContribution}
           onBack={() => onRoute(qualify("/work"))}
           workspace={{ onOrganization: () => onRoute(qualify("")), onWorkstream: () => open("/workstreams/K-01") }} />
@@ -701,7 +706,7 @@ export function ScenarioWorkspace({
             <section className="panel org-stream">
               <CoordinationNeeds items={needs.filter(record => !params.get("category") || params.get("category") === "all" || record.category.toLowerCase() === params.get("category"))} onOpen={openNeed} />
               <p>
-                Signals combine authored context and explicitly local Knowledge contribution transitions. Suggested inspection does not allocate responsibility or establish completion.
+                Signals combine authored context and explicitly local contribution and bounded-use transitions. Suggested inspection does not allocate responsibility or establish completion.
               </p>
             </section>
           ) : (

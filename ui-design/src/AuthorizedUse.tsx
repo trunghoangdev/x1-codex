@@ -1,3 +1,4 @@
+import { useProgress } from "./data/useProgress";
 import { useEffect, useRef, useState } from "react";
 import {
   assessedUseSubject,
@@ -23,24 +24,7 @@ export function AuthorizedUse({
   const [confirm, setConfirm] = useState(false);
   const result = useRef<HTMLHeadingElement>(null);
   const confirmation = useRef<HTMLHeadingElement>(null);
-  const stale = !!state && state.subject !== subject;
-  const stage = !state
-    ? "mandate"
-    : !state.publicationAssessment
-      ? "assessment"
-      : state.publicationAssessment.conclusion === "Revision needed"
-        ? "blocked"
-        : !state.authorization
-          ? "authorization"
-          : state.authorization.decision === "Refused"
-            ? "refused"
-            : !state.execution
-              ? "execution"
-              : state.execution.result === "Succeeded" && !state.readerEvidence
-                ? "evidence"
-                : !state.outcome
-                  ? "outcome"
-                  : "complete";
+  const { stale, stage } = useProgress(contribution, state);
   const choices: UseAction[] =
     stage === "assessment"
       ? ["Suitable", "Revision needed"]

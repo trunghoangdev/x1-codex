@@ -1,3 +1,4 @@
+import { useActors, type UseActor } from "./data/useProgress";
 import type { AuthorizedUse } from "./data/authorizedUse";
 import type { AgreementAdoption } from "./data/agreementAdoption";
 import { emptyBriefHandoff } from "./data/briefHandoff";
@@ -172,6 +173,7 @@ function App() {
   const activePersona = route.scenarioPath
     ? scenarioPersona(route.scenarioPath)
     : undefined;
+  const activeUseActor = route.scenarioPath ? new URLSearchParams(route.scenarioPath.split("?")[1]).get("useActor") as UseActor | null : null;
   const activePerson = activeScenario?.workers.find(
     (w) => w.id === activePersona?.workerId,
   );
@@ -683,7 +685,7 @@ function App() {
                 : "AM"}
             </span>
             <div>
-              <strong>{activePerson?.name ?? "Alex Morgan"}</strong>
+              <strong>{activeUseActor ? useActors[activeUseActor] + " · local inbox context" : activePerson?.name ?? "Alex Morgan"}</strong>
               <span>
                 {activePersona
                   ? `${activePersona.label} · Sample persona`
@@ -827,7 +829,7 @@ function App() {
               </label>
               <p>
                 {activeScenario?.domain ?? mainOrganization.domain} ·{" "}
-                {activePerson?.name ?? "Alex Morgan"} ·{" "}
+                {activeUseActor ? useActors[activeUseActor] + " · local inbox context" : activePerson?.name ?? "Alex Morgan"} ·{" "}
                 {activeScenario
                   ? activeScenario.id === "knowledge" ? "Knowledge sample · session contribution available" : "Read-only sample"
                   : "Interactive software sample"}
@@ -835,7 +837,7 @@ function App() {
               {activeScenario?.personas && (
                 <>
                   <label>
-                    Sample persona
+                    {activeUseActor === "sam" || activeUseActor === "owner" ? "Authored scenario persona · separate from local inbox" : "Sample persona"}
                     <select
                       value={activePersona!.workerId}
                       onChange={(e) => {
@@ -843,6 +845,7 @@ function App() {
                         if (path.endsWith("/contributions/K-01-H")) path = "/organizations/knowledge/work";
                         const p = new URLSearchParams(query);
                         p.set("persona", e.target.value);
+                        p.delete("useActor");
                         if (path.endsWith("/work"))
                           for (const key of ["q", "role", "stream", "status"])
                             p.delete(key);

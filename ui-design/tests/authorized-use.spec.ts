@@ -171,15 +171,27 @@ for (const width of [390, 1440])
       { key: contributionCheckpointKey, encoded },
     );
     await page.goto("/#/organizations/knowledge/workstreams/K-01?persona=maya");
-    await page
-      .getByText("Save or restore Knowledge contribution", { exact: true })
-      .click();
+    if (
+      !(await page
+        .getByText("Save or restore Knowledge contribution", { exact: true })
+        .evaluate((e) => e.parentElement!.hasAttribute("open")))
+    ) {
+      await page
+        .getByText("Save or restore Knowledge contribution", { exact: true })
+        .click();
+    }
     await page
       .getByRole("button", { name: "Review saved contribution", exact: true })
       .click();
     await page
       .getByRole("button", {
         name: "Confirm restore contribution",
+        exact: true,
+      })
+      .click();
+    await page
+      .getByRole("button", {
+        name: "Inspect bounded-use source and history",
         exact: true,
       })
       .click();
@@ -225,6 +237,52 @@ for (const width of [390, 1440])
       }),
     ).toHaveCount(0);
     await step("mandate");
+    await page
+      .getByRole("button", {
+        name: "Open local inbox · Sam · local publication reviewer / authorizer",
+        exact: true,
+      })
+      .click();
+    const inbox = page.getByRole("region", {
+      name: "Local use responsibility inbox",
+      exact: true,
+    });
+    await expect(inbox).toContainText("1 pending local responsibility");
+    await expect(
+      page.getByRole("heading", {
+        name: "My Work · Sam · local publication reviewer / authorizer",
+        exact: true,
+      }),
+    ).toBeVisible();
+    await inbox
+      .getByRole("combobox", { name: "Local responsibility actor" })
+      .selectOption("owner");
+    await expect(inbox).toContainText(
+      "No pending local use responsibility for this actor",
+    );
+    await inbox
+      .getByRole("combobox", { name: "Local responsibility actor" })
+      .selectOption("sam");
+    await inbox
+      .getByRole("button", {
+        name: "Open my exact use responsibility",
+        exact: true,
+      })
+      .click();
+    await page.evaluate(() => {
+      location.hash = "/organizations/knowledge/attention?persona=maya";
+    });
+    const needs = page.getByRole("region", {
+      name: "Concrete coordination needs",
+      exact: true,
+    });
+    await expect(needs).toContainText("Assess publication scope");
+    await needs
+      .getByRole("button", {
+        name: "Open next step · Sam · local publication reviewer / authorizer",
+        exact: true,
+      })
+      .click();
     await step("assessment", "Suitable");
     await expect(
       panel.getByRole("heading", {
@@ -258,6 +316,15 @@ for (const width of [390, 1440])
       key: contributionCheckpointKey,
       value: encodeContributionCheckpoint(changed),
     });
+    if (
+      !(await page
+        .getByText("Save or restore Knowledge contribution", { exact: true })
+        .evaluate((e) => e.parentElement!.hasAttribute("open")))
+    ) {
+      await page
+        .getByText("Save or restore Knowledge contribution", { exact: true })
+        .click();
+    }
     await page
       .getByRole("button", { name: "Review saved contribution", exact: true })
       .click();

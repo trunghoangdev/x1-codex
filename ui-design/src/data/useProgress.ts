@@ -1,0 +1,105 @@
+import type { HumanContributionState } from "./humanContribution";
+import { assessedUseSubject, type AuthorizedUse } from "./authorizedUse";
+import type { CoordinationNeed } from "./actionableAttention";
+export const useActors = {
+  owner: "Demo organization owner",
+  sam: "Sam · local publication reviewer / authorizer",
+  leo: "Leo · execution / reader observer",
+  maya: "Maya · outcome reviewer",
+};
+export type UseActor = keyof typeof useActors;
+export function useChainStage(state?: AuthorizedUse) {
+  return !state
+    ? "mandate"
+    : !state.publicationAssessment
+      ? "assessment"
+      : state.publicationAssessment.conclusion === "Revision needed"
+        ? "blocked"
+        : !state.authorization
+          ? "authorization"
+          : state.authorization.decision === "Refused"
+            ? "refused"
+            : !state.execution
+              ? "execution"
+              : state.execution.result === "Succeeded" && !state.readerEvidence
+                ? "evidence"
+                : !state.outcome
+                  ? "outcome"
+                  : "complete";
+}
+export function useProgress(
+  contribution: HumanContributionState,
+  state?: AuthorizedUse,
+) {
+  const subject = assessedUseSubject(contribution);
+  const stage = useChainStage(state);
+  const stale = !!state && state.subject !== subject;
+  const actor: UseActor | undefined =
+    stale || !subject || ["blocked", "refused", "complete"].includes(stage)
+      ? undefined
+      : stage === "mandate"
+        ? "owner"
+        : ["assessment", "authorization"].includes(stage)
+          ? "sam"
+          : ["execution", "evidence"].includes(stage)
+            ? "leo"
+            : "maya";
+  const title = stale
+    ? "Exact source changed · continuation blocked"
+    : !subject
+      ? "Editorial suitability prerequisite missing"
+      : {
+          mandate: "Allocate bounded publication responsibility",
+          assessment: "Assess publication scope",
+          authorization: "Decide bounded use",
+          execution: "Record execution observation",
+          evidence: "Record reader evidence or its absence",
+          outcome: "Review outcome criterion",
+          blocked: "Publication revision needed",
+          refused: "Bounded use refused",
+          complete: "Outcome review recorded",
+        }[stage];
+  const detail = stale
+    ? "Inspect the frozen source and restored contribution. No replacement mandate or follow-up is allocated."
+    : !subject
+      ? "Draft-02 needs exact delivery, receipt and a suitable Maya reassessment before bounded use."
+      : stage === "blocked" || stage === "refused"
+        ? "This cycle is stopped. Subsequent revision/retry and follow-up allocation are not represented."
+        : stage === "complete"
+          ? `Conclusion: ${state?.outcome?.conclusion}. Simulated evidence does not verify real organizational outcomes.`
+          : `human-guide-example · draft-02 · ${state ? state.audience : "audience must be named in mandate"}. Separate ${stage} record pending.`;
+  const destination = "/organizations/knowledge/use/K-01";
+  const need: CoordinationNeed | undefined =
+    (subject || state) && (stale || stage !== "complete")
+      ? {
+          id: "local-use-next",
+          source: "session",
+          category: actor
+            ? stage === "outcome"
+              ? "Outcome"
+              : "Response"
+            : "Responsibility",
+          title,
+          detail,
+          owner: actor ? useActors[actor] : "Follow-up unallocated",
+          responsibility: actor
+            ? `${useActors[actor]} · local ${stage} responsibility; no production membership or authority implied.`
+            : "No new responsible performer has been allocated.",
+          nextStep: actor
+            ? `Inspect exact source and record the separate ${stage}.`
+            : "Inspect the stopping condition and preserved records.",
+          target: { kind: "workstream", id: "K-01" },
+          destination,
+        }
+      : undefined;
+  return {
+    stage,
+    stale,
+    actor,
+    title,
+    detail,
+    destination,
+    need,
+    represented: !!subject || !!state,
+  };
+}

@@ -1036,3 +1036,9 @@ Build, diff checks and eighteen targeted model/browser checks passed across the 
 Reviewed the new allocation, exchange, agreement and bounded-use capabilities against continuing organizational work. The next proposed sequence is shared/personal next-responsibility projection, whole-Knowledge recovery, explicit scope applicability, subsequent failure/revision cycles and performer acceptance/reassignment. The review identifies that iteration 125 links its internal records but does not yet connect each next participant through My Work/attention. It also prioritizes reducing large repeated exercise panels while integrating existing state.
 
 See [next organization review](VIRTUAL-ORGANIZATION-NEXT-REVIEW.md). Documentation only; no application behavior changed, production capability or new participant/browser evidence is claimed. Diff checks passed.
+
+## 127 — Shared and personal next-use responsibilities
+
+Added one bounded-use progress projection for exact source, stage, next demo performer, stopping reason and attention destination. Organization, attention, K-01 progress/workflow/outcome/decision surfaces and local personal inboxes now connect to the detailed responsibility page. Sam and the demo organization owner remain explicitly local principals, separate from authored worker membership and counts. Completed tasks leave the pending local queue; refusal/revision/stale source do not fabricate follow-up allocations. Shared pages now show compact status rather than full use-chain forms.
+
+Build and eleven targeted model/browser checks passed across actor transitions, routing, local inbox isolation, shared attention, source replacement and existing Knowledge/personal work. Existing session-only persistence and bundle-size advisory remain. See [use responsibilities](USE-RESPONSIBILITIES.md). No production or participant result is claimed.
