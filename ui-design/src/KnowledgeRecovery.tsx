@@ -106,7 +106,7 @@ export function KnowledgeRecovery({
         </h2>
         <p>
           Includes contribution, local responsibility offers/responses and
-          versioned handoffs, case lifecycle history, K-02 brief
+          versioned handoffs, case and workshop lifecycle history, K-02 brief
           delivery/receipt and K-01 → K-02 input handoffs, scope applicability
           and K-01 agreement decisions and exact bounded-use records. Local
           browser/file recovery only; no shared backend storage or automatic
@@ -272,7 +272,7 @@ export function KnowledgeRecovery({
             <p>
               {incoming.kind === "workspace"
                 ? "Replaces all Knowledge slices together. No merge or automatic save."
-                : "Replaces contribution and its local responsibility history. Case, brief, adopted scope and use-chain history are retained; exact-source mismatch can block continuation."}
+                : "Replaces contribution and its local responsibility history. Workshop, case, brief, adopted scope and use-chain history are retained; exact-source mismatch can block continuation."}
             </p>
             {(
               [
@@ -282,6 +282,7 @@ export function KnowledgeRecovery({
                 "use",
                 "applicability",
                 "caseEvents",
+                "workshopEvents",
               ] as const
             ).map((key) => (
               <p key={key}>

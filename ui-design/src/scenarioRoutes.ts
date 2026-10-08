@@ -29,6 +29,7 @@ export function validScenarioPath(raw: string) {
       ...(scenario.id === "knowledge"
         ? [
             "/use/K-01",
+            "/workshop/K-02",
             "/timeline",
             "/cases",
             "/contributions/K-01-H",

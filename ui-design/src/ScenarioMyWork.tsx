@@ -98,7 +98,7 @@ export function ScenarioMyWork({
         action={<button className="button secondary" onClick={() => onWorker(workerId)}>Inspect my responsibility scope</button>}
       />
       {scenario.id === "knowledge" && workerId === "maya" && <ContributionExchange state={contribution} receiver onChange={onContributionChange} />}
-      {scenario.id === "knowledge" && workerId === "leo" && <p>K-01-H status and response flags follow the local contribution records, including restored/imported work. Other assignment flags remain authored context. Receiver receipt is not a missing input.</p>}
+      {scenario.id === "knowledge" && workerId === "leo" && <p>K-01-H status and response flags follow the local contribution records, including restored/imported work. K-02-F follows any accepted local workshop allocation; other assignment flags remain authored context. Receiver receipt is not a missing input.</p>}
       <details className="personal-queue-note directory-record-details">
         <summary>How assignment counts work</summary>
         <p>

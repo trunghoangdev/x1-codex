@@ -1,3 +1,4 @@
+import type { WorkshopEvent } from "./data/workshop";
 import type { CaseEvent } from "./data/caseLifecycle";
 import { WorkspaceContext } from "./WorkspaceContext";
 import type { ApplicabilityCheck } from "./data/scopeApplicability";
@@ -163,6 +164,7 @@ function App() {
   const [applicabilityChecks, setApplicabilityChecks] = useState<ApplicabilityCheck[]>([]);
   const [authorizedUse, setAuthorizedUse] = useState<AuthorizedUse>();
   const [agreementAdoptions, setAgreementAdoptions] = useState<AgreementAdoption[]>([]);
+  const [workshopEvents, setWorkshopEvents] = useState<WorkshopEvent[]>([]);
   const [caseEvents, setCaseEvents] = useState<CaseEvent[]>([]);
   const [briefHandoff, setBriefHandoff] = useState(emptyBriefHandoff);
   const [knowledgeContribution, setKnowledgeContribution] = useState<HumanContributionState>(emptyContribution);
@@ -1989,13 +1991,15 @@ function App() {
           )}
           {route.scenarioPath && (
             <ScenarioWorkspace
-              onKnowledgeWorkspace={(state) => {setCaseEvents(state.caseEvents ?? []);setKnowledgeContribution(state.contribution);setBriefHandoff(state.brief);setAgreementAdoptions(state.adoptions);setAuthorizedUse(state.use);setApplicabilityChecks(state.applicability ?? []);}}
+              onKnowledgeWorkspace={(state) => {setWorkshopEvents(state.workshopEvents ?? []);setCaseEvents(state.caseEvents ?? []);setKnowledgeContribution(state.contribution);setBriefHandoff(state.brief);setAgreementAdoptions(state.adoptions);setAuthorizedUse(state.use);setApplicabilityChecks(state.applicability ?? []);}}
               applicabilityChecks={applicabilityChecks}
               onApplicabilityChecks={setApplicabilityChecks}
               authorizedUse={authorizedUse}
               onAuthorizedUse={setAuthorizedUse}
               agreementAdoptions={agreementAdoptions}
               onAgreementAdoptions={setAgreementAdoptions}
+              workshopEvents={workshopEvents}
+              onWorkshopEvents={setWorkshopEvents}
               caseEvents={caseEvents}
               onCaseEvents={setCaseEvents}
               briefHandoff={briefHandoff}
