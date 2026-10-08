@@ -1,3 +1,8 @@
+import {
+  reviewOwner,
+  reviewPrincipals,
+  type ReviewPrincipal,
+} from "./data/reviewHandoffs";
 import { useRef, useState } from "react";
 import {
   authorityStatus,
@@ -14,6 +19,7 @@ export function AuthorityControls({
   onChange: (s: AuthorizedUse) => void;
   canResume: boolean;
 }) {
+  const [principal, setPrincipal] = useState<ReviewPrincipal>("sam");
   const [action, setAction] = useState<AuthorityAction>("Suspend");
   const [rationale, setRationale] = useState("");
   const [conditions, setConditions] = useState("");
@@ -27,8 +33,10 @@ export function AuthorityControls({
     rationale,
     conditions,
     canResume,
+    principal,
   });
   const valid =
+    principal === reviewOwner(state, "authorization") &&
     status !== "Revoked" &&
     (state.authorityHistory?.length ?? 0) < 20 &&
     (action === "Revoke" ||
@@ -44,12 +52,12 @@ export function AuthorityControls({
         Use authority · {status}
       </h3>
       <p>
-        Sam · demo bounded-use authorizer. Local simulation only. Suspension and
-        revocation block future execution; earlier observations remain. Resume
-        requires unchanged suitable material, applicable scope and a separate
-        decision that conditions are met. Revocation is final for this cycle;
-        changed material needs a fresh mandate. Maximum 20 control records per
-        cycle.
+        {reviewPrincipals[reviewOwner(state, "authorization")]} · demo
+        bounded-use authorizer. Local simulation only. Suspension and revocation
+        block future execution; earlier observations remain. Resume requires
+        unchanged suitable material, applicable scope and a separate decision
+        that conditions are met. Revocation is final for this cycle; changed
+        material needs a fresh mandate. Maximum 20 control records per cycle.
       </p>
       {state.authorityHistory?.map((r) => (
         <article key={r.id}>
@@ -74,6 +82,23 @@ export function AuthorityControls({
               setReviewed(identity);
           }}
         >
+          {state.reviewHandoffs && (
+            <label>
+              Acting authority principal
+              <select
+                aria-label="Acting authority principal"
+                value={principal}
+                onChange={(e) =>
+                  setPrincipal(e.target.value as ReviewPrincipal)
+                }
+              >
+                <option value="sam">Sam</option>
+                <option value="authorityDelegate">
+                  Demo authorization delegate
+                </option>
+              </select>
+            </label>
+          )}
           <label>
             Authority action
             <select
@@ -133,6 +158,7 @@ export function AuthorityControls({
                   rationale,
                   conditions,
                   new Date().toISOString(),
+                  principal,
                 ),
               );
               setReviewed(undefined);

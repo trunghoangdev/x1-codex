@@ -13,3 +13,5 @@ Open the bounded-use view, inspect Use authority, select a decision and enter ra
 The Knowledge timeline includes all decisions. Whole-workspace checkpoint v7 replays controls between their anchored use stages and rejects invalid links, actors, transitions and overwritten records. Earlier formats remain readable. Prior material and cycle history retain their controls.
 
 All controls are local demo actions by the named simulated authorizer. No production permission, remote job cancellation or participant verification is claimed.
+
+Iteration 139 adds [accepted review responsibility handoffs](REVIEW-RESPONSIBILITY-HANDOFF.md) for publication review, authorization/control and outcome review. Original decisions retain their authors; current holders gate new decisions. Whole-workspace checkpoint v9 replays exact-package ownership history without carrying rights into a new material or cycle.

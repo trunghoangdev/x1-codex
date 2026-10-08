@@ -1,3 +1,4 @@
+import { reviewRoles, reviewPrincipals } from "./reviewHandoffs";
 import type { KnowledgeWorkspace } from "./knowledgeCheckpoint";
 import { contributorNames } from "./knowledgeHandoff";
 import { assessedUseSubject, type UseCycle } from "./authorizedUse";
@@ -245,6 +246,26 @@ export function knowledgeTimeline(
       ["outcome", "Outcome review"],
     ] as const;
     const frozen = JSON.parse(u.subject);
+    for (const e of u.reviewHandoffs ?? [])
+      add({
+        ...base,
+        key: `review-handoff:${e.id}`,
+        id: e.id,
+        kind: "Handoff",
+        title: `${reviewRoles[e.role]} handoff · ${e.action}`,
+        actor:
+          e.actor === "owner"
+            ? "Demo organization owner"
+            : reviewPrincipals[e.actor],
+        at: e.at,
+        version: `draft-0${frozen.version} · use cycle ${n}`,
+        detail: `${reviewPrincipals[e.from]} → ${reviewPrincipals[e.to]}. ${e.rationale}`,
+        references: [e.afterRecordId, ...(e.proposalId ? [e.proposalId] : [])],
+        destination: "/organizations/knowledge/use/K-01",
+        record: e,
+        frozenSubject: JSON.parse(e.package),
+      });
+
     for (const r of u.authorityHistory ?? [])
       add({
         ...base,

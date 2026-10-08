@@ -172,13 +172,11 @@ for (const width of [390, 1440])
     await recovery
       .getByText("Save or restore whole Knowledge workspace", { exact: true })
       .click();
-    await recovery
-      .getByLabel("Import Knowledge checkpoint")
-      .setInputFiles({
-        name: "scope.json",
-        mimeType: "application/json",
-        buffer: Buffer.from(encodeKnowledgeCheckpoint(fixture())),
-      });
+    await recovery.getByLabel("Import Knowledge checkpoint").setInputFiles({
+      name: "scope.json",
+      mimeType: "application/json",
+      buffer: Buffer.from(encodeKnowledgeCheckpoint(fixture())),
+    });
     await recovery
       .getByRole("button", {
         name: "Confirm workspace replacement",
@@ -246,7 +244,10 @@ for (const width of [390, 1440])
       }),
     ).toBeVisible();
     await use
-      .getByRole("textbox")
+      .getByRole("textbox", {
+        name: "Decision rationale and scope limits",
+        exact: true,
+      })
       .fill("Allow exact draft for cohort preview only");
     await use
       .getByRole("button", {

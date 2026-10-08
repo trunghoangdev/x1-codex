@@ -1,3 +1,9 @@
+import {
+  reviewOwner,
+  reviewPrincipals,
+  reviewRoles,
+  type ReviewRole,
+} from "./data/reviewHandoffs";
 import { currentGuideSubject, guideInputStatus } from "./data/workstreamInputs";
 import {
   contributionPerformer,
@@ -295,6 +301,19 @@ export function KnowledgeRecovery({
               replacements can remove local offers and acceptance; inspect exact
               history below.
             </p>
+            {next.use && (
+              <p>
+                Incoming decision responsibility:{" "}
+                {(Object.keys(reviewRoles) as ReviewRole[])
+                  .map(
+                    (role) =>
+                      `${reviewRoles[role]}: ${reviewPrincipals[reviewOwner(next.use!, role)]}`,
+                  )
+                  .join("; ")}
+                . Whole replacement may remove accepted review handoffs;
+                contribution-only replacement retains use-role history.
+              </p>
+            )}
             <p>
               Current contributor:{" "}
               {contributorNames[contributionPerformer(state.contribution)]} →{" "}

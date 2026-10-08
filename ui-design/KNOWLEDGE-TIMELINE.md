@@ -13,3 +13,5 @@ Unsent preparation, inferred missing steps, recovery operations and unrecorded t
 Validation covers exact actor/reference projection, both use cycles, stale source history, deterministic recovery, uncertain commands, filters/pagination, related-record/source navigation, phone/desktop layout and explicit whole-workspace restoration.
 
 Iteration 138 adds [K-01 → K-02 input handoffs](CROSS-WORKSTREAM-INPUTS.md), separate receiver applicability, frozen downstream brief links and source-change gating. Whole-workspace checkpoint v8 retains this history; earlier formats remain readable. Contribution-only replacement preserves packages and briefs while current-source mismatch blocks reuse.
+
+Iteration 139 adds [accepted review responsibility handoffs](REVIEW-RESPONSIBILITY-HANDOFF.md) for publication review, authorization/control and outcome review. Original decisions retain their authors; current holders gate new decisions. Whole-workspace checkpoint v9 replays exact-package ownership history without carrying rights into a new material or cycle.

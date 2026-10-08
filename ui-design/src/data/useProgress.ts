@@ -1,4 +1,10 @@
 import {
+  reviewOwner,
+  reviewPrincipals,
+  pendingReviewHandoff,
+  reviewPackage,
+} from "./reviewHandoffs";
+import {
   applicabilityGuard,
   type ApplicabilityScope,
 } from "./scopeApplicability";
@@ -13,6 +19,9 @@ import {
 import type { CoordinationNeed } from "./actionableAttention";
 export const useActors = {
   owner: "Demo organization owner",
+  reviewDelegate: reviewPrincipals.reviewDelegate,
+  authorityDelegate: reviewPrincipals.authorityDelegate,
+  outcomeDelegate: reviewPrincipals.outcomeDelegate,
   sam: "Sam · local publication reviewer / authorizer",
   leo: "Leo · execution / reader observer",
   maya: "Maya · outcome reviewer",
@@ -60,7 +69,7 @@ export function useProgress(
   const stale = !!state && state.subject !== subject;
   const newMaterial =
     !!state && !!subject && useVersion(subject)! > useVersion(state.subject)!;
-  const actor: UseActor | undefined =
+  let actor: UseActor | undefined =
     stage === "authorityStopped" && !newMaterial
       ? "sam"
       : newMaterial
@@ -82,52 +91,75 @@ export function useProgress(
                   : ["execution", "evidence"].includes(stage)
                     ? "leo"
                     : "maya";
-  const title = newMaterial
-    ? "Plan mandate for new material version"
-    : canContinue && !stale
-      ? "Plan next bounded-use cycle"
-      : scopeBlocked && !stale
-        ? "Scope applicability decision needed"
-        : stale
-          ? "Exact source changed · continuation blocked"
-          : !subject
-            ? "Editorial suitability prerequisite missing"
-            : {
-                authorityStopped: "Use authority suspended or revoked",
-                mandate: "Allocate bounded publication responsibility",
-                assessment: "Assess publication scope",
-                authorization: "Decide bounded use",
-                execution: "Record execution observation",
-                evidence: "Record reader evidence or its absence",
-                outcome: "Review outcome criterion",
-                blocked: "Publication revision needed",
-                refused: "Bounded use refused",
-                complete: "Outcome review recorded",
-              }[stage];
-  const detail =
-    stage === "authorityStopped" && !newMaterial
-      ? `Authority is ${authorityStatus(state!)}. Execution is blocked. Suspension requires Sam’s explicit resume decision and evidence that conditions are met; revocation cannot be resumed. Changed material needs a fresh mandate.`
+  const pending = state ? pendingReviewHandoff(state) : undefined;
+  const pendingStale =
+    !!pending &&
+    (stale || pending.package !== reviewPackage(state!, pending.role));
+  if (state && !stale && !newMaterial && !scopeBlocked) {
+    if (pending) actor = pendingStale ? "owner" : pending.to;
+    else if (stage === "assessment")
+      actor = reviewOwner(state, "publicationReview");
+    else if (stage === "authorization" || stage === "authorityStopped")
+      actor = reviewOwner(state, "authorization");
+    else if (stage === "outcome") actor = reviewOwner(state, "outcomeReview");
+  }
+  if (pending && !newMaterial) actor = pendingStale ? "owner" : pending.to;
+  const title =
+    pending && !newMaterial
+      ? pendingStale
+        ? "Cancel changed review handoff package"
+        : "Respond to review responsibility handoff"
       : newMaterial
-        ? `Draft-0${useVersion(subject)} needs a fresh material mandate. Earlier material records are preserved; no authorization transfers.`
+        ? "Plan mandate for new material version"
         : canContinue && !stale
-          ? "Demo owner can explicitly create cycle 2 for the same assessed material. Fresh publication assessment and authorization are required; prior decisions and failed attempts remain historical."
+          ? "Plan next bounded-use cycle"
           : scopeBlocked && !stale
-            ? scopeBlocked
+            ? "Scope applicability decision needed"
             : stale
-              ? "Inspect the frozen source and restored contribution. No replacement mandate or follow-up is allocated."
+              ? "Exact source changed · continuation blocked"
               : !subject
-                ? "The current draft needs exact delivery, receipt and a suitable Maya reassessment without a pending revision request before bounded use."
-                : stage === "blocked" || stage === "refused"
-                  ? "This cycle is stopped. Subsequent revision/retry and follow-up allocation are not represented."
-                  : stage === "complete"
-                    ? `Conclusion: ${state?.outcome?.conclusion}. Simulated evidence does not verify real organizational outcomes.`
-                    : `human-guide-example · draft-0${useVersion(subject) ?? useVersion(state?.subject) ?? contribution.contributions.at(-1)?.version} · ${state ? state.audience : "audience must be named in mandate"}. Separate ${stage} record pending.`;
+                ? "Editorial suitability prerequisite missing"
+                : {
+                    authorityStopped: "Use authority suspended or revoked",
+                    mandate: "Allocate bounded publication responsibility",
+                    assessment: "Assess publication scope",
+                    authorization: "Decide bounded use",
+                    execution: "Record execution observation",
+                    evidence: "Record reader evidence or its absence",
+                    outcome: "Review outcome criterion",
+                    blocked: "Publication revision needed",
+                    refused: "Bounded use refused",
+                    complete: "Outcome review recorded",
+                  }[stage];
+  const detail =
+    pending && !newMaterial
+      ? pendingStale
+        ? "Owner must cancel the changed package; acceptance cannot reuse changed input or work."
+        : `${reviewPrincipals[pending.to]} must accept exact input, remaining work and bounded rights before responsibility transfers. ${reviewPrincipals[pending.from]} remains responsible until acceptance.`
+      : stage === "authorityStopped" && !newMaterial
+        ? `Authority is ${authorityStatus(state!)}. Execution is blocked. Suspension requires the current authorizer’s explicit resume decision and evidence that conditions are met; revocation cannot be resumed. Changed material needs a fresh mandate.`
+        : newMaterial
+          ? `Draft-0${useVersion(subject)} needs a fresh material mandate. Earlier material records are preserved; no authorization transfers.`
+          : canContinue && !stale
+            ? "Demo owner can explicitly create cycle 2 for the same assessed material. Fresh publication assessment and authorization are required; prior decisions and failed attempts remain historical."
+            : scopeBlocked && !stale
+              ? scopeBlocked
+              : stale
+                ? "Inspect the frozen source and restored contribution. No replacement mandate or follow-up is allocated."
+                : !subject
+                  ? "The current draft needs exact delivery, receipt and a suitable Maya reassessment without a pending revision request before bounded use."
+                  : stage === "blocked" || stage === "refused"
+                    ? "This cycle is stopped. Subsequent revision/retry and follow-up allocation are not represented."
+                    : stage === "complete"
+                      ? `Conclusion: ${state?.outcome?.conclusion}. Simulated evidence does not verify real organizational outcomes.`
+                      : `human-guide-example · draft-0${useVersion(subject) ?? useVersion(state?.subject) ?? contribution.contributions.at(-1)?.version} · ${state ? state.audience : "audience must be named in mandate"}. Separate ${stage} record pending.`;
   const destination =
-    scopeBlocked && !stale
+    scopeBlocked && !stale && !pending
       ? "/organizations/knowledge/agreements/K-01?persona=maya"
       : "/organizations/knowledge/use/K-01";
   const need: CoordinationNeed | undefined =
-    (subject || state) && (stale || canContinue || stage !== "complete")
+    (subject || state) &&
+    (stale || canContinue || !!pending || stage !== "complete")
       ? {
           id: "local-use-next",
           source: "session",

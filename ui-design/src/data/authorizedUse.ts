@@ -1,3 +1,10 @@
+import {
+  decisionRole,
+  reviewOwner,
+  reviewPrincipals,
+  type ReviewPrincipal,
+  type ReviewHandoffEvent,
+} from "./reviewHandoffs";
 import type { HumanContributionState } from "./humanContribution";
 export type UseRecord = {
   id: string;
@@ -13,6 +20,7 @@ export type AuthorityRecord = UseRecord & {
   afterRecordId: string;
 };
 export type UseCycle = {
+  reviewHandoffs?: ReviewHandoffEvent[];
   authorityHistory?: AuthorityRecord[];
   subject: string;
   audience: string;
@@ -59,6 +67,7 @@ export function latestUseTime(state: MaterialUse): number {
     state.outcome,
     state.continuation,
     ...(state.authorityHistory ?? []),
+    ...(state.reviewHandoffs ?? []),
   ]
     .filter(Boolean)
     .map((r) => Date.parse(r!.at));
@@ -114,7 +123,7 @@ export function continueUse(
     !source ||
     subject !== state.subject ||
     !base ||
-    Date.parse(at) < Date.parse(source.at)
+    Date.parse(at) < latestUseTime(state)
   )
     return state;
   const { previousMaterials, ...previous } = state;
@@ -233,17 +242,28 @@ export function recordUseStep(
   action: UseAction,
   rationale: string,
   at: string,
+  principal?: ReviewPrincipal | "leo",
 ): AuthorizedUse {
+  const role = decisionRole(action);
+  const actor =
+    principal ?? (role === "outcomeReview" ? "maya" : role ? "sam" : "leo");
+  if (role ? actor !== reviewOwner(state, role) : actor !== "leo") return state;
   if (
     subject !== state.subject ||
     !valid(rationale, at) ||
-    ((useVersion(subject)! > 2 || state.authorityHistory) &&
+    ((useVersion(subject)! > 2 ||
+      state.authorityHistory ||
+      state.reviewHandoffs) &&
       Date.parse(at) < latestUseTime(state))
   )
     return state;
   const record = (id: string, actor: string, sourceId: string): UseRecord => ({
     id: recordId(id, state.subject, state.cycle),
-    actor,
+    actor: actor.startsWith("Demo ")
+      ? actor
+      : principal && !["sam", "maya", "leo"].includes(principal)
+        ? reviewPrincipals[principal as ReviewPrincipal]
+        : actor,
     sourceId,
     rationale: rationale.trim(),
     at,
@@ -358,7 +378,9 @@ export function controlAuthority(
   rationale: string,
   conditions: string,
   at: string,
+  principal: ReviewPrincipal = "sam",
 ): AuthorizedUse {
+  if (principal !== reviewOwner(state, "authorization")) return state;
   const status = authorityStatus(state);
   if (
     state.authorization?.decision !== "Allowed" ||
@@ -388,7 +410,10 @@ export function controlAuthority(
         id: `${state.authorization.id}-control-${(state.authorityHistory?.length ?? 0) + 1}`,
         sourceId: state.authorityHistory?.at(-1)?.id ?? state.authorization.id,
         afterRecordId: after.id,
-        actor: "Sam · demo bounded-use authorizer",
+        actor:
+          principal === "sam"
+            ? "Sam · demo bounded-use authorizer"
+            : reviewPrincipals[principal],
         at,
         action,
         rationale: rationale.trim(),

@@ -1,3 +1,11 @@
+import { ReviewHandoffs } from "./ReviewHandoffs";
+import {
+  decisionRole,
+  reviewOwner,
+  reviewPrincipals,
+  roleCandidates,
+  type ReviewPrincipal,
+} from "./data/reviewHandoffs";
 import { AuthorityControls } from "./AuthorityControls";
 import { MaterialUseStart } from "./MaterialUseStart";
 import { UseContinuation } from "./UseContinuation";
@@ -27,6 +35,7 @@ export function AuthorizedUse({
   state?: UseState;
   onChange: (state: UseState) => void;
 }) {
+  const [principal, setPrincipal] = useState<ReviewPrincipal>("sam");
   const subject = assessedUseSubject(contribution);
   const [audience, setAudience] = useState("");
   const [rationale, setRationale] = useState("");
@@ -39,6 +48,11 @@ export function AuthorizedUse({
     state,
     scope,
   );
+  const role = decisionRole(action);
+  const acting =
+    role === "outcomeReview" && principal === "sam" ? "maya" : principal;
+  const wrongPrincipal =
+    !!state && !!role && acting !== reviewOwner(state, role);
   const identity = JSON.stringify({
     state,
     subject,
@@ -47,6 +61,7 @@ export function AuthorizedUse({
     audience,
     rationale,
     action,
+    acting,
   });
   const confirm = reviewed === identity;
   const setConfirm = (value: boolean) =>
@@ -246,6 +261,9 @@ export function AuthorizedUse({
         </p>
       )}
       {state && (
+        <ReviewHandoffs state={state} subject={subject} onChange={onChange} />
+      )}
+      {state && (
         <AuthorityControls
           state={state}
           onChange={onChange}
@@ -261,18 +279,41 @@ export function AuthorizedUse({
             setConfirm(true);
           }}
         >
+          {state?.reviewHandoffs && role && (
+            <label>
+              Acting decision principal
+              <select
+                aria-label="Acting decision principal"
+                value={acting}
+                onChange={(e) =>
+                  setPrincipal(e.target.value as ReviewPrincipal)
+                }
+              >
+                {roleCandidates[role].map((p) => (
+                  <option key={p} value={p}>
+                    {reviewPrincipals[p]}
+                  </option>
+                ))}
+              </select>
+              <span>
+                Current responsible person:{" "}
+                {reviewPrincipals[reviewOwner(state, role)]}. Former holders
+                cannot record this decision.
+              </span>
+            </label>
+          )}
           <h3>
             {stage === "mandate"
               ? "Allocate scoped publication responsibility · demo organization owner"
               : stage === "assessment"
-                ? "Publication scope assessment · Sam"
+                ? `Publication scope assessment · ${state ? reviewPrincipals[reviewOwner(state, "publicationReview")] : "Sam"}`
                 : stage === "authorization"
-                  ? "Separate bounded-use decision · Sam"
+                  ? `Separate bounded-use decision · ${state ? reviewPrincipals[reviewOwner(state, "authorization")] : "Sam"}`
                   : stage === "execution"
                     ? "Execution observation · Leo"
                     : stage === "evidence"
                       ? "Reader observation · Leo"
-                      : "Outcome evidence review · Maya"}
+                      : `Outcome evidence review · ${state ? reviewPrincipals[reviewOwner(state, "outcomeReview")] : "Maya"}`}
           </h3>
           {stage === "mandate" && (
             <label>
@@ -330,14 +371,16 @@ export function AuthorizedUse({
           <button
             className="button primary"
             disabled={
-              !rationale.trim() || (stage === "mandate" && !audience.trim())
+              wrongPrincipal ||
+              !rationale.trim() ||
+              (stage === "mandate" && !audience.trim())
             }
           >
             Prepare {stage} record
           </button>
         </form>
       )}
-      {actionable && confirm && (
+      {actionable && confirm && !wrongPrincipal && (
         <section aria-label="Confirm bounded-use record">
           <h3 ref={confirmation} tabIndex={-1}>
             Confirm {stage} record
@@ -362,6 +405,7 @@ export function AuthorizedUse({
                     action,
                     rationale,
                     new Date().toISOString(),
+                    role ? acting : "leo",
                   )
                 : allocateUseMandate(
                     subject,

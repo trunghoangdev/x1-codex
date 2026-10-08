@@ -31,6 +31,10 @@ Captured from iteration 109 on 2026-10-07. These are fictional demo views, not p
 
 With Vite running on port 4173, reproduce from this directory using `node scripts/capture-current-demo.mjs`. Screenshots in other files retain their own historical checkpoint dates; see [development history](README-HISTORY.md).
 
+## Review responsibility handoff · iteration 139
+
+Publication review, authorization/control and outcome review can transfer to separate local principals after exact-package acknowledgment and acceptance. Former holders cannot record the transferred decision; earlier grants and outcomes keep their authors. Shared progress, My Work, timeline and checkpoint v9 retain the arrangement. See [review responsibility handoff](REVIEW-RESPONSIBILITY-HANDOFF.md).
+
 ## Cross-workstream input · iteration 138
 
 K-01’s assessed access guide can become K-02 workshop preparation input through Maya’s exact offer, Leo’s receipt and a separate applicability decision. Briefs freeze their source references; changed sources and new handoff decisions block reuse while retaining earlier briefs. Open My Work as Maya/Leo or either workstream. See [cross-workstream inputs](CROSS-WORKSTREAM-INPUTS.md).

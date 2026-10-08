@@ -34,3 +34,5 @@ Continuation update · iteration 130: [cycle 2](USE-CONTINUATION.md) is now supp
 Material update · iteration 136: [fresh material use](MATERIAL-USE-REVISIONS.md) supports separate mandates, assessments and authorizations through draft-09, retained earlier chains and checkpoint v6. Pending follow-up revision requests block current-source use; prior authority and applicability are never inherited.
 
 Authority update · iteration 137: [suspension and revocation](AUTHORITY-CONTROL.md) preserve the original grant, block future execution, require explicit verification to resume a suspension, and retain control history in timeline and whole-workspace checkpoint v7. Revocation cannot be resumed.
+
+Iteration 139 adds [accepted review responsibility handoffs](REVIEW-RESPONSIBILITY-HANDOFF.md) for publication review, authorization/control and outcome review. Original decisions retain their authors; current holders gate new decisions. Whole-workspace checkpoint v9 replays exact-package ownership history without carrying rights into a new material or cycle.
