@@ -1,3 +1,5 @@
+import { PatternStatus } from "./PatternAdoption";
+import type { PatternEvent } from "./data/patternAdoption";
 import { ChangeImpact, ChangeImpactSummary } from "./ChangeImpact";
 import { WorkerReadiness, FacilitatorCandidates } from "./WorkerReadiness";
 import { Workshop, WorkshopStatus } from "./Workshop";
@@ -92,6 +94,8 @@ export function ScenarioWorkspace({
   onAuthorizedUse,
   agreementAdoptions,
   onAgreementAdoptions,
+  patternEvents,
+  onPatternEvents,
   workshopEvents,
   onWorkshopEvents,
   caseEvents,
@@ -106,6 +110,8 @@ export function ScenarioWorkspace({
   onAuthorizedUse: (state: AuthorizedUseState) => void;
   agreementAdoptions: AgreementAdoption[];
   onAgreementAdoptions: (h: AgreementAdoption[]) => void;
+  patternEvents: PatternEvent[];
+  onPatternEvents: (events: PatternEvent[]) => void;
   workshopEvents: WorkshopEvent[];
   onWorkshopEvents: (events: WorkshopEvent[]) => void;
   caseEvents: CaseEvent[];
@@ -122,7 +128,7 @@ export function ScenarioWorkspace({
   const origins = useRef<
     Record<string, { destination: string; source: string }[]>
   >({});
-  const impactState = {contribution,brief:briefHandoff,adoptions:agreementAdoptions,applicability:applicabilityChecks,...(authorizedUse?{use:authorizedUse}:{}),...(caseEvents.length?{caseEvents}:{}),...(workshopEvents.length?{workshopEvents}:{})};
+  const impactState = {...(patternEvents.length?{patternEvents}:{}),contribution,brief:briefHandoff,adoptions:agreementAdoptions,applicability:applicabilityChecks,...(authorizedUse?{use:authorizedUse}:{}),...(caseEvents.length?{caseEvents}:{}),...(workshopEvents.length?{workshopEvents}:{})};
   const workshopContext = {brief:briefHandoff,contribution,caseEvents};
   const workshopView = workshopProgress(workshopEvents,workshopContext);
   const scenario = workshopScenario(goalLoopScenario(briefHandoffScenario(resolveScenario(path)!, briefHandoff, contribution), authorizedUse, assessedUseSubject(contribution)),workshopEvents,workshopContext);
@@ -298,8 +304,9 @@ export function ScenarioWorkspace({
       {scenario.id === "knowledge" && suffix === "/work" && contributionActor !== "delegate" && <UseProgress contribution={contribution} state={authorizedUse} scope={useScope} actor={(params.get("useActor") ?? persona?.workerId ?? "maya") as UseActor} onActor={actor => onRoute(base + "/work?persona=" + (["leo","maya"].includes(actor) ? actor : "maya") + "&useActor=" + actor)} onInspect={() => open("/use/K-01")} />}
 
       {scenario.id === "knowledge" && ["", "/attention", "/workstreams/K-01", "/workstreams/K-02", "/use/K-01", "/workshop/K-02", "/agreements/K-01"].includes(suffix) && <ChangeImpactSummary state={impactState} onOpen={()=>open("/impact")} />}
-      {scenario.id === "knowledge" && <KnowledgeRecovery state={{contribution,brief:briefHandoff,...(workshopEvents.length ? {workshopEvents} : {}),...(caseEvents.length ? {caseEvents} : {}),adoptions:agreementAdoptions,applicability:applicabilityChecks,...(authorizedUse ? {use:authorizedUse} : {})}} onChange={onKnowledgeWorkspace} />}
-      {scenario.id === "knowledge" && <ContributionRecovery state={contribution} onChange={onContribution} replacementContext={incoming => `Workshop, case, brief, adoption and use history are retained. Workshop status: ${workshopProgress(workshopEvents, {brief:briefHandoff,contribution:incoming,caseEvents}).status}. ${caseEvents.length ? `Resulting case status: ${caseProgress(caseEvents, {brief: briefHandoff, contribution: incoming}).status}.` : ""} Resulting use status: ${useProgress(incoming, authorizedUse, useScope).title}. ${useProgress(incoming, authorizedUse, useScope).detail}`} />}
+      {scenario.id === "knowledge" && ["", "/attention", "/workstreams/K-01", "/workstreams/K-02", "/workflows/K-01", "/workflows/K-02", "/use/K-01", "/workshop/K-02"].includes(suffix) && ["K-01","K-02"].filter(id=>!["/workstreams/","/workflows/"].some(prefix=>suffix.startsWith(prefix)) || suffix.endsWith(id)).map(id=><PatternStatus key={id} events={patternEvents} context={impactState} streamId={id} onOpen={()=>open(`/patterns/${id}`)} />)}
+      {scenario.id === "knowledge" && <KnowledgeRecovery state={{...(patternEvents.length?{patternEvents}:{}),contribution,brief:briefHandoff,...(workshopEvents.length ? {workshopEvents} : {}),...(caseEvents.length ? {caseEvents} : {}),adoptions:agreementAdoptions,applicability:applicabilityChecks,...(authorizedUse ? {use:authorizedUse} : {})}} onChange={onKnowledgeWorkspace} />}
+      {scenario.id === "knowledge" && <ContributionRecovery state={contribution} onChange={onContribution} replacementContext={incoming => `Pattern, workshop, case, brief, adoption and use history are retained. Existing pattern associations never transfer to a changed work source. Workshop status: ${workshopProgress(workshopEvents, {brief:briefHandoff,contribution:incoming,caseEvents}).status}. ${caseEvents.length ? `Resulting case status: ${caseProgress(caseEvents, {brief: briefHandoff, contribution: incoming}).status}.` : ""} Resulting use status: ${useProgress(incoming, authorizedUse, useScope).title}. ${useProgress(incoming, authorizedUse, useScope).detail}`} />}
       {scenario.id === "knowledge" && suffix === "/work" && contributionActor !== "delegate" && !["owner", "sam", "reviewDelegate", "authorityDelegate", "outcomeDelegate"].includes(params.get("useActor") ?? "") && ["leo", "maya"].includes(persona?.workerId ?? "") && <BriefHandoff contribution={contribution} state={briefHandoff} onChange={onBriefHandoff} persona={persona?.workerId} />}
       {suffix === "/impact" ? <><DetailBackButton onClick={back}>Back to scenario context</DetailBackButton><h1 tabIndex={-1}>Source and scope impact</h1><ChangeImpact state={impactState} onSource={destination=>open(destination.split("?")[0].slice(base.length))} /></> : suffix === "/workshop/K-02" ? <><DetailBackButton onClick={back}>Back to scenario context</DetailBackButton><h1 tabIndex={-1}>K-02 · workshop delivery</h1><button className="text-link" onClick={() => open("/cases/current-workshop-brief")}>Inspect brief coordination case</button><FacilitatorCandidates scenario={scenario} onWorker={id=>open(`/workers/${id}`)} /><Workshop events={workshopEvents} context={workshopContext} onChange={onWorkshopEvents}/></> : suffix === "/use/K-01" ? <><DetailBackButton onClick={back}>Back to scenario context</DetailBackButton><h1 tabIndex={-1}>Bounded-use responsibility and records</h1><UseProgress contribution={contribution} state={authorizedUse} scope={useScope} inspectLabel="Inspect K-01 workstream" onInspect={() => open("/workstreams/K-01")} onInbox={actor => onRoute(base + "/work?persona=" + (["leo","maya"].includes(actor) ? actor : "maya") + "&useActor=" + actor)} /><AuthorizedUse contribution={contribution} state={authorizedUse} scope={useScope} onChange={onAuthorizedUse} onScope={() => open("/agreements/K-01")} />{authorizedUse && <GoalLoop state={authorizedUse} subject={assessedUseSubject(contribution)} onChange={onAuthorizedUse} />}</> : suffix === "/work" && contributionActor === "delegate" ? <><DetailBackButton onClick={back}>Back to scenario context</DetailBackButton><h1 tabIndex={-1}>My Work · Demo delegate</h1><p>{contributionPerformer(contribution) === "delegate" ? "1 local contribution responsibility · K-01-H. Inspect the accepted handoff and continue contribution preparation above." : "No effective contribution responsibility. Inspect any pending handoff above; proposal alone does not transfer ownership."}</p><p>This local principal is separate from authored worker membership and counts.</p></> : suffix === "/work" && ["owner", "sam", "reviewDelegate", "authorityDelegate", "outcomeDelegate"].includes(params.get("useActor") ?? "") ? <><DetailBackButton onClick={back}>Back to scenario context</DetailBackButton><h1 tabIndex={-1}>My Work · {useActors[params.get("useActor") as UseActor]}</h1><p>Local demo principal only. This principal can inspect explicitly local offers and use responsibilities. No authored worker membership or production authority is inferred. Select Leo or Maya above to inspect their represented personal work.</p></> : suffix === "/contributions/K-01-H" ? (
         <HumanContribution state={contribution} onChange={onContribution} actor={contributionActor}
@@ -317,6 +324,9 @@ export function ScenarioWorkspace({
         />
       ) : suffix.startsWith("/patterns/") ? (
         <OperatingPattern
+          events={patternEvents}
+          context={impactState}
+          onEvents={onPatternEvents}
           scenario={scenario}
           streamId={suffix.split("/")[2]}
           onBack={back}
@@ -372,7 +382,7 @@ export function ScenarioWorkspace({
           onSource={open}
         />
       ) : suffix === "/timeline" ? (
-        <KnowledgeTimeline state={{contribution,brief:briefHandoff,...(workshopEvents.length ? {workshopEvents} : {}),...(caseEvents.length ? {caseEvents} : {}),adoptions:agreementAdoptions,applicability:applicabilityChecks,...(authorizedUse?{use:authorizedUse}:{})}} filters={{stream:params.get("timelineStream")??"all",kind:params.get("timelineKind")??"all",query:params.get("timelineQ")??"",page:Number(params.get("timelinePage")??1),event:params.get("timelineEvent")??undefined}} onFilters={f=>filter("timeline",{timelineStream:f.stream,timelineKind:f.kind,timelineQ:f.query,timelinePage:f.page>1?String(f.page):"",timelineEvent:f.event??""})} onSource={p=>onRoute(p)} onBack={back}/>
+        <KnowledgeTimeline state={{...(patternEvents.length?{patternEvents}:{}),contribution,brief:briefHandoff,...(workshopEvents.length ? {workshopEvents} : {}),...(caseEvents.length ? {caseEvents} : {}),adoptions:agreementAdoptions,applicability:applicabilityChecks,...(authorizedUse?{use:authorizedUse}:{})}} filters={{stream:params.get("timelineStream")??"all",kind:params.get("timelineKind")??"all",query:params.get("timelineQ")??"",page:Number(params.get("timelinePage")??1),event:params.get("timelineEvent")??undefined}} onFilters={f=>filter("timeline",{timelineStream:f.stream,timelineKind:f.kind,timelineQ:f.query,timelinePage:f.page>1?String(f.page):"",timelineEvent:f.event??""})} onSource={p=>onRoute(p)} onBack={back}/>
       ) : suffix === "/activity" ? (
         <ExchangeActivity
           scenario={scenario}

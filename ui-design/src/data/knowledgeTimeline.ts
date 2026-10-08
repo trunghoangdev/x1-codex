@@ -17,6 +17,7 @@ export const timelineKinds = [
   "Goal follow-up",
   "Coordination case",
   "Workshop delivery",
+  "Operating pattern",
 ] as const;
 export type TimelineKind = (typeof timelineKinds)[number];
 export type KnowledgeTimelineEvent = {
@@ -529,6 +530,26 @@ export function knowledgeTimeline(
         (event.actor === "leo" ? "leo" : "maya"),
       record: event,
       frozenSubject: JSON.parse(event.source),
+    });
+  for (const event of state.patternEvents ?? [])
+    add({
+      key: `pattern:${event.id}`,
+      id: event.id,
+      stream: event.stream,
+      kind: "Operating pattern",
+      title: event.action,
+      actor: "Demo organization owner",
+      at: event.at,
+      version: `${event.pattern.id} · ${event.version}`,
+      detail: event.rationale,
+      references: [
+        ...(event.adoptionId ? [event.adoptionId] : []),
+        ...(event.supersedes ? [event.supersedes] : []),
+        ...(event.work ? [event.work.id] : []),
+      ],
+      destination: `/organizations/knowledge/patterns/${event.stream}?persona=leo`,
+      record: event,
+      frozenSubject: event.pattern,
     });
   return events
     .map((e, index) => ({ e, index }))

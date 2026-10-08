@@ -1,20 +1,33 @@
+import { PatternAdoption } from "./PatternAdoption";
+import {
+  activePattern,
+  type PatternContext,
+  type PatternEvent,
+} from "./data/patternAdoption";
 import type { OrganizationScenario } from "./data/organizationScenario";
 import { operatingPattern } from "./data/operatingPatterns";
 import { DetailBackButton } from "./DetailPresentation";
 
 export function OperatingPattern({
+  events,
+  context,
+  onEvents,
   scenario,
   streamId,
   onBack,
   onSource,
 }: {
+  events: PatternEvent[];
+  context: PatternContext;
+  onEvents: (events: PatternEvent[]) => void;
   scenario: OrganizationScenario;
   streamId: string;
   onBack: () => void;
   onSource: (path: string) => void;
 }) {
   const association = operatingPattern(scenario, streamId)!;
-  const { pattern } = association;
+  const active = activePattern(events, streamId);
+  const pattern = active?.pattern ?? association.pattern;
   const parallel = scenario.parallelWork.filter(
     (p) => p.streamId === streamId && association.parallelIds.includes(p.id),
   );
@@ -39,7 +52,11 @@ export function OperatingPattern({
       </div>
       <div className="org-banner">
         <div>
-          <h2>Guidance · adoption not recorded</h2>
+          <h2>
+            {active
+              ? `Local guidance selected · ${active.version}`
+              : "Guidance · adoption not recorded"}
+          </h2>
           <p>
             This workstream has an explicitly authored design association with
             this pattern version. Expectations describe a reusable way to
@@ -48,6 +65,13 @@ export function OperatingPattern({
           </p>
         </div>
       </div>
+      <PatternAdoption
+        events={events}
+        context={context}
+        streamId={streamId as "K-01" | "K-02"}
+        onChange={onEvents}
+        onSource={onSource}
+      />
       <section
         className="org-overview-section"
         aria-label="Pattern role mandates"

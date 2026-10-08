@@ -1174,3 +1174,11 @@ Case directory, shared attention/K-02 progress and relevant My Work entrances de
 - Reused existing source/package/scope guards across bounded use, pending review handoffs, adopted scope, guide handoffs, latest brief, case resolution and workshop allocation.
 - Distinguished missing applicability/receipt from detected change, pre-execution blocking from historical post-execution workshop evidence, and unallocated follow-up from assigned responsibility.
 - Derives from restored workspace state without a new checkpoint format or automatic decision changes. See [coverage and boundaries](CHANGE-IMPACT.md).
+
+## Iteration 149 · Versioned operating guidance
+
+- Preserved original Knowledge patterns and added authored v2 guidance with explicit version comparison, owner-controlled local selection, compatibility rationale and preview/confirmation.
+- Added exact-work version associations for delivered contributions, use cycles, workshop briefs and workshop cycles. Existing associations remain pinned across upgrades/rollback; unassociated and replaced sources are explicit.
+- Added shared guidance/coverage summaries, advisory impact rows and Operating pattern timeline history; selection does not change runtime gates, allocations or authority.
+- Added checkpoint v13 replay validation for known guidance snapshots, actors, source identities, adoption/supersession references and frozen contexts, retaining v1–v12 compatibility.
+- See [versioning operation and limits](PATTERN-VERSIONING.md).

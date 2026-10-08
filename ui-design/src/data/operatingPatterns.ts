@@ -110,3 +110,33 @@ export function operatingPattern(
     };
   return undefined;
 }
+
+// Versioned authored guidance; v1 remains unchanged for retained local associations.
+export function patternVersions(streamId: string): OperatingPattern[] {
+  const first =
+    streamId === "K-01"
+      ? guidePattern
+      : streamId === "K-02"
+        ? workshopPattern
+        : undefined;
+  if (!first) return [];
+  return [
+    first,
+    {
+      ...first,
+      version: "pattern-v2",
+      exchanges: [
+        ...first.exchanges,
+        streamId === "K-01"
+          ? "Check exact-source applicability after scope changes; retain separate reader observations and goal-follow-up decisions."
+          : "Accept facilitator allocation separately, submit a preparation plan and obtain independent readiness review before simulated execution.",
+        streamId === "K-01"
+          ? "A changed review handoff package requires cancellation and a fresh offer; no authority transfers with guidance."
+          : "Record session result, observations and criterion review separately; a new cycle needs fresh acceptance and readiness.",
+      ],
+      revision:
+        first.revision +
+        " Changed inputs require explicit review of downstream effects; preserve completed records against their original source.",
+    },
+  ];
+}

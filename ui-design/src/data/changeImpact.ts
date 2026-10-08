@@ -1,3 +1,4 @@
+import { activePattern, patternWork, workPattern } from "./patternAdoption";
 import {
   pendingReviewHandoff,
   reviewPackage,
@@ -239,6 +240,41 @@ export function changeImpact(state: KnowledgeWorkspace): ChangeImpact[] {
         source: workshopSource(workshopContext) ?? null,
         status: view.status,
       },
+    });
+  }
+  for (const stream of ["K-01", "K-02"] as const) {
+    const active = activePattern(state.patternEvents ?? [], stream);
+    if (!active) continue;
+    const works = patternWork(state, stream),
+      unlinked = works.filter(
+        (w) => !workPattern(state.patternEvents!, stream, w),
+      ),
+      earlier = works.filter((w) => {
+        const link = workPattern(state.patternEvents!, stream, w);
+        return link && link.version !== active.version;
+      });
+    rows.push({
+      id: `pattern-${stream}`,
+      stream,
+      title: `Operating guidance · ${stream}`,
+      status: unlinked.length
+        ? "Review needed"
+        : earlier.length
+          ? "Historical"
+          : "Current",
+      reason: `Selected ${active.version}. ${unlinked.length} represented work records have no explicit version association; ${earlier.length} retain a different recorded version. Guidance changes do not migrate existing work or alter operational gates.`,
+      owner: "Demo organization owner",
+      next: "Inspect version compatibility. Keep existing associations; explicitly associate unlinked work or a fresh cycle after choosing guidance. No automatic compliance is inferred.",
+      destination: `/organizations/knowledge/patterns/${stream}`,
+      retained: (state.patternEvents ?? [])
+        .filter((e) => e.stream === stream)
+        .map((e) => ({
+          id: e.id,
+          action: e.action,
+          version: e.version,
+          work: e.work ?? null,
+        })),
+      current: { adoptionId: active.id, version: active.version, works },
     });
   }
   return rows;
