@@ -39,7 +39,7 @@ export function AgreementAdoption({
       <p>
         Local session simulation · Leo acts as the demo workstream coordinator.
         This is not publication authority or a production authority check.
-        Reload clears adoption; existing checkpoints do not save it.
+        Save and explicitly restore a whole Knowledge workspace checkpoint to recover adoption after reload. Contribution-only checkpoints exclude it.
       </p>
       <p role="status">
         {current

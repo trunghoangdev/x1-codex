@@ -31,3 +31,5 @@ Open the current actor's inbox from the shared progress card; open the exact res
 New local inbox routes are scoped to Knowledge and validate actor IDs. Existing session/reload and snapshot boundaries are unchanged. Changed source clears actionability across personal/shared surfaces while preserving source snapshots. A stopped cycle has an explicit coordination boundary, not an automatically allocated follow-up.
 
 Targeted checks cover each actor transition, stopped/stale/completed stages, scoped routing, Sam/owner inbox isolation, shared attention navigation, exact-source restore, confirmation focus and phone/desktop navigation. No production or participant result is claimed.
+
+Persistence update · iteration 128: [whole Knowledge workspace recovery](KNOWLEDGE-WORKSPACE-RECOVERY.md) now explicitly saves/restores these records. Contribution-only checkpoints and main software snapshots still exclude them; reload never restores automatically. This supersedes the original session-only checkpoint boundary above.

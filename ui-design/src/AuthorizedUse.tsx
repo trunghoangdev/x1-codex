@@ -75,8 +75,7 @@ export function AuthorizedUse({
       <p>
         Local simulation · no publishing or messages are sent. Each control acts
         as its named demo actor, independent of selected persona; these controls
-        are not authentication. Reload clears this chain. Contribution
-        checkpoints and main snapshots exclude it.
+        are not authentication. Whole Knowledge workspace checkpoints can recover this chain after explicit restore. Contribution-only checkpoints and main snapshots exclude it.
       </p>
       <p role="status">
         {stale

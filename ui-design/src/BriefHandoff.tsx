@@ -35,8 +35,7 @@ export function BriefHandoff({
       <h2>Workshop brief · exact version handoff</h2>
       <p>
         Local session demo · workshop-brief-input · Leo / K-02-C → Maya /
-        K-02-E. Reload clears this exchange; contribution checkpoints do not
-        include it. Persona selection is a demonstration, not authentication.
+        K-02-E. Reload starts an empty session; save and explicitly restore a whole Knowledge workspace checkpoint to recover this exchange. Contribution-only checkpoints exclude it. Persona selection is a demonstration, not authentication.
       </p>
       <h3 ref={result} tabIndex={-1}>
         Receiving review input

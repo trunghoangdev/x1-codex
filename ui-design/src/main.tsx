@@ -1964,6 +1964,7 @@ function App() {
           )}
           {route.scenarioPath && (
             <ScenarioWorkspace
+              onKnowledgeWorkspace={(state) => {setKnowledgeContribution(state.contribution);setBriefHandoff(state.brief);setAgreementAdoptions(state.adoptions);setAuthorizedUse(state.use);}}
               authorizedUse={authorizedUse}
               onAuthorizedUse={setAuthorizedUse}
               agreementAdoptions={agreementAdoptions}

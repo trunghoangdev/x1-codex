@@ -82,3 +82,5 @@ Knowledge K-01: [local agreement adoption and scope impact](AGREEMENT-ADOPTION.m
 Knowledge K-01: [assessed draft to bounded use and outcome review](AUTHORIZED-USE-OUTCOME.md) (session-only simulation, no publication executed).
 
 Knowledge bounded-use flow: [shared and personal next responsibilities](USE-RESPONSIBILITIES.md).
+
+Knowledge continuity: [whole workspace checkpoint, export and explicit recovery](KNOWLEDGE-WORKSPACE-RECOVERY.md).

@@ -38,7 +38,9 @@ function stateIdentity(state: HumanContributionState) {
 export function ContributionRecovery({
   state,
   onChange,
+  replacementContext,
 }: {
+  replacementContext?: (incoming: HumanContributionState) => string;
   state: HumanContributionState;
   onChange: (state: HumanContributionState) => void;
 }) {
@@ -305,9 +307,10 @@ export function ContributionRecovery({
                 Latest command:{" "}
                 {preview.state.commands?.at(-1)?.status ?? "none"}.
                 Unknown/pending acknowledgements and projection locks remain
-                unchanged. This replaces current Knowledge work, including
+                unchanged. This replaces the contribution only, including
                 unsaved changes.
               </p>
+              {replacementContext && <p role="status" aria-label="Dependent workspace impact">{replacementContext(preview.state)}</p>}
               <ContributionReplacement current={state} incoming={preview.state} unsaved={saved.checkpoint ? !matches : undefined} />
               <button
                 className="button secondary"

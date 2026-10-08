@@ -24,3 +24,5 @@ This single-cycle exercise deliberately does not support retry, mandate replacem
 ## Validation
 
 Targeted model checks cover prerequisites, refusing skipped stages, exact-source mismatch, immutable history, refusal, execution failure, missing reader evidence and positive simulated review linkage. Browser checks exercise the complete insufficient-evidence path, confirmation focus, checkpoint restore prerequisites, mobile/desktop layout and reload boundaries. Production authority, durable commands, execution and observed participant outcomes remain outside this UI slice.
+
+Persistence update · iteration 128: [whole Knowledge workspace recovery](KNOWLEDGE-WORKSPACE-RECOVERY.md) now explicitly saves/restores these records. Contribution-only checkpoints and main software snapshots still exclude them; reload never restores automatically. This supersedes the original session-only checkpoint boundary above.

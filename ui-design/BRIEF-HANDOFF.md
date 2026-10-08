@@ -11,3 +11,5 @@ The model projects the exact receiving input into My Work, assignment, workstrea
 State lives in the app session across navigation, including switching scenarios. Reload clears it. Neither Knowledge contribution checkpoints nor main demo snapshots save this exchange. There is no backend dispatch, durable storage or production receipt contract.
 
 Validation covers immutable lineage, invalid/duplicate receipt handling, delivery/receipt separation, cancel, route continuity, later-version warning, exact second receipt and reload boundaries. Build retains the existing bundle-size advisory.
+
+Persistence update · iteration 128: [whole Knowledge workspace recovery](KNOWLEDGE-WORKSPACE-RECOVERY.md) now explicitly saves/restores these records. Contribution-only checkpoints and main software snapshots still exclude them; reload never restores automatically. This supersedes the original session-only checkpoint boundary above.

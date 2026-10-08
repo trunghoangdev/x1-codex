@@ -22,7 +22,9 @@ Acceptance: after editorial suitability, scope allocation/publication assessment
 
 This closes a partial acceptance gap from iteration 125: its chain is connected internally, but Organization/My Work do not yet connect the next participant at every boundary.
 
-### 2. Recover the whole Knowledge workspace coherently
+### 2. Recover the whole Knowledge workspace coherently — local slice implemented at iteration 128
+
+See [whole workspace recovery](KNOWLEDGE-WORKSPACE-RECOVERY.md). The original acceptance scope follows; shared durable storage and concurrency remain outside this local slice.
 
 Extend explicit local recovery to include contribution, K-02 brief handoff, K-01 agreement adoption and authorized-use chain together, with a versioned format and exact-link validation. Preserve compatibility with existing contribution-only checkpoints; make partial versus whole-workspace replacement clear. Preview what is replaced, retained and made stale. Do not silently auto-merge unrelated scopes or accept broken references.
 

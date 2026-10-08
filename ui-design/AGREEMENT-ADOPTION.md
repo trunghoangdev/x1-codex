@@ -11,3 +11,5 @@ A shared Knowledge banner displays adopted version and audience and links back t
 State survives app navigation but clears on reload. Main demo snapshots and Knowledge contribution checkpoints exclude adoption history; this boundary appears next to the controls.
 
 Validation: adoption model rejects empty scope, foreign versions and duplicate current-version decisions; keeps superseded history. Browser checks cover prepare/cancel/confirm, focus, proposal/adoption separation, impact/source navigation, history, reload and phone/desktop layout. Existing agreement route/comparison/source-return checks also pass. No participant session or backend result is claimed.
+
+Persistence update · iteration 128: [whole Knowledge workspace recovery](KNOWLEDGE-WORKSPACE-RECOVERY.md) now explicitly saves/restores these records. Contribution-only checkpoints and main software snapshots still exclude them; reload never restores automatically. This supersedes the original session-only checkpoint boundary above.
