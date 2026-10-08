@@ -1,3 +1,4 @@
+import type { ApplicabilityCheck } from "./data/scopeApplicability";
 import { useActors, type UseActor } from "./data/useProgress";
 import type { AuthorizedUse } from "./data/authorizedUse";
 import type { AgreementAdoption } from "./data/agreementAdoption";
@@ -157,6 +158,7 @@ const HandoffDetail = deferredScreen(() =>
   import("./HandoffDetail").then((m) => ({ default: m.HandoffDetail })),
 );
 function App() {
+  const [applicabilityChecks, setApplicabilityChecks] = useState<ApplicabilityCheck[]>([]);
   const [authorizedUse, setAuthorizedUse] = useState<AuthorizedUse>();
   const [agreementAdoptions, setAgreementAdoptions] = useState<AgreementAdoption[]>([]);
   const [briefHandoff, setBriefHandoff] = useState(emptyBriefHandoff);
@@ -1964,7 +1966,9 @@ function App() {
           )}
           {route.scenarioPath && (
             <ScenarioWorkspace
-              onKnowledgeWorkspace={(state) => {setKnowledgeContribution(state.contribution);setBriefHandoff(state.brief);setAgreementAdoptions(state.adoptions);setAuthorizedUse(state.use);}}
+              onKnowledgeWorkspace={(state) => {setKnowledgeContribution(state.contribution);setBriefHandoff(state.brief);setAgreementAdoptions(state.adoptions);setAuthorizedUse(state.use);setApplicabilityChecks(state.applicability ?? []);}}
+              applicabilityChecks={applicabilityChecks}
+              onApplicabilityChecks={setApplicabilityChecks}
               authorizedUse={authorizedUse}
               onAuthorizedUse={setAuthorizedUse}
               agreementAdoptions={agreementAdoptions}

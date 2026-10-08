@@ -30,7 +30,9 @@ Extend explicit local recovery to include contribution, K-02 brief handoff, K-01
 
 Acceptance: export/reload/explicit restore reproduces the same stage, input version, adopted scope, decisions and history. Invalid or incompatible data leaves current state intact. Cancel preserves current work. A contribution-only import shows its impact on dependent use records. Main software snapshots remain independently scoped. This is local recovery, not shared durable multi-user storage.
 
-### 3. Record actual scope applicability decisions
+### 3. Record actual scope applicability decisions — local slice implemented at iteration 129
+
+See [scope applicability](SCOPE-APPLICABILITY.md). The following preserves original acceptance criteria; production review authority and repeated execution cycles remain outside the local slice.
 
 Extend the agreement impact checklist with explicit checks linking an exact source record/version to the exact adoption record and audience. Support applicable, needs reassessment and insufficient information with reviewer responsibility and rationale. Keep workstream agreement and bounded-use audience distinct until an explicit mapping is recorded. A newer agreement leaves earlier applicability decisions historical; it does not automatically grant use permission.
 

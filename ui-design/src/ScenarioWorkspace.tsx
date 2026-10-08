@@ -1,3 +1,5 @@
+import { ScopeApplicability } from "./ScopeApplicability";
+import type { ApplicabilityCheck } from "./data/scopeApplicability";
 import { KnowledgeRecovery } from "./KnowledgeRecovery";
 import type { KnowledgeWorkspace } from "./data/knowledgeCheckpoint";
 import { UseProgress } from "./UseProgress";
@@ -69,6 +71,8 @@ export function ScenarioWorkspace({
   onMyWork,
   contribution,
   onContribution,
+  applicabilityChecks,
+  onApplicabilityChecks,
   onKnowledgeWorkspace,
   authorizedUse,
   onAuthorizedUse,
@@ -77,6 +81,8 @@ export function ScenarioWorkspace({
   briefHandoff,
   onBriefHandoff,
 }: {
+  applicabilityChecks: ApplicabilityCheck[];
+  onApplicabilityChecks: (checks: ApplicabilityCheck[]) => void;
   onKnowledgeWorkspace: (state: KnowledgeWorkspace) => void;
   authorizedUse?: AuthorizedUseState;
   onAuthorizedUse: (state: AuthorizedUseState) => void;
@@ -95,7 +101,8 @@ export function ScenarioWorkspace({
     Record<string, { destination: string; source: string }[]>
   >({});
   const scenario = briefHandoffScenario(resolveScenario(path)!, briefHandoff);
-  const useView = useProgress(contribution, authorizedUse);
+  const useScope = {adoptions:agreementAdoptions,checks:applicabilityChecks};
+  const useView = useProgress(contribution, authorizedUse, useScope);
   const needs = [...(scenario.id === "knowledge" && useView.need ? [useView.need] : []), ...actionableAttention(scenario, contribution)];
   const base = `/organizations/${scenario.id}`;
   const persona = scenarioPersona(path);
@@ -241,14 +248,14 @@ export function ScenarioWorkspace({
           verified outcomes. Main software records remain separate.
         </p>
       </details>
-      {scenario.id === "knowledge" && agreementAdoptions.length > 0 && suffix !== "/agreements/K-01" && <section className="panel" aria-label="Adopted K-01 scope"><h2>K-01 · adopted local scope</h2><p>{agreementAdoptions.at(-1)!.versionId} · {agreementAdoptions.at(-1)!.audience}</p><p>Record applicability remains unconfirmed; publication authority is separate.</p><button className="text-link" onClick={() => open("/agreements/K-01")}>Inspect adopted scope and impact</button></section>}
-      {scenario.id === "knowledge" && ["", "/workstreams/K-01", "/workflows/K-01", "/outcomes/K-01", "/decisions"].includes(suffix) && <UseProgress contribution={contribution} state={authorizedUse} onInspect={() => open("/use/K-01")} onInbox={actor => onRoute(base + "/work?persona=" + (["leo","maya"].includes(actor) ? actor : "maya") + "&useActor=" + actor)} />}
-      {scenario.id === "knowledge" && suffix === "/work" && <UseProgress contribution={contribution} state={authorizedUse} actor={(params.get("useActor") ?? persona?.workerId ?? "maya") as UseActor} onActor={actor => onRoute(base + "/work?persona=" + (["leo","maya"].includes(actor) ? actor : "maya") + "&useActor=" + actor)} onInspect={() => open("/use/K-01")} />}
+      {scenario.id === "knowledge" && agreementAdoptions.length > 0 && suffix !== "/agreements/K-01" && <section className="panel" aria-label="Adopted K-01 scope"><h2>K-01 · adopted local scope</h2><p>{agreementAdoptions.at(-1)!.versionId} · {agreementAdoptions.at(-1)!.audience}</p><p>Applicability is record-specific; inspect current decisions before reuse. Publication authority is separate.</p><button className="text-link" onClick={() => open("/agreements/K-01")}>Inspect adopted scope and impact</button></section>}
+      {scenario.id === "knowledge" && ["", "/workstreams/K-01", "/workflows/K-01", "/outcomes/K-01", "/decisions"].includes(suffix) && <UseProgress contribution={contribution} state={authorizedUse} scope={useScope} onInspect={() => open("/use/K-01")} onInbox={actor => onRoute(base + "/work?persona=" + (["leo","maya"].includes(actor) ? actor : "maya") + "&useActor=" + actor)} />}
+      {scenario.id === "knowledge" && suffix === "/work" && <UseProgress contribution={contribution} state={authorizedUse} scope={useScope} actor={(params.get("useActor") ?? persona?.workerId ?? "maya") as UseActor} onActor={actor => onRoute(base + "/work?persona=" + (["leo","maya"].includes(actor) ? actor : "maya") + "&useActor=" + actor)} onInspect={() => open("/use/K-01")} />}
 
-      {scenario.id === "knowledge" && <KnowledgeRecovery state={{contribution,brief:briefHandoff,adoptions:agreementAdoptions,...(authorizedUse ? {use:authorizedUse} : {})}} onChange={onKnowledgeWorkspace} />}
-      {scenario.id === "knowledge" && <ContributionRecovery state={contribution} onChange={onContribution} replacementContext={incoming => `Brief, adoption and use history are retained. Resulting use status: ${useProgress(incoming, authorizedUse).title}. ${useProgress(incoming, authorizedUse).detail}`} />}
+      {scenario.id === "knowledge" && <KnowledgeRecovery state={{contribution,brief:briefHandoff,adoptions:agreementAdoptions,applicability:applicabilityChecks,...(authorizedUse ? {use:authorizedUse} : {})}} onChange={onKnowledgeWorkspace} />}
+      {scenario.id === "knowledge" && <ContributionRecovery state={contribution} onChange={onContribution} replacementContext={incoming => `Brief, adoption and use history are retained. Resulting use status: ${useProgress(incoming, authorizedUse, useScope).title}. ${useProgress(incoming, authorizedUse, useScope).detail}`} />}
       {scenario.id === "knowledge" && suffix === "/work" && !["owner", "sam"].includes(params.get("useActor") ?? "") && ["leo", "maya"].includes(persona?.workerId ?? "") && <BriefHandoff state={briefHandoff} onChange={onBriefHandoff} persona={persona?.workerId} />}
-      {suffix === "/use/K-01" ? <><DetailBackButton onClick={back}>Back to scenario context</DetailBackButton><h1 tabIndex={-1}>Bounded-use responsibility and records</h1><UseProgress contribution={contribution} state={authorizedUse} inspectLabel="Back to K-01 workstream" onInspect={() => onRoute(base + "/workstreams/K-01")} onInbox={actor => onRoute(base + "/work?persona=" + (["leo","maya"].includes(actor) ? actor : "maya") + "&useActor=" + actor)} /><AuthorizedUse contribution={contribution} state={authorizedUse} onChange={onAuthorizedUse} /></> : suffix === "/work" && ["owner", "sam"].includes(params.get("useActor") ?? "") ? <><h1 tabIndex={-1}>My Work · {useActors[params.get("useActor") as UseActor]}</h1><p>Local demo principal only. No authored worker membership, assignment allocation or production authority is inferred. Select Leo or Maya above to inspect their represented personal work.</p></> : suffix === "/contributions/K-01-H" ? (
+      {suffix === "/use/K-01" ? <><DetailBackButton onClick={back}>Back to scenario context</DetailBackButton><h1 tabIndex={-1}>Bounded-use responsibility and records</h1><UseProgress contribution={contribution} state={authorizedUse} scope={useScope} inspectLabel="Back to K-01 workstream" onInspect={() => onRoute(base + "/workstreams/K-01")} onInbox={actor => onRoute(base + "/work?persona=" + (["leo","maya"].includes(actor) ? actor : "maya") + "&useActor=" + actor)} /><AuthorizedUse contribution={contribution} state={authorizedUse} scope={useScope} onChange={onAuthorizedUse} onScope={() => open("/agreements/K-01")} /></> : suffix === "/work" && ["owner", "sam"].includes(params.get("useActor") ?? "") ? <><h1 tabIndex={-1}>My Work · {useActors[params.get("useActor") as UseActor]}</h1><p>Local demo principal only. No authored worker membership, assignment allocation or production authority is inferred. Select Leo or Maya above to inspect their represented personal work.</p></> : suffix === "/contributions/K-01-H" ? (
         <HumanContribution state={contribution} onChange={onContribution}
           onBack={() => onRoute(qualify("/work"))}
           workspace={{ onOrganization: () => onRoute(qualify("")), onWorkstream: () => open("/workstreams/K-01") }} />
@@ -277,6 +284,8 @@ export function ScenarioWorkspace({
         />
       ) : suffix === "/agreements/K-01" ? (
         <WorkstreamAgreement
+          applicabilityCount={applicabilityChecks.length}
+          applicability={<ScopeApplicability adoptions={agreementAdoptions} checks={applicabilityChecks} context={{contribution,...(authorizedUse ? {use:authorizedUse} : {})}} onChange={onApplicabilityChecks} />}
           adoptions={agreementAdoptions}
           onAdoptions={onAgreementAdoptions}
           persona={persona?.workerId}

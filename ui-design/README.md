@@ -84,3 +84,5 @@ Knowledge K-01: [assessed draft to bounded use and outcome review](AUTHORIZED-US
 Knowledge bounded-use flow: [shared and personal next responsibilities](USE-RESPONSIBILITIES.md).
 
 Knowledge continuity: [whole workspace checkpoint, export and explicit recovery](KNOWLEDGE-WORKSPACE-RECOVERY.md).
+
+Knowledge scope governance: [exact source applicability decisions](SCOPE-APPLICABILITY.md).

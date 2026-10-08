@@ -1,7 +1,9 @@
+import type { ApplicabilityScope } from "./data/scopeApplicability";
 import { useProgress, useActors, type UseActor } from "./data/useProgress";
 import type { AuthorizedUse } from "./data/authorizedUse";
 import type { HumanContributionState } from "./data/humanContribution";
 export function UseProgress({
+  scope,
   contribution,
   state,
   actor,
@@ -10,6 +12,7 @@ export function UseProgress({
   inspectLabel,
   onInbox,
 }: {
+  scope?: ApplicabilityScope;
   contribution: HumanContributionState;
   state?: AuthorizedUse;
   actor?: UseActor;
@@ -18,7 +21,7 @@ export function UseProgress({
   onInspect: () => void;
   onInbox?: (actor: UseActor) => void;
 }) {
-  const view = useProgress(contribution, state);
+  const view = useProgress(contribution, state, scope);
   const personal = !!onActor;
   const mine = !!actor && view.actor === actor;
   return (
@@ -81,9 +84,10 @@ export function UseProgress({
         </p>
       )}
       <button className="button secondary" onClick={onInspect}>
-        {inspectLabel ?? (mine
-          ? "Open my exact use responsibility"
-          : "Inspect bounded-use source and history")}
+        {inspectLabel ??
+          (mine
+            ? "Open my exact use responsibility"
+            : "Inspect bounded-use source and history")}
       </button>
       {view.actor && onInbox && (
         <button className="text-link" onClick={() => onInbox(view.actor!)}>

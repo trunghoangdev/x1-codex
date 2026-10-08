@@ -65,12 +65,19 @@ export function KnowledgeRecovery({
     setNotice(message);
     requestAnimationFrame(() => heading.current?.focus());
   };
-  const stage = (s: KnowledgeWorkspace) => useProgress(s.contribution, s.use);
+  const stage = (s: KnowledgeWorkspace) =>
+    useProgress(s.contribution, s.use, {
+      adoptions: s.adoptions,
+      checks: s.applicability ?? [],
+    });
   return (
     <section aria-label="Knowledge workspace recovery">
       <p role="status" aria-label="Workspace save status">
         {saved
-          ? sameKnowledgeValue(saved, state)
+          ? sameKnowledgeValue(
+              { ...saved, applicability: saved.applicability ?? [] },
+              { ...state, applicability: state.applicability ?? [] },
+            )
             ? "Whole workspace matches saved checkpoint."
             : "Saved workspace differs from current work; restore is explicit."
           : available
@@ -86,10 +93,10 @@ export function KnowledgeRecovery({
           Knowledge workspace checkpoint
         </h2>
         <p>
-          Includes contribution, K-02 brief delivery/receipt, K-01 agreement
-          decisions and exact bounded-use records. Local browser/file recovery
-          only; no shared backend storage or automatic restore. Main software
-          snapshots remain separate.
+          Includes contribution, K-02 brief delivery/receipt, scope
+          applicability and K-01 agreement decisions and exact bounded-use
+          records. Local browser/file recovery only; no shared backend storage
+          or automatic restore. Main software snapshots remain separate.
         </p>
         {error && <p role="alert">{error}</p>}
         {notice && <p role="status">{notice}</p>}
@@ -250,19 +257,25 @@ export function KnowledgeRecovery({
             </h3>
             <p>
               {incoming.kind === "workspace"
-                ? "Replaces all four Knowledge slices together. No merge or automatic save."
+                ? "Replaces all Knowledge slices together. No merge or automatic save."
                 : "Replaces contribution only. Brief, adopted scope and use-chain history are retained; exact-source mismatch can block continuation."}
             </p>
-            {(["contribution", "brief", "adoptions", "use"] as const).map(
-              (key) => (
-                <p key={key}>
-                  {key}:{" "}
-                  {sameKnowledgeValue(state[key], next[key])
-                    ? "unchanged"
-                    : "replaced · inspect removed and incoming records below"}
-                </p>
-              ),
-            )}
+            {(
+              [
+                "contribution",
+                "brief",
+                "adoptions",
+                "use",
+                "applicability",
+              ] as const
+            ).map((key) => (
+              <p key={key}>
+                {key}:{" "}
+                {sameKnowledgeValue(state[key], next[key])
+                  ? "unchanged"
+                  : "replaced · inspect removed and incoming records below"}
+              </p>
+            ))}
             <p>
               Current use: {stage(state).title}. Incoming use:{" "}
               {stage(next).title}. {stage(next).detail}

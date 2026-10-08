@@ -1,3 +1,4 @@
+import type { ApplicabilityScope } from "./data/scopeApplicability";
 import { useProgress } from "./data/useProgress";
 import { useEffect, useRef, useState } from "react";
 import {
@@ -9,10 +10,14 @@ import {
 } from "./data/authorizedUse";
 import type { HumanContributionState } from "./data/humanContribution";
 export function AuthorizedUse({
+  scope,
+  onScope,
   contribution,
   state,
   onChange,
 }: {
+  scope?: ApplicabilityScope;
+  onScope?: () => void;
   contribution: HumanContributionState;
   state?: UseState;
   onChange: (state: UseState) => void;
@@ -24,7 +29,11 @@ export function AuthorizedUse({
   const [confirm, setConfirm] = useState(false);
   const result = useRef<HTMLHeadingElement>(null);
   const confirmation = useRef<HTMLHeadingElement>(null);
-  const { stale, stage } = useProgress(contribution, state);
+  const { stale, stage, scopeBlocked } = useProgress(
+    contribution,
+    state,
+    scope,
+  );
   const choices: UseAction[] =
     stage === "assessment"
       ? ["Suitable", "Revision needed"]
@@ -57,13 +66,16 @@ export function AuthorizedUse({
               ? "Insufficient evidence"
               : "Suitable",
     );
-  }, [stage, subject]);
+  }, [stage, subject, scopeBlocked]);
   useEffect(() => {
     if (confirm) confirmation.current?.focus();
   }, [confirm]);
   const current = contribution.contributions.at(-1);
   const actionable =
-    !!subject && !stale && !["blocked", "refused", "complete"].includes(stage);
+    !!subject &&
+    !stale &&
+    !scopeBlocked &&
+    !["blocked", "refused", "complete"].includes(stage);
   return (
     <section
       className="panel org-stream"
@@ -75,20 +87,31 @@ export function AuthorizedUse({
       <p>
         Local simulation · no publishing or messages are sent. Each control acts
         as its named demo actor, independent of selected persona; these controls
-        are not authentication. Whole Knowledge workspace checkpoints can recover this chain after explicit restore. Contribution-only checkpoints and main snapshots exclude it.
+        are not authentication. Whole Knowledge workspace checkpoints can
+        recover this chain after explicit restore. Contribution-only checkpoints
+        and main snapshots exclude it.
       </p>
+      {scopeBlocked && !stale && (
+        <p role="alert">
+          {scopeBlocked}{" "}
+          <button className="text-link" onClick={onScope}>
+            Inspect exact scope applicability
+          </button>
+        </p>
+      )}
       <p role="status">
         {stale
           ? "Source changed or removed: continuation blocked. Existing records retain their original exact subject."
-          : !subject
-            ? "Requires draft-02 delivery, exact receipt and Maya reassessment: Suitable for stated scope."
-            : `Exact draft-02 assessment available · next stage: ${stage}.`}
+          : scopeBlocked
+            ? "Scope applicability pending; authorization/execution controls are blocked."
+            : !subject
+              ? "Requires draft-02 delivery, exact receipt and Maya reassessment: Suitable for stated scope."
+              : `Exact draft-02 assessment available · next stage: ${stage}.`}
       </p>
       <p>
-        This bounded use does not establish applicability to an adopted
-        workstream agreement. Publication responsibility is allocated for this
-        exact exercise only; the authored organization-wide publication gap
-        remains unresolved.
+        Applicability to adopted scope requires separate exact-record decisions.
+        Publication responsibility is allocated for this exact exercise only;
+        the authored organization-wide publication gap remains unresolved.
       </p>
       {!!subject && (
         <details>

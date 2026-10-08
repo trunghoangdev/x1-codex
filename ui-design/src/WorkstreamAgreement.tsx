@@ -1,3 +1,4 @@
+import type { ReactNode } from "react";
 import { AgreementAdoption } from "./AgreementAdoption";
 import type { AgreementAdoption as Adoption } from "./data/agreementAdoption";
 import type { OrganizationScenario } from "./data/organizationScenario";
@@ -5,6 +6,8 @@ import { agreementVersions } from "./data/workstreamAgreements";
 import { DetailBackButton } from "./DetailPresentation";
 
 export function WorkstreamAgreement({
+  applicability,
+  applicabilityCount = 0,
   adoptions,
   onAdoptions,
   persona,
@@ -15,6 +18,8 @@ export function WorkstreamAgreement({
   onBack,
   onSource,
 }: {
+  applicability?: ReactNode;
+  applicabilityCount?: number;
   adoptions: Adoption[];
   onAdoptions: (h: Adoption[]) => void;
   persona?: string;
@@ -69,6 +74,7 @@ export function WorkstreamAgreement({
         persona={persona}
         onSource={onSource}
       />
+      {applicability}
       <div className="stream-directory-filters panel">
         <label>
           Proposed brief version
@@ -190,15 +196,15 @@ export function WorkstreamAgreement({
       >
         <h2>What applies to this proposal?</h2>
         <p>
-          No assignment or evidence applicability mapping to {selected.id} has
-          been declared. Existing records are context, not proof of acceptance,
-          invalidation or completion.
+          {applicabilityCount
+            ? "Inspect the exact scope decisions above. Other assignment/evidence mappings remain unconfirmed; no automatic acceptance or invalidation occurs."
+            : `No assignment or evidence applicability mapping to ${selected.id} has been declared. Existing records are context, not proof of acceptance, invalidation or completion.`}
         </p>
         <p>
-          No delivery, receipt or assessment has a declared applicability
-          mapping to either brief; local contribution records are separate.
-          Reader observations are not represented. The workshop's brief-v0
-          exchange history belongs to K-02 and is not guide evidence.
+          Explicit mappings apply only to their recorded adoption, audience and
+          source snapshot. Authored outcome evidence remains absent; local
+          simulated observations are separate. The workshop's brief-v0 exchange
+          history belongs to K-02 and is not guide evidence.
         </p>
         {stream.assignmentIds.map((id) => (
           <p key={id}>

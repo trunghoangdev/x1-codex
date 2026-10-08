@@ -1,4 +1,8 @@
 import {
+  recordApplicability,
+  type ApplicabilityCheck,
+} from "./scopeApplicability";
+import {
   parseContributionCheckpoint,
   encodeContributionCheckpoint,
 } from "./contributionCheckpoint";
@@ -24,9 +28,10 @@ export type KnowledgeWorkspace = {
   brief: BriefHandoffState;
   adoptions: AgreementAdoption[];
   use?: AuthorizedUse;
+  applicability?: ApplicabilityCheck[];
 };
 export type KnowledgeCheckpoint = {
-  format: "forge.knowledge-workspace.v1";
+  format: "forge.knowledge-workspace.v1" | "forge.knowledge-workspace.v2";
   savedAt: string;
   state: KnowledgeWorkspace;
 };
@@ -128,9 +133,18 @@ export function parseKnowledgeCheckpoint(raw: string): KnowledgeCheckpoint {
     const x = JSON.parse(raw);
     if (
       !shape(x, ["format", "savedAt", "state"]) ||
-      x.format !== "forge.knowledge-workspace.v1" ||
+      ![
+        "forge.knowledge-workspace.v1",
+        "forge.knowledge-workspace.v2",
+      ].includes(x.format) ||
       !date(x.savedAt) ||
-      !shape(x.state, ["contribution", "brief", "adoptions", "use"])
+      !shape(x.state, [
+        "contribution",
+        "brief",
+        "adoptions",
+        "use",
+        "applicability",
+      ])
     )
       throw Error();
     const s = x.state;
@@ -226,6 +240,46 @@ export function parseKnowledgeCheckpoint(raw: string): KnowledgeCheckpoint {
       if (!sameKnowledgeValue(rebuilt, u)) throw Error();
       // A stale source is valid history: preserve it and let the shared projection block continuation.
     }
+    if (
+      s.applicability !== undefined ||
+      x.format === "forge.knowledge-workspace.v2"
+    ) {
+      if (
+        !Array.isArray(s.applicability) ||
+        s.applicability.length > 100 ||
+        (s.applicability.length && x.format !== "forge.knowledge-workspace.v2")
+      )
+        throw Error();
+      let checks: ApplicabilityCheck[] = [];
+      for (const check of s.applicability) {
+        if (
+          !object(check) ||
+          !shape(check.context, ["contribution", "use"]) ||
+          !object(check.source) ||
+          !text(check.rationale) ||
+          !date(check.at)
+        )
+          throw Error();
+        parseKnowledgeCheckpoint(
+          JSON.stringify({
+            format: "forge.knowledge-workspace.v1",
+            savedAt: x.savedAt,
+            state: { ...check.context, brief: { versions: [] }, adoptions: [] },
+          }),
+        );
+        const adoption = adoptions.find((a) => a.id === check.adoptionId);
+        checks = recordApplicability(
+          checks,
+          adoption,
+          check.context,
+          check.source.kind,
+          check.conclusion,
+          check.rationale,
+          check.at,
+        );
+      }
+      if (!sameKnowledgeValue(checks, s.applicability)) throw Error();
+    }
     return x;
   } catch {
     throw Error(
@@ -234,10 +288,14 @@ export function parseKnowledgeCheckpoint(raw: string): KnowledgeCheckpoint {
   }
 }
 export function encodeKnowledgeCheckpoint(state: KnowledgeWorkspace) {
+  const encodedState = { ...state };
+  if (!state.applicability?.length) delete encodedState.applicability;
   const raw = JSON.stringify({
-    format: "forge.knowledge-workspace.v1",
+    format: state.applicability?.length
+      ? "forge.knowledge-workspace.v2"
+      : "forge.knowledge-workspace.v1",
     savedAt: new Date().toISOString(),
-    state,
+    state: encodedState,
   });
   parseKnowledgeCheckpoint(raw);
   return raw;
