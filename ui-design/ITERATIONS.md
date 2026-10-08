@@ -1182,3 +1182,10 @@ Case directory, shared attention/K-02 progress and relevant My Work entrances de
 - Added shared guidance/coverage summaries, advisory impact rows and Operating pattern timeline history; selection does not change runtime gates, allocations or authority.
 - Added checkpoint v13 replay validation for known guidance snapshots, actors, source identities, adoption/supersession references and frozen contexts, retaining v1–v12 compatibility.
 - See [versioning operation and limits](PATTERN-VERSIONING.md).
+
+## Iteration 150 · Organization goals and evidence
+
+- Added an explicitly authored Knowledge organization goal linked to K-01 guide and K-02 practical workshop outcomes, with a concise overview summary and a shared evidence page.
+- Separated execution, observations, criterion review and scoped goal decisions; showed exact source/audience/cycle, evidence IDs/actors/times, gaps and next operational responsibility without inferring organization-level accountability.
+- Preserved historical source/cycle boundaries and unallocated follow-up; current positive simulation decisions do not automatically establish organization-wide success.
+- Reused existing restored workspace state without new mutation or checkpoint schema. Added source/outcome navigation with persona and contextual return. See [goal-map operation and boundaries](ORGANIZATION-GOALS.md).

@@ -19,6 +19,7 @@ import { releaseWait } from "./data/organization";
 export function OrganizationOverview({
   scenario = mainOrganization,
   attentionItems,
+  goalContext,
   coordination,
   coordinationExpanded = false,
   operatingContext,
@@ -43,6 +44,7 @@ export function OrganizationOverview({
 }: {
   scenario?: OrganizationScenario;
   attentionItems?: AttentionItem[];
+  goalContext?: ReactNode;
   coordination?: ReactNode;
   coordinationExpanded?: boolean;
   operatingContext?: ReactNode;
@@ -113,6 +115,7 @@ export function OrganizationOverview({
           )}
         </div>
       </div>
+      {goalContext}
       <OrganizationAtGlance
         scenario={scenario}
         onWorkstream={onWorkstream}
