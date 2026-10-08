@@ -1167,3 +1167,10 @@ Case directory, shared attention/K-02 progress and relevant My Work entrances de
 - Added capability/availability search, compact directory summaries and full worker profile inspection without inferring skills from roles or capacity from assignment counts.
 - Added K-02 facilitator candidate review with human requirement, capability declaration, availability confirmation and current assignment context. Profile inspection returns to workshop context; inspection creates no allocation or automatic ranking.
 - Read-only advisory data; no new workspace/checkpoint state, runtime feed or real availability verification. See [readiness boundaries](WORKER-READINESS.md).
+
+## Iteration 148 · Shared source and scope impact
+
+- Added a read-only Knowledge impact report and shared entry summaries, with status filters, affected-record links, responsible actors, next steps and exact retained/current context.
+- Reused existing source/package/scope guards across bounded use, pending review handoffs, adopted scope, guide handoffs, latest brief, case resolution and workshop allocation.
+- Distinguished missing applicability/receipt from detected change, pre-execution blocking from historical post-execution workshop evidence, and unallocated follow-up from assigned responsibility.
+- Derives from restored workspace state without a new checkpoint format or automatic decision changes. See [coverage and boundaries](CHANGE-IMPACT.md).
