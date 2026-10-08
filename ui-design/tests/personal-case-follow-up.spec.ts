@@ -24,9 +24,9 @@ test("personal case ownership is explicit and separate from assignments and role
     personalCaseFollowUp(scenario, "leo", { query: "audience", stream: "K-02" })
       .shown,
   ).toHaveLength(1);
-  expect(scenario.assignments.filter((a) => a.workerId === "leo")).toHaveLength(
-    2,
-  );
+  expect(
+    scenario.assignments.filter((a) => a.workerId === "leo").map((a) => a.id),
+  ).toEqual(["K-01-H", "K-01-P", "K-02-C"]);
 });
 for (const width of [390, 1440])
   test(`personal follow-up filters, source return and persona isolation ${width}`, async ({
@@ -44,7 +44,7 @@ for (const width of [390, 1440])
     await expect(section).toContainText("Next action:");
     await expect(section).toContainText("Waiting for:");
     await expect(page.locator(".personal-queue-results")).toContainText(
-      "0 of 2 allocated assignments shown",
+      "0 of 3 allocated assignments shown",
     );
     await page
       .getByRole("button", {

@@ -1,3 +1,4 @@
+import type { CaseEvent } from "./data/caseLifecycle";
 import { WorkspaceContext } from "./WorkspaceContext";
 import type { ApplicabilityCheck } from "./data/scopeApplicability";
 import { useActors, type UseActor } from "./data/useProgress";
@@ -162,6 +163,7 @@ function App() {
   const [applicabilityChecks, setApplicabilityChecks] = useState<ApplicabilityCheck[]>([]);
   const [authorizedUse, setAuthorizedUse] = useState<AuthorizedUse>();
   const [agreementAdoptions, setAgreementAdoptions] = useState<AgreementAdoption[]>([]);
+  const [caseEvents, setCaseEvents] = useState<CaseEvent[]>([]);
   const [briefHandoff, setBriefHandoff] = useState(emptyBriefHandoff);
   const [knowledgeContribution, setKnowledgeContribution] = useState<HumanContributionState>(emptyContribution);
   const [humanContribution, setHumanContribution] = useState<HumanContributionState>(emptyContribution);
@@ -1987,13 +1989,15 @@ function App() {
           )}
           {route.scenarioPath && (
             <ScenarioWorkspace
-              onKnowledgeWorkspace={(state) => {setKnowledgeContribution(state.contribution);setBriefHandoff(state.brief);setAgreementAdoptions(state.adoptions);setAuthorizedUse(state.use);setApplicabilityChecks(state.applicability ?? []);}}
+              onKnowledgeWorkspace={(state) => {setCaseEvents(state.caseEvents ?? []);setKnowledgeContribution(state.contribution);setBriefHandoff(state.brief);setAgreementAdoptions(state.adoptions);setAuthorizedUse(state.use);setApplicabilityChecks(state.applicability ?? []);}}
               applicabilityChecks={applicabilityChecks}
               onApplicabilityChecks={setApplicabilityChecks}
               authorizedUse={authorizedUse}
               onAuthorizedUse={setAuthorizedUse}
               agreementAdoptions={agreementAdoptions}
               onAgreementAdoptions={setAgreementAdoptions}
+              caseEvents={caseEvents}
+              onCaseEvents={setCaseEvents}
               briefHandoff={briefHandoff}
               onBriefHandoff={setBriefHandoff}
               contribution={knowledgeContribution}

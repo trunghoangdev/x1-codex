@@ -79,3 +79,5 @@ Iteration 138 adds [K-01 → K-02 input handoffs](../../CROSS-WORKSTREAM-INPUTS.
 Iteration 139 adds [accepted review responsibility handoffs](../../REVIEW-RESPONSIBILITY-HANDOFF.md) for publication review, authorization/control and outcome review. Original decisions retain their authors; current holders gate new decisions. Whole-workspace checkpoint v9 replays exact-package ownership history without carrying rights into a new material or cycle.
 
 Iteration 140 adds the [goal outcome loop](../../GOAL-OUTCOME-LOOP.md): scoped owner goal decisions, exact linked follow-up offers/acceptance/delivery/review and checkpoint v10. Accepted task results do not rewrite outcome evidence; open tasks require review or explicit cancellation before a new material/use cycle.
+
+`caseLifecycle.ts` adds a separate bounded workshop-brief case event history with Leo acceptance/follow-up, Maya resolution review, exact current brief/receipt evidence and explicit reopening. `KnowledgeWorkspace.caseEvents` uses checkpoint v11 replay and timeline projection; brief delivery, assignment counts, authority and workshop outcomes remain separate. See [case lifecycle](../../CASE-LIFECYCLE.md).

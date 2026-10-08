@@ -1,3 +1,4 @@
+import { caseActors } from "./caseLifecycle";
 import { goalActors } from "./goalLoop";
 import { reviewRoles, reviewPrincipals } from "./reviewHandoffs";
 import type { KnowledgeWorkspace } from "./knowledgeCheckpoint";
@@ -13,6 +14,7 @@ export const timelineKinds = [
   "Workshop brief",
   "Workstream input",
   "Goal follow-up",
+  "Coordination case",
 ] as const;
 export type TimelineKind = (typeof timelineKinds)[number];
 export type KnowledgeTimelineEvent = {
@@ -488,6 +490,25 @@ export function knowledgeTimeline(
         record: b.receipt,
       });
   }
+  for (const event of state.caseEvents ?? [])
+    add({
+      key: `case:${event.id}`,
+      id: event.id,
+      stream: "K-02",
+      kind: "Coordination case",
+      title: event.action,
+      actor: caseActors[event.actor],
+      at: event.at,
+      version: "current-workshop-brief",
+      detail: event.rationale,
+      references: [
+        "workshop-brief-input",
+        ...(event.proposalId ? [event.proposalId] : []),
+      ],
+      destination: `/organizations/knowledge/cases/current-workshop-brief?persona=${event.actor}`,
+      record: event,
+      ...(event.evidence ? { frozenSubject: JSON.parse(event.evidence) } : {}),
+    });
   // Preserve deterministic record order for equal timestamps, without inventing causality.
   return events
     .map((e, index) => ({ e, index }))

@@ -1,4 +1,9 @@
 import {
+  recordCaseEvent,
+  retainsBriefs,
+  type CaseEvent,
+} from "./caseLifecycle";
+import {
   reviewGoal,
   respondGoalTask,
   deliverGoalTask,
@@ -52,6 +57,7 @@ export type KnowledgeWorkspace = {
   adoptions: AgreementAdoption[];
   use?: AuthorizedUse;
   applicability?: ApplicabilityCheck[];
+  caseEvents?: CaseEvent[];
 };
 export type KnowledgeCheckpoint = {
   format:
@@ -64,7 +70,8 @@ export type KnowledgeCheckpoint = {
     | "forge.knowledge-workspace.v7"
     | "forge.knowledge-workspace.v8"
     | "forge.knowledge-workspace.v9"
-    | "forge.knowledge-workspace.v10";
+    | "forge.knowledge-workspace.v10"
+    | "forge.knowledge-workspace.v11";
   savedAt: string;
   state: KnowledgeWorkspace;
 };
@@ -191,6 +198,7 @@ export function parseKnowledgeCheckpoint(raw: string): KnowledgeCheckpoint {
         "forge.knowledge-workspace.v8",
         "forge.knowledge-workspace.v9",
         "forge.knowledge-workspace.v10",
+        "forge.knowledge-workspace.v11",
       ].includes(x.format) ||
       !date(x.savedAt) ||
       !shape(x.state, [
@@ -199,6 +207,7 @@ export function parseKnowledgeCheckpoint(raw: string): KnowledgeCheckpoint {
         "adoptions",
         "use",
         "applicability",
+        "caseEvents",
       ])
     )
       throw Error();
@@ -214,6 +223,7 @@ export function parseKnowledgeCheckpoint(raw: string): KnowledgeCheckpoint {
         "forge.knowledge-workspace.v8",
         "forge.knowledge-workspace.v9",
         "forge.knowledge-workspace.v10",
+        "forge.knowledge-workspace.v11",
       ].includes(x.format)
     )
       throw Error();
@@ -226,6 +236,7 @@ export function parseKnowledgeCheckpoint(raw: string): KnowledgeCheckpoint {
         "forge.knowledge-workspace.v8",
         "forge.knowledge-workspace.v9",
         "forge.knowledge-workspace.v10",
+        "forge.knowledge-workspace.v11",
       ].includes(x.format)
     )
       throw Error();
@@ -244,6 +255,7 @@ export function parseKnowledgeCheckpoint(raw: string): KnowledgeCheckpoint {
           "forge.knowledge-workspace.v8",
           "forge.knowledge-workspace.v9",
           "forge.knowledge-workspace.v10",
+          "forge.knowledge-workspace.v11",
         ].includes(x.format) ||
         !Array.isArray(s.brief.guideHandoffs) ||
         !s.brief.guideHandoffs.length ||
@@ -317,6 +329,7 @@ export function parseKnowledgeCheckpoint(raw: string): KnowledgeCheckpoint {
             "forge.knowledge-workspace.v8",
             "forge.knowledge-workspace.v9",
             "forge.knowledge-workspace.v10",
+            "forge.knowledge-workspace.v11",
           ].includes(x.format) ||
           !Number.isInteger(input.handoffCount) ||
           input.handoffCount < 1 ||
@@ -394,6 +407,7 @@ export function parseKnowledgeCheckpoint(raw: string): KnowledgeCheckpoint {
         "forge.knowledge-workspace.v8",
         "forge.knowledge-workspace.v9",
         "forge.knowledge-workspace.v10",
+        "forge.knowledge-workspace.v11",
       ].includes(x.format)
     )
       throw Error();
@@ -432,6 +446,7 @@ export function parseKnowledgeCheckpoint(raw: string): KnowledgeCheckpoint {
             "forge.knowledge-workspace.v8",
             "forge.knowledge-workspace.v9",
             "forge.knowledge-workspace.v10",
+            "forge.knowledge-workspace.v11",
           ].includes(x.format) ||
           !Array.isArray(u.previousMaterials) ||
           !u.previousMaterials.length ||
@@ -488,6 +503,7 @@ export function parseKnowledgeCheckpoint(raw: string): KnowledgeCheckpoint {
             "forge.knowledge-workspace.v8",
             "forge.knowledge-workspace.v9",
             "forge.knowledge-workspace.v10",
+            "forge.knowledge-workspace.v11",
           ].includes(x.format) ||
           u.cycle !== 2 ||
           !shape(u.previousCycle, [
@@ -516,6 +532,7 @@ export function parseKnowledgeCheckpoint(raw: string): KnowledgeCheckpoint {
               "forge.knowledge-workspace.v8",
               "forge.knowledge-workspace.v9",
               "forge.knowledge-workspace.v10",
+              "forge.knowledge-workspace.v11",
             ].includes(x.format)
               ? x.format
               : s.contribution.handoffs
@@ -547,6 +564,7 @@ export function parseKnowledgeCheckpoint(raw: string): KnowledgeCheckpoint {
           "forge.knowledge-workspace.v8",
           "forge.knowledge-workspace.v9",
           "forge.knowledge-workspace.v10",
+          "forge.knowledge-workspace.v11",
         ].includes(x.format) ||
           !Array.isArray(u.authorityHistory) ||
           !u.authorityHistory.length ||
@@ -558,6 +576,7 @@ export function parseKnowledgeCheckpoint(raw: string): KnowledgeCheckpoint {
         (![
           "forge.knowledge-workspace.v9",
           "forge.knowledge-workspace.v10",
+          "forge.knowledge-workspace.v11",
         ].includes(x.format) ||
           !Array.isArray(u.reviewHandoffs) ||
           !u.reviewHandoffs.length ||
@@ -634,7 +653,10 @@ export function parseKnowledgeCheckpoint(raw: string): KnowledgeCheckpoint {
       if (roleCursor !== (u.reviewHandoffs?.length ?? 0)) throw Error();
       if (u.goalReviews !== undefined) {
         if (
-          x.format !== "forge.knowledge-workspace.v10" ||
+          ![
+            "forge.knowledge-workspace.v10",
+            "forge.knowledge-workspace.v11",
+          ].includes(x.format) ||
           !Array.isArray(u.goalReviews) ||
           !u.goalReviews.length ||
           u.goalReviews.length > 10
@@ -714,6 +736,7 @@ export function parseKnowledgeCheckpoint(raw: string): KnowledgeCheckpoint {
             "forge.knowledge-workspace.v8",
             "forge.knowledge-workspace.v9",
             "forge.knowledge-workspace.v10",
+            "forge.knowledge-workspace.v11",
           ].includes(x.format))
       )
         throw Error();
@@ -735,6 +758,7 @@ export function parseKnowledgeCheckpoint(raw: string): KnowledgeCheckpoint {
               "forge.knowledge-workspace.v8",
               "forge.knowledge-workspace.v9",
               "forge.knowledge-workspace.v10",
+              "forge.knowledge-workspace.v11",
             ].includes(x.format)
               ? x.format
               : check.context.contribution?.handoffs
@@ -761,6 +785,41 @@ export function parseKnowledgeCheckpoint(raw: string): KnowledgeCheckpoint {
       }
       if (!sameKnowledgeValue(checks, s.applicability)) throw Error();
     }
+    if (s.caseEvents !== undefined) {
+      if (
+        x.format !== "forge.knowledge-workspace.v11" ||
+        !Array.isArray(s.caseEvents) ||
+        !s.caseEvents.length ||
+        s.caseEvents.length > 40
+      )
+        throw Error();
+      let events: CaseEvent[] = [];
+      for (const event of s.caseEvents) {
+        if (
+          !shape(event.context, ["brief", "contribution"]) ||
+          !text(event.rationale) ||
+          !date(event.at)
+        )
+          throw Error();
+        parseKnowledgeCheckpoint(
+          JSON.stringify({
+            format: "forge.knowledge-workspace.v11",
+            savedAt: x.savedAt,
+            state: { ...event.context, adoptions: [] },
+          }),
+        );
+        if (!retainsBriefs(event.context.brief, s.brief)) throw Error();
+        events = recordCaseEvent(
+          events,
+          event.context,
+          event.actor,
+          event.action,
+          event.rationale,
+          event.at,
+        );
+      }
+      if (!sameKnowledgeValue(events, s.caseEvents)) throw Error();
+    }
     return x;
   } catch {
     throw Error(
@@ -771,10 +830,12 @@ export function parseKnowledgeCheckpoint(raw: string): KnowledgeCheckpoint {
 export function encodeKnowledgeCheckpoint(state: KnowledgeWorkspace) {
   const encodedState = { ...state };
   if (!state.applicability?.length) delete encodedState.applicability;
+  if (!state.caseEvents?.length) delete encodedState.caseEvents;
   const raw = JSON.stringify({
-    format:
-      hasGoalReviews(state.use) ||
-      state.applicability?.some((c) => hasGoalReviews(c.context.use))
+    format: state.caseEvents?.length
+      ? "forge.knowledge-workspace.v11"
+      : hasGoalReviews(state.use) ||
+          state.applicability?.some((c) => hasGoalReviews(c.context.use))
         ? "forge.knowledge-workspace.v10"
         : hasReviewHandoffs(state.use) ||
             state.applicability?.some((c) => hasReviewHandoffs(c.context.use))

@@ -1,3 +1,10 @@
+import { CaseLifecycle } from "./CaseLifecycle";
+import {
+  caseProgress,
+  operationalCaseId,
+  type CaseContext,
+  type CaseEvent,
+} from "./data/caseLifecycle";
 import type { OrganizationScenario } from "./data/organizationScenario";
 import {
   coordinationCases,
@@ -7,6 +14,9 @@ import {
 } from "./data/coordinationCases";
 import { DetailBackButton } from "./DetailPresentation";
 export function CoordinationCases({
+  caseEvents,
+  caseContext,
+  onCaseEvents,
   scenario,
   caseId,
   filters,
@@ -15,6 +25,9 @@ export function CoordinationCases({
   onCase,
   onSource,
 }: {
+  caseEvents: CaseEvent[];
+  caseContext: CaseContext;
+  onCaseEvents: (events: CaseEvent[]) => void;
   scenario: OrganizationScenario;
   caseId?: string;
   filters: CaseFilters;
@@ -63,131 +76,146 @@ export function CoordinationCases({
           <p>
             A case owner coordinates this issue; that does not allocate tasks,
             grant decision authority or verify the workstream outcome. These are
-            read-only sample cases; no resolution is recorded.
+            authored case definitions. The workshop-brief case also has a
+            separate local lifecycle; policy clarification remains read-only.
           </p>
         </div>
       </div>
       {selected ? (
         <>
-          <section
-            className="panel org-stream org-overview-section"
-            aria-label="Case follow-up"
+          {selected.id === operationalCaseId && (
+            <CaseLifecycle
+              events={caseEvents}
+              context={caseContext}
+              onChange={onCaseEvents}
+            />
+          )}
+          <details
+            open={!caseEvents.length || selected.id !== operationalCaseId}
           >
-            <div className="eyebrow">
-              {selected.id} · {selected.streamId}
-            </div>
-            <h2>{selected.status}</h2>
-            <h3>Who is following up?</h3>
-            <p>
-              <strong>{owner(selected)}</strong>
-            </p>
-            <p>
-              {selected.owner.state === "assigned"
-                ? selected.owner.mandate
-                : selected.owner.detail}
-            </p>
-            {selected.owner.state === "assigned" && (
-              <button
-                className="text-link"
-                onClick={() =>
-                  onSource(
-                    `/workers/${selected.owner.state === "assigned" ? selected.owner.workerId : ""}`,
-                  )
-                }
-              >
-                Inspect follow-up owner
-              </button>
-            )}
-            <h3>Next coordination action</h3>
-            <p>{selected.nextAction}</p>
-            <h3>Waiting for</h3>
-            <p>{selected.waitingFor}</p>
-            <p>Priority and due date not represented.</p>
-          </section>
-          <section
-            className="panel org-stream org-overview-section"
-            aria-label="Case closure requirements"
-          >
-            <h2>What would resolve this case?</h2>
-            <ul>
-              {selected.closure.map((c) => (
-                <li key={c}>{c}</li>
-              ))}
-            </ul>
-            <p>
-              <strong>Resolution: not recorded.</strong> Conditions are
-              requirements, not passed checks.
-            </p>
-            <p>{selected.boundary}</p>
-          </section>
-          <section
-            className="panel org-stream"
-            aria-label="Case source records"
-          >
-            <h2>Inspect the source</h2>
-            <p>{selected.provenance}</p>
-            {selected.source.dependencyId && (
-              <p>Dependency · {selected.source.dependencyId}</p>
-            )}
-            {selected.source.providerAssignmentId && (
+            <summary>Authored case requirements and source records</summary>
+            <section
+              className="panel org-stream org-overview-section"
+              aria-label="Case follow-up"
+            >
+              <div className="eyebrow">
+                {selected.id} · {selected.streamId}
+              </div>
+              <h2>{selected.status}</h2>
+              <h3>Who is following up?</h3>
               <p>
+                <strong>{owner(selected)}</strong>
+              </p>
+              <p>
+                {selected.owner.state === "assigned"
+                  ? selected.owner.mandate
+                  : selected.owner.detail}
+              </p>
+              {selected.owner.state === "assigned" && (
                 <button
                   className="text-link"
                   onClick={() =>
                     onSource(
-                      `/assignments/${selected.source.providerAssignmentId}`,
+                      `/workers/${selected.owner.state === "assigned" ? selected.owner.workerId : ""}`,
                     )
                   }
                 >
-                  Inspect supplying responsibility ·{" "}
-                  {selected.source.providerAssignmentId}
+                  Inspect follow-up owner
                 </button>
+              )}
+              <h3>Next coordination action</h3>
+              <p>{selected.nextAction}</p>
+              <h3>Waiting for</h3>
+              <p>{selected.waitingFor}</p>
+              <p>Priority and due date not represented.</p>
+            </section>
+            <section
+              className="panel org-stream org-overview-section"
+              aria-label="Case closure requirements"
+            >
+              <h2>What would resolve this case?</h2>
+              <ul>
+                {selected.closure.map((c) => (
+                  <li key={c}>{c}</li>
+                ))}
+              </ul>
+              <p>
+                <strong>Resolution: not recorded.</strong> Conditions are
+                requirements, not passed checks.
               </p>
-            )}
-            {selected.source.receiverAssignmentId && (
+              <p>{selected.boundary}</p>
+            </section>
+            <section
+              className="panel org-stream"
+              aria-label="Case source records"
+            >
+              <h2>Inspect the source</h2>
+              <p>{selected.provenance}</p>
+              {selected.source.dependencyId && (
+                <p>Dependency · {selected.source.dependencyId}</p>
+              )}
+              {selected.source.providerAssignmentId && (
+                <p>
+                  <button
+                    className="text-link"
+                    onClick={() =>
+                      onSource(
+                        `/assignments/${selected.source.providerAssignmentId}`,
+                      )
+                    }
+                  >
+                    Inspect supplying responsibility ·{" "}
+                    {selected.source.providerAssignmentId}
+                  </button>
+                </p>
+              )}
+              {selected.source.receiverAssignmentId && (
+                <p>
+                  <button
+                    className="text-link"
+                    onClick={() =>
+                      onSource(
+                        `/assignments/${selected.source.receiverAssignmentId}`,
+                      )
+                    }
+                  >
+                    Inspect waiting responsibility ·{" "}
+                    {selected.source.receiverAssignmentId}
+                  </button>
+                </p>
+              )}
+              {selected.source.gapId && (
+                <p>
+                  <button
+                    className="text-link"
+                    onClick={() =>
+                      onSource(`/workstreams/${selected.streamId}`)
+                    }
+                  >
+                    Inspect responsibility gap · {selected.source.gapId}
+                  </button>
+                </p>
+              )}
+              {selected.source.decisionId && (
+                <p>
+                  <button
+                    className="text-link"
+                    onClick={() => onSource("/decisions")}
+                  >
+                    Inspect decision requirement · {selected.source.decisionId}
+                  </button>
+                </p>
+              )}
               <p>
                 <button
                   className="text-link"
-                  onClick={() =>
-                    onSource(
-                      `/assignments/${selected.source.receiverAssignmentId}`,
-                    )
-                  }
+                  onClick={() => onSource(`/workflows/${selected.streamId}`)}
                 >
-                  Inspect waiting responsibility ·{" "}
-                  {selected.source.receiverAssignmentId}
+                  Inspect related workflow · {selected.streamId}
                 </button>
               </p>
-            )}
-            {selected.source.gapId && (
-              <p>
-                <button
-                  className="text-link"
-                  onClick={() => onSource(`/workstreams/${selected.streamId}`)}
-                >
-                  Inspect responsibility gap · {selected.source.gapId}
-                </button>
-              </p>
-            )}
-            {selected.source.decisionId && (
-              <p>
-                <button
-                  className="text-link"
-                  onClick={() => onSource("/decisions")}
-                >
-                  Inspect decision requirement · {selected.source.decisionId}
-                </button>
-              </p>
-            )}
-            <p>
-              <button
-                className="text-link"
-                onClick={() => onSource(`/workflows/${selected.streamId}`)}
-              >
-                Inspect related workflow · {selected.streamId}
-              </button>
-            </p>
-          </section>
+            </section>
+          </details>
         </>
       ) : (
         <>
@@ -255,12 +283,19 @@ export function CoordinationCases({
                     {c.id} · {c.streamId}
                   </div>
                   <h2>{c.title}</h2>
-                  <span className="badge neutral">{c.status}</span>
+                  <span className="badge neutral">
+                    {c.id === operationalCaseId && caseEvents.length
+                      ? caseProgress(caseEvents, caseContext).status
+                      : c.status}
+                  </span>
                   <p>
                     <strong>Follow-up:</strong> {owner(c)}
                   </p>
                   <p>
-                    <strong>Next action:</strong> {c.nextAction}
+                    <strong>Next action:</strong>{" "}
+                    {c.id === operationalCaseId && caseEvents.length
+                      ? caseProgress(caseEvents, caseContext).nextStep
+                      : c.nextAction}
                   </p>
                   <button
                     className="button secondary"

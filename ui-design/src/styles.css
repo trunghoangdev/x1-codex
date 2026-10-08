@@ -3852,3 +3852,7 @@ main h3,
 .workspace-context p { line-height: 1.6; }
 .workspace-context button { max-width: 100%; white-space: normal; text-align: left; }
 @media (max-width: 850px) { .workspace-context { grid-template-columns: minmax(0, 1fr); gap: 16px; } .workspace-context > div + div { border-top: 1px solid #dde3df; padding-top: 16px; } }
+
+.case-lifecycle select { width: 100%; min-width: 0; max-width: 100%; }
+.case-lifecycle pre { white-space: pre-wrap; overflow-wrap: anywhere; }
+.case-lifecycle details { margin-block: 16px; }

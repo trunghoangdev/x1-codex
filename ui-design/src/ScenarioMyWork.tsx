@@ -1,3 +1,4 @@
+import { caseProgress, operationalCaseId, type CaseContext, type CaseEvent } from "./data/caseLifecycle";
 import { WorkspaceContext } from "./WorkspaceContext";
 import { contributionPerformer } from "./data/knowledgeHandoff";
 import { contributionView } from "./data/contributionView";
@@ -14,6 +15,8 @@ import type { OrganizationScenario } from "./data/organizationScenario";
 import { DetailBackButton } from "./DetailPresentation";
 import { personalCaseFollowUp } from "./data/coordinationCases";
 export function ScenarioMyWork({
+  caseEvents,
+  caseContext,
   scenario,
   workerId,
   onAssignment,
@@ -31,6 +34,8 @@ export function ScenarioMyWork({
   onContribution: () => void;
   contribution: HumanContributionState;
   onContributionChange: (state: HumanContributionState) => void;
+  caseEvents: CaseEvent[];
+  caseContext: CaseContext;
   scenario: OrganizationScenario;
   workerId: string;
   filters: ScenarioWorkFilters;
@@ -197,16 +202,16 @@ export function ScenarioMyWork({
                   <div className="eyebrow">CASE FOLLOW-UP · {c.streamId}</div>
                   <h3>{c.title}</h3>
                   <p>
-                    <strong>{c.status}</strong>
+                    <strong>{c.id === operationalCaseId && caseEvents.length ? caseProgress(caseEvents, caseContext).status : c.status}</strong>
                   </p>
                   <p>
-                    <strong>Next action:</strong> {c.nextAction}
+                    <strong>Next action:</strong> {c.id === operationalCaseId && caseEvents.length ? caseProgress(caseEvents, caseContext).nextStep : c.nextAction}
                   </p>
                   <p>
-                    <strong>Waiting for:</strong> {c.waitingFor}
+                    <strong>Waiting for:</strong> {c.id === operationalCaseId && caseEvents.length ? caseProgress(caseEvents, caseContext).waitingFor : c.waitingFor}
                   </p>
                   <p>
-                    Resolution not recorded · follow-up responsibility only.
+                    {c.id === operationalCaseId && caseEvents.length ? "Local case decisions are retained separately; workshop outcome remains unverified." : "Resolution not recorded · follow-up responsibility only."}
                   </p>
                   <button
                     className="button secondary"

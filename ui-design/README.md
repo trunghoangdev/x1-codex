@@ -132,3 +132,5 @@ Iteration 142 adds a concise organization overview scan of workstream goals, rec
 Iteration 143 aligns Roles, Workers, Workflow, Outcome and My Work with a common Current state / Responsibility / Next step summary. Facts and actions remain specific to each screen; narrow screens stack the same reading order vertically.
 
 Iteration 144 audits navigation continuity: organization-aware invalid-link recovery, persona-preserving bounded-use links, contextual local-inbox returns and Escape dismissal for the mobile menu. Empty-directory and nested-return paths are covered by targeted phone/desktop checks.
+
+Iteration 145 adds a [local workshop-brief case lifecycle](CASE-LIFECYCLE.md): accepted follow-up, updates, exact-source resolution proposals, independent review and explicit reopening. Organization/My Work, timeline and whole-workspace checkpoint v11 retain its status and history; case closure does not verify workshop outcomes.
