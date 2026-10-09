@@ -1,3 +1,4 @@
+import { WorkstreamRelations } from "./WorkstreamRelations";
 import type { KnowledgeWorkspace } from "./data/knowledgeCheckpoint";
 import type { OrganizationScenario } from "./data/organizationScenario";
 import { workstreamFlow } from "./data/workstreamFlow";
@@ -22,6 +23,7 @@ export function OrganizationFlow({
         flows. Source order is not urgency. Open a step to inspect its exact
         work and response.
       </p>
+      <WorkstreamRelations state={state} onOpen={onOpen} />
       <div className="org-stream-grid">
         {rows.map((row) => {
           const stream = scenario.streams.find((s) => s.id === row.stream)!;

@@ -1231,3 +1231,10 @@ Case directory, shared attention/K-02 progress and relevant My Work entrances de
 - Reused projected goals, personal next steps and shared workstream coordination; added chapter history, source context, retained-record inspection and validated checkpoint download.
 - Preserved current working records while browsing; updated the customer/investor presenter walkthrough with optional reviewed import for hands-on continuation.
 - See [behavior and limits](ORGANIZATION-JOURNEY.md).
+
+## Iteration 157 · Explicit cross-workstream input relationship
+
+- Added a shared K-01 → K-02 relationship panel showing the transferred guide, exact receipt/applicability and next exchange responsibility.
+- Identified the latest brief's recorded guide link without inventing dependencies for independent briefs; explained downstream case and workshop prerequisites.
+- Reused source-impact checks to distinguish blocked preparation from retained historical execution and linked to existing operational sources.
+- Covered independent inputs, pending responses, changed sources and guided desktop/phone inspection. See [flow behavior](ORGANIZATION-FLOW.md).
