@@ -1,3 +1,4 @@
+import { OrganizationFlow } from "./OrganizationFlow";
 import { PersonalNextSteps } from "./PersonalNextSteps";
 import type { PersonalStep } from "./data/personalNextSteps";
 import { ExceptionLoop, ExceptionStatus } from "./ExceptionLoop";
@@ -800,6 +801,7 @@ export function ScenarioWorkspace({
             </section>
           ) : (
             <OrganizationOverview
+              workstreamFlow={scenario.id === "knowledge" ? <OrganizationFlow state={impactState} scenario={scenario} onOpen={p=>{if(p.includes("?"))onRoute(base+p);else open(p)}}/> : undefined}
               goalContext={scenario.id === "knowledge" ? <><OrganizationGoalSummary scenario={scenario} state={impactState} onOpen={()=>open("/goals")} /><nav className="organization-sections" aria-label="Knowledge workspace shortcuts"><button className="button secondary" onClick={()=>open("/timeline")}>View activity timeline</button><button className="button secondary" onClick={()=>{const tools=document.getElementById("knowledge-operating-tools") as HTMLDetailsElement | null;if(tools){tools.open=true;tools.querySelector("summary")?.focus();tools.scrollIntoView({block:"start",behavior:"instant"});}}}>Open operating tools</button></nav></> : undefined}
               coordinationExpanded={params.has("coordQ") || params.has("coordSignal") || params.has("coordPage")}
               onCases={

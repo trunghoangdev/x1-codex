@@ -20,6 +20,7 @@ export function OrganizationOverview({
   scenario = mainOrganization,
   attentionItems,
   goalContext,
+  workstreamFlow,
   coordination,
   coordinationExpanded = false,
   operatingContext,
@@ -45,6 +46,7 @@ export function OrganizationOverview({
   scenario?: OrganizationScenario;
   attentionItems?: AttentionItem[];
   goalContext?: ReactNode;
+  workstreamFlow?: ReactNode;
   coordination?: ReactNode;
   coordinationExpanded?: boolean;
   operatingContext?: ReactNode;
@@ -116,11 +118,11 @@ export function OrganizationOverview({
         </div>
       </div>
       {goalContext}
-      <OrganizationAtGlance
+      {workstreamFlow ?? <OrganizationAtGlance
         scenario={scenario}
         onWorkstream={onWorkstream}
         onDirectory={onDirectory}
-      />
+      />}
       <AttentionSummary
         attentionItems={
           attentionItems ??

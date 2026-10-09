@@ -3921,3 +3921,10 @@ main h3,
 .coordination-workspace [aria-label="Current work actions"] > section {
   scroll-margin-top: 84px;
 }
+
+.flow-stream ul { list-style: none; padding: 0; margin: 16px 0; }
+.flow-stream li { padding: 18px 0; border-top: 1px solid #e0e5df; }
+.flow-stream h4 { font-size: 15px; margin: 0 0 10px; }
+.flow-stream .flow-status { font-weight: 600; color: #34534b; }
+.flow-stream details { margin: 12px 0; }
+.flow-stream summary { cursor: pointer; font-size: 13px; }

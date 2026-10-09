@@ -7,7 +7,7 @@ for (const width of [320, 1440]) {
     await page.setViewportSize({ width, height: 900 });
     await page.goto("/#/organizations/knowledge");
     const overview = page.getByRole("region", {
-      name: "Organization at a glance",
+      name: "Workstream coordination",
       exact: true,
     });
     await expect(overview).toBeVisible();
@@ -18,15 +18,15 @@ for (const width of [320, 1440]) {
     ).not.toHaveAttribute("open", "");
     await expect(overview.getByRole("article")).toHaveCount(2);
     const guide = overview.getByRole("article", {
-      name: "Summary · K-01",
+      name: "Flow · K-01",
       exact: true,
     });
-    await expect(guide).toContainText("Goal");
+    await expect(guide).toContainText("Contribution and editorial review");
     await expect(guide).toContainText("Recorded outcome");
-    await expect(guide).toContainText("Response pending:");
-    await expect(guide).toContainText("known responsibility gap");
+    await expect(guide).toContainText("Next responsible:");
+    await expect(guide).toContainText("No local use mandate");
     const workshop = overview.getByRole("article", {
-      name: "Summary · K-02",
+      name: "Flow · K-02",
       exact: true,
     });
     await expect(workshop).toContainText("Input missing:");

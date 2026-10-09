@@ -158,3 +158,7 @@ Iteration 151 adds [multi-candidate K-02 allocation](WORKSHOP-ALLOCATION.md): ex
 ## Personal next steps · iteration 154
 
 [My Work next steps](PERSONAL-NEXT-STEPS.md) distinguishes current work, independent review and waiting, with direct response links and a compact grouped assignment inbox.
+
+## Shared workstream coordination · iteration 155
+
+[Operational lanes](ORGANIZATION-FLOW.md) make each Knowledge workstream’s current step, next actor and waiting conditions visible without collapsing separate decisions into a completion score.

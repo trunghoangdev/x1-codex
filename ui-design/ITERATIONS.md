@@ -1218,3 +1218,9 @@ Case directory, shared attention/K-02 progress and relevant My Work entrances de
 - Reused current contribution, handoff, allocation, workshop, case, exception, bounded-use/goal and input records; kept local follow-ups independent of assignment filters and counts.
 - Grouped each filtered assignment once with overlapping response/input flags retained; folded input and dependency details and moved Maya's response form to current-work actions.
 - Preserved recovery and operational guards, with a direct Organization exit. See [behavior and boundaries](PERSONAL-NEXT-STEPS.md).
+
+## Iteration 155 · Shared workstream coordination
+
+- Replaced the Knowledge single-signal glance with parallel operational lanes showing current stage, next responsible actor, waiting conditions and source inspection.
+- Reused contribution, bounded-use, input, case, workshop and exception progress; preserved current-vs-historical boundaries and explicit cross-workstream exchange.
+- Kept generic/software overview and flow behavior separate. No new mutation or checkpoint schema. See [operation and limits](ORGANIZATION-FLOW.md).
