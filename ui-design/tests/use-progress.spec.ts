@@ -85,7 +85,7 @@ test("one projection assigns only current responsibility and preserves stopping 
   );
   expect(useProgress(contribution, state).actor).toBe("owner");
   expect(useProgress(contribution, state).need?.title).toBe(
-    "Plan next bounded-use cycle",
+    "Review outcome against organizational goal",
   );
   const stale = useProgress(emptyContribution(), state);
   expect(stale.stale).toBe(true);

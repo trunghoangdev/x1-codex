@@ -1211,3 +1211,10 @@ Case directory, shared attention/K-02 progress and relevant My Work entrances de
 - Grouped Knowledge overview operational panels in a collapsed disclosure with a keyboard-focused shortcut; kept personal/detail actions expanded.
 - Added the Knowledge personal inbox entrance and a direct timeline shortcut. Preserved primary Attention signals, source navigation and recovery workflows.
 - See [layout and scope](WORKSPACE-LAYOUT.md).
+
+## Iteration 154 · Personal next steps
+
+- Added an actor-specific Knowledge next-step summary before the personal inbox, separating work, review/decisions and waiting with source references and direct navigation/focused panel access.
+- Reused current contribution, handoff, allocation, workshop, case, exception, bounded-use/goal and input records; kept local follow-ups independent of assignment filters and counts.
+- Grouped each filtered assignment once with overlapping response/input flags retained; folded input and dependency details and moved Maya's response form to current-work actions.
+- Preserved recovery and operational guards, with a direct Organization exit. See [behavior and boundaries](PERSONAL-NEXT-STEPS.md).

@@ -59,6 +59,9 @@ for (const width of [390, 1440]) {
     page.on("pageerror", (e) => errors.push(e.message));
     await page.setViewportSize({ width, height: 1000 });
     await page.goto("/#/organizations/knowledge/work?persona=maya");
+    await page
+      .getByText("Inspect dependency records · K-02-E", { exact: true })
+      .click();
     const region = page.getByRole("region", {
       name: "Coordination inputs",
       exact: true,
@@ -133,6 +136,9 @@ for (const width of [390, 1440]) {
     await expect(
       page.getByRole("heading", { name: "My Work · Maya Patel", exact: true }),
     ).toBeVisible();
+    await page
+      .getByText("Inspect dependency records · K-02-E", { exact: true })
+      .click();
     await brief
       .getByRole("button", {
         name: "Inspect provider worker · Leo Rivera",

@@ -1,8 +1,7 @@
+import type { ReactNode } from "react";
 import { caseProgress, operationalCaseId, type CaseContext, type CaseEvent } from "./data/caseLifecycle";
-import { WorkspaceContext } from "./WorkspaceContext";
 import { contributionPerformer } from "./data/knowledgeHandoff";
 import { contributionView } from "./data/contributionView";
-import { ContributionExchange } from "./ContributionExchange";
 import type { HumanContributionState } from "./data/humanContribution";
 import {
   defaultScenarioWorkFilters,
@@ -15,6 +14,7 @@ import type { OrganizationScenario } from "./data/organizationScenario";
 import { DetailBackButton } from "./DetailPresentation";
 import { personalCaseFollowUp } from "./data/coordinationCases";
 export function ScenarioMyWork({
+  nextSteps,
   caseEvents,
   caseContext,
   scenario,
@@ -31,6 +31,7 @@ export function ScenarioMyWork({
   contribution,
   onContributionChange,
 }: {
+  nextSteps?: ReactNode;
   onContribution: () => void;
   contribution: HumanContributionState;
   onContributionChange: (state: HumanContributionState) => void;
@@ -89,18 +90,14 @@ export function ScenarioMyWork({
             Organization retains the shared goals and gaps.
           </p>
         </div>
+        {onBack && <button className="button secondary" onClick={onOrganization}>Back to Organization</button>}
       </div>
-      <WorkspaceContext
-        label="Personal workspace context"
-        status={<p role="status">{mine.length} assignments · {response} awaiting your response · {waiting} waiting for input</p>}
-        responsibility={<p>{worker.name} · explicitly allocated assignments and case follow-up. Role bindings alone do not allocate work.</p>}
-        next={<p>Inspect an assignment's expected response and inputs before acting. Use your worker record to check represented scope.</p>}
-        action={<button className="button secondary" onClick={() => onWorker(workerId)}>Inspect my responsibility scope</button>}
-      />
-      {scenario.id === "knowledge" && workerId === "maya" && <ContributionExchange state={contribution} receiver onChange={onContributionChange} />}
-      {scenario.id === "knowledge" && workerId === "leo" && <p>K-01-H status and response flags follow the local contribution records, including restored/imported work. K-02-F follows any accepted local workshop allocation; other assignment flags remain authored context. Receiver receipt is not a missing input.</p>}
+      {nextSteps}
+      <section className="panel personal-inbox-summary" aria-label="Personal workspace context"><h2>Assigned work</h2><p role="status">{mine.length} assignments · {response} awaiting your response · {waiting} waiting for input</p><button className="text-link" onClick={()=>onWorker(workerId)}>Inspect my responsibility scope</button></section>
       <details className="personal-queue-note directory-record-details">
         <summary>How assignment counts work</summary>
+      {scenario.id === "knowledge" && workerId === "leo" && <p>K-01-H status and response flags follow the local contribution records, including restored/imported work. K-02-F follows any accepted local workshop allocation; other assignment flags remain authored context. Receiver receipt is not a missing input.</p>}
+        <p>Assignments appear once: waiting input first, then response needed, then remaining work. Overlapping flags remain visible on each card; grouping does not establish execution or priority.</p>
         <p>
           Assignment counts cover your full assignment inbox. Response and
           waiting-input flags can overlap ({both} in both); they are not added
@@ -258,16 +255,20 @@ export function ScenarioMyWork({
           </button>
         </DetailEmptyState>
       ) : (
-        <div className="org-stream-grid">
-          {shown.map((a) => (
+        <div className="personal-assignment-groups">
+          {([['response','Needs your response'],['waiting','Waiting for input'],['active','In progress or inspect']] as const).map(([group,label])=>{
+            const items=shown.filter(a=>(a.waitingForInput?'waiting':a.responseNeeded?'response':'active')===group);
+            return items.length?<section key={group} aria-label={`Assigned work · ${label}`}><h2>{label} · {items.length}</h2><div className="org-stream-grid">{items.map((a) => (
             <article className="panel org-stream" aria-label={a.id} key={a.id}>
               <div className="eyebrow">
                 {a.role} · {a.id}
               </div>
-              <h2>{a.title}</h2>
+              <h3>{a.title}</h3>
+              {a.waitingForInput && a.responseNeeded && <p className="badge neutral">Response also needed · waiting input is shown first</p>}
               <p>
                 <strong>{a.id === "K-01-H" ? contributionStatus.stage : a.state}</strong>
               </p>
+              <details className="personal-assignment-details"><summary>Inputs and expected response · {a.id}</summary>
               <p>
                 <strong>Input:</strong>{" "}
                 {a.input ?? "No input records represented for this assignment."}
@@ -277,6 +278,7 @@ export function ScenarioMyWork({
                 {a.expectedResponse ??
                   "Expected-response details are not represented in this sample."}
               </p>
+              </details>
               {a.id === "K-01-H" && <div>
                 <p>Local exercise · reload starts empty. Use Save or restore Knowledge contribution to restore a saved browser checkpoint. Demos continuity remains separate.</p>
                 <p role="status">{contributionStatus.summary}</p>
@@ -284,12 +286,14 @@ export function ScenarioMyWork({
                 {contribution.contributions.at(-1)?.assessment && <p role="status">Maya requested a revision · human-assessment-v1. Open contribution to prepare draft-02.</p>}
                 <button className="button primary" onClick={onContribution}>Open contribution · K-01-H</button>
               </div>}
+              {(scenario.dependencies.some(d=>d.receiverAssignmentId===a.id || ("assignmentId" in d.provider && d.provider.assignmentId===a.id)) || scenario.parallelWork.some(g=>g.assignmentIds.includes(a.id))) && <details className="personal-assignment-details"><summary>Inspect dependency records · {a.id}</summary>
               <CoordinationInputs
                 scenario={scenario}
                 assignmentId={a.id}
                 onAssignment={onAssignment}
                 onWorker={onWorker}
               />
+              </details>}
               <button
                 className="button secondary"
                 onClick={() => onAssignment(a.id)}
@@ -307,11 +311,11 @@ export function ScenarioMyWork({
                 </p>
               )}
             </article>
-          ))}
+          ))}</div></section>:null;})}
         </div>
       )}
       <p className="scenario-inbox-note">
-        No response, publication, distribution or scheduling action is enabled.
+        Authored assignment cards provide inspection; local response forms are available below. No real publication, distribution or scheduling is performed.
         Authored requests do not establish input delivery or achieved outcomes.
       </p>
     </div>

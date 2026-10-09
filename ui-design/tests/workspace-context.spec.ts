@@ -47,27 +47,39 @@ for (const width of [320, 1440]) {
       await page.goto(`/#${path}`);
       const context = page.getByRole("region", { name: label, exact: true });
       await expect(context).toBeVisible();
-      await expect(context.getByRole("heading", { level: 2 })).toHaveText([
-        "Current state",
-        "Responsibility",
-        "Next step",
-      ]);
-      const positions = await context
-        .locator(":scope > div")
-        .evaluateAll((nodes) =>
-          nodes.map((el) => ({
-            x: el.getBoundingClientRect().x,
-            y: el.getBoundingClientRect().y,
-          })),
+      if (path === "/organizations/knowledge/work?persona=leo") {
+        await expect(context.getByRole("heading", { level: 2 })).toHaveText(
+          "Assigned work",
         );
-      if (width === 320)
-        expect(
-          positions[0].y < positions[1].y && positions[1].y < positions[2].y,
-        ).toBe(true);
-      else
-        expect(
-          positions[0].x < positions[1].x && positions[1].x < positions[2].x,
-        ).toBe(true);
+        await expect(
+          page.getByRole("region", {
+            name: "Personal next steps",
+            exact: true,
+          }),
+        ).toBeVisible();
+      } else {
+        await expect(context.getByRole("heading", { level: 2 })).toHaveText([
+          "Current state",
+          "Responsibility",
+          "Next step",
+        ]);
+        const positions = await context
+          .locator(":scope > div")
+          .evaluateAll((nodes) =>
+            nodes.map((el) => ({
+              x: el.getBoundingClientRect().x,
+              y: el.getBoundingClientRect().y,
+            })),
+          );
+        if (width === 320)
+          expect(
+            positions[0].y < positions[1].y && positions[1].y < positions[2].y,
+          ).toBe(true);
+        else
+          expect(
+            positions[0].x < positions[1].x && positions[1].x < positions[2].x,
+          ).toBe(true);
+      }
       await context.getByRole("button", { name: action, exact: true }).click();
       await expect(page).toHaveURL(destination);
     }

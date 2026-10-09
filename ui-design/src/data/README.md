@@ -97,3 +97,7 @@ Iteration 151 extends `workshop.ts` with explicit facilitator/reviewer allocatio
 ## Exception follow-up · iteration 152
 
 `exceptionLoop.ts` derives supported K-02 incident conditions and validates explicit ticket transitions, named handling acceptance, exact remedy evidence and independent owner closure. `knowledgeCheckpoint.ts` v15 replays the bounded history; `knowledgeTimeline.ts` exposes retained records. Pattern snapshots exclude exception history. See [boundaries](../../EXCEPTION-HANDLING.md).
+
+## Personal next steps · iteration 154
+
+`personalNextSteps.ts` derives actor-specific read-only follow-ups from current Knowledge records. It reuses existing progress/acceptance models, preserves source identity and separates work, review and waiting. Entries are independent of authored assignment counts and filters; no checkpoint slice is added. See [coverage](../../PERSONAL-NEXT-STEPS.md).

@@ -154,3 +154,7 @@ Iteration 151 adds [multi-candidate K-02 allocation](WORKSHOP-ALLOCATION.md): ex
 ## Workspace layout · iteration 153
 
 [Organization-first layout](WORKSPACE-LAYOUT.md) prioritizes purpose, goals and coordination, with operating tools on demand and personal/detail actions expanded below the main content.
+
+## Personal next steps · iteration 154
+
+[My Work next steps](PERSONAL-NEXT-STEPS.md) distinguishes current work, independent review and waiting, with direct response links and a compact grouped assignment inbox.
