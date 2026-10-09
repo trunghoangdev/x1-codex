@@ -2207,6 +2207,7 @@ function App() {
                   <h2>Start with a virtual organization</h2>
                   <p>Explore Knowledge Operations, open Leo’s My Work, deliver a contribution and switch to Maya to receive and request a revision. Return to Organization for shared attention and history. Sample data only; starting preserves current local work.</p>
                   <button className="button primary" onClick={() => changeRoute({view:"Organization",tab:"Overview",scenarioPath:"/organizations/knowledge?persona=leo"})}>Start organization demo</button>
+                  <button className="button secondary" onClick={() => changeRoute({view:"Organization",tab:"Overview",scenarioPath:"/organizations/knowledge/journey?persona=leo"})}>Explore guided organization journey</button>
                   <p>Software review and retained SF inspection are separate examples below; they are not the continuation of this contribution.</p>
                 </section>
                 <section className="panel org-stream">

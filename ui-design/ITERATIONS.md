@@ -1224,3 +1224,10 @@ Case directory, shared attention/K-02 progress and relevant My Work entrances de
 - Replaced the Knowledge single-signal glance with parallel operational lanes showing current stage, next responsible actor, waiting conditions and source inspection.
 - Reused contribution, bounded-use, input, case, workshop and exception progress; preserved current-vs-historical boundaries and explicit cross-workstream exchange.
 - Kept generic/software overview and flow behavior separate. No new mutation or checkpoint schema. See [operation and limits](ORGANIZATION-FLOW.md).
+
+## Iteration 156 · End-to-end organization journey
+
+- Added eight isolated, transition-generated snapshots from purpose and accepted responsibility through failed execution, recovery, exception closure and independent criterion review.
+- Reused projected goals, personal next steps and shared workstream coordination; added chapter history, source context, retained-record inspection and validated checkpoint download.
+- Preserved current working records while browsing; updated the customer/investor presenter walkthrough with optional reviewed import for hands-on continuation.
+- See [behavior and limits](ORGANIZATION-JOURNEY.md).

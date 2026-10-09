@@ -78,6 +78,7 @@ for (const width of [1440, 390]) {
     await expect(
       page.getByRole("region", { name: "Scenario boundary" }),
     ).toContainText("read-only sample");
+    await page.getByText("Inspect detailed workstream coordination", { exact: true }).click();
     await expect(
       page
         .getByRole("region", { name: "Organization workstreams" })
@@ -137,6 +138,7 @@ for (const width of [1440, 390]) {
     await page
       .getByRole("button", { name: "Back to scenario context", exact: true })
       .click();
+    await page.getByText("Inspect detailed workstream coordination", { exact: true }).click();
     await page
       .getByRole("button", { name: "Browse workstreams", exact: true })
       .click();

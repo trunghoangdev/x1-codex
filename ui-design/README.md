@@ -15,7 +15,7 @@ Open the URL printed by Vite. Build static assets with `npm run build`. No appli
 
 ## Start the demo
 
-Open **Demos → Start organization demo**. Follow [the current walkthrough](WALKTHROUGH.md) for Organization → Leo My Work → Maya receipt/revision → shared coordination, followed by separate software evidence examples.
+Open **Demos → Explore guided organization journey** for the eight-chapter goal-to-reviewed-result story. Follow [the presenter walkthrough](WALKTHROUGH.md). The guided snapshots preserve current work; **Start organization demo** opens the editable Knowledge workspace. See [journey behavior and limits](ORGANIZATION-JOURNEY.md).
 
 Starting preserves local work. For a clean presentation, use a fresh browser profile instead of clearing someone else's data. Sample personas do not authenticate users or grant permissions.
 

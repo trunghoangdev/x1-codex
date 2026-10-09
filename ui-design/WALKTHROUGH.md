@@ -1,4 +1,37 @@
-# Current virtual organization demo
+# Guided virtual organization demo
+
+Updated 2026-10-09 · iteration 156. Allow 5–7 minutes. Open **Demos → Explore guided organization journey**, or visit `/#/organizations/knowledge/journey?persona=leo`.
+
+The eight chapters show how an organization coordinates people around a goal, handles failure and checks results. These are fictional snapshots generated through existing transition models. Moving between chapters preserves the current workspace. Persona selection previews responsibility; it is not authentication.
+
+## Present the story
+
+1. **Purpose.** Start with the shared goal and its evidence gaps. A goal needs several workstreams; completing one activity cannot prove the whole goal.
+2. **Allocation.** Show an explicit responsibility offer and Leo's acceptance. Naming a worker alone does not establish accepted ownership.
+3. **Preparation.** Follow contribution delivery, Maya's review, revision and reassessment. Inspect the linked guide exchange, received brief, approved coordination case and workshop readiness. These are parallel responsibilities with explicit dependencies.
+4. **Failure.** Show the failed session and the open exception with an accepted handler. The failure remains recorded; opening a ticket does not repair the work.
+5. **Recovery.** A new cycle requires fresh allocation, preparation and review before a successful simulated execution. The exception still needs independent closure, and success alone does not establish the outcome criterion.
+6. **Closure.** Leo submits the remedy and the owner reviews and closes the exception. Closing the ticket leaves outcome review pending.
+7. **Evidence.** Leo records fictional observations. Maya has the next review responsibility; submitted observations are not an accepted result.
+8. **Independent review.** Maya records that the workshop criterion is met in this simulation. Show the retained failure and recovery history. K-02 has scoped positive evidence; the organization-wide goal remains incomplete because other criteria still need evidence.
+
+At any chapter, expand **What changed in this chapter**, switch **Journey participant**, and inspect workstream lanes. Source previews show the selected chapter's retained records within the guided viewer. Browser Back/Forward and reload retain chapter navigation. **Back to current Organization** returns to the workspace you started with.
+
+## Optional: continue through the actual forms
+
+For a hands-on demonstration, download the **Failure** chapter using **Presenter tools and snapshot export → Download chapter checkpoint**. Return to the current Organization and **Export whole workspace** through its recovery controls before importing another checkpoint.
+
+Use **Import Knowledge checkpoint**, inspect the preview, and explicitly **Confirm workspace replacement**. This replaces local working records; chapter navigation itself never does. Continue the second workshop cycle as owner, Leo and Maya: offer and accept responsibility, submit and review fresh preparation, then record a successful simulated session. Submit the exception remedy as Leo and close it as owner. Record observations as Leo and review the criterion as Maya. Restore your exported workspace through the same reviewed import flow when finished.
+
+This demonstrates frontend coordination and replay guards. It does not call a live factory, perform a real workshop, authenticate actors or establish customer outcome evidence.
+
+## Other demonstrations
+
+The earlier contribution-only walkthrough remains below for detailed form practice. Software-specific assignment, attempt and release evidence examples remain separate. Unprompted participant research is deferred; its existing guide is [participant tasks](INTEGRATED-PARTICIPANT-WALKTHROUGH.md).
+
+---
+
+## Earlier contribution-only walkthrough
 
 Updated 2026-10-07 · iteration 109. This presenter guide follows the current UI. For unprompted participant research use the separate [participant tasks](INTEGRATED-PARTICIPANT-WALKTHROUGH.md).
 

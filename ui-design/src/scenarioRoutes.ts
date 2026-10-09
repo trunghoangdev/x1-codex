@@ -1,3 +1,4 @@
+import {journeyIds} from "./data/journeyChapters";
 import { timelineKinds } from "./data/knowledgeTimeline";
 import { resolveScenario } from "./data/scenarioRegistry";
 import { coordinationCases } from "./data/coordinationCases";
@@ -31,6 +32,7 @@ export function validScenarioPath(raw: string) {
             "/use/K-01",
             "/workshop/K-02",
             "/exceptions",
+            "/journey",
             "/impact",
             "/goals",
             "/timeline",
@@ -56,6 +58,7 @@ export function validScenarioPath(raw: string) {
   if (suffix === "/contributions/K-01-H" && params.get("persona") !== "leo")
     return false;
   return (
+    (!params.has("journeyStep") || (scenario.id === "knowledge" && suffix === "/journey" && journeyIds.includes(params.get("journeyStep") as typeof journeyIds[number]))) &&
     (![
       "timelineStream",
       "timelineKind",

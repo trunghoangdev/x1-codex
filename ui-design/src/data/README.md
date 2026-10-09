@@ -101,3 +101,7 @@ Iteration 151 extends `workshop.ts` with explicit facilitator/reviewer allocatio
 ## Personal next steps · iteration 154
 
 `personalNextSteps.ts` derives actor-specific read-only follow-ups from current Knowledge records. It reuses existing progress/acceptance models, preserves source identity and separates work, review and waiting. Entries are independent of authored assignment counts and filters; no checkpoint slice is added. See [coverage](../../PERSONAL-NEXT-STEPS.md).
+
+## Guided organization snapshots
+
+`organizationJourney.ts` generates eight synthetic Knowledge chapters using existing transition models; `journeyChapters.ts` exports route-safe identifiers. These are isolated presenter fixtures, not server responses. Each chapter is checkpoint-replay tested. Browsing does not update working records; importing an exported snapshot uses explicit workspace replacement.

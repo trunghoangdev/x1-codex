@@ -3928,3 +3928,13 @@ main h3,
 .flow-stream .flow-status { font-weight: 600; color: #34534b; }
 .flow-stream details { margin: 12px 0; }
 .flow-stream summary { cursor: pointer; font-size: 13px; }
+
+.journey-stages { display: flex; gap: 10px; flex-wrap: wrap; margin: 24px 0; }
+.journey-stages [aria-current="step"] { background: #eaf0e2; border-color: #49695a; }
+.journey-story { margin: 20px 0; }
+.journey-point { padding: 16px; background: #f3f6ed; border-left: 3px solid #9aa971; }
+.journey-records { margin: 20px 0; }
+.journey-records ol { margin: 0 24px 24px; padding-left: 20px; line-height: 1.5; }
+.journey-records li { padding: 12px 0; border-top: 1px solid #e0e5df; }
+.journey-export { padding: 0 24px 24px; line-height: 1.5; }
+.organization-journey pre { white-space: pre-wrap; overflow-wrap: anywhere; max-height: 420px; overflow: auto; }
