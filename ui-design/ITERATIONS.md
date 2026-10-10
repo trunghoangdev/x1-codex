@@ -1245,3 +1245,9 @@ Case directory, shared attention/K-02 progress and relevant My Work entrances de
 - Focused action headings through route navigation while preserving contextual return and existing local-panel next-step entrances.
 - Validated destination/actor parameters and made missing requested tickets explicit. Existing review/confirmation and operational guards remain unchanged.
 - See [personal next-step behavior](PERSONAL-NEXT-STEPS.md).
+
+## Iteration 159 · Focused guided-demo evidence
+
+- Filtered chapter source previews to represented source families; added clear empty states and record context with new-event markers.
+- Added visible chapter change counts by event kind, comparing consistently with the preceding story chapter.
+- Preserved isolated workspace behavior, chapter history, export and detailed inspection. See [journey behavior](ORGANIZATION-JOURNEY.md).

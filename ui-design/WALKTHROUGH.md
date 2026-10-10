@@ -15,7 +15,7 @@ The eight chapters show how an organization coordinates people around a goal, ha
 7. **Evidence.** Leo records fictional observations. Maya has the next review responsibility; submitted observations are not an accepted result.
 8. **Independent review.** Maya records that the workshop criterion is met in this simulation. Show the retained failure and recovery history. K-02 has scoped positive evidence; the organization-wide goal remains incomplete because other criteria still need evidence.
 
-At any chapter, expand **What changed in this chapter**, switch **Journey participant**, and inspect workstream lanes. Source previews show the selected chapter's retained records within the guided viewer. Browser Back/Forward and reload retain chapter navigation. **Back to current Organization** returns to the workspace you started with.
+At any chapter, expand **What changed in this chapter**, switch **Journey participant**, and inspect workstream lanes. Source previews filter records to the selected source within the guided viewer, with new records marked against the preceding story chapter. Browser Back/Forward and reload retain chapter navigation. **Back to current Organization** returns to the workspace you started with.
 
 ## Optional: continue through the actual forms
 

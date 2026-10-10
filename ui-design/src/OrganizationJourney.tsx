@@ -1,3 +1,4 @@
+import { journeySource, chapterChanges } from "./data/journeyPresentation";
 import { useMemo, useState, useEffect, useRef } from "react";
 import {
   organizationJourney,
@@ -37,17 +38,11 @@ export function OrganizationJourney({
     [error, setError] = useState("");
   const heading = useRef<HTMLHeadingElement>(null),
     source = useRef<HTMLHeadingElement>(null);
-  const records = useMemo(() => knowledgeTimeline(stage.state), [stage]),
-    prior = useMemo(
-      () =>
-        new Set(
-          index > 0
-            ? knowledgeTimeline(stages[index - 1].state).map((e) => e.key)
-            : [],
-        ),
-      [index, stages],
-    );
-  const added = records.filter((e) => !prior.has(e.key));
+  const records = useMemo(() => knowledgeTimeline(stage.state), [stage]);
+  const previous = index > 0 ? stages[index - 1] : undefined;
+  const changes = useMemo(() => chapterChanges(records, previous ? knowledgeTimeline(previous.state) : []), [records, previous]);
+  const added = changes.added;
+  const selectedSource = journeySource(records, inspect);
   useEffect(() => {
     setInspect("");
     setShowState(false);
@@ -136,6 +131,12 @@ export function OrganizationJourney({
         state={stage.state}
         onOpen={() => setInspect("Organization goal evidence")}
       />
+      <section className="panel org-stream" aria-label="Chapter changes summary">
+        <h2>{previous ? `Since “${previous.title}”` : "Starting context"}</h2>
+        <p>{previous ? `${added.length} new ${added.length === 1 ? "record" : "records"}; earlier history remains in this snapshot. Comparison is against the preceding story chapter, even when you jump between chapters.` : "Shared purpose and work context; no operational response yet."}</p>
+        {changes.groups.length > 0 && <ul>{changes.groups.map(g=><li key={g.kind}>{g.kind} · {g.count} new {g.count === 1 ? "record" : "records"}<p>{added.filter(e=>e.kind===g.kind).slice(0,2).map(e=>`${e.title} · ${e.actor}`).join("; ")}{g.count > 2 ? "; more in the detailed records below." : ""}</p></li>)}</ul>}
+        <p>{stage.point}</p>
+      </section>
       <details className="organization-disclosure journey-records">
         <summary>What changed in this chapter · {added.length} records</summary>
         <ol>
@@ -188,18 +189,23 @@ export function OrganizationJourney({
           <h2 ref={source} tabIndex={-1}>
             Source context in this snapshot
           </h2>
+          <h3>{selectedSource.label}</h3>
           <p>{inspect}</p>
+          <p>{selectedSource.records.length} related records in this chapter. New markers compare with the preceding story chapter.</p>
           <p>
-            This preview contains this chapter’s retained records. It does not
+            This preview contains only the selected source context in this chapter. It does not
             open or replace your current operational workspace.
           </p>
           <ul>
-            {records.map((e) => (
+            {selectedSource.records.map((e) => (
               <li key={e.key}>
-                {e.id} · {e.title} · {e.actor}
+                <strong>{e.title}</strong> · {e.actor}
+                {added.some(a=>a.key===e.key) && <span> · New in this chapter</span>}
+                <p>{e.id} · {e.version} · {e.at}</p><p>{e.detail}</p>
               </li>
             ))}
           </ul>
+          {!selectedSource.records.length && <p>No recorded events for this source in this chapter. Other chapter records are available through presenter tools.</p>}
           <button className="text-link" onClick={() => setInspect("")}>
             Close snapshot preview
           </button>
