@@ -1251,3 +1251,10 @@ Case directory, shared attention/K-02 progress and relevant My Work entrances de
 - Filtered chapter source previews to represented source families; added clear empty states and record context with new-event markers.
 - Added visible chapter change counts by event kind, comparing consistently with the preceding story chapter.
 - Preserved isolated workspace behavior, chapter history, export and detailed inspection. See [journey behavior](ORGANIZATION-JOURNEY.md).
+
+## Iteration 160 · Coordination presentation consistency
+
+- Returned source-preview focus to its opener and supported repeated source inspection.
+- Unified explicit status labels, disclosure focus/spacing, record markers and singular counts; removed nested participant padding and stretched workstream-card whitespace.
+- Improved participant controls and long-button/chapter wrapping on narrow screens.
+- Checked representative Organization, My Work, larger-organization and guided views at 320/640/1440px with keyboard and forced-colors coverage. See [review and boundaries](DISPLAY-ACCESSIBILITY-REVIEW.md).

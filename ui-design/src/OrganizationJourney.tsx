@@ -36,6 +36,7 @@ export function OrganizationJourney({
     [inspect, setInspect] = useState(""),
     [showState, setShowState] = useState(false),
     [error, setError] = useState("");
+  const opener = useRef<HTMLElement | null>(null);
   const heading = useRef<HTMLHeadingElement>(null),
     source = useRef<HTMLHeadingElement>(null);
   const records = useMemo(() => knowledgeTimeline(stage.state), [stage]);
@@ -52,6 +53,16 @@ export function OrganizationJourney({
   useEffect(() => {
     if (inspect) source.current?.focus();
   }, [inspect]);
+  function openSource(value: string) {
+    opener.current = document.activeElement instanceof HTMLElement ? document.activeElement : null;
+    setInspect(value);
+    if (inspect === value) source.current?.focus();
+  }
+  function closeSource() {
+    setInspect("");
+    if (opener.current?.isConnected) opener.current.focus();
+    else heading.current?.focus();
+  }
   function download() {
     try {
       const raw = encodeKnowledgeCheckpoint(stage.state),
@@ -129,7 +140,7 @@ export function OrganizationJourney({
       <OrganizationGoalSummary
         scenario={scenario}
         state={stage.state}
-        onOpen={() => setInspect("Organization goal evidence")}
+        onOpen={() => openSource("Organization goal evidence")}
       />
       <section className="panel org-stream" aria-label="Chapter changes summary">
         <h2>{previous ? `Since “${previous.title}”` : "Starting context"}</h2>
@@ -138,7 +149,7 @@ export function OrganizationJourney({
         <p>{stage.point}</p>
       </section>
       <details className="organization-disclosure journey-records">
-        <summary>What changed in this chapter · {added.length} records</summary>
+        <summary>What changed in this chapter · {added.length} {added.length === 1 ? "record" : "records"}</summary>
         <ol>
           {added.map((e) => (
             <li key={e.key}>
@@ -157,7 +168,7 @@ export function OrganizationJourney({
           </p>
         )}
       </details>
-      <section className="panel personal-inbox-summary">
+      <section className="panel personal-inbox-summary journey-participant">
         <label>
           View a participant’s next steps
           <select
@@ -173,17 +184,17 @@ export function OrganizationJourney({
         <PersonalNextSteps
           state={stage.state}
           actor={actor}
-          onOpen={(s) => setInspect(s.path ?? s.panel ?? s.source)}
+          onOpen={(s) => openSource(s.path ?? s.panel ?? s.source)}
         />
       </section>
       <OrganizationFlow
         scenario={scenario}
         state={stage.state}
-        onOpen={setInspect}
+        onOpen={openSource}
       />
       {inspect && (
         <section
-          className="panel org-stream"
+          className="panel org-stream journey-source"
           aria-label="Journey source preview"
         >
           <h2 ref={source} tabIndex={-1}>
@@ -191,7 +202,7 @@ export function OrganizationJourney({
           </h2>
           <h3>{selectedSource.label}</h3>
           <p>{inspect}</p>
-          <p>{selectedSource.records.length} related records in this chapter. New markers compare with the preceding story chapter.</p>
+          <p>{selectedSource.records.length} related {selectedSource.records.length === 1 ? "record" : "records"} in this chapter. New markers compare with the preceding story chapter.</p>
           <p>
             This preview contains only the selected source context in this chapter. It does not
             open or replace your current operational workspace.
@@ -200,13 +211,13 @@ export function OrganizationJourney({
             {selectedSource.records.map((e) => (
               <li key={e.key}>
                 <strong>{e.title}</strong> · {e.actor}
-                {added.some(a=>a.key===e.key) && <span> · New in this chapter</span>}
+                {added.some(a=>a.key===e.key) && <span className="record-marker">New in this chapter</span>}
                 <p>{e.id} · {e.version} · {e.at}</p><p>{e.detail}</p>
               </li>
             ))}
           </ul>
           {!selectedSource.records.length && <p>No recorded events for this source in this chapter. Other chapter records are available through presenter tools.</p>}
-          <button className="text-link" onClick={() => setInspect("")}>
+          <button className="text-link" onClick={closeSource}>
             Close snapshot preview
           </button>
         </section>

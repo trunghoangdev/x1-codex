@@ -2,9 +2,9 @@ import type { KnowledgeWorkspace } from "./data/knowledgeCheckpoint";
 import { workstreamRelations } from "./data/workstreamRelations";
 export function WorkstreamRelations({state,onOpen}:{state:KnowledgeWorkspace;onOpen:(path:string)=>void}) {
   const relation = workstreamRelations(state);
-  return <section className="panel org-stream" aria-label="Cross-workstream input relationship">
+  return <section className="panel org-stream workstream-relations" aria-label="Cross-workstream input relationship">
     <h3>K-01 → K-02 · guide for workshop preparation</h3>
-    <p><strong>{relation.status}</strong></p>
+    <p className="flow-status"><strong>Exchange status:</strong> {relation.status}</p>
     <p>Maya offers an assessed guide from K-01. Leo receives the exact version and separately assesses its applicability to K-02 preparation.</p>
     {relation.recorded ? <details><summary>Inspect transferred source and responses</summary>
       <p><strong>Source:</strong> {relation.source}</p><p><strong>Exchange:</strong> {relation.handoff}</p>

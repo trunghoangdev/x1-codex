@@ -44,7 +44,7 @@ export function OrganizationFlow({
                 {row.lanes.map((lane) => (
                   <li key={lane.id}>
                     <h4>{lane.label}</h4>
-                    <p className="flow-status">{lane.status}</p>
+                    <p className="flow-status"><strong>Step status:</strong> {lane.status}</p>
                     <p>
                       <strong>Next responsible:</strong>{" "}
                       {lane.actor ??

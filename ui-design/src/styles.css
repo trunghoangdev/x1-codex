@@ -3938,3 +3938,39 @@ main h3,
 .journey-records li { padding: 12px 0; border-top: 1px solid #e0e5df; }
 .journey-export { padding: 0 24px 24px; line-height: 1.5; }
 .organization-journey pre { white-space: pre-wrap; overflow-wrap: anywhere; max-height: 420px; overflow: auto; }
+
+/* Shared coordination and guided-demo presentation. */
+.coordination-workspace summary:focus-visible {
+  outline: 3px solid #285b93;
+  outline-offset: 3px;
+}
+.workstream-relations { margin-block: 16px 24px; }
+.workstream-relations details { margin-block: 16px; }
+.workstream-relations summary,
+.flow-stream summary { padding-block: 12px; min-height: 44px; cursor: pointer; line-height: 1.5; }
+.workstream-relations li,
+.journey-source li { padding-block: 14px; border-top: 1px solid var(--line); }
+.workstream-relations ul,
+.journey-source ul { list-style: none; padding: 0; margin-block: 16px; }
+.coordination-workspace .flow-status { font-weight: 600; color: #34534b; }
+.organization-journey .panel { margin-block: 20px; }
+.organization-journey .journey-participant .personal-next-steps {
+  padding: 0; border: 0; box-shadow: none; background: transparent; margin-bottom: 0;
+}
+.organization-journey button,
+.personal-next-steps button { max-width: 100%; white-space: normal; overflow-wrap: anywhere; text-align: left; }
+.organization-journey select { width: 100%; min-width: 0; max-width: 100%; }
+.organization-journey h2,
+.coordination-workspace [data-next-action] { scroll-margin-top: 84px; }
+.record-marker { display: inline-block; margin: 4px 8px; padding: 3px 7px; border: 1px solid #49695a; border-radius: 4px; font-size: 12px; color: #34534b; }
+@media (max-width: 600px) {
+  .organization-journey .org-stream { padding: 18px; }
+  .journey-stages { gap: 8px; }
+  .journey-stages button { flex: 1 1 100%; }
+}
+
+.flow-stream { align-self: start; }
+.journey-participant select {
+  font: inherit; color: inherit; min-height: 44px; padding: 8px 12px;
+  margin-top: 8px; border: 1px solid #9aa99e; border-radius: 6px; background: #fff;
+}

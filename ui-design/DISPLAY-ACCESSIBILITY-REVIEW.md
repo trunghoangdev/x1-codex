@@ -31,3 +31,11 @@ Previews: [Chromium forced colors](previews/95-forced-colors-chromium-320.png), 
 On a desktop browser with a 1280px content viewport, use its actual zoom control at 200% and 400%. Repeat confirmation, assessment dialog and exact-source navigation. Check pinned navigation, obscured focused elements, all modal actions, text wrapping and whether document scrolling is sufficient without horizontal page scrolling. Reset zoom afterward.
 
 Also run the role tasks with a screen reader and real platform high-contrast/forced-colors settings. Record browser/OS/AT versions, actual observed announcements and task errors. Then run the prepared participant sessions in `USABILITY-ACCESSIBILITY-REVIEW.md`. None of those manual sessions were performed here. Backend/accessibility behavior with real authentication and admission remains outside the current prototype.
+
+## Coordination and journey consistency · iteration 160 · 2026-10-09
+
+Reviewed the shared stylesheet, Organization/My Work entrances and recent coordination/journey components. Corrected source-preview close focus return to its opener, repeat-source focus, disclosure focus outlines and target spacing, nested participant-panel padding, participant select sizing, long-button wrapping, narrow-screen chapter controls and source-record separation. Workstream cards no longer stretch to match a taller neighbor. Step/exchange status labels are explicit text; the new-record marker has a border and text rather than relying on color. Singular record counts are corrected.
+
+Chromium checks cover 320, 640 and 1440 CSS-pixel widths across Knowledge Organization, Maya My Work, the larger organization and guided journey, plus keyboard disclosure activation, preview focus/return, explicit new-record markers and forced-colors emulation at 390px. Existing chapter/source, lifecycle next-action, overview and workspace-layout checks run alongside these. Desktop and phone captures were inspected; temporary captures are repository-local under `.cache`.
+
+This pass checks representative shared layout and recent flows, not every historical software screen or all status semantics. It adds no workflow states or authority. Actual browser-menu zoom, screen-reader/platform high-contrast and participant sessions remain outstanding as described above. No participant session was performed.
