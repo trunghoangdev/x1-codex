@@ -14,8 +14,12 @@ export function ExceptionLoop({
   events,
   context,
   onChange,
+  initialActor,
+  initialTicket,
   onSource,
 }: {
+  initialActor?: ExceptionEvent["actor"];
+  initialTicket?: string;
   events: ExceptionEvent[];
   context: ExceptionContext;
   onChange: (events: ExceptionEvent[]) => void;
@@ -33,9 +37,9 @@ export function ExceptionLoop({
           );
         }),
     );
-  const [ticket, setTicket] = useState(""),
+  const [ticket, setTicket] = useState(initialTicket ?? ""),
     [sourceId, setSourceId] = useState(""),
-    [actor, setActor] = useState<ExceptionEvent["actor"]>("owner"),
+    [actor, setActor] = useState<ExceptionEvent["actor"]>(initialActor ?? "owner"),
     [action, setAction] = useState<ExceptionAction>("Open exception"),
     [assignee, setAssignee] = useState<"leo" | "maya">("leo"),
     [body, setBody] = useState("");
@@ -45,7 +49,7 @@ export function ExceptionLoop({
   }>();
   const selectedTicket = tickets.includes(ticket)
       ? ticket
-      : (tickets.at(-1) ?? ""),
+      : (initialTicket ? "" : tickets.at(-1) ?? ""),
     p = exceptionProgress(events, selectedTicket, context);
   const options: ExceptionAction[] = [
     ...(actor === "owner" && sources.length ? ["Open exception" as const] : []),
@@ -65,7 +69,7 @@ export function ExceptionLoop({
   });
   return (
     <section className="panel" aria-label="Local exception lifecycle">
-      <h2>Exception handling</h2>
+      <h2 tabIndex={-1} data-next-action={initialActor ? "true" : undefined}>Exception handling</h2>
       <p>
         Open an observed issue explicitly; detection does not allocate work.
         Demo actor selection is not authentication. Handling responsibilities
@@ -87,6 +91,7 @@ export function ExceptionLoop({
           require their separate review.
         </p>
       )}
+      {initialTicket && !tickets.includes(initialTicket) && <p role="status">The requested exception ticket is not in this workspace. Select a recorded ticket explicitly.</p>}
       <label>
         Exception ticket
         <select
@@ -97,7 +102,7 @@ export function ExceptionLoop({
             setPreview(undefined);
           }}
         >
-          {!tickets.length && <option value="">No recorded tickets</option>}
+          {(!tickets.length || !selectedTicket) && <option value="">{tickets.length ? "Select a recorded ticket" : "No recorded tickets"}</option>}
           {tickets.map((id) => (
             <option key={id}>{id}</option>
           ))}

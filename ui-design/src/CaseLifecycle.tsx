@@ -12,12 +12,14 @@ export function CaseLifecycle({
   events,
   context,
   onChange,
+  initialActor,
 }: {
+  initialActor?: "leo" | "maya";
   events: CaseEvent[];
   context: CaseContext;
   onChange: (events: CaseEvent[]) => void;
 }) {
-  const [actor, setActor] = useState<"leo" | "maya">("leo");
+  const [actor, setActor] = useState<"leo" | "maya">(initialActor ?? "leo");
   const [action, setAction] = useState<CaseAction>("Accept responsibility");
   const [rationale, setRationale] = useState("");
   const [preview, setPreview] = useState<{
@@ -55,7 +57,7 @@ export function CaseLifecycle({
       className="panel org-stream material-use-start case-lifecycle"
       aria-label="Local coordination case lifecycle"
     >
-      <h2 ref={heading} tabIndex={-1}>
+      <h2 ref={heading} tabIndex={-1} data-next-action={initialActor ? "true" : undefined}>
         {progress.status}
       </h2>
       <p>{progress.nextStep}</p>

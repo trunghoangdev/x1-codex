@@ -14,12 +14,14 @@ export function Workshop({
   events,
   context,
   onChange,
+  initialActor,
 }: {
+  initialActor?: WorkshopActor;
   events: WorkshopEvent[];
   context: WorkshopContext;
   onChange: (events: WorkshopEvent[]) => void;
 }) {
-  const [actor, setActor] = useState<WorkshopActor>("owner");
+  const [actor, setActor] = useState<WorkshopActor>(initialActor ?? "owner");
   const [action, setAction] = useState<WorkshopAction>("Offer facilitation");
   const [facilitator, setFacilitator] = useState<"leo" | "maya">("leo");
   const [reviewer, setReviewer] = useState<WorkshopActor>("maya");
@@ -60,7 +62,7 @@ export function Workshop({
   );
   return (
     <section className="panel org-stream" aria-label="Local workshop lifecycle">
-      <h2>{p.status}</h2>
+      <h2 tabIndex={-1} data-next-action={initialActor ? "true" : undefined}>{p.status}</h2>
       <p>{p.nextStep}</p>
       <p>
         Local simulation only. Selecting an actor is a demo control, not

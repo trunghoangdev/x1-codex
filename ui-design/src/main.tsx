@@ -397,7 +397,7 @@ function App() {
       }
       document
         .querySelector<HTMLElement>(
-          tourStep === null ? "main h1" : ".customer-tour h2",
+          tourStep === null && document.querySelector("main [data-next-action]") ? "main [data-next-action]" : tourStep === null ? "main h1" : ".customer-tour h2",
         )
         ?.focus();
     };

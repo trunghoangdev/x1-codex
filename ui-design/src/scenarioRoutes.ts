@@ -58,6 +58,9 @@ export function validScenarioPath(raw: string) {
   if (suffix === "/contributions/K-01-H" && params.get("persona") !== "leo")
     return false;
   return (
+    (!params.has("nextActor") || (scenario.id === "knowledge" &&
+      (["/workshop/K-02", "/exceptions"].includes(suffix) ? ["owner","leo","maya"] : suffix === "/cases/current-workshop-brief" ? ["leo","maya"] : []).includes(params.get("nextActor")!))) &&
+    (!params.has("nextTicket") || (suffix === "/exceptions" && params.has("nextActor") && /^exception-[a-zA-Z0-9-]+$/.test(params.get("nextTicket")!))) &&
     (!params.has("journeyStep") || (scenario.id === "knowledge" && suffix === "/journey" && journeyIds.includes(params.get("journeyStep") as typeof journeyIds[number]))) &&
     (![
       "timelineStream",

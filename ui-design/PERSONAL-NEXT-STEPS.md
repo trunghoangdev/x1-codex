@@ -11,3 +11,11 @@ Assignment input/expected-response text and dependency records now open on deman
 ## Boundaries
 
 Next-step entries are represented follow-ups, not additional assignments, new authorization or authentication. They may reference the same work source across distinct responsibilities. Unknown actors do not inherit personal work; accepted handoff/allocation identity determines current responsibility. Authored case ownership and authored assignment flags remain separate from locally recorded transitions. No checkpoint format change or external integration is introduced.
+
+## Direct lifecycle action context · iteration 158
+
+My Work workshop, coordination-case and exception next steps now carry the viewed actor to the corresponding form. Exception links also carry the exact ticket. The action heading receives keyboard focus and the existing context Back button returns to the originating personal entrance. Local panel destinations (editorial receipt, guide input, brief receipt and contribution acceptance/handoff) retain their existing direct disclosure/focus behavior.
+
+`nextActor` is accepted only for supported Knowledge lifecycle destinations and actors; `nextTicket` is limited to exception destinations with actor context. These parameters initialize local preview controls, not authenticated authority. Existing action availability and preview/confirmation guards remain in force. Missing requested exception tickets require explicit ticket selection instead of silently substituting another ticket. Opening a form does not record an action or save workspace state.
+
+Browser checks cover desktop/phone keyboard navigation for workshop review, case review and exception handling, actor/ticket initialization, retained local checkpoint and contextual return.

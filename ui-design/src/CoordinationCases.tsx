@@ -14,6 +14,7 @@ import {
 } from "./data/coordinationCases";
 import { DetailBackButton } from "./DetailPresentation";
 export function CoordinationCases({
+  initialActor,
   caseEvents,
   caseContext,
   onCaseEvents,
@@ -25,6 +26,7 @@ export function CoordinationCases({
   onCase,
   onSource,
 }: {
+  initialActor?: "leo" | "maya";
   caseEvents: CaseEvent[];
   caseContext: CaseContext;
   onCaseEvents: (events: CaseEvent[]) => void;
@@ -84,7 +86,7 @@ export function CoordinationCases({
       {selected ? (
         <>
           {selected.id === operationalCaseId && (
-            <CaseLifecycle
+            <CaseLifecycle key={initialActor ?? "default"} initialActor={initialActor}
               events={caseEvents}
               context={caseContext}
               onChange={onCaseEvents}

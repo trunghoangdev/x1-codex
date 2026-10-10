@@ -1238,3 +1238,10 @@ Case directory, shared attention/K-02 progress and relevant My Work entrances de
 - Identified the latest brief's recorded guide link without inventing dependencies for independent briefs; explained downstream case and workshop prerequisites.
 - Reused source-impact checks to distinguish blocked preparation from retained historical execution and linked to existing operational sources.
 - Covered independent inputs, pending responses, changed sources and guided desktop/phone inspection. See [flow behavior](ORGANIZATION-FLOW.md).
+
+## Iteration 158 · Next step to lifecycle action
+
+- Carried My Work actor context directly into workshop, coordination-case and exception forms; selected the exact exception ticket.
+- Focused action headings through route navigation while preserving contextual return and existing local-panel next-step entrances.
+- Validated destination/actor parameters and made missing requested tickets explicit. Existing review/confirmation and operational guards remain unchanged.
+- See [personal next-step behavior](PERSONAL-NEXT-STEPS.md).
